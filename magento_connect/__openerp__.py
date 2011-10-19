@@ -48,7 +48,7 @@
      3.2 Also exists another module Magento management we working another projects:
         - https://launchpad.net/magentoerpconnect
 
-    Special Thanks to Akretion www.akretion.com
+    Special Thanks to Akretion www.akretion.com and OpenLabs www.openlabs.co.in
     """,
     "license" : "AGPL-3",
     "depends" : [
