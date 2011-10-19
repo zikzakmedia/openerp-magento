@@ -1,0 +1,21 @@
+==Magento E-commerce management. Your Magento and OpenERP are connecting==
+
+1. Requirements:
+ 1.1 Install Magento Python from:
+    - https://github.com/zikzakmedia/magento
+    - http://pypi.python.org/pypi/magento
+
+ 1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category 
+    - http://www.magentocommerce.com/magento-connect/Sharoon+Thomas/extension/1827/open-erp-connecotr-by-openlabs
+
+2. Configuration
+ 2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude
+ 2.2 Mapping more product fields go to Administrator -> Customization -> Database Structure -> External Mapping
+ 2.3 Configure yours Magento APP: Sale -> Configuration -> Magento
+
+3. Other information
+ 3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.
+ 3.2 Also exists another module Magento management we working another projects:
+    - https://launchpad.net/magentoerpconnect
+
+Special Thanks to Akretion www.akretion.com

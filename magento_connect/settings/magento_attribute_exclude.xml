@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<openerp>
+    <data noupdate='1'>
+
+<!--Product.Product-->
+        <record model='magento.attribute.exclude' id='mgnattribute01'>
+            <field name='name'>name</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute02'>
+            <field name='name'>description</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute03'>
+            <field name='name'>sku</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+        <record model='magento.attribute.exclude' id='mgnattribute04'>
+            <field name='name'>category_ids</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute05'>
+            <field name='name'>cost</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute06'>
+            <field name='name'>web_store</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute07'>
+        <field name='name'>manufacturer</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute08'>
+        <field name='name'>status</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute09'>
+        <field name='name'>visibility</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute10'>
+        <field name='name'>slug</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute11'>
+        <field name='name'>short_description</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute12'>
+        <field name='name'>meta_description</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+        
+        <record model='magento.attribute.exclude' id='mgnattribute13'>
+        <field name='name'>meta_keyword</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+        
+        <record model='magento.attribute.exclude' id='mgnattribute14'>
+        <field name='name'>meta_title</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute15'>
+        <field name='name'>url_key</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+    </data>
+</openerp>

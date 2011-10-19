@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="mag0" model="product.category">
+            <field name="parent_id" ref="null"/>
+            <field name="name">Service</field>
+        </record>
+
+        <record id="product_product_shipping" model="product.product">
+            <field name="default_code">SHIP MAGENTO</field>
+            <field name="list_price">0.0</field>
+            <field name="standard_price">0.0</field>
+            <field name="type">service</field>
+            <field name="name">Shipping and Handling</field>
+            <field name="magento_exportable" eval="False" />
+            <field name="categ_id" ref="mag0"/>
+        </record>
+        
+        <record id="product_product_cash_on_delivery" model="product.product">
+            <field name="default_code">CASH ON DELIVERY MAGENTO</field>
+            <field name="list_price">0.0</field>
+            <field name="standard_price">0.0</field>
+            <field name="type">service</field>
+            <field name="name">Cash on delivery</field>
+            <field name="magento_exportable" eval="False" />
+            <field name="categ_id" ref="mag0"/>
+        </record>
+
+        <record id="product_product_gift" model="product.product">
+            <field name="default_code">GIFT CERTIFICATE</field>
+            <field name="list_price">0.0</field>
+            <field name="standard_price">0.0</field>
+            <field name="type">service</field>
+            <field name="name">Gift Certificate</field>
+            <field name="magento_exportable" eval="False" />
+            <field name="categ_id" ref="mag0"/>
+        </record>
+
+        <record id="product_product_discount" model="product.product">
+            <field name="default_code">DISCOUNT MAGENTO</field>
+            <field name="list_price">0.0</field>
+            <field name="standard_price">0.0</field>
+            <field name="type">service</field>
+            <field name="name">Discount Coupon</field>
+            <field name="magento_exportable" eval="False" />
+            <field name="categ_id" ref="mag0"/>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_import_orders_scheduler_action" model="ir.cron">
+            <field name="name">Magento Import Orders</field>
+            <field eval="False" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'sale.shop'" name="model"/>
+            <field eval="'run_import_orders_scheduler'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_update_orders_scheduler_action" model="ir.cron">
+            <field name="name">Magento Update Orders Status</field>
+            <field eval="False" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'sale.shop'" name="model"/>
+            <field eval="'run_update_orders_scheduler'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_export_catalog_scheduler_action" model="ir.cron">
+            <field name="name">Magento Export Catalog</field>
+            <field eval="False" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'sale.shop'" name="model"/>
+            <field eval="'run_export_catalog_scheduler'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_export_stock_scheduler_action" model="ir.cron">
+            <field name="name">Magento Export Stock</field>
+            <field eval="False" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'sale.shop'" name="model"/>
+            <field eval="'run_export_stock_scheduler'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_export_price_scheduler_action" model="ir.cron">
+            <field name="name">Magento Export Price</field>
+            <field eval="False" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'sale.shop'" name="model"/>
+            <field eval="'run_export_price_scheduler'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+
+    </data>
+</openerp>

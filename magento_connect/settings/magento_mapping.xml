@@ -1,0 +1,316 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<openerp>
+    <data noupdate='1'>
+
+<!--Product-->
+        <record model='base.external.mapping' id='mgn01'>
+            <field name='name'>magento.product.product</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+            <field name='state'>done</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpp01'>
+            <field name='mapping_id' ref='magento_connect.mgn01'/>
+            <field name='field_id' search="[('model_id','=','product.product'),('name','=','magento_sku')]" model='ir.model.fields'/>
+            <field name='external_field'>sku</field>
+            <field name='type'>out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpp02'>
+            <field name='mapping_id' ref='magento_connect.mgn01'/>
+            <field name='field_id' search="[('model_id','=','product.product'),('name','=','magento_product_type')]" model='ir.model.fields'/>
+            <field name='external_field'>type</field>
+            <field name='type'>out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpp03'>
+            <field name='mapping_id' ref='magento_connect.mgn01'/>
+            <field name='field_id' search="[('model_id','=','product.product'),('name','=','magento_sale_shop')]" model='ir.model.fields'/>
+            <field name='external_field'>websites</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+            <field name='in_function'>saleshops = []
+if values:
+    values = self.pool.get('magento.external.referential').get_mgnreferential_ids(cr, uid, context['magento_app'], 'sale.shop', values)
+    values = self.pool.get('magento.external.referential').get_external_referential(cr, uid, values)
+    for val in values:
+        saleshops.append(val['oerp_id'])
+value = [(6, 0, saleshops)]</field>
+            <field name='out_function'>value = []
+if context['product_id']:
+    product = self.pool.get('product.product').browse(cr, uid, context['product_id'])
+    for sale_shop in product.magento_sale_shop:
+        shop_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, context['magento_app'], 'sale.shop', sale_shop.id)
+        shop_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [shop_id])
+        if len(shop_id)>0:
+            value.append(shop_id[0]['mgn_id'])</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpp04'>
+            <field name='mapping_id' ref='magento_connect.mgn01'/>
+            <field name='field_id' search="[('model_id','=','product.product'),('name','=','attribute_group_id')]" model='ir.model.fields'/>
+            <field name='external_field'>set</field>
+            <field name='type'>out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+            <field name='out_function'>value = ''
+if context['product_id']:
+    product = self.pool.get('product.product').browse(cr, uid, context['product_id'])
+    if product.attribute_group_id.id:
+        set_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, context['magento_app'], 'product.attributes.group', product.attribute_group_id.id)
+        set_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [set_id])
+        if len(set_id)>0:
+            value = set_id[0]['mgn_id']</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpp05'>
+            <field name='mapping_id' ref='magento_connect.mgn01'/>
+            <field name='field_id' search="[('model_id','=','product.product'),('name','=','magento_status')]" model='ir.model.fields'/>
+            <field name='external_field'>status</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpp06'>
+            <field name='mapping_id' ref='magento_connect.mgn01'/>
+            <field name='field_id' search="[('model_id','=','product.product'),('name','=','magento_visibility')]" model='ir.model.fields'/>
+            <field name='external_field'>visibility</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpp07'>
+            <field name='mapping_id' ref='magento_connect.mgn01'/>
+            <field name='field_id' search="[('model_id','=','product.product'),('name','=','magento_url_key')]" model='ir.model.fields'/>
+            <field name='external_field'>url_key</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpp08'>
+            <field name='mapping_id' ref='magento_connect.mgn01'/>
+            <field name='field_id' search="[('model_id','=','product.product'),('name','=','magento_shortdescription')]" model='ir.model.fields'/>
+            <field name='external_field'>short_description</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpp09'>
+            <field name='mapping_id' ref='magento_connect.mgn01'/>
+            <field name='field_id' search="[('model_id','=','product.product'),('name','=','magento_metadescription')]" model='ir.model.fields'/>
+            <field name='external_field'>meta_description</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpp10'>
+            <field name='mapping_id' ref='magento_connect.mgn01'/>
+            <field name='field_id' search="[('model_id','=','product.product'),('name','=','magento_metakeyword')]" model='ir.model.fields'/>
+            <field name='external_field'>meta_keyword</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpp11'>
+            <field name='mapping_id' ref='magento_connect.mgn01'/>
+            <field name='field_id' search="[('model_id','=','product.product'),('name','=','magento_metatitle')]" model='ir.model.fields'/>
+            <field name='external_field'>meta_title</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+<!--Product Template-->
+        <record model='base.external.mapping' id='mgn02'>
+            <field name='name'>magento.product.template</field>
+            <field name='model_id' search="[('model','=','product.template')]" model='ir.model'/>
+            <field name='state'>done</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpt01'>
+            <field name='mapping_id' ref='magento_connect.mgn02'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','name')]" model='ir.model.fields'/>
+            <field name='external_field'>name</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+        
+        <record model='base.external.mapping.line' id='mgnlpt02'>
+            <field name='mapping_id' ref='magento_connect.mgn02'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','description_sale')]" model='ir.model.fields'/>
+            <field name='external_field'>description</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpt03'>
+            <field name='mapping_id' ref='magento_connect.mgn02'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','list_price')]" model='ir.model.fields'/>
+            <field name='external_field'>price</field>
+            <field name='type'>in</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpt04'>
+            <field name='mapping_id' ref='magento_connect.mgn02'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','standard_price')]" model='ir.model.fields'/>
+            <field name='external_field'>price</field>
+            <field name='type'>in</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpt05'>
+            <field name='mapping_id' ref='magento_connect.mgn02'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','categ_ids')]" model='ir.model.fields'/>
+            <field name='external_field'>category_ids</field>
+            <field name='type'>out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+            <field name='out_function'>value = []
+if context['product_id']:
+    product = self.pool.get('product.product').browse(cr, uid, context['product_id'])
+    for category in product.categ_ids:
+        cat_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, context['magento_app'], 'product.category', category.id)
+        cat_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [cat_id])
+        if len(cat_id)>0:
+            value.append(cat_id[0]['mgn_id'])</field>
+        </record>
+
+<!--Product Category-->
+        <record model='base.external.mapping' id='mgn03'>
+            <field name='name'>magento.product.category</field>
+            <field name='model_id' search="[('model','=','product.category')]" model='ir.model'/>
+            <field name='state'>done</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpc01'>
+            <field name='mapping_id' ref='magento_connect.mgn03'/>
+            <field name='field_id' search="[('model_id','=','product.category'),('name','=','magento_is_active')]" model='ir.model.fields'/>
+            <field name='external_field'>is_active</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpc02'>
+            <field name='mapping_id' ref='magento_connect.mgn03'/>
+            <field name='field_id' search="[('model_id','=','product.category'),('name','=','magento_description')]" model='ir.model.fields'/>
+            <field name='external_field'>description</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpc03'>
+            <field name='mapping_id' ref='magento_connect.mgn03'/>
+            <field name='field_id' search="[('model_id','=','product.category'),('name','=','magento_meta_keywords')]" model='ir.model.fields'/>
+            <field name='external_field'>meta_keywords</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+
+        <record model='base.external.mapping.line' id='mgnlpc04'>
+            <field name='mapping_id' ref='magento_connect.mgn03'/>
+            <field name='field_id' search="[('model_id','=','product.category'),('name','=','magento_meta_description')]" model='ir.model.fields'/>
+            <field name='external_field'>meta_description</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+
+        <record model='base.external.mapping.line' id='mgnlpc05'>
+            <field name='mapping_id' ref='magento_connect.mgn03'/>
+            <field name='field_id' search="[('model_id','=','product.category'),('name','=','magento_available_sort_by')]" model='ir.model.fields'/>
+            <field name='external_field'>available_sort_by</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+            <field name='in_function'>value = []
+options = self.pool.get('magento.product_category_attribute_options').search(cr, uid, [('attribute_name','=','available_sort_by'),('value','=',values)])
+if len(options)>0:
+    value = self.pool.get('magento.product_category_attribute_options').browse(cr, uid, options[0]).id</field>
+            <field name='out_function'>value = ''
+if context['category_id']:
+    category = self.pool.get('product.category').browse(cr, uid, context['category_id'])
+    value = category.magento_available_sort_by.value
+if value == None or value == 'None':
+    value = ''</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpc06'>
+            <field name='mapping_id' ref='magento_connect.mgn03'/>
+            <field name='field_id' search="[('model_id','=','product.category'),('name','=','magento_default_sort_by')]" model='ir.model.fields'/>
+            <field name='external_field'>default_sort_by</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+            <field name='in_function'>value = ''
+options = self.pool.get('magento.product_category_attribute_options').search(cr, uid, [('attribute_name','=','default_sort_by'),('value','=',values)])
+if len(options)>0:
+    value = self.pool.get('magento.product_category_attribute_options').browse(cr, uid, options[0]).id</field>
+            <field name='out_function'>value = ''
+if context['category_id']:
+    category = self.pool.get('product.category').browse(cr, uid, context['category_id'])
+    value = category.magento_default_sort_by.value
+if value == None or value == 'None':
+    value = ''</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpc07'>
+            <field name='mapping_id' ref='magento_connect.mgn03'/>
+            <field name='field_id' search="[('model_id','=','product.category'),('name','=','magento_url_key')]" model='ir.model.fields'/>
+            <field name='external_field'>url_key</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpc08'>
+            <field name='mapping_id' ref='magento_connect.mgn03'/>
+            <field name='field_id' search="[('model_id','=','product.category'),('name','=','name')]" model='ir.model.fields'/>
+            <field name='external_field'>name</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpc09'>
+            <field name='mapping_id' ref='magento_connect.mgn03'/>
+            <field name='field_id' search="[('model_id','=','product.category'),('name','=','parent_id')]" model='ir.model.fields'/>
+            <field name='external_field'>parent_id</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+            <field name='in_function'>value = ''
+if context['parent_id']:
+    value = context['parent_id']</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlpc10'>
+            <field name='mapping_id' ref='magento_connect.mgn03'/>
+            <field name='field_id' search="[('model_id','=','product.category'),('name','=','sequence')]" model='ir.model.fields'/>
+            <field name='external_field'>position</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+    </data>
+</openerp>

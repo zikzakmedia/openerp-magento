@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_magento_sale_shop_form">
+            <field name="name">magento_sale_shop_form</field>
+            <field name="model">sale.shop</field>
+            <field name="inherit_id" ref="sale.view_shop_form" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <data>
+                    <form position="inside">
+                        <group col="4" colspan="4" attrs="{'invisible':[('magento_shop','!=', True)]}">
+                            <separator string="Magento" colspan="4"/>
+                            <notebook colspan="4">
+                                <page string="Actions">
+                                    <group col="3" colspan="4">
+                                        <separator string="Magento" colspan="3"/>
+                                        <group col="1" colspan="1">
+                                            <button name="magento_export_products" string="Export Products" colspan="1" type="object"/>
+                                            <button name="magento_export_prices" string="Export Prices" colspan="1" type="object"/>
+                                            <button name="magento_export_stock" string="Export Stock" colspan="1" type="object"/>
+                                        </group>
+                                        <group col="2" colspan="2">
+                                            <field name="magento_last_export_products" />
+                                            <field name="magento_last_export_prices" />
+                                            <field name="magento_last_export_stock" />
+                                        </group>
+                                    </group>
+                                </page>
+                                
+                                <page string="Extra Information">
+                                    <group col="4" colspan="4">
+                                        <field name="magento_shop"/>
+                                        <field name="magento_website" readonly="1"/>
+                                        <field name="magento_scheduler"/>
+                                        <field name="magento_sale_stock"/>
+                                        <field name="magento_sale_price"/>
+                                        <field name="magento_tax_include"/>
+                                        <field name="magento_default_language"/>
+                                        <separator string="Payment Types" colspan="4" />
+                                        <field name="magento_payment_types" colspan="4" nolabel="1"/>
+                                    </group>
+                                </page>
+                            </notebook>
+                        </group>
+                    </form>
+                </data>
+            </field>
+        </record>
+        
+    </data>
+</openerp>

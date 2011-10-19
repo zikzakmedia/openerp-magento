@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_magento_product_attributes_form">
+            <field name="name">magento.product.attributes.group.form</field>
+            <field name="model">product.attributes.group</field>
+            <field name="inherit_id" ref="product_attributes.view_product_attributes_group_form" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <xpath expr="/form/field[@name='code']" position="after">
+                    <field name="magento"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_magento_product_attributes_tree">
+            <field name="name">magento.product.attributes.group.tree</field>
+            <field name="model">product.attributes.group</field>
+            <field name="inherit_id" ref="product_attributes.view_product_attributes_group_tree" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="code" position="after">
+                    <field name="magento"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

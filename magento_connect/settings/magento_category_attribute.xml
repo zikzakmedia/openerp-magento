@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<openerp>
+    <data noupdate='1'>
+
+        <!--default_sort_by-->
+        <record model='magento.product_category_attribute_options' id='mgncatattribute01'>
+            <field name='attribute_name'>default_sort_by</field>
+            <field name='value'>None</field>
+            <field name="label">Use Config Settings</field>
+        </record>
+
+        <record model='magento.product_category_attribute_options' id='mgncatattribute02'>
+            <field name='attribute_name'>default_sort_by</field>
+            <field name='value'>position</field>
+            <field name="label">Best Value</field>
+        </record>
+
+        <record model='magento.product_category_attribute_options' id='mgncatattribute03'>
+            <field name='attribute_name'>default_sort_by</field>
+            <field name='value'>name</field>
+            <field name="label">Name</field>
+        </record>
+
+        <record model='magento.product_category_attribute_options' id='mgncatattribute04'>
+            <field name='attribute_name'>default_sort_by</field>
+            <field name='value'>price</field>
+            <field name="label">Price</field>
+        </record>
+
+        <!--available_sort_by-->
+        <record model='magento.product_category_attribute_options' id='mgncatattribute05'>
+            <field name='attribute_name'>available_sort_by</field>
+            <field name='value'>None</field>
+            <field name="label">Use Config Settings</field>
+        </record>
+
+        <record model='magento.product_category_attribute_options' id='mgncatattribute06'>
+            <field name='attribute_name'>available_sort_by</field>
+            <field name='value'>position</field>
+            <field name="label">Best Value</field>
+        </record>
+
+        <record model='magento.product_category_attribute_options' id='mgncatattribute07'>
+            <field name='attribute_name'>available_sort_by</field>
+            <field name='value'>name</field>
+            <field name="label">Name</field>
+        </record>
+
+        <record model='magento.product_category_attribute_options' id='mgncatattribute08'>
+            <field name='attribute_name'>available_sort_by</field>
+            <field name='value'>price</field>
+            <field name="label">Price</field>
+        </record>
+
+    </data>
+</openerp>

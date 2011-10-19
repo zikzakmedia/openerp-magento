@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <menuitem id="menu_magento" name="Magento" parent="base.menu_base_config" sequence="0" groups="base.group_extended"/>
+
+        <!-- Magento App -->
+        <record id="view_magento_app_form" model="ir.ui.view">
+            <field name="name">magento.app</field>
+            <field name="model">magento.app</field>
+            <field name="type">form</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <form string="Magento App">
+                <group col="4" colspan="4">
+                    <field name="name" />
+                    <notebook colspan="4">
+                        <page string="General">
+                            <field name="uri" />
+                            <field name="magento_default_storeview"/>
+                            <field name="product_category_id" />
+                        </page>
+                        <page string="Sale">
+                            <field name="payment_default_id"/>
+                            <field name="warehouse_id"/>
+                            <field name="pricelist_id"/>
+                        </page>
+                        <page string="Authentication">
+                            <field name="username"/>
+                            <field name="password" password="True"/>
+                            <button name="core_sync_test" string="Test Connection" colspan="4" type="object" />
+                        </page>
+                    </notebook>
+                </group>
+
+                <group col="4" colspan="4">
+                    <separator string="Core Components" colspan="4" />
+                    <notebook colspan="4">
+                        <page string="Referential Actions">
+                            <separator string="Store" colspan="4" />
+                            <button name="core_sync_store" string="1 - Import Magento Store" colspan="2" type="object" />
+                            <separator string="Import" colspan="4" />
+                            <button name="core_sync_product_type" string="1 - Import Magento Product Types" colspan="2" type="object" />
+                            <button name="core_sync_attributes_set" string="2 - Import Magento Attributes Set" colspan="2" type="object" />
+                            <button name="core_sync_attributes" string="3 - Import Magento Attributes" colspan="2" type="object" />
+                            <button name="core_sync_categories" string="4 - Import Magento Categories" colspan="2" type="object" />
+                            <newline/>
+                            <button name="core_sync_products" string="5 - Import Magento Products" colspan="2" type="object" />
+                            <newline/>
+                            <field name="from_import_products" />
+                            <field name="to_import_products" />
+
+                            <separator string="Export" colspan="4" />
+                            <button name="core_export_categories" string="1 - Export Product Categories" colspan="2" type="object" />
+                            <field name="last_export_product_category" />
+                        </page>
+
+                        <page string="Websites">
+                            <field name="magento_website_ids" nolabel="1" />
+                        </page>
+                    </notebook>
+                </group>
+            </form>
+            </field>
+        </record>
+
+        <record id="view_magento_app_tree" model="ir.ui.view">
+            <field name="name">magento.app</field>
+            <field name="model">magento.app</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <tree string="Magento App">
+                <field name="name"/>
+                <field name="uri"/>
+            </tree>
+            </field>
+        </record>
+
+        <record id="action_magento_app" model="ir.actions.act_window">
+            <field name="name">Magento Server</field>
+            <field name="res_model">magento.app</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem action="action_magento_app" id="menu_magento_app" parent="menu_magento" groups="base.group_extended" sequence="50"/>
+
+        <!-- Magento Website -->
+        <record id="view_magento_website_form" model="ir.ui.view">
+            <field name="name">magento.website.form</field>
+            <field name="model">magento.website</field>
+            <field name="type">form</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <form string="Magento Website">
+                <field name="name" readonly="1"/>
+                <field name="code" readonly="1"/>
+                <field name="magento_app_id" readonly="1"/>
+                <separator string="Sale Shop" colspan="4" />
+                <field name="sale_shop" nolabel="1" colspan="4" readonly="1"/>
+                <separator string="Store Group" colspan="4" />
+                <field name="magento_storegroup_ids" nolabel="1" colspan="4" readonly="1"/>
+            </form>
+            </field>
+        </record>
+
+        <record id="view_magento_website_tree" model="ir.ui.view">
+            <field name="name">magento.website.tree</field>
+            <field name="model">magento.website</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <tree string="Magento Website">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+            </field>
+        </record>
+
+        <record id="action_magento_website" model="ir.actions.act_window">
+            <field name="name">Magento Website</field>
+            <field name="res_model">magento.website</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem action="action_magento_website" id="menu_magento_website" parent="menu_magento_app" groups="base.group_extended" sequence="50"/>
+
+        <!-- Magento Store Group -->
+        <record id="view_magento_storegroup_form" model="ir.ui.view">
+            <field name="name">magento.storegroup.form</field>
+            <field name="model">magento.storegroup</field>
+            <field name="type">form</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <form string="Magento Store Group">
+                <field name="name" readonly="1"/>
+                <field name="magento_website_id" readonly="1"/>
+                <separator string="Store Views" colspan="4" />
+                <field name="magento_storeview_ids" nolabel="1" colspan="4" readonly="1"/>
+            </form>
+            </field>
+        </record>
+
+        <record id="view_magento_storegroup_tree" model="ir.ui.view">
+            <field name="name">magento.storegroup.tree</field>
+            <field name="model">magento.storegroup</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <tree string="Magento Store Group">
+                <field name="name"/>
+            </tree>
+            </field>
+        </record>
+
+        <record id="action_magento_storegroup" model="ir.actions.act_window">
+            <field name="name">Magento Store Group</field>
+            <field name="res_model">magento.storegroup</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem action="action_magento_storegroup" id="menu_magento_storegroup" parent="menu_magento_app" groups="base.group_extended" sequence="50"/>
+
+        <!-- Magento Store View -->
+        <record id="view_magento_storeview_form" model="ir.ui.view">
+            <field name="name">magento.storeview.form</field>
+            <field name="model">magento.storeview</field>
+            <field name="type">form</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <form string="Magento Store View">
+                <field name="name" readonly="1"/>
+                <field name="code" readonly="1"/>
+                <field name="magento_storegroup_id" readonly="1"/>
+                <field name="language_id"/>
+                <separator string="Locale" colspan="4"/>
+                <button name="magento_import_locale_products" string="Import Translations Products" colspan="2" type="object"/>
+                <field name="magento_last_import_locale_products" />
+                <button name="magento_export_locale_products" string="Export Translations Products" colspan="2" type="object"/>
+                <field name="magento_last_export_locale_products" />
+            </form>
+            </field>
+        </record>
+
+        <record id="view_magento_storeview_tree" model="ir.ui.view">
+            <field name="name">magento.storeview.tree</field>
+            <field name="model">magento.storeview</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <tree string="Magento Store View">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="language_id"/>
+            </tree>
+            </field>
+        </record>
+
+        <record id="action_magento_storeview" model="ir.actions.act_window">
+            <field name="name">Magento Store View</field>
+            <field name="res_model">magento.storeview</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem action="action_magento_storeview" id="menu_magento_storeview" parent="menu_magento_app" groups="base.group_extended" sequence="50"/>
+
+        <!-- Magento Attribute Exclude View -->
+        <record id="view_magento_attribute_exclude_form" model="ir.ui.view">
+            <field name="name">magento.attribute.exclude.form</field>
+            <field name="model">magento.attribute.exclude</field>
+            <field name="type">form</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <form string="Magento Attribute Exclude">
+                <field name="name"/>
+                <field name="model_id"/>
+            </form>
+            </field>
+        </record>
+
+        <record id="view_magento_attribute_exclude_tree" model="ir.ui.view">
+            <field name="name">magento.attribute.exclude.tree</field>
+            <field name="model">magento.attribute.exclude</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <tree string="Magento Attribute Exclude">
+                <field name="name"/>
+                <field name="model_id"/>
+            </tree>
+            </field>
+        </record>
+
+        <record id="action_magento_attribute_exclude" model="ir.actions.act_window">
+            <field name="name">Magento Attribute Exclude</field>
+            <field name="res_model">magento.attribute.exclude</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem action="action_magento_attribute_exclude" id="menu_magento_attribute_exclude" parent="menu_magento" groups="base.group_extended" sequence="50"/>
+
+    </data>
+</openerp>

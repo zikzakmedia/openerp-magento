@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Product Category View -->
+        <record model="ir.ui.view" id="product_category_form_view_zoook">
+            <field name="name">product.category.form_view_zoook</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <xpath expr="/form/field[@name='name']" position="replace">
+                    <field name="name" on_change="onchange_name(name, magento_url_key)"/>
+                </xpath>
+                <xpath expr="/form/field[@name='sequence']" position="after">
+                    <group colspan="4" col="4">
+                        <field name="magento_exportable" attrs="{'readonly':[('magento_exportable','==',True)]}"/>
+                        <separator string="Magento" colspan="4" />
+                        <notebook colspan="4">
+                            <page string="Meta Information">
+                                <field name="magento_url_key" colspan="4" attrs="{'required':[('magento_exportable','==',True)]}"/>
+                                <field name="magento_meta_title" colspan="4" />
+                                <field name="magento_meta_keywords" colspan="4" />
+                                <field name="magento_meta_description" colspan="4" />
+                            </page>
+                            <page string="Description">
+                                <field name="magento_description" colspan="4" nolabel="1"/>
+                            </page>
+                            <page string="Display Settings">
+                                <field name="magento_is_active" />
+                                <separator string="Sorting method" colspan="4" />
+                                <field name="magento_available_sort_by" widget="selection" domain="[('attribute_name', '=', 'available_sort_by')]"/>
+                                <field name="magento_default_sort_by" widget="selection" domain="[('attribute_name', '=', 'default_sort_by')]"/>
+                            </page>
+                        </notebook>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Product Product Filter -->
+       <record model="ir.ui.view" id="iew_magento_product_product_search" >
+            <field name="name">magento.product.product.search</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_search_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="/search/group[@string='Extended Filters...']" position="after">
+                    <newline/>
+                    <group expand="0" string="Magento Filters..." groups="base.group_extended">
+                        <field name="magento_sku" string="SKU"/>
+                        <field name="magento_exportable"/>
+                        <field name="magento_product_type"/>
+                        <field name="magento_status"/>
+                        <field name="magento_visibility"/>
+                        <field name="magento_sale_shop"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Product Product View -->
+        <record model="ir.ui.view" id="view_magento_product_product_form">
+            <field name="name">magento.product.product.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/form/group/group/field[@name='name']" position="replace">
+                        <field name="name" on_change="onchange_name(name, magento_url_key)"/>
+                    </xpath>
+                    <xpath expr="/form/group/group/field[@name='purchase_ok']" position="after">
+                        <field name="magento_exportable"/>
+                    </xpath>
+                    <xpath expr="/form/group/group/field[@name='ean13']" position="after">
+                        <field name="magento_sku" attrs="{'required':[('magento_exportable','==',True)], 'readonly':[('magento_exported', '==', True)],'invisible':[('magento_exportable','==',False)]}"/>
+                    </xpath>
+                    <xpath expr="/form/notebook/page[@string='Descriptions']" position="after">
+                        <page string="Magento" attrs="{'invisible':[('magento_exportable','==',False)]}">
+                            <notebook colspan="4">
+                                <page string="General">
+                                    <field name="magento_product_type" attrs="{'required':[('magento_exportable','==',True)], 'readonly':[('magento_exported', '==', True)],'invisible':[('magento_exportable','==',False)]}" colspan="4"/>
+                                    <separator string="Short Description" colspan="4"/>
+                                    <field name="magento_shortdescription" nolabel="1" colspan="4"/>
+                                    <field name="magento_status"/>
+                                    <field name="magento_visibility"/>
+                                </page>
+                                <page string="SEO">
+                                    <field name="magento_url_key" colspan="4" attrs="{'required':[('magento_exportable','==',True)]}"/>
+                                    <separator string="Metadescription" colspan="4"/>
+                                    <field name="magento_metadescription" nolabel="1" colspan="4"/>
+                                    <separator string="Metakeyword" colspan="4"/>
+                                    <field name="magento_metakeyword" nolabel="1" colspan="4"/>
+                                    <field name="magento_metatitle" colspan="4"/>
+                                </page>
+                                <page string="Website">
+                                    <separator string="Website" colspan="4" />
+                                    <field name="magento_sale_shop" colspan="4" nolabel="1" domain="[('magento_shop','=',True)]"/>
+                                </page>
+                            </notebook>
+                        </page>
+                    </xpath>
+
+                </data>
+            </field>
+        </record>
+
+        <!-- Magento Product Type View -->
+       <record id="view_magento_product_product_type_search" model="ir.ui.view">
+            <field name="name">magento.product.product.type.search</field>
+            <field name="model">magento.product.product.type</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Search Magento Product Type">
+                   <group col='15' colspan='4'>
+                        <field name="name"/>
+                        <field name="product_type"/>
+                        <field name="active"/>
+                   </group>
+               </search>
+            </field>
+        </record>
+
+        <record id="view_magento_product_product_type_form" model="ir.ui.view">
+            <field name="name">magento.product.product.type.form</field>
+            <field name="model">magento.product.product.type</field>
+            <field name="type">form</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <form string="Magento Attribute Exclude">
+                <field name="name" readonly="1"/>
+                <field name="product_type" readonly="1"/>
+                <field name="active"/>
+            </form>
+            </field>
+        </record>
+
+        <record id="view_magento_product_product_type_tree" model="ir.ui.view">
+            <field name="name">magento.product.product.tree</field>
+            <field name="model">magento.product.product</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <tree string="Magento Product Product Type">
+                <field name="name"/>
+                <field name="product_type"/>
+                <field name="active"/>
+            </tree>
+            </field>
+        </record>
+
+        <record id="action_magento_product_product_type" model="ir.actions.act_window">
+            <field name="name">Magento Product Type</field>
+            <field name="res_model">magento.product.product.type</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem action="action_magento_product_product_type" id="menu_magento_product_product_type" parent="menu_magento" groups="base.group_extended" sequence="50"/>
+
+    </data>
+</openerp>
