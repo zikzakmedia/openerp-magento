@@ -186,9 +186,10 @@ if context['product_id']:
     product = self.pool.get('product.product').browse(cr, uid, context['product_id'])
     for category in product.categ_ids:
         cat_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, context['magento_app'], 'product.category', category.id)
-        cat_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [cat_id])
-        if len(cat_id)>0:
-            value.append(cat_id[0]['mgn_id'])</field>
+        if cat_id:
+            cat_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [cat_id])
+            if len(cat_id)>0:
+                value.append(cat_id[0]['mgn_id'])</field>
         </record>
 
 <!--Product Category-->

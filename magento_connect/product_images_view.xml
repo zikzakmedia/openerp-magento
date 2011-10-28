@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="view_magento_product_image_form" model="ir.ui.view">
+            <field name="name">magento.product.images.form</field>
+            <field name="model">product.images</field>
+            <field name="inherit_id" ref="product_images_olbs.view_product_image_form" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <xpath expr="/form/notebook/page[@string='Comments']" position="after">
+                    <page string="Magento">
+                        <group col="4" colspan="2">
+                            <field name="magento_base_image" colspan="4" />
+                            <field name="magento_small_image" colspan="4" />
+                        </group>
+                        <group col="4" colspan="2">
+                            <field name="magento_thumbnail" colspan="4" />
+                            <field name="magento_exclude" colspan="4" />
+                        </group>
+                        <group col="4" colspan="2">
+                            <field name="magento_position" colspan="2"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_magento_product_image_tree" model="ir.ui.view">
+            <field name="name">magento.product.images.tree</field>
+            <field name="model">product.images</field>
+            <field name="inherit_id" ref="product_images_olbs.view_product_image_tree" />
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <field name="image" position="after">
+                    <field name="magento_base_image"/>
+                    <field name="magento_small_image"/>
+                    <field name="magento_thumbnail"/>
+                    <field name="magento_exclude" />
+                    <field name="magento_position"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

@@ -21,11 +21,25 @@
 #
 ##############################################################################
 
-import mgn
-import mgn_referential
-import partner
-import product
-import product_attributes
-import product_images
-import sale
+from osv import osv, fields
+from tools.translate import _
 
+class product_images(osv.osv):
+    _inherit = "product.images"
+
+    _columns = {
+        'magento_base_image':fields.boolean('Base Image'),
+        'magento_small_image':fields.boolean('Small Image'),
+        'magento_thumbnail':fields.boolean('Thumbnail'),
+        'magento_exclude':fields.boolean('Exclude'),
+        'magento_position':fields.integer('Position'),
+    }
+
+    _defaults = {
+        'magento_base_image':lambda * a:True,
+        'magento_small_image':lambda * a:True,
+        'magento_thumbnail':lambda * a:True,
+        'magento_exclude':lambda * a:False
+    }
+
+product_images()
