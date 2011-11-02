@@ -3,7 +3,7 @@
     <data>
 
         <!-- Product Category View -->
-        <record model="ir.ui.view" id="product_category_form_view_zoook">
+        <record model="ir.ui.view" id="view_magento_product_category_form">
             <field name="name">product.category.form_view_zoook</field>
             <field name="model">product.category</field>
             <field name="inherit_id" ref="product.product_category_form_view" />
@@ -39,7 +39,7 @@
         </record>
 
         <!-- Product Product Filter -->
-       <record model="ir.ui.view" id="iew_magento_product_product_search" >
+       <record model="ir.ui.view" id="view_magento_product_product_search" >
             <field name="name">magento.product.product.search</field>
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_search_form_view"/>
@@ -101,6 +101,21 @@
                         </page>
                     </xpath>
 
+                </data>
+            </field>
+        </record>
+
+        <!-- Product Attributes View -->
+        <record model="ir.ui.view" id="view_magento_product_attributes_product_form">
+            <field name="name">magento.product.attributes.product.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product_attributes.view_product_attributes_product_product_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/form/group/group/field[@name='attribute_group_id']" position="replace">
+                        <field name="attribute_group_id" attrs="{'required':[('magento_exportable','==',True)]}"/>
+                    </xpath>
                 </data>
             </field>
         </record>
