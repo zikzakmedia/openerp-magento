@@ -321,20 +321,25 @@ class magento_app(osv.osv):
 
                 del product_category_vals['id']
 
-                try:
-                    if product_cat_mgn_id:
-                        with Category(magento_app.uri, magento_app.username, magento_app.password) as category_api:
+                with Category(magento_app.uri, magento_app.username, magento_app.password) as category_api:
+                    try:
+                        if product_cat_mgn_id:
+                            #TODO Parent ID not updated. Only vals
                             category_api.update(product_cat_mgn_id, product_category_vals)
                             logger.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "Update Category Magento ID %s, OpenERP ID %s." % (product_cat_mgn_id, product_category))
-                    else:
-                        with Category(magento_app.uri, magento_app.username, magento_app.password) as category_api:
-                            parent_id = product_category_vals['parent_id']
+                        else:
+                            product_cat_parent = product_category_vals['parent_id']
+                            product_cat_parent = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.category', product_cat_parent)
+                            if product_cat_parent:
+                                product_cat_parent = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [product_cat_parent])
+                                parent_id = product_cat_parent[0]['mgn_id']
+
                             del product_category_vals['parent_id']
                             product_cat_mgn_id = category_api.create(parent_id, product_category_vals)
                             self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.category', product_category, product_cat_mgn_id)
                             logger.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "Create Category Magento ID %s, OpenERP ID %s." % (product_cat_mgn_id, product_category))
-                except:
-                    logger.notifyChannel('Magento Export Categories', netsvc.LOG_ERROR, "Error to export Category OpenERP ID %s." % (product_category))
+                    except:
+                        logger.notifyChannel('Magento Export Categories', netsvc.LOG_ERROR, "Error to export Category OpenERP ID %s." % (product_category))
 
             logger.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "End export product categories to magento %s." % (magento_app.name))
 

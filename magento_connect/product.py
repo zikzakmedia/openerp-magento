@@ -92,11 +92,13 @@ class product_category(osv.osv):
         'magento_available_sort_by': fields.many2one('magento.product_category_attribute_options', 'Available Product Listing (Sort By)', domain="[('attribute_name', '=', 'available_sort_by')]"),
         'magento_default_sort_by': fields.many2one('magento.product_category_attribute_options', 'Default Product Listing Sort (Sort By)', domain="[('attribute_name', '=', 'default_sort_by')]"),
         'magento_url_key': fields.char('URL-key', size=100, translate=True),
+        'magento_include_in_menu': fields.boolean('Include in menu'),
     }
 
     _defaults = {
         'magento_available_sort_by': lambda self,cr,uid,c: self.pool.get('magento.product_category_attribute_options')._get_default_option(cr, uid, 'available_sort_by', 'None', context=c),
         'magento_default_sort_by': lambda self,cr,uid,c: self.pool.get('magento.product_category_attribute_options')._get_default_option(cr, uid, 'default_sort_by', 'None', context=c),
+        'magento_include_in_menu': lambda *a: 1,
     }
 
     def magento_record_entire_tree(self, cr, uid, magento_app, categ_tree, context={}):

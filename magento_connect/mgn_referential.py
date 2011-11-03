@@ -118,7 +118,7 @@ class magento_external_referential(osv.osv):
         Search if magento app, model and openerp ID exists in other syncronizations
         :param magento_app: object
         :param model: str name model
-        :param mgn_id: int OpenERP ID
+        :param oerp_id: int OpenERP ID
         :return id or False
         """
         model_ids = self.pool.get('ir.model').search(cr, uid, [('model','=',model)])

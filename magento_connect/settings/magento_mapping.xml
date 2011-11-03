@@ -252,8 +252,8 @@ if len(options)>0:
 if context['category_id']:
     category = self.pool.get('product.category').browse(cr, uid, context['category_id'])
     value = category.magento_available_sort_by.value
-if value == None or value == 'None':
-    value = ''</field>
+if value == None:
+    value = 'None'</field>
         </record>
 
         <record model='base.external.mapping.line' id='mgnlpc06'>
@@ -271,8 +271,8 @@ if len(options)>0:
 if context['category_id']:
     category = self.pool.get('product.category').browse(cr, uid, context['category_id'])
     value = category.magento_default_sort_by.value
-if value == None or value == 'None':
-    value = ''</field>
+if value == None:
+    value = 'None'</field>
         </record>
 
         <record model='base.external.mapping.line' id='mgnlpc07'>
@@ -313,5 +313,14 @@ if context['parent_id']:
             <field name='external_type'>str</field>
             <field name='active'>1</field>
         </record>
+        
+        <record model='base.external.mapping.line' id='mgnlpc11'>
+            <field name='mapping_id' ref='magento_connect.mgn03'/>
+            <field name='field_id' search="[('model_id','=','product.category'),('name','=','magento_include_in_menu')]" model='ir.model.fields'/>
+            <field name='external_field'>include_in_menu</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>   
     </data>
 </openerp>
