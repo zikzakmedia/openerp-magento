@@ -77,5 +77,195 @@
             <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
         </record>
 
+        <record model='magento.attribute.exclude' id='mgnattribute16'>
+        <field name='name'>weight</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute17'>
+        <field name='name'>url_path</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute18'>
+        <field name='name'>price_type</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute19'>
+        <field name='name'>sku_type</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute20'>
+        <field name='name'>weight_type</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute21'>
+        <field name='name'>shipment_type</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute22'>
+        <field name='name'>links_purchased_separately</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute23'>
+        <field name='name'>samples_title</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute24'>
+        <field name='name'>links_title</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute25'>
+        <field name='name'>links_exist</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute26'>
+        <field name='name'>is_imported</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute27'>
+        <field name='name'>price</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute28'>
+        <field name='name'>special_price</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute29'>
+        <field name='name'>special_from_date</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute30'>
+        <field name='name'>special_to_date</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute31'>
+        <field name='name'>cost</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute32'>
+        <field name='name'>tier_price</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute33'>
+        <field name='name'>minimal_price</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute34'>
+        <field name='name'>enable_googlecheckout</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute35'>
+        <field name='name'>price_view</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute36'>
+        <field name='name'>is_recurring</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute37'>
+        <field name='name'>recurring_profile</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute38'>
+        <field name='name'>custom_design</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute39'>
+        <field name='name'>custom_design_from</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute40'>
+        <field name='name'>custom_design_to</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute41'>
+        <field name='name'>custom_layout_update</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute42'>
+        <field name='name'>page_layout</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute43'>
+        <field name='name'>options_container</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute44'>
+        <field name='name'>gift_message_available</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute45'>
+        <field name='name'>news_from_date</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute46'>
+        <field name='name'>news_to_date</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute47'>
+        <field name='name'>required_options</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute48'>
+        <field name='name'>has_options</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute49'>
+        <field name='name'>image_label</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute50'>
+        <field name='name'>small_image_label</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute51'>
+        <field name='name'>thumbnail_label</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute52'>
+        <field name='name'>created_at</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
+        <record model='magento.attribute.exclude' id='mgnattribute53'>
+        <field name='name'>updated_at</field>
+            <field name='model_id' search="[('model','=','product.product')]" model='ir.model'/>
+        </record>
+
     </data>
 </openerp>
