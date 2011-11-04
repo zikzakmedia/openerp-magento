@@ -256,7 +256,7 @@ class magento_app(osv.osv):
                                             if len(values['selection']) > 128:
                                                 values = False
                                                 logger.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Skip! Attribute type selection long: magento %s, magento attribute id %s, attribute type %s. Not create" % (magento_app.name, product_attribute['code'], product_attribute['type']))
-        
+
                                         if values:
                                             #if this attribute not exists:
                                             product_attributes = self.pool.get('product.attributes').search(cr, uid, [('name','=',values['name'])])
@@ -274,7 +274,7 @@ class magento_app(osv.osv):
                                         logger.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Skip! Attribute type not suport: magento %s, magento attribute id %s, attribute type %s. Not create" % (magento_app.name, product_attribute['code'], product_attribute['type']))
                                 else:
                                     logger.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Skip! Attribute exists: magento %s, magento attribute id %s. Not create" % (magento_app.name, product_attribute['code']))
-                
+
                     #save attributes relation at product_attribute_group
                     if len(prod_attribute_oerp_ids)>0:
                         self.pool.get('product.attributes.group').write(cr, uid, [prod_attribute.id], {'product_att_ids': [(6, 0, prod_attribute_oerp_ids)], })
@@ -293,7 +293,7 @@ class magento_app(osv.osv):
             with Category(magento_app.uri, magento_app.username, magento_app.password) as category_api:
                 categ_tree = category_api.tree()
                 self.pool.get('product.category').magento_record_entire_tree(cr, uid, magento_app, categ_tree)
-                
+
         logger.notifyChannel('Magento Sync Categories', netsvc.LOG_INFO, "End Sync Categories magento app %s." % (magento_app.name))
         return True
 
@@ -393,7 +393,7 @@ class magento_app(osv.osv):
                 store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', magento_app.magento_default_storeview.id)
                 store_view = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])
                 store_view = store_view[0]['mgn_id']
-                
+
                 for product in product_api.list(ofilter, store_view):
                     product_product = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.product', product['product_id'])
 
@@ -442,9 +442,93 @@ class magento_app(osv.osv):
                     else:
                         logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Product exists: magento %s, magento product id %s. Not create" % (magento_app.name, product['product_id']))
 
-                #~ Update date last import 
+                #~ Update date last import
                 self.write(cr, uid, ids, {'from_import_products': time.strftime('%Y-%m-%d %H:%M:%S')})
                 self.write(cr, uid, ids, {'to_import_products': time.strftime('%Y-%m-%d %H:%M:%S')})
+
+        return True
+
+    def core_sync_images(self, cr, uid, ids, context):
+        """
+        def sync Images from Magento to OpenERP
+        Only create new values if not exist; not update or delete
+        :ids list
+        :return True
+        """
+
+        logger = netsvc.Logger()
+
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
+        product_image_magento_app_obj = self.pool.get('product.images.magento.app')
+        product_images_obj = self.pool.get('product.images')
+
+        for magento_app in self.browse(cr, uid, ids):
+
+            with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
+                magento_external_referential_ids = magento_external_referential_obj.search(cr, uid, [('model_id.model', '=', 'product.product'), ('magento_app_id', 'in', [magento_app.id])], context = context)
+                product_ids = magento_external_referential_obj.read(cr, uid, magento_external_referential_ids, ['oerp_id', 'mgn_id'], context)
+
+                for product_id in product_ids:
+                    with ProductImages(magento_app.uri, magento_app.username, magento_app.password) as product_image_api:
+                        for product_image in product_image_api.list(product_id['mgn_id']):
+                            image_ids = product_images_obj.search(cr, uid, [('filename', '=', product_image['url'])], context = context)
+                            if len(image_ids) > 0:
+                                product_image_magento_ids = product_image_magento_app_obj.search(cr, uid, [('magento_app_id', '=', magento_app.id), ('product_image_id', 'in', image_ids)], context=context)
+                                if len(product_image_magento_ids) > 0: #exist
+                                    logger.notifyChannel('Magento Sync Images', netsvc.LOG_INFO, "Image skipped! Image for this product in this Magento App already exists. Not created.")
+                                    continue
+
+                            name = product_image['label']
+                            if not name:
+                                splited_name = product_image['file'].split('/')
+                                name = splited_name[len(splited_name)-1]
+
+                            vals = {
+                                'name': name,
+                                'link': True,
+                                'filename': product_image['url'],
+                                'magento_exclude': product_image['exclude'],
+                                'magento_position': product_image['position'],
+                                'product_id': product_id['oerp_id'],
+                            }
+                            product_image_id =  product_images_obj.create(cr, uid, vals, context)
+
+                            values = {
+                                'product_image_id': product_image_id,
+                                'magento_app_id': magento_app.id,
+                            }
+                            product_image_magento_app_obj.create(cr, uid, values, context)
+
+                            logger.notifyChannel('Magento Sync Images', netsvc.LOG_INFO, " Magento %s, Image %s created, Product ID %s" % (magento_app.name, name, product_id['oerp_id']))
+        return True
+
+
+    def core_sync_customer_group(self, cr, uid, ids, context):
+        """
+        def sync Customer Group from Magento to OpenERP
+        Only create new values if not exist; not update or delete
+        :ids list
+        :return True
+        """
+
+        logger = netsvc.Logger()
+
+        for magento_app in self.browse(cr, uid, ids):
+            with CustomerGroup(magento_app.uri, magento_app.username, magento_app.password) as customer_group_api:
+                for customer_group in customer_group_api.list():
+                    group_ids = self.pool.get('magento.customer.group').search(cr, uid, [('customer_group_id', '=', customer_group['customer_group_id']), ('magento_app_id', 'in', [magento_app.id])])
+                    if len(group_ids)>0:
+                        logger.notifyChannel('Magento Sync Customer Group', netsvc.LOG_INFO, "Skip! Magento %s: Group %s already exists. Not created." % (magento_app.name, customer_group['customer_group_code']))
+                        continue
+                    
+                    values = {
+                        'name': customer_group['customer_group_code'],
+                        'customer_group_id': customer_group['customer_group_id'],
+                        'magento_app_id': magento_app.id,
+                    }
+                    self.pool.get('magento.customer.group').create(cr, uid, values)
+
+                    logger.notifyChannel('Magento Sync Customer Group', netsvc.LOG_INFO, "Magento %s: Group %s created." % (magento_app.name, customer_group['customer_group_code']))
 
         return True
 
@@ -499,7 +583,7 @@ class magento_storeview(osv.osv):
         raise osv.except_osv(_("Alert"), _("This Magento Store View not allow to delete"))
 
     def magento_import_locale_products(self, cr, uid, ids, context=None):
-        """ 
+        """
         Get all IDs products to write locale to OpenERP)
         Use Base External Mapping to transform values
         :return True
@@ -540,13 +624,13 @@ class magento_storeview(osv.osv):
                     logger.notifyChannel('Magento Store View', netsvc.LOG_INFO, "Write Product Product Locale: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product.id, product_info['product_id']))
 
                     cr.commit()
- 
+
             self.write(cr, uid, ids, {'magento_last_import_locale_products': time.strftime('%Y-%m-%d %H:%M:%S')})
-        
+
         return True
 
     def magento_export_locale_products(self, cr, uid, ids, context=None):
-        """ 
+        """
         Get all IDs products to write locale to Magento (store))
         Use Base External Mapping to transform values
         :return True
@@ -579,7 +663,7 @@ class magento_storeview(osv.osv):
             logger.notifyChannel('Magento Store View', netsvc.LOG_INFO, "Products to export: %s" % (product_shop_ids))
 
             self.write(cr, uid, ids, {'magento_last_export_locale_products': time.strftime('%Y-%m-%d %H:%M:%S')})
-        
+
         return True
 
 magento_storeview()
@@ -597,3 +681,42 @@ class magento_attribute_exclude(osv.osv):
         raise osv.except_osv(_("Alert"), _("This Magento Attribute Exclude not allow to delete"))
 
 magento_attribute_exclude()
+
+class magento_customer_group(osv.osv):
+    _name = 'magento.customer.group'
+    _description = 'Magento Customer Group'
+    
+    _columns = {
+        'name': fields.char('Name', size=256, required=True, readonly=True),
+        'customer_group_id': fields.integer('Customer Group ID', required=True, readonly=True),
+        'magento_app_id': fields.many2one('magento.app', 'Magento App', required=True, readonly=True),
+    }
+
+    def unlink(self, cr, uid, ids, context=None):
+        raise osv.except_osv(_("Alert"), _("This Magento Customer Group not allow to delete"))
+
+magento_customer_group()
+
+class magento_app_customer(osv.osv):
+    _name = 'magento.app.customer'
+    _description = 'Magento App Customer'
+    _rec_name = "partner_id"
+
+    _columns = {
+        'partner_id': fields.many2one('res.partner', 'Partner', required=True),
+        'magento_app_id': fields.many2one('magento.app','Magento App', required=True),
+        'magento_customer_group_id': fields.many2one('magento.customer.group','Customer Group', required=True), #TODO: Domain
+        'magento_storeview_id':fields.many2one('magento.storeview', 'Last Store View', readonly=True, help="Last store view where the customer has bought."),
+        'magento_storeview_ids':fields.many2many('magento.storeview', 'magento_storeid_rel', 'partner_id', 'store_id', 'Store Views', readonly=True),
+        'magento_emailid':fields.char('Email Address', size=100, required=True, help="Magento uses this email ID to match the customer."),
+        'magento_vat':fields.char('Magento VAT', size=50, readonly=True, help="To be able to receive customer VAT number you must set it in Magento Admin Panel, menu System / Configuration / Client Configuration / Name and Address Options."),
+        'magento_birthday':fields.date('Birthday', help="To be able to receive customer birthday you must set it in Magento Admin Panel, menu System / Configuration / Client Configuration / Name and Address Options."),
+        'magento_newsletter':fields.boolean('Newsletter'),
+    }
+
+    #~ TODO: Constrain partner_id and magento_app_id
+
+    def unlink(self, cr, uid, ids, context=None):
+        raise osv.except_osv(_("Alert"), _("This Magento Websites/Groups not allow to delete"))
+
+magento_app_customer()

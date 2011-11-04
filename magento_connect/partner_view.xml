@@ -2,5 +2,53 @@
 <openerp>
     <data>
     
+        <record id="view_magento_partner_form" model="ir.ui.view">
+            <field name="name">magento.res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+                <xpath expr="/form/notebook" position="inside">
+                    <page string="Magento">
+                        <field colspan="4" mode="tree,form" name="magento_app_customer" nolabel="1" select="1" height="260">
+                               <form string="Magento Customer">
+                                    <field name="magento_app_id" widget="selection"/>
+                                    <field name="magento_customer_group_id" widget="selection"/>
+                                    <field name="magento_emailid" />
+                                    <field name="magento_vat" />
+                                    <field name="magento_birthday" />
+                                    <field name="magento_newsletter"/>
+                                    <field name="magento_storeview_id" />
+                                    <newline/>
+                                    <separator string="Store views" colspan="4" />
+                                    <field name="magento_storeview_ids" colspan="4" nolabel="1" />
+                                </form>
+                                <tree string="Magento Customer">
+                                    <field name="magento_app_id"/>
+                                    <field name="magento_customer_group_id"/>
+                                    <field name="magento_emailid" />
+                                    <field name="magento_vat" />
+                                    <field name="magento_newsletter"/>
+                                    <field name="magento_storeview_id" />
+                                </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_magento_partner_address_form" model="ir.ui.view">
+            <field name="name">magento.res.partner.address.form</field>
+            <field name="model">res.partner.address</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_partner_address_form1" />
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="magento_firstname" />
+                    <field name="magento_lastname" />
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>

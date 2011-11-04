@@ -4,7 +4,7 @@
 
         <!-- Product Category View -->
         <record model="ir.ui.view" id="view_magento_product_category_form">
-            <field name="name">product.category.form_view_zoook</field>
+            <field name="name">magento.product.category.form</field>
             <field name="model">product.category</field>
             <field name="inherit_id" ref="product.product_category_form_view" />
             <field name="type">form</field>
@@ -14,24 +14,27 @@
                 </xpath>
                 <xpath expr="/form/field[@name='sequence']" position="after">
                     <group colspan="4" col="4">
-                        <field name="magento_exportable"/>
-                        <separator string="Magento" colspan="4" />
+                        <field name="magento_exportable" attrs="{'invisible':[('magento_exportable','==',True)]}"/>
                         <notebook colspan="4">
-                            <page string="Meta Information">
-                                <field name="magento_url_key" colspan="4" attrs="{'required':[('magento_exportable','==',True)]}"/>
-                                <field name="magento_meta_title" colspan="4" />
-                                <field name="magento_meta_keywords" colspan="4" />
-                                <field name="magento_meta_description" colspan="4" />
-                            </page>
-                            <page string="Description">
-                                <field name="magento_description" colspan="4" nolabel="1"/>
-                            </page>
-                            <page string="Display Settings">
-                                <field name="magento_is_active" />
-                                <field name="magento_include_in_menu" />
-                                <separator string="Sorting method" colspan="4" />
-                                <field name="magento_available_sort_by" widget="selection" domain="[('attribute_name', '=', 'available_sort_by')]"/>
-                                <field name="magento_default_sort_by" widget="selection" domain="[('attribute_name', '=', 'default_sort_by')]"/>
+                            <page string="Magento" attrs="{'invisible':[('magento_exportable','==',False)]}">
+                                <notebook colspan="4">
+                                    <page string="Meta Information">
+                                        <field name="magento_url_key" colspan="4" attrs="{'required':[('magento_exportable','==',True)]}"/>
+                                        <field name="magento_meta_title" colspan="4" />
+                                        <field name="magento_meta_keywords" colspan="4" />
+                                        <field name="magento_meta_description" colspan="4" />
+                                    </page>
+                                    <page string="Description">
+                                        <field name="magento_description" colspan="4" nolabel="1"/>
+                                    </page>
+                                    <page string="Display Settings">
+                                        <field name="magento_is_active" />
+                                        <field name="magento_include_in_menu" />
+                                        <separator string="Sorting method" colspan="4" />
+                                        <field name="magento_available_sort_by" widget="selection" domain="[('attribute_name', '=', 'available_sort_by')]"/>
+                                        <field name="magento_default_sort_by" widget="selection" domain="[('attribute_name', '=', 'default_sort_by')]"/>
+                                    </page>
+                                </notebook>
                             </page>
                         </notebook>
                     </group>
@@ -71,7 +74,7 @@
                         <field name="name" on_change="onchange_name(name, magento_url_key)"/>
                     </xpath>
                     <xpath expr="/form/group/group/field[@name='purchase_ok']" position="after">
-                        <field name="magento_exportable"/>
+                        <field name="magento_exportable" attrs="{'invisible':[('magento_exportable','==',True)]}"/>
                     </xpath>
                     <xpath expr="/form/group/group/field[@name='ean13']" position="after">
                         <field name="magento_sku" attrs="{'required':[('magento_exportable','==',True)], 'readonly':[('magento_exported', '==', True)],'invisible':[('magento_exportable','==',False)]}"/>

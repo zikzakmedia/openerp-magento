@@ -8,3 +8,6 @@
 "access_magento_sale_shop_payment_type","magento.sale.shop.payment.type","model_magento_sale_shop_payment_type","base.group_sale_manager",1,1,1,1
 "access_magento_product_product_type","magento.product.product.type","model_magento_product_product_type","base.group_sale_manager",1,1,0,0
 "access_magento_product_category_attribute_options","magento.product_category_attribute_options","model_magento_product_category_attribute_options","base.group_sale_salesman",1,1,0,0
+"access_product_images_magento_app","product.images.magento.app","model_product_images_magento_app","base.group_sale_manager",1,0,0,0
+"access_magento_customer_group","magento.customer.group","model_magento_customer_group","base.group_user",1,0,0,0
+"access_magento_app_customer","magento.app.customer","model_magento_app_customer","base.group_user",1,1,1,0

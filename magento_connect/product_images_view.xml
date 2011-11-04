@@ -8,8 +8,11 @@
             <field name="inherit_id" ref="product_images_olbs.view_product_image_form" />
             <field name="type">form</field>
             <field name="arch" type="xml">
+                <xpath expr="/form/notebook/page[@string='Image']/group/field[@name='link']" position="after">
+                    <field name="magento_exportable" attrs="{'invisible':[('magento_exportable','==',True)]}"/>
+                </xpath>
                 <xpath expr="/form/notebook/page[@string='Comments']" position="after">
-                    <page string="Magento">
+                    <page string="Magento" attrs="{'invisible':[('magento_exportable','==',False)]}">
                         <group col="4" colspan="2">
                             <field name="magento_base_image" colspan="4" />
                             <field name="magento_small_image" colspan="4" />
@@ -21,6 +24,8 @@
                         <group col="4" colspan="2">
                             <field name="magento_position" colspan="2"/>
                         </group>
+                        <separator string="Magento Server" colspan="4" />
+                        <field name="magento_app_ids" colspan="4" nolabel="1" help="test"/>
                     </page>
                 </xpath>
             </field>
@@ -41,6 +46,28 @@
                 </field>
             </field>
         </record>
+
+        <!-- Magento Customer Group View -->
+        <record id="view_product_images_magento_app_tree" model="ir.ui.view">
+            <field name="name">product.images.magento.app.tree</field>
+            <field name="model">product.images.magento.app</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <tree string="Products Images Magento">
+                <field name="product_image_id"/>
+                <field name="magento_app_id"/>
+            </tree>
+            </field>
+        </record>
+
+        <record id="action_product_images_magento_app" model="ir.actions.act_window">
+            <field name="name">Product Images Magento</field>
+            <field name="res_model">product.images.magento.app</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem action="action_product_images_magento_app" id="menu_product_images_magento" parent="menu_magento" groups="base.group_extended" sequence="50"/>
 
     </data>
 </openerp>

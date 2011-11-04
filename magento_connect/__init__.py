@@ -28,4 +28,3 @@ import product
 import product_attributes
 import product_images
 import sale
-

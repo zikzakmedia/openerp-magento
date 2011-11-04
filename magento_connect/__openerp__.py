@@ -75,7 +75,7 @@
         "product_attributes_view.xml",
         "product_images_view.xml",
         "sale_view.xml",
-#        "partner_view.xml",
+        "partner_view.xml",
     ],
     "active": False,
     "installable": True

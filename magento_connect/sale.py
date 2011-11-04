@@ -44,6 +44,7 @@ class sale_shop(osv.osv):
         'magento_last_export_products': fields.datetime('Last Export Products', help='This date is last export. If you need export new products, you can modify this date (filter)'),
         'magento_last_export_prices': fields.datetime('Last Export Prices', help='This date is last export. If you need export all product prices, empty this field (long sync)'),
         'magento_last_export_stock': fields.datetime('Last Export Stock', help='This date is last export. If you need export all product prices, empty this field (long sync)'),
+        'magento_last_export_images': fields.datetime('Last Export Image', help='This date correspond to the last export. If you need export all images, left empty this field.'),
     }
 
     _defaults = {
@@ -52,7 +53,7 @@ class sale_shop(osv.osv):
     }
 
     def magento_export_products(self, cr, uid, ids, context=None):
-        """ 
+        """
         Sync Products to Magento Site filterd by magento_sale_shop
         Get ids all products and send one to one to Magento
         :return True
@@ -83,7 +84,7 @@ class sale_shop(osv.osv):
         return True
 
     def magento_export_products_stepbystep(self, cr, uid, magento_app, ids, context=None):
-        """ 
+        """
         Get all IDs products to create/write to Magento
         Use Base External Mapping to transform values
         Get values and call magento is step by step (product by product)
@@ -93,7 +94,7 @@ class sale_shop(osv.osv):
         logger = netsvc.Logger()
 
         context['magento_app'] = magento_app
-        
+
         with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
             for product in self.pool.get('product.product').browse(cr, uid, ids, context):
                 context['product_id'] = product.id
@@ -139,7 +140,7 @@ class sale_shop(osv.osv):
         return mgn_id
 
     def magento_export_prices(self, cr, uid, ids, context=None):
-        """ 
+        """
         Sync Products Price to Magento Site
         Get price products when last export time and send one to one to Magento
         :return True
@@ -178,7 +179,7 @@ class sale_shop(osv.osv):
                         price = self.pool.get('product.pricelist').price_get(cr, uid, [shop.pricelist_id.id], product.id, 1.0)[shop.pricelist_id.id]
                     else:
                         price = product.product_tmpl_id.list_price
-                        
+
                     if shop.magento_tax_include:
                         price_compute_all = self.pool.get('account.tax').compute_all(cr, uid, product.product_tmpl_id.taxes_id, price, 1, address_id=None, product=product.product_tmpl_id, partner=None)
                         price = price_compute_all['total_included']
@@ -198,7 +199,7 @@ class sale_shop(osv.osv):
         return True
 
     def magento_export_stock(self, cr, uid, ids, context=None):
-        """ 
+        """
         Sync Products Stock to Magento Site
         Get stock all products and send one to one to Magento
         :return True
@@ -252,6 +253,111 @@ class sale_shop(osv.osv):
 
         return True
 
+
+    #TODO EXPORT IMAGES
+    def magento_export_images(self, cr, uid, ids, context=None):
+        """
+        Sync Images to Magento Site filterd by magento_sale_shop
+        Get ids all products and send one to one to Magento
+        :return True
+        """
+
+        print self
+        print ids
+        print context
+
+        logger = netsvc.Logger()
+
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
+        product_product_obj = self.pool.get('product.product')
+
+        magento_product_images_ids = []
+        for shop in self.browse(cr, uid, ids):
+            magento_app = shop.magento_website.magento_app_id
+            last_exported_time = shop.magento_last_export_images
+            print "-----------------------------------------"
+            print "last_exported_time: ", last_exported_time
+
+            product_images_ids = self.pool.get('product.image.magento.app').search(cr, uid, [('magento_app_id','=',magento_app.id)])
+
+            for product_product in self.pool.get('product.images').perm_read(cr, uid, product_images_ids):
+                # product.product create/modify > date exported last time
+                if last_exported_time < product_product['create_date'][:19] or (product_product['write_date'] and last_exported_time < product_product['write_date'][:19]):
+                    magento_product_images_ids.append(product_product['id'])
+
+            if len(magento_product_images_ids) > 0:
+                magento_product_images_ids = product_images_ids
+
+            print "=======TEST2========"
+            print magento_product_images_ids
+            with ProductImages(magento_app.uri, magento_app.username, magento_app.password) as product_image_api:
+                for product_image in self.pool.get('product.images').browse(cr, uid, magento_product_images_ids):
+                    print "====product image==="
+                    print product_image
+
+
+#
+            #magento_external_referential_ids = magento_external_referential_obj.search(cr, uid, [
+                #('model_id.model', '=', 'product.product'),
+                #('magento_app_id', '=', shop.magento_website.id),
+                #('oerp_id', 'in', product_product_ids),
+            #], context = context)
+            #magento_product_ids = magento_external_referential_obj.read(cr, uid, magento_external_referential_ids, ['oerp_id', 'mgn_id'], context)
+            #print "Productes mapejats: ", magento_product_ids
+#
+            #product_ids = []
+            #map_product = {}
+            #for magento_product_id in magento_product_ids:
+                #if magento_product_id['oerp_id'] in product_product_ids:
+                    #product_ids.append(magento_product_id['oerp_id'])
+                    #map_product[magento_product_id['oerp_id']] = magento_product_id['mgn_id']
+            #print "productes a mapejar: ", product_ids
+#
+            #for product in product_product_obj.browse(cr, uid, product_ids, context):
+                #print 'product: ', product
+                #print 'magento product', map_product[product.id]
+                #for image in product.image_ids:
+                    #print 'image: ', image
+                #with ProductImages(magento_app.uri, magento_app.username, magento_app.password) as product_image_api:
+                    #try:
+                        #product_images = product_image_api.list(map_product[product.id])
+                        #for product_image in product_images:
+                            #product_image = product_image_api.info(map_product[product.id], product_images['file'])
+                            #print "product_image: ", product_image
+                    #except:
+                        #logger.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Products %s not found" % (map_product[product.id]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+#
+            #
+            #product_product_ids = self.pool.get('product.product').search(cr, uid, [('magento_exportable','=',True), ('magento_sale_shop','in',shop.id)])
+#
+            #for product_product in self.pool.get('product.product').perm_read(cr, uid, product_product_ids):
+                 ####product.product create/modify > date exported last time
+                #if last_exported_time < product_product['create_date'][:19] or (product_product['write_date'] and last_exported_time < product_product['write_date'][:19]):
+                    #product_shop_ids.append(product_product['id'])
+#
+            #if shop.magento_default_language:
+                #context['lang'] = shop.magento_default_language.code
+#
+            #logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Products to sync: %s" % (product_shop_ids))
+#
+            #context['shop'] = shop
+            #self.magento_export_products_stepbystep(cr, uid, magento_app, product_shop_ids, context)
+
+        return True
+
     def _sale_shop(self, cr, uid, callback, context=None):
         """
         Sale Shop Magento available Scheduler
@@ -285,7 +391,7 @@ class magento_sale_shop_payment_type(osv.osv):
 
     _description = "Magento Sale Shop Payment Type"
     _rec_name = "payment_type_id"
- 
+
     _columns = {
         'payment_type_id': fields.many2one('payment.type','Payment Type', required=True),
         'shop_id': fields.many2one('sale.shop','Shop', required=True),

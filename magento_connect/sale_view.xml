@@ -20,15 +20,17 @@
                                             <button name="magento_export_products" string="Export Products" colspan="1" type="object"/>
                                             <button name="magento_export_prices" string="Export Prices" colspan="1" type="object"/>
                                             <button name="magento_export_stock" string="Export Stock" colspan="1" type="object"/>
+                                            <button name="magento_export_images" string="Export Images" colspan="1" type="object"/>
                                         </group>
                                         <group col="2" colspan="2">
                                             <field name="magento_last_export_products" />
                                             <field name="magento_last_export_prices" />
                                             <field name="magento_last_export_stock" />
+                                            <field name="magento_last_export_images" />
                                         </group>
                                     </group>
                                 </page>
-                                
+
                                 <page string="Extra Information">
                                     <group col="4" colspan="4">
                                         <field name="magento_shop"/>
@@ -48,6 +50,6 @@
                 </data>
             </field>
         </record>
-        
+
     </data>
 </openerp>
