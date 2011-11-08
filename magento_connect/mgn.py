@@ -68,8 +68,8 @@ class magento_app(osv.osv):
         'to_import_products': fields.datetime('To Import Products', help='This date is to import (filter)'),
         'last_export_product_category': fields.datetime('Last Export Categories', help='This date is to export (filter)'),
         'magento_default_storeview': fields.many2one('magento.storeview', 'Store View Default', help='Default language this shop. If not select, use lang user'),
-        'from_import_customers': fields.datetime('From Import Partners', help='This date is last import. If you need import new partners, you can modify this date (filter)'),
-        'to_import_customers': fields.datetime('To Import Partners', help='This date is to import (filter)'),
+        'from_import_customers': fields.datetime('From Import Customers', help='This date is last import. If you need import new partners, you can modify this date (filter)'),
+        'to_import_customers': fields.datetime('To Import Customers', help='This date is to import (filter)'),
     }
 
     def core_sync_test(self, cr, uid, ids, context):
@@ -529,7 +529,8 @@ class magento_app(osv.osv):
                         'customer_group_id': customer_group['customer_group_id'],
                         'magento_app_id': magento_app.id,
                     }
-                    self.pool.get('magento.customer.group').create(cr, uid, values)
+                    magento_customer_group_id = self.pool.get('magento.customer.group').create(cr, uid, values)
+                    self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'magento.customer.group', magento_customer_group_id, customer_group['customer_group_id'])
 
                     logger.notifyChannel('Magento Sync Customer Group', netsvc.LOG_INFO, "Magento %s: Group %s created." % (magento_app.name, customer_group['customer_group_code']))
 
@@ -727,8 +728,8 @@ class magento_app_customer(osv.osv):
         'magento_storeview_ids':fields.many2many('magento.storeview', 'magento_storeid_rel', 'partner_id', 'store_id', 'Store Views', readonly=True),
         'magento_emailid':fields.char('Email Address', size=100, required=True, help="Magento uses this email ID to match the customer."),
         'magento_vat':fields.char('Magento VAT', size=50, readonly=True, help="To be able to receive customer VAT number you must set it in Magento Admin Panel, menu System / Configuration / Client Configuration / Name and Address Options."),
-        'magento_birthday':fields.date('Birthday', help="To be able to receive customer birthday you must set it in Magento Admin Panel, menu System / Configuration / Client Configuration / Name and Address Options."),
-        'magento_newsletter':fields.boolean('Newsletter'),
+        #~ 'magento_birthday':fields.date('Birthday', help="To be able to receive customer birthday you must set it in Magento Admin Panel, menu System / Configuration / Client Configuration / Name and Address Options."),
+        #~ 'magento_newsletter':fields.boolean('Newsletter'),
     }
 
     #~ TODO: Constrain partner_id and magento_app_id

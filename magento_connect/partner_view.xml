@@ -16,8 +16,10 @@
                                     <field name="magento_customer_group_id" widget="selection"/>
                                     <field name="magento_emailid" />
                                     <field name="magento_vat" />
+<!--
                                     <field name="magento_birthday" />
                                     <field name="magento_newsletter"/>
+-->
                                     <field name="magento_storeview_id" />
                                     <newline/>
                                     <separator string="Store views" colspan="4" />
@@ -28,7 +30,9 @@
                                     <field name="magento_customer_group_id"/>
                                     <field name="magento_emailid" />
                                     <field name="magento_vat" />
+<!--
                                     <field name="magento_newsletter"/>
+-->
                                     <field name="magento_storeview_id" />
                                 </tree>
                         </field>

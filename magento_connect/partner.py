@@ -26,7 +26,7 @@ from tools.translate import _
 
 class res_partner(osv.osv):
     _inherit = "res.partner"
-    
+
     _columns = {
         'magento_app_customer': fields.one2many('magento.app.customer', 'partner_id', 'Magento Customer'),
     }
@@ -39,11 +39,6 @@ class res_partner_address(osv.osv):
     _columns = {
         'magento_firstname':fields.char('First Name', size=100),
         'magento_lastname':fields.char('Last Name', size=100),
-        'magento_order_address':fields.boolean('Magento Order Address?'),
     }
 
-    _defaults = {
-        'magento_order_address': lambda * a:False,
-     }
-     
 res_partner_address()
