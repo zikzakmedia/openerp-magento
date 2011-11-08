@@ -35,27 +35,36 @@
                 <group col="4" colspan="4">
                     <separator string="Core Components" colspan="4" />
                     <notebook colspan="4">
-                        <page string="Referential Actions">
+                        <page string="Global">
                             <separator string="Store" colspan="4" />
-                            <button name="core_sync_store" string="1 - Import Magento Store" colspan="2" type="object" />
+                            <button name="core_sync_store" string="Import Magento Store" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
+                            <separator string="Catalog" colspan="4" />
+                            <button name="core_sync_product_type" string="Import Magento Product Types" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
+                            <button name="core_sync_attributes_set" string="Import Magento Attributes Set" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
+                            <button name="core_sync_attributes" string="Import Magento Attributes" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
+                            <separator string="Customer" colspan="4" />
+                            <button name="core_sync_customer_group" string="Import Customer Group" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
+
+                        </page>
+                        <page string="Catalog">
                             <separator string="Import" colspan="4" />
-                            <button name="core_sync_product_type" string="1 - Import Magento Product Types" colspan="2" type="object" />
-                            <button name="core_sync_attributes_set" string="2 - Import Magento Attributes Set" colspan="2" type="object" />
-                            <button name="core_sync_attributes" string="3 - Import Magento Attributes" colspan="2" type="object" />
-                            <button name="core_sync_categories" string="4 - Import Magento Categories" colspan="2" type="object" />
-                            <newline/>
-                            <button name="core_sync_products" string="5 - Import Magento Products" colspan="2" type="object" />
-                            <button name="core_sync_images" string="6 - Import Magento Images" colspan="2" type="object" />
-                            <newline/>
+                            <button name="core_sync_categories" string="Import Magento Categories" colspan="4" type="object" confirm="Are you sure to continue? See logs server process. This operation import all categories Magento to OpenERP"/>
+                            <label string="Select dates to import products" colspan="4"/>
+                            <button name="core_sync_products" string="Import Magento Products" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
                             <field name="from_import_products" />
                             <field name="to_import_products" />
-                            <button name="core_sync_customer_group" string="7 - Import Customer Group" colspan="2" type="object" />
+                            <button name="core_sync_images" string="Import Magento Product Images" colspan="4" type="object" confirm="Are you sure to continue? See logs server process. This operation import all images Magento to OpenERP"/>
                             <separator string="Export" colspan="4" />
-                            <button name="core_export_categories" string="1 - Export Product Categories" colspan="2" type="object" />
+                            <button name="core_export_categories" string="Export Product Categories" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
                             <field name="last_export_product_category" />
                         </page>
-
-                        <page string="Websites">
+                        <page string="Partners">
+                            <separator string="Customers" colspan="4" />
+                            <button name="core_sync_customers" string="Import Customers" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
+                            <field name="from_import_customers" />
+                            <field name="to_import_customers" />
+                        </page>
+                        <page string="Websites Info">
                             <field name="magento_website_ids" nolabel="1" />
                         </page>
                     </notebook>

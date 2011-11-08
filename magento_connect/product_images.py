@@ -24,6 +24,18 @@
 from osv import osv, fields
 from tools.translate import _
 
+class product_images_magento_app(osv.osv):
+    _name = 'product.images.magento.app'
+    _description = 'Product Images related with Magento App'
+
+    _columns = {
+        'product_images_id': fields.many2one('product.images', 'Product Image', required=True),
+        'magento_app_id': fields.many2one('magento.app', 'Magento App', required=True),
+        'magento_exported':fields.boolean('Exported to Magento?'),
+    }
+
+product_images_magento_app()
+
 class product_images(osv.osv):
     _inherit = "product.images"
 
@@ -34,7 +46,8 @@ class product_images(osv.osv):
         'magento_thumbnail':fields.boolean('Thumbnail'),
         'magento_exclude':fields.boolean('Exclude'),
         'magento_position':fields.integer('Position'),
-        'magento_app_ids':fields.many2many('magento.app', 'product_images_magento_app_rel', 'magento_app_id', 'product_images_id', 'Magento App'),
+        'magento_app_ids':fields.many2many('magento.app', 'product_images_magento_app', 'product_images_id', 'magento_app_id', 'Magento App'),
+        'magento_filename': fields.char('Magento File Name', size=128, readonly=True),
     }
 
     _defaults = {
@@ -44,63 +57,38 @@ class product_images(osv.osv):
         'magento_exclude':lambda * a:False
     }
 
-    def create(self, cr, uid, values, context=None):
-        """
-        :values -> Dictionary with values
-        :return id
-        """
-        if context is None:
-            context = {}
-        id = super(product_images, self).create(cr, uid, values, context)
-        product_image_magento_app_obj = self.pool.get('product.image.magento.app')
-        product_image = self.browse(cr, uid, id, context)
-        if product_image.magento_exportable and len(values['magento_app_ids'][0][2]) > 0:
-            for magento_app_id in values['magento_app_ids'][0][2]:
-                vals = {
-                    'product_image_id': id,
-                    'magento_app_id': magento_app_id,
-                }
-                product_image_magento_app_obj.create(cr, uid, vals, context)
-        return id
-
-    #TODO: write -> product.image.magento.app
-    def write(self, cr, uid, ids, values, context = None):
+    def write(self, cr, uid, ids, values, context=None):
         """
         :values -> Dictionary with values
         :return true
         """
-        if context is None:
-            context = {}
-        product_image_magento_app_obj = self.pool.get('product.image.magento.app')
-        for product_image in self.browse(cr, uid, ids, context):
-            if product_image.magento_exportable:
-                product_image_magento_app_ids = product_image_magento_app_obj.search(cr, uid, [
-                    ('product_image_id', 'in', ids),
-                ], context = context)
-                if len(product_image_magento_app_ids) > 0:
-                    product_image_magento_app_obj.unlink(cr, uid, product_image_magento_app_ids, context)
-                for magento_app_id in values['magento_app_ids'][0][2]:
-                    vals = {
-                        'product_image_id': product_image.id,
-                        'magento_app_id': magento_app_id,
-                    }
-                    product_image_magento_app_obj.create(cr, uid, vals, context)
+
+        #If edit product form, lose magento_exported field. Not same at product.image edit form
+        if 'magento_app_ids' in values:
+            prod_img_mgn_app_obj = self.pool.get('product.images.magento.app')
+
+            prod_img_mgn_app_ids = prod_img_mgn_app_obj.search(cr, uid, [('product_images_id','in',ids)])
+            prod_img_mgn_app_exported = prod_img_mgn_app_obj.read(cr, uid, prod_img_mgn_app_ids, ['magento_exported'])
+        
         super(product_images, self).write(cr, uid, ids, values, context)
+
+        if 'magento_app_ids' in values:
+            #add new values in order list search
+            if len(prod_img_mgn_app_exported)>0:
+                keys = []
+                for prod_img_mgn_app_id in prod_img_mgn_app_obj.search(cr, uid, [('product_images_id','in',ids)]):
+                    keys.append(prod_img_mgn_app_id)
+
+                values = []
+                for prod_exported in prod_img_mgn_app_exported:
+                    values.append(prod_exported['magento_exported'])
+                
+                for val in zip(keys, values):
+                    prod_img_mgn_app_exported = prod_img_mgn_app_obj.write(cr, uid, [val[0]], {'magento_exported':val[1]})
+
         return True
 
     def unlink(self, cr, uid, ids, context=None):
         raise osv.except_osv(_("Alert"), _("This Image can't be deleted"))
 
 product_images()
-
-class product_images_magento_app(osv.osv):
-    _name = 'product.images.magento.app'
-    _description = 'Product Images related with Magento App'
-
-    _columns = {
-        'product_image_id': fields.many2one('product.images', 'Product Image', required=True),
-        'magento_app_id': fields.many2one('magento.app', 'Magento App', required=True),
-    }
-
-product_images_magento_app()
-

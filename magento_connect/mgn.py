@@ -65,9 +65,11 @@ class magento_app(osv.osv):
         'warehouse_id': fields.many2one('stock.warehouse', 'Warehouse', required=True),
         'pricelist_id': fields.many2one('product.pricelist', 'Pricelist', required=True),
         'from_import_products': fields.datetime('From Import Products', help='This date is last import. If you need import new products, you can modify this date (filter)'),
-        'to_import_products': fields.datetime('To Import Products', help='This date is from import (filter)'),
+        'to_import_products': fields.datetime('To Import Products', help='This date is to import (filter)'),
         'last_export_product_category': fields.datetime('Last Export Categories', help='This date is to export (filter)'),
         'magento_default_storeview': fields.many2one('magento.storeview', 'Store View Default', help='Default language this shop. If not select, use lang user'),
+        'from_import_customers': fields.datetime('From Import Partners', help='This date is last import. If you need import new partners, you can modify this date (filter)'),
+        'to_import_customers': fields.datetime('To Import Partners', help='This date is to import (filter)'),
     }
 
     def core_sync_test(self, cr, uid, ids, context):
@@ -394,6 +396,11 @@ class magento_app(osv.osv):
                 store_view = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])
                 store_view = store_view[0]['mgn_id']
 
+                #~ Update date last import
+                date_from_import = magento_app.to_import_products and magento_app.to_import_products or time.strftime('%Y-%m-%d %H:%M:%S')
+                self.write(cr, uid, ids, {'from_import_products': date_from_import})
+                self.write(cr, uid, ids, {'to_import_products': time.strftime('%Y-%m-%d %H:%M:%S')})
+
                 for product in product_api.list(ofilter, store_view):
                     product_product = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.product', product['product_id'])
 
@@ -442,10 +449,6 @@ class magento_app(osv.osv):
                     else:
                         logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Product exists: magento %s, magento product id %s. Not create" % (magento_app.name, product['product_id']))
 
-                #~ Update date last import
-                self.write(cr, uid, ids, {'from_import_products': time.strftime('%Y-%m-%d %H:%M:%S')})
-                self.write(cr, uid, ids, {'to_import_products': time.strftime('%Y-%m-%d %H:%M:%S')})
-
         return True
 
     def core_sync_images(self, cr, uid, ids, context):
@@ -473,7 +476,7 @@ class magento_app(osv.osv):
                         for product_image in product_image_api.list(product_id['mgn_id']):
                             image_ids = product_images_obj.search(cr, uid, [('filename', '=', product_image['url'])], context = context)
                             if len(image_ids) > 0:
-                                product_image_magento_ids = product_image_magento_app_obj.search(cr, uid, [('magento_app_id', '=', magento_app.id), ('product_image_id', 'in', image_ids)], context=context)
+                                product_image_magento_ids = product_image_magento_app_obj.search(cr, uid, [('magento_app_id', '=', magento_app.id), ('product_images_id', 'in', image_ids)], context=context)
                                 if len(product_image_magento_ids) > 0: #exist
                                     logger.notifyChannel('Magento Sync Images', netsvc.LOG_INFO, "Image skipped! Image for this product in this Magento App already exists. Not created.")
                                     continue
@@ -490,14 +493,14 @@ class magento_app(osv.osv):
                                 'magento_exclude': product_image['exclude'],
                                 'magento_position': product_image['position'],
                                 'product_id': product_id['oerp_id'],
+                                'magento_filename': product_image['file'],
+                                'magento_exportable': True,
+                                'magento_app_ids': [(6, 0, [magento_app.id])],
                             }
-                            product_image_id =  product_images_obj.create(cr, uid, vals, context)
-
-                            values = {
-                                'product_image_id': product_image_id,
-                                'magento_app_id': magento_app.id,
-                            }
-                            product_image_magento_app_obj.create(cr, uid, values, context)
+                            product_images_id =  product_images_obj.create(cr, uid, vals, context)
+                            prod_image_mgn_app_ids = product_image_magento_app_obj.search(cr, uid, [('product_images_id','=',product_images_id),('magento_app_id','=',magento_app.id)])
+                            if len(prod_image_mgn_app_ids)>0:
+                                product_image_magento_app_obj.write(cr, uid, prod_image_mgn_app_ids, {'magento_exported':True})
 
                             logger.notifyChannel('Magento Sync Images', netsvc.LOG_INFO, " Magento %s, Image %s created, Product ID %s" % (magento_app.name, name, product_id['oerp_id']))
         return True
@@ -529,6 +532,20 @@ class magento_app(osv.osv):
                     self.pool.get('magento.customer.group').create(cr, uid, values)
 
                     logger.notifyChannel('Magento Sync Customer Group', netsvc.LOG_INFO, "Magento %s: Group %s created." % (magento_app.name, customer_group['customer_group_code']))
+
+        return True
+        
+    def core_sync_customers(self, cr, uid, ids, context):
+        """
+        def sync Customer from Magento to OpenERP
+        Only create new values if not exist; not update or delete
+        :ids list
+        :return True
+        """
+
+        logger = netsvc.Logger()
+
+        print "TODO"
 
         return True
 

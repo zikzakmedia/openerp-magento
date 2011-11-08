@@ -24,10 +24,15 @@
 from osv import osv, fields
 from tools.translate import _
 
-from magento import *
-
 import netsvc
 import time
+import mimetypes
+import os
+import urllib, urllib2
+import binascii
+
+from magento import *
+from urllib2 import Request, urlopen, URLError, HTTPError
 
 class sale_shop(osv.osv):
     _inherit = "sale.shop"
@@ -65,6 +70,9 @@ class sale_shop(osv.osv):
         for shop in self.browse(cr, uid, ids):
             magento_app = shop.magento_website.magento_app_id
             last_exported_time = shop.magento_last_export_products
+
+            # write sale shop date last export
+            self.pool.get('sale.shop').write(cr, uid, shop.id, {'magento_last_export_products': time.strftime('%Y-%m-%d %H:%M:%S')})
 
             product_product_ids = self.pool.get('product.product').search(cr, uid, [('magento_exportable','=',True),('magento_sale_shop','in',shop.id)])
 
@@ -134,9 +142,6 @@ class sale_shop(osv.osv):
 
         logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Products Export")
 
-        # write sale shop date last export
-        self.pool.get('sale.shop').write(cr, uid, [context['shop'].id], {'magento_last_export_products': time.strftime('%Y-%m-%d %H:%M:%S')})
-
         return mgn_id
 
     def magento_export_prices(self, cr, uid, ids, context=None):
@@ -155,6 +160,9 @@ class sale_shop(osv.osv):
             magento_app = shop.magento_website.magento_app_id
             last_exported_time = shop.magento_last_export_prices
 
+            # write sale shop date last export
+            self.write(cr, uid, shop.id, {'magento_last_export_prices': time.strftime('%Y-%m-%d %H:%M:%S')})
+
             product_product_ids = self.pool.get('product.product').search(cr, uid, [('magento_exportable','=',True),('magento_sale_shop','in',shop.id)])
 
             for product_product in self.pool.get('product.product').perm_read(cr, uid, product_product_ids):
@@ -168,8 +176,8 @@ class sale_shop(osv.osv):
                     mgn_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.product', product.id)
                     if mgn_id:
                         mgn_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [mgn_id])[0]['mgn_id']
-                    store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', shop.id)
-                    store_view  = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])[0]['mgn_id']
+                    #~ store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', shop.id)
+                    #~ store_view  = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])[0]['mgn_id']
 
                     price = ''
                     if not mgn_id:#not product created/exist in Magento. Create
@@ -188,11 +196,10 @@ class sale_shop(osv.osv):
                         price = '%.*f' % (decimal, price) #decimal precision
 
                     data = {'price':price}
-                    product_mgn_id = product_api.update(mgn_id, data, store_view)
+                    #~ product_mgn_id = product_api.update(mgn_id, data, store_view)
+                    product_mgn_id = product_api.update(mgn_id, data)
 
                     logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Prices: %s. OpenERP ID %s, Magento ID %s" % (price, product.id, mgn_id))
-
-            self.write(cr, uid, [context['shop'].id], {'magento_last_export_prices': time.strftime('%Y-%m-%d %H:%M:%S')})
 
         logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Prices Export")
 
@@ -221,6 +228,9 @@ class sale_shop(osv.osv):
                 recent_move_ids = self.pool.get('stock.move').search(cr, uid, [('product_id', 'in', product_shop_ids),('state', '!=', 'draft'),('state', '!=', 'cancel')])
             product_ids = [move.product_id.id for move in self.pool.get('stock.move').browse(cr, uid, recent_move_ids) if move.product_id.state != 'obsolete']
             product_ids = [x for x in set(product_ids)]
+
+            # write sale shop date last export
+            self.write(cr, uid, shop.id, {'magento_last_export_stock': time.strftime('%Y-%m-%d %H:%M:%S')})
 
             with Inventory(magento_app.uri, magento_app.username, magento_app.password) as inventory_api:
                 context['shop'] = shop
@@ -253,18 +263,12 @@ class sale_shop(osv.osv):
 
         return True
 
-
-    #TODO EXPORT IMAGES
     def magento_export_images(self, cr, uid, ids, context=None):
         """
         Sync Images to Magento Site filterd by magento_sale_shop
-        Get ids all products and send one to one to Magento
+        Get ids all product images and send one to one to Magento
         :return True
         """
-
-        print self
-        print ids
-        print context
 
         logger = netsvc.Logger()
 
@@ -275,86 +279,105 @@ class sale_shop(osv.osv):
         for shop in self.browse(cr, uid, ids):
             magento_app = shop.magento_website.magento_app_id
             last_exported_time = shop.magento_last_export_images
-            print "-----------------------------------------"
-            print "last_exported_time: ", last_exported_time
 
-            product_images_ids = self.pool.get('product.image.magento.app').search(cr, uid, [('magento_app_id','=',magento_app.id)])
+            # write sale shop date last export
+            self.write(cr, uid, shop.id, {'magento_last_export_images': time.strftime('%Y-%m-%d %H:%M:%S')})
 
-            for product_product in self.pool.get('product.images').perm_read(cr, uid, product_images_ids):
+            product_images_magento_app_ids = self.pool.get('product.images.magento.app').search(cr, uid, [('magento_app_id','=',magento_app.id)])
+
+            product_images_ids = []
+            for product_image in self.pool.get('product.images.magento.app').read(cr, uid, product_images_magento_app_ids, ['product_images_id']):
+                product_images_ids.append(product_image['product_images_id'][0])
+
+            for product_image in self.pool.get('product.images').perm_read(cr, uid, product_images_ids):
                 # product.product create/modify > date exported last time
-                if last_exported_time < product_product['create_date'][:19] or (product_product['write_date'] and last_exported_time < product_product['write_date'][:19]):
-                    magento_product_images_ids.append(product_product['id'])
+                if last_exported_time < product_image['create_date'][:19] or (product_image['write_date'] and last_exported_time < product_image['write_date'][:19]):
+                    magento_product_images_ids.append(product_image['id'])
 
-            if len(magento_product_images_ids) > 0:
-                magento_product_images_ids = product_images_ids
-
-            print "=======TEST2========"
-            print magento_product_images_ids
             with ProductImages(magento_app.uri, magento_app.username, magento_app.password) as product_image_api:
                 for product_image in self.pool.get('product.images').browse(cr, uid, magento_product_images_ids):
-                    print "====product image==="
-                    print product_image
+                    is_last_exported = self.pool.get('product.images.magento.app').search(cr, uid, [('magento_app_id','=',magento_app.id),('product_images_id','=',product_image.id),('magento_exported','=',True)])
 
+                    product = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.product', product_image.product_id.id)
+                    if product:
+                        product = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [product])
+                        product = product[0]['mgn_id']
+                    else:
+                        logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Skip! Product not exists. Not create Image ID %s" % (product_image.id))
+                        continue
 
-#
-            #magento_external_referential_ids = magento_external_referential_obj.search(cr, uid, [
-                #('model_id.model', '=', 'product.product'),
-                #('magento_app_id', '=', shop.magento_website.id),
-                #('oerp_id', 'in', product_product_ids),
-            #], context = context)
-            #magento_product_ids = magento_external_referential_obj.read(cr, uid, magento_external_referential_ids, ['oerp_id', 'mgn_id'], context)
-            #print "Productes mapejats: ", magento_product_ids
-#
-            #product_ids = []
-            #map_product = {}
-            #for magento_product_id in magento_product_ids:
-                #if magento_product_id['oerp_id'] in product_product_ids:
-                    #product_ids.append(magento_product_id['oerp_id'])
-                    #map_product[magento_product_id['oerp_id']] = magento_product_id['mgn_id']
-            #print "productes a mapejar: ", product_ids
-#
-            #for product in product_product_obj.browse(cr, uid, product_ids, context):
-                #print 'product: ', product
-                #print 'magento product', map_product[product.id]
-                #for image in product.image_ids:
-                    #print 'image: ', image
-                #with ProductImages(magento_app.uri, magento_app.username, magento_app.password) as product_image_api:
-                    #try:
-                        #product_images = product_image_api.list(map_product[product.id])
-                        #for product_image in product_images:
-                            #product_image = product_image_api.info(map_product[product.id], product_images['file'])
-                            #print "product_image: ", product_image
-                    #except:
-                        #logger.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Products %s not found" % (map_product[product.id]))
+                    image_name = product_image.name
 
+                    types = []
+                    if product_image.magento_base_image:
+                        types.append('image')
+                    if product_image.magento_small_image:
+                        types.append('small_image')
+                    if product_image.magento_thumbnail:
+                        types.append('thumbnail')
 
+                    data = {
+                        'label': product_image.name,
+                        'position': product_image.magento_position,
+                        'exclude': product_image.magento_exclude,
+                        'types': types,
+                    }
 
+                    if len(is_last_exported)>0:
+                        mgn_file_name = product_image.magento_filename
+                        try:
+                            product_image_api.update(product, mgn_file_name, data)
+                            logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Update Image %s, Product Mgn ID %s" % (product_image.name, product))
+                        except:
+                            logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Error Update Image %s, Product Mgn ID %s" % (product_image.name, product))
 
+                    else:
+                        """
+                        if Product Image Link
+                            if product_image_repository installed
+                            not product image filename
+                        else Product Image Filename
+                        """
+                        image = False
+                        if product_image.link:
+                            product_images_repository = self.pool.get('ir.module.module').search(cr, uid, [('name','=','product_images_repository'),('state','=','installed')])
+                            if len(product_images_repository)>0:
+                                user = self.pool.get('res.users').browse(cr, uid, uid)
+                                company = user.company_id
+                                try:
+                                    (filename, header) = urllib.urlretrieve(os.path.join(company.local_media_repository, product_image.filename))
+                                    image_mime = filename and mimetypes.guess_type(filename)[0] or 'image/jpeg'
+                                    img = open(filename , 'rb')
+                                    image = img.read()
+                                except:
+                                    logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Skip! Not exist %s/%s" % (company.local_media_repository, product_image.filename))
 
+                            if not image:
+                                url = product_image.filename
+                                try:
+                                    image_mime = product_image.filename and mimetypes.guess_type(product_image.filename)[0] or 'image/jpeg'
+                                    img = urllib2.urlopen(url)
+                                    image = img.read()
+                                except:
+                                    logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Skip! Not exist %s" % (url))
+                                    continue
+                        else:
+                            image_mime = product_image.image and mimetypes.guess_type(product_image.image)[0] or 'image/jpeg'
+                            image = product_image.image
+                            image = binascii.a2b_base64(image)
 
-
-
-
-
-
-
-
-#
-            #
-            #product_product_ids = self.pool.get('product.product').search(cr, uid, [('magento_exportable','=',True), ('magento_sale_shop','in',shop.id)])
-#
-            #for product_product in self.pool.get('product.product').perm_read(cr, uid, product_product_ids):
-                 ####product.product create/modify > date exported last time
-                #if last_exported_time < product_product['create_date'][:19] or (product_product['write_date'] and last_exported_time < product_product['write_date'][:19]):
-                    #product_shop_ids.append(product_product['id'])
-#
-            #if shop.magento_default_language:
-                #context['lang'] = shop.magento_default_language.code
-#
-            #logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Products to sync: %s" % (product_shop_ids))
-#
-            #context['shop'] = shop
-            #self.magento_export_products_stepbystep(cr, uid, magento_app, product_shop_ids, context)
+                        try:
+                            mgn_file_name = product_image_api.create(product, image, image_name, image_mime)
+                            product_image_api.update(product, mgn_file_name, data)
+                            logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Create Image %s, Product Mgn ID %s" % (product_image.name, product))
+                            #update magento filename
+                            self.pool.get('product.images').write(cr,uid,[product_image.id],{'magento_filename':mgn_file_name})
+                            # update magento_exported
+                            prod_images_mgn_apps = self.pool.get('product.images.magento.app').search(cr, uid, [('product_images_id','=',product_image.id),('magento_app_id','=',magento_app.id)])
+                            if len(prod_images_mgn_apps)>0:
+                                self.pool.get('product.images.magento.app').write(cr,uid,prod_images_mgn_apps,{'magento_exported':True})
+                        except:
+                            logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Error Create Image %s, Product Mgn ID %s" % (product_image.name, product))
 
         return True
 

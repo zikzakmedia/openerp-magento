@@ -35,7 +35,7 @@ res_partner()
 
 class res_partner_address(osv.osv):
     _inherit = "res.partner.address"
-    
+
     _columns = {
         'magento_firstname':fields.char('First Name', size=100),
         'magento_lastname':fields.char('Last Name', size=100),

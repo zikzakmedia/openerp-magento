@@ -22,7 +22,8 @@
                             <field name="magento_exclude" colspan="4" />
                         </group>
                         <group col="4" colspan="2">
-                            <field name="magento_position" colspan="2"/>
+                            <field name="magento_position" colspan="4"/>
+                            <field name="magento_filename" colspan="4"/>
                         </group>
                         <separator string="Magento Server" colspan="4" />
                         <field name="magento_app_ids" colspan="4" nolabel="1" help="test"/>

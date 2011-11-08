@@ -17,10 +17,10 @@
                                     <group col="3" colspan="4">
                                         <separator string="Magento" colspan="3"/>
                                         <group col="1" colspan="1">
-                                            <button name="magento_export_products" string="Export Products" colspan="1" type="object"/>
-                                            <button name="magento_export_prices" string="Export Prices" colspan="1" type="object"/>
-                                            <button name="magento_export_stock" string="Export Stock" colspan="1" type="object"/>
-                                            <button name="magento_export_images" string="Export Images" colspan="1" type="object"/>
+                                            <button name="magento_export_products" string="Export Products" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
+                                            <button name="magento_export_prices" string="Export Prices" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
+                                            <button name="magento_export_stock" string="Export Stock" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
+                                            <button name="magento_export_images" string="Export Images" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
                                         </group>
                                         <group col="2" colspan="2">
                                             <field name="magento_last_export_products" />
