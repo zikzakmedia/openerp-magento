@@ -13,9 +13,21 @@
                         <group col="4" colspan="4" attrs="{'invisible':[('magento_shop','!=', True)]}">
                             <separator string="Magento" colspan="4"/>
                             <notebook colspan="4">
-                                <page string="Actions">
+                                <page string="Orders">
+                                    <group col="5" colspan="4">
+                                        <group col="1" colspan="1">
+                                            <button name="magento_import_sale_order" string="Import Orders" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
+                                            <button name="magento_export_status_sale_order" string="Export Status Sale Orders" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
+                                        </group>
+                                        <group col="4" colspan="2">
+                                            <field name="magento_from_sale_orders" />
+                                            <field name="magento_to_sale_orders" />
+                                            <field name="magento_last_export_status_sale_orders" />
+                                        </group>
+                                    </group>
+                                </page>
+                                <page string="Catalog">
                                     <group col="3" colspan="4">
-                                        <separator string="Magento" colspan="3"/>
                                         <group col="1" colspan="1">
                                             <button name="magento_export_products" string="Export Products" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
                                             <button name="magento_export_prices" string="Export Prices" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
@@ -30,7 +42,6 @@
                                         </group>
                                     </group>
                                 </page>
-
                                 <page string="Extra Information">
                                     <group col="4" colspan="4">
                                         <field name="magento_shop"/>
@@ -40,14 +51,71 @@
                                         <field name="magento_sale_price"/>
                                         <field name="magento_tax_include"/>
                                         <field name="magento_default_language"/>
-                                        <separator string="Payment Types" colspan="4" />
-                                        <field name="magento_payment_types" colspan="4" nolabel="1"/>
                                     </group>
+                                </page>
+                                <page string="Payments">
+                                    <field name="magento_payment_types" colspan="4" nolabel="1"/>
                                 </page>
                             </notebook>
                         </group>
                     </form>
                 </data>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_magento_sale_order_form">
+            <field name="name">magento_sale_order_form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <xpath expr="/form/notebook/page[@string='History']" position="after">
+                    <page string="Magento">
+                        <separator string="Gift Message" colspan="4" />
+                        <field name="magento_gift_message" colspan="4" nolabel="1"/>
+                    </page>
+                </xpath>
+                <xpath expr="/form/notebook/page[@string='Sales Order']/field[@name='order_line']/form/notebook/page[@string='History']" position="after">
+                    <page string="Magento">
+                        <separator string="Gift Message" colspan="4" />
+                        <field name="magento_gift_message" colspan="4" nolabel="1"/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Magento Sale Shop Payment Type-->
+        <record model="ir.ui.view" id="view_magento_sale_shop_payment_type_form">
+            <field name="name">magento_sale_shop_payment_type_form</field>
+            <field name="model">magento.sale.shop.payment.type</field>
+            <field name="type">form</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+            <form string="Payment Type">
+                <field name="payment_type_id"/>
+                <field name="order_policy"/>
+                <field name="picking_policy"/>
+                <field name="invoice_quantity"/>
+                <field name="app_payment"/>
+                <field name="confirm"/>
+            </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="magento_zoook_sale_shop_payment_type_tree">
+            <field name="name">magento_sale_shop_payment_type_tree</field>
+            <field name="model">magento.sale.shop.payment.type</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+                <tree string="Payment Type">
+                    <field name="payment_type_id"/>
+                    <field name="app_payment"/>
+                    <field name="order_policy"/>
+                    <field name="picking_policy"/>
+                    <field name="invoice_quantity"/>
+                    <field name="sequence"/>
+                </tree>
             </field>
         </record>
 

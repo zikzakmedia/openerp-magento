@@ -146,7 +146,7 @@ if context['product_id']:
             <field name='external_type'>str</field>
             <field name='active'>1</field>
         </record>
-        
+
         <record model='base.external.mapping.line' id='mgnlpt02'>
             <field name='mapping_id' ref='magento_connect.mgn02'/>
             <field name='field_id' search="[('model_id','=','product.template'),('name','=','description_sale')]" model='ir.model.fields'/>
@@ -313,7 +313,7 @@ if context['parent_id']:
             <field name='external_type'>str</field>
             <field name='active'>1</field>
         </record>
-        
+
         <record model='base.external.mapping.line' id='mgnlpc11'>
             <field name='mapping_id' ref='magento_connect.mgn03'/>
             <field name='field_id' search="[('model_id','=','product.category'),('name','=','magento_include_in_menu')]" model='ir.model.fields'/>
@@ -321,6 +321,157 @@ if context['parent_id']:
             <field name='type'>in_out</field>
             <field name='external_type'>str</field>
             <field name='active'>1</field>
-        </record>   
+        </record>
+
+<!--Partner-->
+        <record model='base.external.mapping' id='mgn04'>
+            <field name='name'>magento.res.partner</field>
+            <field name='model_id' search="[('model','=','res.partner')]" model='ir.model'/>
+            <field name='state'>done</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrp01'>
+            <field name='mapping_id' ref='magento_connect.mgn04'/>
+            <field name='field_id' search="[('model_id','=','res.partner'),('name','=','name')]" model='ir.model.fields'/>
+            <field name='external_field'>name</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrp02'>
+            <field name='mapping_id' ref='magento_connect.mgn04'/>
+            <field name='field_id' search="[('model_id','=','res.partner'),('name','=','vat')]" model='ir.model.fields'/>
+            <field name='external_field'>vat</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+<!--Address-->
+        <record model='base.external.mapping' id='mgn05'>
+            <field name='name'>magento.res.partner.address</field>
+            <field name='model_id' search="[('model','=','res.partner.address')]" model='ir.model'/>
+            <field name='state'>done</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrpa01'>
+            <field name='mapping_id' ref='magento_connect.mgn05'/>
+            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','name')]" model='ir.model.fields'/>
+            <field name='external_field'>name</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrpa02'>
+            <field name='mapping_id' ref='magento_connect.mgn05'/>
+            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','street')]" model='ir.model.fields'/>
+            <field name='external_field'>street</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrpa03'>
+            <field name='mapping_id' ref='magento_connect.mgn05'/>
+            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','zip')]" model='ir.model.fields'/>
+            <field name='external_field'>zip</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrpa04'>
+            <field name='mapping_id' ref='magento_connect.mgn05'/>
+            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','country_id')]" model='ir.model.fields'/>
+            <field name='external_field'>country_id</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrpa05'>
+            <field name='mapping_id' ref='magento_connect.mgn05'/>
+            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','state_id')]" model='ir.model.fields'/>
+            <field name='external_field'>state_id</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrpa06'>
+            <field name='mapping_id' ref='magento_connect.mgn05'/>
+            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','phone')]" model='ir.model.fields'/>
+            <field name='external_field'>phone</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrpa07'>
+            <field name='mapping_id' ref='magento_connect.mgn05'/>
+            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','type')]" model='ir.model.fields'/>
+            <field name='external_field'>type</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrpa08'>
+            <field name='mapping_id' ref='magento_connect.mgn05'/>
+            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','country_id')]" model='ir.model.fields'/>
+            <field name='external_field'>country_id</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrpa09'>
+            <field name='mapping_id' ref='magento_connect.mgn05'/>
+            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','city')]" model='ir.model.fields'/>
+            <field name='external_field'>city</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrpa10'>
+            <field name='mapping_id' ref='magento_connect.mgn05'/>
+            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','magento_firstname')]" model='ir.model.fields'/>
+            <field name='external_field'>magento_firstname</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrpa11'>
+            <field name='mapping_id' ref='magento_connect.mgn05'/>
+            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','magento_lastname')]" model='ir.model.fields'/>
+            <field name='external_field'>magento_lastname</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrpa12'>
+            <field name='mapping_id' ref='magento_connect.mgn05'/>
+            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','partner_id')]" model='ir.model.fields'/>
+            <field name='external_field'>partner_id</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnlrpa13'>
+            <field name='mapping_id' ref='magento_connect.mgn05'/>
+            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','email')]" model='ir.model.fields'/>
+            <field name='external_field'>email</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
+
     </data>
 </openerp>

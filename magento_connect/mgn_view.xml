@@ -23,6 +23,9 @@
                             <field name="payment_default_id"/>
                             <field name="warehouse_id"/>
                             <field name="pricelist_id"/>
+                            <field name="product_uom_id"/>
+                            <field name="product_delivery_default_id"/>
+                            <field name="product_discount_default_id"/>
                         </page>
                         <page string="Authentication">
                             <field name="username"/>
@@ -49,20 +52,33 @@
                         <page string="Catalog">
                             <separator string="Import" colspan="4" />
                             <button name="core_sync_categories" string="Import Magento Categories" colspan="4" type="object" confirm="Are you sure to continue? See logs server process. This operation import all categories Magento to OpenERP"/>
-                            <label string="Select dates to import products" colspan="4"/>
-                            <button name="core_sync_products" string="Import Magento Products" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
-                            <field name="from_import_products" />
-                            <field name="to_import_products" />
+                            <group col="5" colspan="4">
+                                <group col="1" colspan="1">
+                                    <button name="core_sync_products" string="Import Magento Products" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
+                                </group>
+                                <group col="4" colspan="2">
+                                    <field name="from_import_products" />
+                                    <field name="to_import_products" />
+                                </group>
+                            </group>
                             <button name="core_sync_images" string="Import Magento Product Images" colspan="4" type="object" confirm="Are you sure to continue? See logs server process. This operation import all images Magento to OpenERP"/>
                             <separator string="Export" colspan="4" />
-                            <button name="core_export_categories" string="Export Product Categories" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
-                            <field name="last_export_product_category" />
+                            <group col="5" colspan="4">
+                                <group col="1" colspan="1">
+                                    <button name="core_export_categories" string="Export Product Categories" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
+                                </group>
+                                <group col="4" colspan="2">
+                                    <field name="last_export_product_category" />
+                                </group>
+                            </group>
                         </page>
                         <page string="Partners">
                             <separator string="Customers" colspan="4" />
                             <button name="core_sync_customers" string="Import Customers" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
                             <field name="from_import_customers" />
                             <field name="to_import_customers" />
+                            <button name="core_export_customers" string="Export Customers" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
+                            <field name="last_export_partners" />
                         </page>
                         <page string="Websites Info">
                             <field name="magento_website_ids" nolabel="1" />

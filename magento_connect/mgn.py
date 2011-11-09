@@ -61,15 +61,19 @@ class magento_app(osv.osv):
         'password': fields.char('Password', size=256, required=True),
         'product_category_id': fields.many2one('product.category', 'Root product Category', required=True),
         'magento_website_ids': fields.one2many('magento.website', 'magento_app_id', 'Websites'),
-        'payment_default_id': fields.many2one('account.payment.term', 'Default Payment Term', required=True),
+        'payment_default_id': fields.many2one('account.payment.term', 'Payment Term', required=True, help='Default Payment Term'),
+        'product_delivery_default_id': fields.many2one('product.product', 'Product Delivery', required=True, help='Default Product Delivery'),
+        'product_discount_default_id': fields.many2one('product.product', 'Product Discount', required=True, help='Default Product Discount'),
         'warehouse_id': fields.many2one('stock.warehouse', 'Warehouse', required=True),
         'pricelist_id': fields.many2one('product.pricelist', 'Pricelist', required=True),
+        'product_uom_id': fields.many2one('product.uom', 'Unit of Sale', required=True, help='Default Unit of Sale'),
         'from_import_products': fields.datetime('From Import Products', help='This date is last import. If you need import new products, you can modify this date (filter)'),
         'to_import_products': fields.datetime('To Import Products', help='This date is to import (filter)'),
         'last_export_product_category': fields.datetime('Last Export Categories', help='This date is to export (filter)'),
         'magento_default_storeview': fields.many2one('magento.storeview', 'Store View Default', help='Default language this shop. If not select, use lang user'),
         'from_import_customers': fields.datetime('From Import Customers', help='This date is last import. If you need import new partners, you can modify this date (filter)'),
         'to_import_customers': fields.datetime('To Import Customers', help='This date is to import (filter)'),
+        'last_export_partners': fields.datetime('Last Export Partners', help='This date is last export. If you need export all partners, empty this field (long sync)'),
     }
 
     def core_sync_test(self, cr, uid, ids, context):
@@ -523,7 +527,7 @@ class magento_app(osv.osv):
                     if len(group_ids)>0:
                         logger.notifyChannel('Magento Sync Customer Group', netsvc.LOG_INFO, "Skip! Magento %s: Group %s already exists. Not created." % (magento_app.name, customer_group['customer_group_code']))
                         continue
-                    
+
                     values = {
                         'name': customer_group['customer_group_code'],
                         'customer_group_id': customer_group['customer_group_id'],
@@ -535,7 +539,7 @@ class magento_app(osv.osv):
                     logger.notifyChannel('Magento Sync Customer Group', netsvc.LOG_INFO, "Magento %s: Group %s created." % (magento_app.name, customer_group['customer_group_code']))
 
         return True
-        
+
     def core_sync_customers(self, cr, uid, ids, context):
         """
         def sync Customer from Magento to OpenERP
@@ -545,7 +549,44 @@ class magento_app(osv.osv):
         """
 
         logger = netsvc.Logger()
+        external_referential_obj = self.pool.get('magento.external.referential')
+        partner_obj = self.pool.get('res.partner')
+        partner_address_obj = self.pool.get('res.partner.address')
 
+        for magento_app in self.browse(cr, uid, ids):
+            if not magento_app.magento_default_storeview:
+                raise osv.except_osv(_("Alert"), _("Select Store View Magento"))
+
+            with Customer(magento_app.uri, magento_app.username, magento_app.password) as customer_api:
+                ofilter = {'created_at':{'from':magento_app.from_import_customers, 'to':magento_app.to_import_customers}}
+
+                #~ Update date last import
+                date_from_import = magento_app.to_import_customers and magento_app.to_import_customers or time.strftime('%Y-%m-%d %H:%M:%S')
+                self.write(cr, uid, ids, {'from_import_customers': date_from_import})
+                self.write(cr, uid, ids, {'to_import_customers': time.strftime('%Y-%m-%d %H:%M:%S')})
+
+                for customer in customer_api.list(ofilter):
+                    res_partner = external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer['customer_id'])
+                    if not res_partner: #create
+                        partner_id = partner_obj.magento_create_partner(cr, uid, ids, magento_app, customer, context)
+                        partner_address_ids = partner_address_obj.magento_create_partner_address(cr, uid, ids, magento_app, partner_id, customer, context)
+                    else:
+                        logger.notifyChannel('Magento Sync Customer', netsvc.LOG_INFO, "Skip! Partner already exists: magento %s, magento partner id %s. Partner not created" % (magento_app.name, customer['customer_id']))
+
+        return True
+
+    def core_export_customers(self, cr, uid, ids, context):
+        """
+        def sync Customer from OpenERP to Magento
+        Only create new values if not exist; not update or delete
+        :ids list
+        :return True
+        """
+        
+        #~ TODO
+        #~ Only Partners or Address are created or modified > last_export: raimon
+        
+        #~ Send values to Magento: jesus
         print "TODO"
 
         return True
@@ -703,7 +744,7 @@ magento_attribute_exclude()
 class magento_customer_group(osv.osv):
     _name = 'magento.customer.group'
     _description = 'Magento Customer Group'
-    
+
     _columns = {
         'name': fields.char('Name', size=256, required=True, readonly=True),
         'customer_group_id': fields.integer('Customer Group ID', required=True, readonly=True),

@@ -50,11 +50,18 @@ class sale_shop(osv.osv):
         'magento_last_export_prices': fields.datetime('Last Export Prices', help='This date is last export. If you need export all product prices, empty this field (long sync)'),
         'magento_last_export_stock': fields.datetime('Last Export Stock', help='This date is last export. If you need export all product prices, empty this field (long sync)'),
         'magento_last_export_images': fields.datetime('Last Export Image', help='This date correspond to the last export. If you need export all images, left empty this field.'),
+        'magento_last_export_partners': fields.datetime('Last Export Partners', help='This date correspond to the last export. If you need export all partners, left empty this field.'),
+        'magento_last_import_sale_orders': fields.datetime('Last Import Status Sale Orders', help='This date correspond to the last export. If you need export all status, left empty this field.'),
+        'magento_from_sale_orders': fields.datetime('From Orders', help='This date is last import. If you need import news orders, you can modify this date (filter)'),
+        'magento_to_sale_orders': fields.datetime('To Orders', help='This date is to import (filter)'),
+        'magento_last_export_status_sale_orders': fields.datetime('Last Status Orders', help='This date correspond to the last export. If you need export all orders, left empty this field.'),
+        'magento_payment_types': fields.one2many('magento.sale.shop.payment.type', 'shop_id', 'Payment Type'),
     }
 
     _defaults = {
         'magento_sale_price': 'saleprice',
         'magento_sale_stock': 'virtualstock',
+        'magento_from_sale_orders': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'),
     }
 
     def magento_export_products(self, cr, uid, ids, context=None):
@@ -381,6 +388,56 @@ class sale_shop(osv.osv):
 
         return True
 
+    def magento_import_sale_order(self, cr, uid, ids, context=None):
+        """
+        Sync Orders Magento to OpenERP filterd by magento_sale_shop
+        Get ids all sale.order and send one to one to Magento
+        :return True
+        """
+
+        logger = netsvc.Logger()
+
+        for sale_shop in self.browse(cr, uid, ids):
+            magento_app = sale_shop.magento_website.magento_app_id
+
+            with Order(magento_app.uri, magento_app.username, magento_app.password) as order_api:
+                creted_filter = {'from':sale_shop.magento_from_sale_orders}
+                if sale_shop.magento_to_sale_orders:
+                    creted_filter['to'] = sale_shop.magento_to_sale_orders
+
+                ofilter = {'created_at':creted_filter}
+                orders = order_api.list(ofilter)
+
+                for order in orders:
+                    order_id = order['order_id']
+                    code = order['increment_id']
+                    mgn_order_mapping = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'sale.order', order_id)
+                    if mgn_order_mapping:
+                        logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_ERROR, "Skip! magento %s, order %s, mapping id %s. Not create" % (magento_app.name, code, mgn_order_mapping))
+                        continue
+
+                    values = order_api.info(code)
+                    sale_order_id = self.pool.get('sale.order').magento_create_order(cr, uid, magento_app, values, context)
+                
+                if not orders:
+                    logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Not Orders available, magento %s, date > %s" % (magento_app.name, creted_filter))
+
+
+        return True
+
+    def magento_export_status_sale_order(self, cr, uid, ids, context=None):
+        """
+        Sync Sale orders to Magento Site filterd by magento_sale_shop
+        Get ids all sale.order and send one to one to Magento
+        :return True
+        """
+
+        logger = netsvc.Logger()
+
+        # TODO
+        print "TODO"
+        return True
+
     def _sale_shop(self, cr, uid, callback, context=None):
         """
         Sale Shop Magento available Scheduler
@@ -409,6 +466,203 @@ class sale_shop(osv.osv):
 
 sale_shop()
 
+class sale_order(osv.osv):
+    _inherit = "sale.order"
+
+    _columns = {
+        'magento_gift_message': fields.text('Gift Message'),
+    }
+
+    def magento_create_order(self, cr, uid, magento_app, values, context=None):
+        """
+        Create Magento Order
+        Not use Base External Mapping
+        :magento_app: object
+        :values: dicc order
+        :return sale_order_id (OpenERP ID)
+        """
+
+        logger = netsvc.Logger()
+        vals = {}
+
+        """Partner OpenERP. If not, create partner"""
+        partner_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner', values['customer_id'])
+        if not partner_mapping_id:
+            # TODO
+            print "TODO: call function create partner"
+        partner_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_mapping_id])[0]['oerp_id']
+
+        """Partner Address Invoice OpenERP. If not, create partner address"""
+        partner_invoice_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', values['billing_address']['customer_address_id'])
+        if not partner_invoice_mapping_id:
+            # TODO
+            print "TODO: call function create partner address billing"
+        partner_address_invoice_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_invoice_mapping_id])[0]['oerp_id']
+
+        """Partner Address Delivery OpenERP. If not, create partner address"""
+        partner_shipping_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', values['shipping_address']['customer_address_id'])
+        if not partner_shipping_mapping_id:
+            # TODO
+            print "TODO: call function create partner address shipping_address"
+        partner_address_shipping_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_shipping_mapping_id])[0]['oerp_id']
+
+        partner = self.pool.get('res.partner').browse(cr, uid, partner_id, context)
+
+        """Sale Order"""
+        vals['name'] = values['increment_id']
+        vals['partner_id'] = partner_id
+        vals['partner_invoice_id'] = partner_address_invoice_id
+        vals['partner_shipping_id'] = partner_address_shipping_id
+        vals['partner_order_id'] = partner_address_invoice_id
+        vals['pricelist_id'] = partner.property_product_pricelist.id
+        vals['note'] = values['customer_note']
+        vals['origin'] = "%s-%s" % (magento_app.name,values['increment_id'])
+        if 'gift_message' in values:
+            vals['magento_gift_message'] = values['gift_message']
+        sale_order_id = self.create(cr, uid, vals, context)
+        
+        sale_order = self.browse(cr, uid, sale_order_id)
+
+        """Sale Order Discount"""
+        if values['discount_amount'] != '0.0000':
+            sale_order_delivery = self.pool.get('sale.order.line').magento_create_discount_line(cr, uid, magento_app, sale_order, values, context)
+
+        """Sale Order Delivery"""
+        sale_order_delivery = self.pool.get('sale.order.line').magento_create_delivery_line(cr, uid, magento_app, sale_order, values, context)
+
+        """Sale Order Line"""
+        for item in values['items']:
+            sale_order_line = self.pool.get('sale.order.line').magento_create_order_line(cr, uid, magento_app, sale_order, item, context)
+
+        """Magento APP Customer"""
+        #~ TODO: Add last visit and storeviews shop
+        #~ magento_storeview_id
+        #~ magento_storeview_ids
+        
+        # TODO
+        print "TODO: magento order mapping"
+        
+        logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s, magento %s, openerp id %s" % (values['increment_id'], magento_app.name, sale_order.id))
+
+        return sale_order_id
+
+sale_order()
+
+class sale_order_line(osv.osv):
+    _inherit = "sale.order.line"
+
+    _columns = {
+        'magento_gift_message': fields.text('Gift Message'),
+    }
+
+    def magento_create_order_line(self, cr, uid, magento_app, sale_order, item={}, context=None):
+        """
+        Create Magento Order Line
+        Not use Base External Mapping
+        :magento_app: object
+        :sale_order: object
+        :item: dicc order line Magento
+        :return sale_order_line_id (OpenERP ID)
+        """
+
+        vals_line = {}
+
+        decimals = self.pool.get('decimal.precision').precision_get(cr, uid, 'Sale Price')
+        
+        #Default values
+        product_id = False
+        product_uom = magento_app.product_uom_id.id
+        product_uom_qty = round(float(item['qty_ordered']),decimals)
+        weight = round(float(item['weight']),decimals)
+
+        product_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.product', item['product_id'])
+        if product_mapping_id:
+            """Product is mapping. Get Product OpenERP"""
+            product_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [product_mapping_id])[0]['oerp_id']
+            product = self.pool.get('product.product').browse(cr, uid, product_id)
+            product_uom = product.uos_id.id and product.uos_id.id or product.uom_id.id
+            product_id_change = self.pool.get('sale.order.line').product_id_change(cr, uid,
+                [sale_order.id], sale_order.partner_id.property_product_pricelist.id, product.id,
+                product_uom_qty, product_uom, partner_id=sale_order.partner_id.id)
+
+            vals_line['delay'] = product_id_change['value']['delay']
+            weight = product_id_change['value']['th_weight']
+            vals_line['type'] = product_id_change['value']['type']
+            tax_ids = [self.pool.get('account.tax').browse(cr, uid, t_id).id for t_id in product_id_change['value']['tax_id']]
+            vals_line['tax_id'] = [(6, 0, tax_ids)]
+
+        vals_line['order_id'] = sale_order.id
+        vals_line['product_id'] = product_id
+        vals_line['name'] = item['name']
+        vals_line['price_unit'] = float(item['price'])
+        vals_line['product_uom_qty'] = product_uom_qty
+        vals_line['product_uom'] = product_uom
+        vals_line['notes'] = item['description']
+        vals_line['th_weight'] = weight
+        if 'gift_message' in item:
+            vals_line['magento_gift_message'] = item['gift_message']
+        sale_order_line_id = self.create(cr, uid, vals_line, context)
+
+        return sale_order_line_id
+
+    def magento_create_delivery_line(self, cr, uid, magento_app, sale_order, values=False, context=None):
+        """
+        Create Magento Order Line Delivery
+        Not use Base External Mapping
+        :magento_app: object
+        :sale_order: object
+        :item: dicc order Magento
+        :return sale_order_line_id (OpenERP ID)
+        """
+        if not values:
+            return False
+
+        delivery_product = magento_app.product_delivery_default_id
+        delivery_ids = self.pool.get('delivery.carrier').search(cr, uid, [('name','=',values['shipping_description'])])
+        if len(delivery_ids)>0:
+            delivery = self.pool.get('delivery.carrier').browse(cr, uid, delivery_ids[0], context)
+            delivery_product = delivery.product_id
+
+        item = {
+            'product_id': delivery_product.id,
+            'qty_ordered': 1,
+            'weight': delivery_product.weight and delivery_product.weight or 0,
+            'name': delivery_product.name,
+            'price': values['base_shipping_amount'],
+            'description': '',
+        }
+        sale_order_line_id = self.magento_create_order_line(cr, uid, magento_app, sale_order, item, context)
+
+        return sale_order_line_id
+
+    def magento_create_discount_line(self, cr, uid, magento_app, sale_order, values=False, context=None):
+        """
+        Create Magento Order Line Discount
+        Not use Base External Mapping
+        :magento_app: object
+        :sale_order: object
+        :values: dicc order Magento
+        :return sale_order_line_id (OpenERP ID)
+        """
+        if not values:
+            return False
+
+        discount_product = magento_app.product_discount_default_id
+
+        item = {
+            'product_id': discount_product.id,
+            'qty_ordered': 1,
+            'weight': discount_product.weight and discount_product.weight or 0,
+            'name': discount_product.name,
+            'price': values['discount_amount'],
+            'description': '',
+        }
+        sale_order_line_id = self.magento_create_order_line(cr, uid, magento_app, sale_order, item, context)
+
+        return sale_order_line_id
+
+sale_order_line()
+
 class magento_sale_shop_payment_type(osv.osv):
     _name = "magento.sale.shop.payment.type"
 
@@ -427,6 +681,8 @@ class magento_sale_shop_payment_type(osv.osv):
         ], 'Shipping Policy'),
         'invoice_quantity': fields.selection([('order', 'Ordered Quantities'), ('procurement', 'Shipped Quantities')], 'Invoice on'),
         'app_payment': fields.char('App Payment', size=255, required=True, help='Name App Payment module (example, paypal, servired, cash_on_delivery,...'),
+        'confirm': fields.boolean('Confirm', help="Confirm order. Sale Order change state draft to done, and generate picking and/or invoice automatlly"),
+        'sequence': fields.integer('Sequence', help="Gives the sequence order when displaying a list of payments."),
      }
 
 magento_sale_shop_payment_type()
