@@ -17,12 +17,12 @@
                                     <group col="5" colspan="4">
                                         <group col="1" colspan="1">
                                             <button name="magento_import_sale_order" string="Import Orders" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
-                                            <button name="magento_export_status_sale_order" string="Export Status Sale Orders" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
+                                            <button name="magento_export_status" string="Export Status Sale Orders" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
                                         </group>
                                         <group col="4" colspan="2">
                                             <field name="magento_from_sale_orders" />
                                             <field name="magento_to_sale_orders" />
-                                            <field name="magento_last_export_status_sale_orders" />
+                                            <field name="magento_last_export_status_orders" />
                                         </group>
                                     </group>
                                 </page>
@@ -61,7 +61,12 @@
                                     <separator string="Import Status" colspan="4"/>
                                     <field name="magento_status" colspan="4" nolabel="1"/>
                                     <separator string="Export Status" colspan="4"/>
-
+                                    <field name="magento_status_paid" attrs="{'required':[('magento_shop','=', True)]}"/>
+                                    <field name="magento_notify_paid"/>
+                                    <field name="magento_status_delivered" attrs="{'required':[('magento_shop','=', True)]}"/>
+                                    <field name="magento_notify_delivered"/>
+                                    <field name="magento_status_paid_delivered" attrs="{'required':[('magento_shop','=', True)]}"/>
+                                    <field name="magento_notify_paid_delivered"/>
                                 </page>
                                 <page string="Payments">
                                     <field name="magento_payments" colspan="4" nolabel="1"/>
@@ -83,6 +88,7 @@
                     <page string="Magento">
                         <separator string="Gift Message" colspan="4" />
                         <field name="magento_gift_message" colspan="4" nolabel="1"/>
+                        <field name="magento_status"/>
                     </page>
                 </xpath>
                 <xpath expr="/form/notebook/page[@string='Sales Order']/field[@name='order_line']/form/notebook/page[@string='History']" position="after">

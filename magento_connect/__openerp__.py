@@ -47,6 +47,9 @@
      3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.
      3.2 Also exists another module Magento management we working another projects:
         - https://launchpad.net/magentoerpconnect
+        
+    Documentation available at (spanish):
+    http://wiki.zikzakmedia.com/openerp:magentoconnect
 
     Special Thanks to Akretion www.akretion.com and OpenLabs www.openlabs.co.in
     """,

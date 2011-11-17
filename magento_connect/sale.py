@@ -55,15 +55,21 @@ class sale_shop(osv.osv):
         'magento_last_import_sale_orders': fields.datetime('Last Import Status Sale Orders', help='This date correspond to the last export. If you need export all status, left empty this field.'),
         'magento_from_sale_orders': fields.datetime('From Orders', help='This date is last import. If you need import news orders, you can modify this date (filter)'),
         'magento_to_sale_orders': fields.datetime('To Orders', help='This date is to import (filter)'),
-        'magento_last_export_status_sale_orders': fields.datetime('Last Status Orders', help='This date correspond to the last export. If you need export all orders, left empty this field.'),
+        'magento_last_export_status_orders': fields.datetime('Last Status Orders', help='This date correspond to the last export. If you need export all orders, left empty this field.'),
         'magento_default_picking_policy': fields.selection([('direct', 'Partial Delivery'), ('one', 'Complete Delivery')], 'Packing Policy'),
         'magento_default_order_policy': fields.selection([
-         ('prepaid', 'Payment Before Delivery'),
-         ('manual', 'Shipping & Manual Invoice'),
-         ('postpaid', 'Invoice on Order After Delivery'),
-         ('picking', 'Invoice from the Packing'),
+            ('prepaid', 'Payment Before Delivery'),
+            ('manual', 'Shipping & Manual Invoice'),
+            ('postpaid', 'Invoice on Order After Delivery'),
+            ('picking', 'Invoice from the Packing'),
         ], 'Shipping Policy'),
         'magento_default_invoice_quantity': fields.selection([('order', 'Ordered Quantities'), ('procurement', 'Shipped Quantities')], 'Invoice on'),
+        'magento_status_paid': fields.char('Paid', size=128, help='Status for paid orders (invoice)'),
+        'magento_notify_paid': fields.boolean('Notify Paid', size=128, help='Magento notification'),
+        'magento_status_delivered': fields.char('Delivered', size=128, help='Status for delivered (picking)'),
+        'magento_notify_delivered': fields.boolean('Notify Delivered', size=128, help='Magento notification'),
+        'magento_status_paid_delivered': fields.char('Paid/Delivered', size=128, help='Status for paid and delivered'),
+        'magento_notify_paid_delivered': fields.boolean('Notify Paid/Delivered', size=128, help='Magento notification'),
     }
 
     _defaults = {
@@ -435,10 +441,9 @@ class sale_shop(osv.osv):
                 if not orders:
                     logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Not Orders available, magento %s, date > %s" % (magento_app.name, creted_filter))
 
-
         return True
 
-    def magento_export_status_sale_order(self, cr, uid, ids, context=None):
+    def magento_export_status(self, cr, uid, ids, context=None):
         """
         Sync Sale orders to Magento Site filterd by magento_sale_shop
         Get ids all sale.order and send one to one to Magento
@@ -447,8 +452,47 @@ class sale_shop(osv.osv):
 
         logger = netsvc.Logger()
 
-        # TODO
-        print "TODO"
+        status = False
+        comment = False
+        notify = False
+        sale_order_ids = []
+
+        for shop in self.browse(cr, uid, ids):
+            magento_app = shop.magento_website.magento_app_id
+            last_exported_time = shop.magento_last_export_status_orders
+
+            logger.notifyChannel('Magento Sync Sale Order Status', netsvc.LOG_INFO, "magento %s, sale shop %s" % (magento_app.name, shop.id))
+
+            # write sale shop date last export
+            self.pool.get('sale.shop').write(cr, uid, shop.id, {'magento_last_export_status_orders': time.strftime('%Y-%m-%d %H:%M:%S')})
+            sale_order_ids = self.pool.get('sale.order').search(cr, uid, [('shop_id','=',shop.id)])
+            
+            for sale_order in self.pool.get('sale.order').perm_read(cr, uid, sale_order_ids):
+                # product.product modify > date exported last time
+                if  sale_order['write_date'] and last_exported_time < sale_order['write_date'][:19]:
+                    sale_order_ids.append(sale_order['id'])
+
+            for sale_order in self.pool.get('sale.order').browse(cr, uid, sale_order_ids):
+                if sale_order.invoiced:
+                    notify = shop.magento_notify_paid
+                    status = shop.magento_status_paid
+                if sale_order.shipped:
+                    notify = shop.magento_notify_delivered
+                    status = shop.magento_status_delivered
+                if sale_order.invoiced and sale_order.shipped:
+                    notify = shop.magento_notify_paid_delivered
+                    status = shop.magento_status_paid_delivered
+
+                #not update status if status not change
+                if status == sale_order.magento_status:
+                    status = False
+
+                if status:
+                    with Order(magento_app.uri, magento_app.username, magento_app.password) as order_api:
+                        order_api.addcomment(sale_order.name, status, comment, notify)
+                    self.pool.get('sale.order').write(cr, uid, [sale_order.id], {'magento_status': status})
+                    logger.notifyChannel('Order Status', netsvc.LOG_INFO, "%s, status: %s" % (sale_order.name, status))
+
         return True
 
     def _sale_shop(self, cr, uid, callback, context=None):
@@ -477,12 +521,21 @@ class sale_shop(osv.osv):
         """Scheduler Catalog Stock Cron"""
         self._sale_shop(cr, uid, self.magento_export_stock, context=context)
 
+    def run_import_orders_scheduler(self, cr, uid, context=None):
+        """Scheduler Orders Status Cron"""
+        self._sale_shop(cr, uid, self.magento_import_sale_order, context=context)
+
+    def run_update_orders_scheduler(self, cr, uid, context=None):
+        """Scheduler Orders Status Cron"""
+        self._sale_shop(cr, uid, self.magento_export_status, context=context)
+
 sale_shop()
 
 class sale_order(osv.osv):
     _inherit = "sale.order"
 
     _columns = {
+        'magento_status': fields.char('Status', size=128, readonly=True, help='Magento Status'),
         'magento_gift_message': fields.text('Gift Message'),
     }
 
@@ -560,6 +613,7 @@ class sale_order(osv.osv):
                 vals['payment_type'] = payment_type[0]['payment_type_id'][0]
 
         """Sale Order"""
+        vals['shop_id'] = sale_shop.id
         vals['name'] = values['increment_id']
         vals['partner_id'] = partner_id
         vals['partner_invoice_id'] = partner_address_invoice_id
@@ -577,6 +631,7 @@ class sale_order(osv.osv):
 
         """Magento Status Order"""
         magento_status = values['status_history'][0]['status']
+        vals['magento_status'] = magento_status
         mgn_status = self.pool.get('magento.sale.shop.status.type').search(cr, uid, [
                 ('status','=',magento_status),
                 ('shop_id','=',sale_shop.id),
@@ -625,6 +680,8 @@ class sale_order(osv.osv):
         self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'sale.order', sale_order.id, values['order_id'])
 
         logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s, magento %s, openerp id %s, magento id %s" % (values['increment_id'], magento_app.name, sale_order.id, values['order_id']))
+
+        cr.commit()
 
         return sale_order.id
 

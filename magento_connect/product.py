@@ -204,4 +204,62 @@ class product_product(osv.osv):
                 raise osv.except_osv(_("Alert"), _("Product '%s' not allow to delete because are active in Magento Shop") % (val.name))
         return super(product_product, self).unlink(cr, uid, ids, context)
 
+    def magento_create_product(self, cr, uid, magento_app, product, store_view, context = None):
+        """Create Product from Magento Values
+        Transform dicc by Base External Mapping
+        :magento_app object
+        :product dicc
+        :store_view ID
+        :return product_product_oerp_id
+        """
+        if context is None:
+            context = {}
+
+        logger = netsvc.Logger()
+
+        external_referential_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.attributes.group', product['set'])
+        attribute_external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [external_referential_id])
+
+        category_ids = []
+        for cat_id in product['category_ids']:
+            category_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.category', cat_id)
+            external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [category_id])
+            category_ids.append(external_referentials[0]['oerp_id'])
+
+        values = {
+            'name': product['name'],
+            'magento_sku': product['sku'],
+            'default_code': product['sku'],
+            'magento_exportable': True,
+            'magento_product_type': product['type'],
+            'categ_id':magento_app.product_category_id.id,
+            'attribute_group_id': attribute_external_referentials[0]['oerp_id'],
+            'type': 'product',
+        }
+
+        if len(category_ids)>0:
+            values['categ_ids'] = [(6, 0, category_ids)]
+
+        product_product_oerp_id = self.pool.get('product.product').create(cr, uid, values, context)
+        self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.product', product_product_oerp_id, product['product_id'])
+        logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Product Product: magento app %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
+
+        #~ Update product info
+        with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
+            product_info = product_api.info(product['product_id'], store_view)
+
+        product_obj = self.pool.get('product.product').browse(cr, uid, product_product_oerp_id, context)
+
+        context['magento_app'] = magento_app
+        product_product_vals = self.pool.get('base.external.mapping').get_external_to_oerp(cr, uid, 'magento.product.product', product_product_oerp_id, product_info, context)
+        product_template_vals = self.pool.get('base.external.mapping').get_external_to_oerp(cr, uid, 'magento.product.template', product_obj.product_tmpl_id.id, product_info, context)
+        vals = dict(product_product_vals, **product_template_vals)
+        #~ print vals #dicc value to write
+        self.pool.get('product.product').write(cr, uid, [product_product_oerp_id], vals)
+        logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Write Product Product: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
+
+        cr.commit()
+
+        return product_product_oerp_id
+
 product_product()
