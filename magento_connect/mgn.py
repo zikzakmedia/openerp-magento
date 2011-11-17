@@ -74,6 +74,8 @@ class magento_app(osv.osv):
         'from_import_customers': fields.datetime('From Import Customers', help='This date is last import. If you need import new partners, you can modify this date (filter)'),
         'to_import_customers': fields.datetime('To Import Customers', help='This date is to import (filter)'),
         'last_export_partners': fields.datetime('Last Export Partners', help='This date is last export. If you need export all partners, empty this field (long sync)'),
+        'magento_country_ids': fields.many2many('res.country','magento_app_country_rel', 'magento_app_id','country_id','Country'),
+        'magento_region_ids': fields.one2many('magento.region', 'magento_app_id', 'Region'),
     }
 
     def core_sync_test(self, cr, uid, ids, context):
@@ -131,6 +133,9 @@ class magento_app(osv.osv):
                             'pricelist_id': magento_app.pricelist_id.id,
                             'magento_shop': True,
                             'magento_website': website_oerp_id,
+                            'magento_default_picking_policy': 'one',
+                            'magento_default_order_policy': 'picking',
+                            'magento_default_invoice_quantity': 'order',
                         }
                         saleshop_oerp_id = self.pool.get('sale.shop').create(cr, uid, values, context)
                         self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'sale.shop', saleshop_oerp_id, website['default_group_id'])
@@ -181,11 +186,54 @@ class magento_app(osv.osv):
                     else:
                         logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Store Group exists: magento %s, magento store group id %s. Not create" % (magento_app.name, storeview['store_id']))
         return True
+        
+    def core_sync_regions(self, cr, uid, ids, context):
+        """
+        def sync Regions Magento to OpenERP
+        Only create new values if not exist; not update or delete
+        :ids list magento app
+        :return True
+        """
+
+        logger = netsvc.Logger()
+        
+        for magento_app in self.browse(cr, uid, ids):
+            with Region(magento_app.uri, magento_app.username, magento_app.password) as region_api:
+                countries = magento_app.magento_country_ids
+                if not countries:
+                    return False
+
+                for country in countries:
+                    regions = region_api.list(country.code)
+                    for region in regions:
+                        mag_regions = self.pool.get('magento.region').search(cr, uid, [
+                                ('region_id','=',region['region_id']),
+                                ('magento_app_id','=',magento_app.id)
+                            ])
+                        if not len(mag_regions)>0: #not exists
+                            states = self.pool.get('res.country.state').search(cr, uid, [
+                                    ('name','ilike',region['code'])
+                                ])
+                            values = {}
+                            if len(states)>0:
+                                values['res_country_state_id'] = states[0]
+                            values['magento_app_id'] = magento_app.id
+                            values['code'] = region['code']
+                            values['region_id'] = region['region_id']
+                            values['name'] = region['name']
+                            region_id = self.pool.get('magento.region').create(cr, uid, values)
+                            logger.notifyChannel('Magento Sync Region', netsvc.LOG_INFO, "Create Region: magento id %s, magento.region id %s." % (region['region_id'], region_id))
+                        else:
+                            logger.notifyChannel('Magento Sync Region', netsvc.LOG_INFO, "Skip! Region: magento id %s, magento.region ids %s." % (region['region_id'], mag_regions))
+
+        return True
 
     def core_sync_attributes_set(self, cr, uid, ids, context):
         """
         def sync Attributes Set (group attribute) Magento to OpenERP
         Only create new values if not exist; not update or delete
+        :ids list magento app
+        :return True
         """
 
         logger = netsvc.Logger()
@@ -214,6 +262,8 @@ class magento_app(osv.osv):
         Only create new values if not exist; not update or delete
         Notes:
          - Selection field not more 128 characters. More fields, need create many2one field manually
+        :ids list magento app
+        :return True
         """
 
         logger = netsvc.Logger()
@@ -291,6 +341,8 @@ class magento_app(osv.osv):
         def sync Categories Catalog Magento to OpenERP
         Only create new values if not exist; not update or delete
         Category extraction values and creation is magento_record_entire_tree function at product.category model
+        :ids list magento app
+        :return True
         """
 
         logger = netsvc.Logger()
@@ -307,7 +359,7 @@ class magento_app(osv.osv):
         """
         def export Product Categories OpenERP to Magento
         :ids list
-        :return True
+        :return: True
         """
 
         logger = netsvc.Logger()
@@ -357,6 +409,8 @@ class magento_app(osv.osv):
         """
         def sync Product Type Magento to OpenERP
         Only create new values if not exist; not update or delete
+        :ids list magento app
+        :return True
         """
 
         logger = netsvc.Logger()
@@ -552,6 +606,7 @@ class magento_app(osv.osv):
         external_referential_obj = self.pool.get('magento.external.referential')
         partner_obj = self.pool.get('res.partner')
         partner_address_obj = self.pool.get('res.partner.address')
+        magento_app_customer_obj = self.pool.get('magento.app.customer')
 
         for magento_app in self.browse(cr, uid, ids):
             if not magento_app.magento_default_storeview:
@@ -568,8 +623,12 @@ class magento_app(osv.osv):
                 for customer in customer_api.list(ofilter):
                     res_partner = external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer['customer_id'])
                     if not res_partner: #create
-                        partner_id = partner_obj.magento_create_partner(cr, uid, ids, magento_app, customer, context)
-                        partner_address_ids = partner_address_obj.magento_create_partner_address(cr, uid, ids, magento_app, partner_id, customer, context)
+                        partner_id = partner_obj.magento_create_partner(cr, uid, magento_app, customer, context)
+                        magento_app_customer_ids = magento_app_customer_obj.magento_app_customer_create(cr, uid, magento_app, partner_id, customer, context)
+                        with CustomerAddress(magento_app.uri, magento_app.username, magento_app.password) as customer_address_api:
+                            customer_addresses = customer_address_api.list(customer['customer_id'])
+                            for customer_address in customer_addresses:
+                                partner_address_ids = partner_address_obj.magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address, context)
                     else:
                         logger.notifyChannel('Magento Sync Customer', netsvc.LOG_INFO, "Skip! Partner already exists: magento %s, magento partner id %s. Partner not created" % (magento_app.name, customer['customer_id']))
 
@@ -582,12 +641,111 @@ class magento_app(osv.osv):
         :ids list
         :return True
         """
-        
-        #~ TODO
-        #~ Only Partners or Address are created or modified > last_export: raimon
-        
-        #~ Send values to Magento: jesus
-        print "TODO"
+        if context is None:
+            context = {}
+
+        logger = netsvc.Logger()
+        partner_obj = self.pool.get('res.partner')
+        partner_address_obj = self.pool.get('res.partner.address')
+        extern_ref_obj = self.pool.get('magento.external.referential')
+        country_obj = self.pool.get('res.country')
+        state_obj = self.pool.get('res.country.state')
+
+        for magento_app in self.browse(cr, uid, ids):
+
+            if not magento_app.magento_default_storeview:
+                raise osv.except_osv(_("Alert"), _("Select Store View Magento"))
+
+            #~ Update the last export date
+            last_export_partners = magento_app.last_export_partners and magento_app.last_export_partners or time.strftime('%Y-%m-%d %H:%M:%S')
+            self.write(cr, uid, ids, {'last_export_partners': last_export_partners}, context)
+
+            extern_ref = partner_obj.get_mapped_partners(cr, uid, magento_app, context)
+
+            external_refs = []
+            for ref in extern_ref:
+                external_refs.append(ref.oerp_id)
+            external_refs = tuple(external_refs)
+            magento_app_customer_obj = self.pool.get("magento.app.customer")
+            magento_app_customer_ids = magento_app_customer_obj.search(cr, uid, [
+                ('magento_app_id', '=', magento_app.id),
+                ('partner_id', 'not in', external_refs),
+            ], context = context)
+            magento_app_customers = magento_app_customer_obj.browse(cr, uid, magento_app_customer_ids, context)
+
+            with Customer(magento_app.uri, magento_app.username, magento_app.password) as customer_api:
+                for magento_app_customer in magento_app_customers:
+                    magento_customer_group_id = extern_ref_obj.check_oerp2mgn(
+                        cr,
+                        uid,
+                        magento_app,
+                        'magento.customer.group',
+                        magento_app_customer.magento_customer_group_id.id,
+                    )
+                    name = partner_obj.magento_get_name(cr, uid, magento_app_customer.partner_id, context)
+                    first_name = name['firstname']
+                    last_name = name['lastname']
+                    customer_value = {
+                        'taxvat': magento_app_customer.partner_id.vat,
+                        'group_id': magento_customer_group_id,
+                        'email': magento_app_customer.magento_emailid,
+                        'lastname': last_name,
+                        'firstname': first_name,
+                    }
+                    partner_id = magento_app_customer.partner_id.id
+
+                    """Create Customer"""
+                    create_address = False
+                    try:
+                        magento_customer_id = customer_api.create(customer_value)
+                        create_address = True
+                        customer_id = extern_ref_obj.create_external_referential(cr, uid, magento_app, 'res.partner', partner_id, magento_customer_id)
+                        logger.notifyChannel('Magento Export Customer', netsvc.LOG_INFO, "Create Magento %s: Partner ID %s." % (magento_app.name, partner_id))
+                    except:
+                        logger.notifyChannel('Magento Export Customer', netsvc.LOG_ERROR, "Magento %s: Partner ID %s error." % (magento_app.name, partner_id))
+
+                    """Create Customer Address"""
+                    if create_address:
+                        for address in magento_app_customer.partner_id.address:
+                            with CustomerAddress(magento_app.uri, magento_app.username, magento_app.password) as customer_address_api:
+                                if address.type == 'delivery' or address.type == 'invoice':
+                                    name = partner_address_obj.magento_get_address_name(cr, uid, address, context)
+
+                                    country_ids = country_obj.read(cr, uid, [address.country_id.id], ['code'], context)
+                                    country_id = country_ids[0] and country_ids[0]['code'] or False
+
+                                    regions = state_obj.read(cr, uid, [address.state_id.id], ['name'], context)
+                                    region = regions[0] and regions[0]['name'] or False
+
+                                    region_ids = self.pool.get('magento.region').search(cr, uid,[
+                                            ('res_country_state_id','=',address.state_id.id),
+                                            ('magento_app_id','=',magento_app.id),
+                                        ])
+
+                                    region_id = False
+                                    if (region_ids)>0:
+                                        region_id = self.pool.get('magento.region').read(cr, uid, region_ids, ['region_id'])[0]['region_id']
+                                        
+                                    data = {
+                                        'city': address.city or False,
+                                        'fax': address.fax or False,
+                                        'firstname': name['firstname'],
+                                        'lastname': name['lastname'],
+                                        'is_default_shipping': address.type == 'delivery',
+                                        'is_default_billing': address.type == 'invoice',
+                                        'telephone': address.phone or False,
+                                        'street': address.street or False,
+                                        'postcode': address.zip or False,
+                                        'country_id': country_id,
+                                        'region': region,
+                                        'region_id': region_id,
+                                    }
+                                    try:
+                                        magento_customer_address_id = customer_address_api.create(magento_customer_id, data)
+                                        customer_address_id = extern_ref_obj.create_external_referential(cr, uid, magento_app, 'res.partner.address', address.id, magento_customer_address_id)
+                                        logger.notifyChannel('Magento Export Customer', netsvc.LOG_INFO, "Create Address magento %s: openerp ID %s." % (magento_customer_address_id, address.id))
+                                    except:
+                                        logger.notifyChannel('Magento Export Customer', netsvc.LOG_ERROR, "Magento %s: Partner Address ID %s error." % (magento_app.name, address.id))
 
         return True
 
@@ -756,6 +914,25 @@ class magento_customer_group(osv.osv):
 
 magento_customer_group()
 
+class magento_region(osv.osv):
+    _name = 'magento.region'
+    _description = 'Magento Region'
+    
+    _rec_name = "code"
+
+    _columns = {
+        'magento_app_id': fields.many2one('magento.app', 'Magento App', required=True, readonly=True),
+        'res_country_state_id': fields.many2one('res.country.state', 'State'),
+        'code': fields.char('Code', size=256, required=True, readonly=True),
+        'region_id': fields.integer('Region ID', required=True, readonly=True),
+        'name': fields.char('Name', size=256, readonly=True),
+    }
+
+    def unlink(self, cr, uid, ids, context=None):
+        raise osv.except_osv(_("Alert"), _("This Magento Region not allow to delete"))
+
+magento_region()
+
 class magento_app_customer(osv.osv):
     _name = 'magento.app.customer'
     _description = 'Magento App Customer'
@@ -773,9 +950,82 @@ class magento_app_customer(osv.osv):
         #~ 'magento_newsletter':fields.boolean('Newsletter'),
     }
 
+    def _check_email(self, cr, uid, ids, context = None):
+        if context is None:
+            context = {}
+        magento_app_customer = self.browse(cr, uid, ids[0], context)
+        email_exist = self.search(cr, uid, [
+            ('magento_app_id', '=', magento_app_customer.magento_app_id.id),
+            ('magento_emailid', '=', magento_app_customer.magento_emailid),
+            ('id', '!=', ids[0]),
+        ], context = context)
+        if len(email_exist) > 0:
+            return False
+        return True
+
+    _constraints = [
+        (_check_email, "This email is already assigned to another partner in the same Magento Server.", ['magento_emailid']),
+    ]
+
     #~ TODO: Constrain partner_id and magento_app_id
 
     def unlink(self, cr, uid, ids, context=None):
         raise osv.except_osv(_("Alert"), _("This Magento Websites/Groups not allow to delete"))
+
+    def magento_app_customer_create(self, cr, uid, magento_app, partner_id, customer, context=None):
+        """Create Partner Magento Values
+        :magento_app object
+        :partner_id ID
+        :customer dicc
+        :return partner_id
+        """
+        if context is None:
+            context = {}
+
+        external_referential_obj = self.pool.get('magento.external.referential')
+        magento_customer_group_id = self.pool.get('magento.customer.group').search(cr, uid, [('customer_group_id', '=', customer['group_id']), ('magento_app_id', 'in', [magento_app.id])])[0]
+        email = customer['email']
+        #check if exist this email. Yes, add -copy
+        emails = self.search(cr, uid, [('magento_emailid', '=', customer['email']), ('magento_app_id', 'in', [magento_app.id])])
+        if len(emails)>0:
+            email = "%s-copy" % customer['email']
+
+        vals = {
+            'partner_id': partner_id,
+            'magento_app_id': magento_app.id,
+            'magento_customer_group_id': magento_customer_group_id,
+            'magento_emailid': email,
+        }
+        if 'taxvat' in customer:
+            vals['magento_vat'] = customer['taxvat']
+
+        magento_app_customer_id = self.create(cr, uid, vals, context)
+        external_referential_obj.create_external_referential(cr, uid, magento_app, 'magento.app.customer', magento_customer_group_id, customer['group_id'])
+
+        return magento_app_customer_id
+
+    def magento_last_store(self, cr, uid, magento_app, partner, values):
+        """Add last store buy
+        :magento_app object
+        :partner object
+        :values dicc
+        :return True
+        """
+
+        magento_app_customers = self.search(cr, uid, [
+                ('partner_id','=',partner.id),
+                ('magento_app_id','=',magento_app.id),
+            ])
+        if len(magento_app_customers)>0:
+            store_view_ids = self.pool.get('magento.external.referential').search(cr, uid, [('model_id.model', '=', 'magento.storeview'), ('magento_app_id', 'in', [magento_app.id])])
+            if len(store_view_ids)>0:
+                store_view = self.pool.get('magento.external.referential').read(cr, uid, store_view_ids, ['oerp_id', 'mgn_id'])[0]
+                values =  {
+                    'magento_storeview_id':store_view['oerp_id'],
+                    'magento_storeview_ids':[(6, 0, [store_view['oerp_id']])],
+                }
+                self.write(cr, uid, magento_app_customers[0], values)
+        
+        return True
 
 magento_app_customer()

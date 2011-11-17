@@ -34,24 +34,30 @@ class res_partner(osv.osv):
         'magento_app_customer': fields.one2many('magento.app.customer', 'partner_id', 'Magento Customer'),
     }
 
-    def magento_create_partner(self, cr, uid, ids, magento_app, values, context = None):
+    def magento_create_partner(self, cr, uid, magento_app, values, context = None):
         """Create Partner from Magento Values
         Transform dicc by Base External Mapping
         :return partner_id
         """
+        if context is None:
+            context = {}
+
+        vat = False
+        vat_ok = False
+        magento_vat = False
+        if 'taxvat' in values:
+            magento_vat = values['taxvat']
 
         logger = netsvc.Logger()
 
-        magento_vat = values['taxvat']
         external_referential_obj = self.pool.get('magento.external.referential')
 
-        vat = False
         if magento_vat:
             country_obj = self.pool.get('res.country')
             country_id = country_obj.search(cr, uid, [('code', 'ilike', magento_vat[:2])], context = context)
             if len(country_id) == 0: # The VAT has not a valid country code
                 partner_address_obj = self.pool.get('res.partner.address')
-                country_code = partner_address_obj.magento_get_customer_address_country_code(cr, uid, ids, magento_app, values, context)
+                country_code = partner_address_obj.magento_get_customer_address_country_code(cr, uid, magento_app, values, context)
                 vat = '%s%s' % (country_code, magento_vat)
             else: # The VAT has a valid country code
                 vat = magento_vat
@@ -77,6 +83,46 @@ class res_partner(osv.osv):
 
         return partner_id
 
+    def get_mapped_partners(self, cr, uid, magento_app, context = None):
+        """Get mapped partners of OpenERP with Magento
+        :magento_app: Browse object of magento_app model
+        :return Partner list of magento_external_referential's browse objects
+        """
+        if context is None:
+            context = {}
+        model_obj = self.pool.get('ir.model')
+        model_id = model_obj.search(cr, uid, [('model', '=', 'res.partner')], context = context)[0]
+
+        extern_ref_obj = self.pool.get('magento.external.referential')
+        extern_ref_ids = extern_ref_obj.search(cr, uid, [
+            ('magento_app_id','=', magento_app.id),
+            ('model_id','=', model_id),
+        ], context = context)
+        return extern_ref_obj.browse(cr, uid, extern_ref_ids, context)
+
+    def magento_get_name(self, cr, uid, partner, context = None):
+        """Split the name of the partner into magento_firstname and magento_lastname
+        :partner: Partner browse object
+        :return: dictionary with magento_firstname and magento_lastname values for customer
+        """
+        if context is None:
+            context = {}
+        result = {}
+        partner_name = partner.name.split(' ')
+
+        if len(partner_name)>3:
+            result['firstname'] = ' '.join(partner_name[:2])
+            partner_name.remove(partner_name[0])
+        else:
+            result['firstname'] = ''.join(partner_name[:1])
+        partner_name.remove(partner_name[0])
+
+        result['lastname'] = ' '.join(partner_name[:])
+        if result['lastname'] == '': #not empty
+            result['lastname'] = '--'
+
+        return result
+
 res_partner()
 
 class res_partner_address(osv.osv):
@@ -87,14 +133,17 @@ class res_partner_address(osv.osv):
         'magento_lastname':fields.char('Last Name', size=100),
     }
 
-    def magento_get_customer_address_country_code(self, cr, uid, ids, magento_app, customer, context = None):
+    def magento_get_customer_address_country_code(self, cr, uid, magento_app, customer, context = None):
         """Get Country Code Customer Billing Address
         :magento_app: object
         :customer: dicc
         :return str country_code
         """
+        if context is None:
+            context = {}
 
-        customer_addresses = self.magento_get_customer_address(cr, uid, ids, magento_app, customer, context)
+        customer_addresses = self.magento_get_customer_address(cr, uid, magento_app, customer, context)
+        country_code = False
         for customer_address in customer_addresses:
             country_code = customer_address['country_id']
             while not customer_address['is_default_billing']:
@@ -102,12 +151,14 @@ class res_partner_address(osv.osv):
             break
         return country_code
 
-    def magento_get_customer_address(self, cr, uid, ids, magento_app, customer, context = None):
+    def magento_get_customer_address(self, cr, uid, magento_app, customer, context = None):
         """Get Country Code Customer Billing Address
         :magento_app: object
         :customer: dicc
         :return list customer_addresses
         """
+        if context is None:
+            context = {}
 
         with CustomerAddress(magento_app.uri, magento_app.username, magento_app.password) as customer_address_api:
             customer_addresses = []
@@ -115,14 +166,17 @@ class res_partner_address(osv.osv):
                 customer_addresses.append(customer_address)
         return customer_addresses
 
-    def magento_create_partner_address(self, cr, uid, ids, magento_app, partner_id, values, context = None):
+    def magento_create_partner_address(self, cr, uid, magento_app, partner_id, customer_address, mapping = True, context = None):
         """Create Partner Address from Magento Values
         Transform dicc by Base External Mapping
+        Remember add email in customer_address dicc
         :magento_app: object
-        :values: [dicc]
-        :partner_id ID
-        :return partner_address_ids. List address ids
+        :customer_address: [dicc]
+        :partner_id: ID
+        :return partner_address_id
         """
+        if context is None:
+            context = {}
 
         logger = netsvc.Logger()
 
@@ -133,30 +187,99 @@ class res_partner_address(osv.osv):
 
         partner_address_ids = []
         vals = {}
-        for customer_address in self.magento_get_customer_address(cr, uid, ids, magento_app, values, context):
-            vals['name'] = '%s %s' % (customer_address['firstname'], customer_address['lastname'])
-            vals['city'] = customer_address['city']
-            vals['phone'] = customer_address['telephone']
-            vals['street'] = customer_address['street']
-            vals['zip'] = customer_address['postcode']
-            vals['magento_firstname'] = customer_address['firstname']
-            vals['magento_lastname'] = customer_address['lastname']
-            vals['email'] = values['email']
-            vals['partner_id'] = partner_id
-            vals['type'] =  customer_address['is_default_billing'] and 'invoice' or customer_address['is_default_shipping'] and 'delivery' or 'default'
-            country_ids = country_obj.search(cr, uid, [('code', '=', customer_address['country_id'])], context = context)
-            vals['country_id'] = country_ids and country_ids[0] or False
-            state_ids = state_obj.search(cr, uid, [('name', '=', customer_address['region'])], context = context)
-            vals['state_id'] = state_ids and state_ids[0] or False
+        vals['name'] = '%s %s' % (customer_address['firstname'], customer_address['lastname'])
+        vals['city'] = customer_address['city']
+        vals['phone'] = customer_address['telephone']
+        vals['street'] = customer_address['street']
+        vals['zip'] = customer_address['postcode']
+        vals['magento_firstname'] = customer_address['firstname']
+        vals['magento_lastname'] = customer_address['lastname']
+        if 'email' in customer_address:
+                vals['email'] = customer_address['email']
+        vals['partner_id'] = partner_id
+        vals['type'] =  customer_address['is_default_billing'] and 'invoice' or customer_address['is_default_shipping'] and 'delivery' or 'default'
+        country_ids = country_obj.search(cr, uid, [('code', '=', customer_address['country_id'])], context = context)
+        vals['country_id'] = country_ids and country_ids[0] or False
+        state_ids = state_obj.search(cr, uid, [('name', '=', customer_address['region'])], context = context)
+        vals['state_id'] = state_ids and state_ids[0] or False
 
-            partner_address_vals = base_external_mapping_obj.get_external_to_oerp(cr, uid, 'magento.res.partner.address', False, vals, context)
-            partner_address_id = self.create(cr, uid, partner_address_vals, context)
+        partner_address_vals = base_external_mapping_obj.get_external_to_oerp(cr, uid, 'magento.res.partner.address', False, vals, context)
+        partner_address_id = self.create(cr, uid, partner_address_vals, context)
+        if mapping:
             external_referential_obj.create_external_referential(cr, uid, magento_app, 'res.partner.address', partner_address_id, customer_address['customer_address_id'])
 
-            logger.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, magento id %s" % (magento_app.name, partner_address_id, customer_address['customer_address_id']))
+        logger.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, magento id %s" % (magento_app.name, partner_address_id, customer_address['customer_address_id']))
 
-            partner_address_ids.append(partner_address_id)
+        return partner_address_id
 
-        return partner_address_ids
+    def magento_ghost_customer_address(self, cr, uid, magento_app, partner_id, customer_id, values):
+        """If Create Partner same time create order, Magento Customer Address ID = 0
+        1- Check zip and address exists in Address OpenERP
+        2- Get Customer API. Check Address. Not mapping address
+        3- Not address available. Create Address Order
+        :magento_app: object
+        :partner_id: ID Partner
+        :customer_id: ID Customer
+        :values: dicc
+        :return: openerp address ID
+        """
+        create_ghost_address = True
+        zip = values['postcode']
+        street = values['street']
+
+        address = self.pool.get('res.partner.address').search(cr, uid, [
+                ('zip','=',zip),
+                ('street','=',street),
+                ('partner_id','=',partner_id),
+            ])
+        # 1
+        if len(address)>0:
+            return address[0]
+        # 2
+        else:
+            with CustomerAddress(magento_app.uri, magento_app.username, magento_app.password) as customer_address_api:
+                customer_address = customer_address_api.list(customer_id)
+                for address in customer_address:
+                    if address['postcode'] == zip and address['street'] == street:
+                        create_ghost_address = False
+                        return self.magento_create_partner_address(cr, uid, magento_app, partner_id, address, mapping = True)
+                # 3
+                if create_ghost_address:
+                    return self.magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address[0], mapping = False)
+
+    def magento_get_address_name(self, cr, uid, partner_address, context = None):
+        """Split the name of the partner into magento_firstname and magento_lastname
+        :partner_address: Partner address browse object
+        :return: dictionary with magento_firstname and magento_lastname values for customer address
+        """
+        if context is None:
+            context = {}
+        result = {}
+
+        if partner_address.magento_firstname:
+            firstname = partner_address.magento_firstname
+        else:
+            if partner_address.name:
+                partner_name = partner_address.name.split(' ')
+            else:
+                partner_name = partner_address.partner_id.name.split(' ')
+            if len(partner_name)>3:
+                firstname = ' '.join(partner_name[:2])
+                partner_name.remove(partner_name[0])
+            else:
+                firstname = ''.join(partner_name[:1])
+            partner_name.remove(partner_name[0])
+        result['firstname'] = firstname
+
+        if partner_address.magento_lastname:
+            lastname = partner_address.magento_lastname
+        else:
+            lastname = ' '.join(partner_name)
+
+        result['lastname'] = lastname
+        if result['lastname'] == '': #not empty
+            result['lastname'] = '--'
+
+        return result
 
 res_partner_address()

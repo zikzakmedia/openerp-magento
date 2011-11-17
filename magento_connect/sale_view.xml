@@ -51,10 +51,20 @@
                                         <field name="magento_sale_price"/>
                                         <field name="magento_tax_include"/>
                                         <field name="magento_default_language"/>
+                                        <separator string="Logistic Default" colspan="4"/>
+                                        <field name="magento_default_picking_policy" attrs="{'required':[('magento_shop','=', True)]}"/>
+                                        <field name="magento_default_order_policy" attrs="{'required':[('magento_shop','=', True)]}"/>
+                                        <field name="magento_default_invoice_quantity" attrs="{'required':[('magento_shop','=', True)]}"/>
                                     </group>
                                 </page>
+                                <page string="Status">
+                                    <separator string="Import Status" colspan="4"/>
+                                    <field name="magento_status" colspan="4" nolabel="1"/>
+                                    <separator string="Export Status" colspan="4"/>
+
+                                </page>
                                 <page string="Payments">
-                                    <field name="magento_payment_types" colspan="4" nolabel="1"/>
+                                    <field name="magento_payments" colspan="4" nolabel="1"/>
                                 </page>
                             </notebook>
                         </group>
@@ -84,6 +94,41 @@
             </field>
         </record>
 
+        <!--Magento Sale Shop Status Type-->
+        <record model="ir.ui.view" id="view_magento_sale_shop_status_type_form">
+            <field name="name">magento_sale_shop_status_type_form</field>
+            <field name="model">magento.sale.shop.status.type</field>
+            <field name="type">form</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+                <form string="Import Status">
+                    <field name="status"/>
+                    <field name="order_policy"/>
+                    <field name="picking_policy"/>
+                    <field name="invoice_quantity"/>
+                    <field name="confirm"/>
+                    <field name="cancel"/>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="magento_sale_shop_status_type_tree">
+            <field name="name">magento_sale_shop_status_type_tree</field>
+            <field name="model">magento.sale.shop.status.type</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+                <tree string="Import Status">
+                    <field name="status"/>
+                    <field name="order_policy"/>
+                    <field name="picking_policy"/>
+                    <field name="invoice_quantity"/>
+                    <field name="confirm"/>
+                    <field name="cancel"/>
+                </tree>
+            </field>
+        </record>
+
         <!--Magento Sale Shop Payment Type-->
         <record model="ir.ui.view" id="view_magento_sale_shop_payment_type_form">
             <field name="name">magento_sale_shop_payment_type_form</field>
@@ -91,30 +136,22 @@
             <field name="type">form</field>
             <field name="priority" eval="5"/>
             <field name="arch" type="xml">
-            <form string="Payment Type">
-                <field name="payment_type_id"/>
-                <field name="order_policy"/>
-                <field name="picking_policy"/>
-                <field name="invoice_quantity"/>
-                <field name="app_payment"/>
-                <field name="confirm"/>
-            </form>
+                <form string="Payment Type">
+                    <field name="method"/>
+                    <field name="payment_type_id"/>
+                </form>
             </field>
         </record>
 
-        <record model="ir.ui.view" id="magento_zoook_sale_shop_payment_type_tree">
+        <record model="ir.ui.view" id="magento_sale_shop_payment_type_tree">
             <field name="name">magento_sale_shop_payment_type_tree</field>
             <field name="model">magento.sale.shop.payment.type</field>
             <field name="type">tree</field>
             <field name="priority" eval="5"/>
             <field name="arch" type="xml">
                 <tree string="Payment Type">
+                    <field name="method"/>
                     <field name="payment_type_id"/>
-                    <field name="app_payment"/>
-                    <field name="order_policy"/>
-                    <field name="picking_policy"/>
-                    <field name="invoice_quantity"/>
-                    <field name="sequence"/>
                 </tree>
             </field>
         </record>

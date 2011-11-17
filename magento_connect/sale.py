@@ -42,7 +42,8 @@ class sale_shop(osv.osv):
         'magento_website': fields.many2one('magento.website', 'Magento Website'),
         'magento_scheduler': fields.boolean('Scheduler', help='Available this Sale Shop crons (import/export)'),
         'magento_tax_include': fields.boolean('Tax Include'),
-        'magento_payment_types': fields.one2many('magento.sale.shop.payment.type', 'shop_id', 'Payment Type'),
+        'magento_status': fields.one2many('magento.sale.shop.status.type', 'shop_id', 'Status'),
+        'magento_payments': fields.one2many('magento.sale.shop.payment.type', 'shop_id', 'Payment'),
         'magento_default_language': fields.many2one('res.lang', 'Language Default', help='Default language this shop. If not select, use lang user'),
         'magento_sale_price': fields.selection([('saleprice','Sale Price'),('pricelist','Pricelist')], 'Price'),
         'magento_sale_stock': fields.selection([('realstock','Real Stock'),('virtualstock','Virtual Stock')], 'Stock'),
@@ -55,7 +56,14 @@ class sale_shop(osv.osv):
         'magento_from_sale_orders': fields.datetime('From Orders', help='This date is last import. If you need import news orders, you can modify this date (filter)'),
         'magento_to_sale_orders': fields.datetime('To Orders', help='This date is to import (filter)'),
         'magento_last_export_status_sale_orders': fields.datetime('Last Status Orders', help='This date correspond to the last export. If you need export all orders, left empty this field.'),
-        'magento_payment_types': fields.one2many('magento.sale.shop.payment.type', 'shop_id', 'Payment Type'),
+        'magento_default_picking_policy': fields.selection([('direct', 'Partial Delivery'), ('one', 'Complete Delivery')], 'Packing Policy'),
+        'magento_default_order_policy': fields.selection([
+         ('prepaid', 'Payment Before Delivery'),
+         ('manual', 'Shipping & Manual Invoice'),
+         ('postpaid', 'Invoice on Order After Delivery'),
+         ('picking', 'Invoice from the Packing'),
+        ], 'Shipping Policy'),
+        'magento_default_invoice_quantity': fields.selection([('order', 'Ordered Quantities'), ('procurement', 'Shipped Quantities')], 'Invoice on'),
     }
 
     _defaults = {
@@ -408,6 +416,11 @@ class sale_shop(osv.osv):
                 ofilter = {'created_at':creted_filter}
                 orders = order_api.list(ofilter)
 
+                #~ Update date last import
+                date_from_import = sale_shop.magento_to_sale_orders and sale_shop.magento_to_sale_orders or time.strftime('%Y-%m-%d %H:%M:%S')
+                self.write(cr, uid, ids, {'magento_from_sale_orders': date_from_import})
+                self.write(cr, uid, ids, {'magento_to_sale_orders': time.strftime('%Y-%m-%d %H:%M:%S')})
+
                 for order in orders:
                     order_id = order['order_id']
                     code = order['increment_id']
@@ -417,7 +430,7 @@ class sale_shop(osv.osv):
                         continue
 
                     values = order_api.info(code)
-                    sale_order_id = self.pool.get('sale.order').magento_create_order(cr, uid, magento_app, values, context)
+                    sale_order_id = self.pool.get('sale.order').magento_create_order(cr, uid, sale_shop, values, context)
                 
                 if not orders:
                     logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Not Orders available, magento %s, date > %s" % (magento_app.name, creted_filter))
@@ -473,40 +486,78 @@ class sale_order(osv.osv):
         'magento_gift_message': fields.text('Gift Message'),
     }
 
-    def magento_create_order(self, cr, uid, magento_app, values, context=None):
+    def magento_create_order(self, cr, uid, sale_shop, values, context=None):
         """
         Create Magento Order
         Not use Base External Mapping
-        :magento_app: object
+        :sale_shop: object
         :values: dicc order
         :return sale_order_id (OpenERP ID)
         """
 
         logger = netsvc.Logger()
         vals = {}
+        confirm = False
+        cancel = False
 
-        """Partner OpenERP. If not, create partner"""
-        partner_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner', values['customer_id'])
+        magento_app = sale_shop.magento_website.magento_app_id
+
+        """Partner OpenERP.
+        If not, create partner
+        """
+        customer_id = values['customer_id'] and values['customer_id'] or values['billing_address']['customer_id']
+        partner_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer_id)
         if not partner_mapping_id:
-            # TODO
-            print "TODO: call function create partner"
+            with Customer(magento_app.uri, magento_app.username, magento_app.password) as customer_api:
+                customer = customer_api.info(customer_id)
+                partner_id = self.pool.get('res.partner').magento_create_partner(cr, uid, magento_app, customer, context)
+                magento_app_customer_ids = self.pool.get('magento.app.customer').magento_app_customer_create(cr, uid, magento_app, partner_id, customer, context)
+                partner_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer_id)
         partner_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_mapping_id])[0]['oerp_id']
+        customer_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_mapping_id])[0]['mgn_id']
 
-        """Partner Address Invoice OpenERP. If not, create partner address"""
-        partner_invoice_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', values['billing_address']['customer_address_id'])
-        if not partner_invoice_mapping_id:
-            # TODO
-            print "TODO: call function create partner address billing"
-        partner_address_invoice_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_invoice_mapping_id])[0]['oerp_id']
+        """Partner Address Invoice OpenERP.
+        If not, create partner address
+        """
+        billing_address = values['billing_address']['customer_address_id']
+        # If Create Partner same time create order, Magento Customer Address ID = 0
+        if values['billing_address']['customer_address_id'] == '0' or values['billing_address']['customer_address_id'] == None:
+            partner_address_invoice_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, values['billing_address'])
+        else:
+            partner_invoice_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', billing_address)
+            if not partner_invoice_mapping_id:
+                with CustomerAddress(magento_app.uri, magento_app.username, magento_app.password) as customer_address_api:
+                    customer_address = customer_address_api.info(billing_address)
+                self.pool.get('res.partner.address').magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address)
+                partner_invoice_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', billing_address)
+            partner_address_invoice_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_invoice_mapping_id])[0]['oerp_id']
 
-        """Partner Address Delivery OpenERP. If not, create partner address"""
-        partner_shipping_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', values['shipping_address']['customer_address_id'])
-        if not partner_shipping_mapping_id:
-            # TODO
-            print "TODO: call function create partner address shipping_address"
-        partner_address_shipping_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_shipping_mapping_id])[0]['oerp_id']
+        """Partner Address Delivery OpenERP.
+        If not, create partner address
+        """
+        shipping_address = values['shipping_address']['customer_address_id']
+        # If Create Partner same time create order, Magento Customer Address ID = 0
+        if values['shipping_address']['customer_address_id'] == '0' or values['shipping_address']['customer_address_id'] == None:
+            partner_address_shipping_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, values['shipping_address'])
+        else:
+            partner_shipping_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', shipping_address)
+            if not partner_shipping_mapping_id:
+                with CustomerAddress(magento_app.uri, magento_app.username, magento_app.password) as customer_address_api:
+                    customer_address = customer_address_api.info(shipping_address)
+                self.pool.get('res.partner.address').magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address)
+                partner_shipping_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', shipping_address)
+            partner_address_shipping_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_shipping_mapping_id])[0]['oerp_id']
 
         partner = self.pool.get('res.partner').browse(cr, uid, partner_id, context)
+
+        """Payment Type"""
+        if 'method' in values['payment']:
+            payment_types = self.pool.get('magento.sale.shop.payment.type').search(cr, uid,
+                    [('method','=',values['payment']['method']),('shop_id','=',sale_shop.id)]
+                )
+            if len(payment_types)>0:
+                payment_type = self.pool.get('magento.sale.shop.payment.type').read(cr, uid, payment_types, ['payment_type_id'])
+                vals['payment_type'] = payment_type[0]['payment_type_id'][0]
 
         """Sale Order"""
         vals['name'] = values['increment_id']
@@ -519,8 +570,29 @@ class sale_order(osv.osv):
         vals['origin'] = "%s-%s" % (magento_app.name,values['increment_id'])
         if 'gift_message' in values:
             vals['magento_gift_message'] = values['gift_message']
+
+        vals['order_policy'] = sale_shop.magento_default_order_policy
+        vals['picking_policy'] = sale_shop.magento_default_picking_policy
+        vals['invoice_quantity'] = sale_shop.magento_default_invoice_quantity
+
+        """Magento Status Order"""
+        magento_status = values['status_history'][0]['status']
+        mgn_status = self.pool.get('magento.sale.shop.status.type').search(cr, uid, [
+                ('status','=',magento_status),
+                ('shop_id','=',sale_shop.id),
+            ])
+
+        if len(mgn_status)>0:
+            mgn_status = self.pool.get('magento.sale.shop.status.type').browse(cr, uid, mgn_status[0])
+            vals['order_policy'] = mgn_status.order_policy
+            vals['picking_policy'] = mgn_status.picking_policy
+            vals['invoice_quantity'] = mgn_status.invoice_quantity
+            if mgn_status.confirm:
+                confirm = True
+            if mgn_status.cancel:
+                cancel = True
+
         sale_order_id = self.create(cr, uid, vals, context)
-        
         sale_order = self.browse(cr, uid, sale_order_id)
 
         """Sale Order Discount"""
@@ -533,18 +605,28 @@ class sale_order(osv.osv):
         """Sale Order Line"""
         for item in values['items']:
             sale_order_line = self.pool.get('sale.order.line').magento_create_order_line(cr, uid, magento_app, sale_order, item, context)
+            
+        """Confirm Order - Change status sale order"""
+        if confirm:
+            logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s change status: Done" % (sale_order_id))
+            netsvc.LocalService("workflow").trg_validate(uid, 'sale.order', sale_order_id, 'order_confirm', cr)
 
-        """Magento APP Customer"""
-        #~ TODO: Add last visit and storeviews shop
-        #~ magento_storeview_id
-        #~ magento_storeview_ids
-        
-        # TODO
-        print "TODO: magento order mapping"
-        
-        logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s, magento %s, openerp id %s" % (values['increment_id'], magento_app.name, sale_order.id))
+        """Cancel Order - Change status sale order"""
+        if cancel:
+            logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s change status: Cancel" % (sale_order_id))
+            netsvc.LocalService("workflow").trg_validate(uid, 'sale.order', sale_order_id, 'cancel', cr)
 
-        return sale_order_id
+        """Magento APP Customer
+        Add last store - history stores buy
+        """
+        self.pool.get('magento.app.customer').magento_last_store(cr, uid, magento_app, partner, values)
+
+        """Mapping Sale Order"""
+        self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'sale.order', sale_order.id, values['order_id'])
+
+        logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s, magento %s, openerp id %s, magento id %s" % (values['increment_id'], magento_app.name, sale_order.id, values['order_id']))
+
+        return sale_order.id
 
 sale_order()
 
@@ -663,14 +745,14 @@ class sale_order_line(osv.osv):
 
 sale_order_line()
 
-class magento_sale_shop_payment_type(osv.osv):
-    _name = "magento.sale.shop.payment.type"
+class magento_sale_shop_status_type(osv.osv):
+    _name = "magento.sale.shop.status.type"
 
-    _description = "Magento Sale Shop Payment Type"
-    _rec_name = "payment_type_id"
+    _description = "Magento Sale Shop Status Type"
+    _rec_name = "status"
 
     _columns = {
-        'payment_type_id': fields.many2one('payment.type','Payment Type', required=True),
+        'status': fields.char('Status', size=255, required=True, help='Code Status (example, cancel, pending, processing,..)'),
         'shop_id': fields.many2one('sale.shop','Shop', required=True),
         'picking_policy': fields.selection([('direct', 'Partial Delivery'), ('one', 'Complete Delivery')], 'Packing Policy'),
         'order_policy': fields.selection([
@@ -680,9 +762,22 @@ class magento_sale_shop_payment_type(osv.osv):
          ('picking', 'Invoice from the Packing'),
         ], 'Shipping Policy'),
         'invoice_quantity': fields.selection([('order', 'Ordered Quantities'), ('procurement', 'Shipped Quantities')], 'Invoice on'),
-        'app_payment': fields.char('App Payment', size=255, required=True, help='Name App Payment module (example, paypal, servired, cash_on_delivery,...'),
         'confirm': fields.boolean('Confirm', help="Confirm order. Sale Order change state draft to done, and generate picking and/or invoice automatlly"),
-        'sequence': fields.integer('Sequence', help="Gives the sequence order when displaying a list of payments."),
+        'cancel': fields.boolean('Cancel', help="Cancel order. Sale Order change state draft to cancel"),
      }
+
+magento_sale_shop_status_type()
+
+class magento_sale_shop_payment_type(osv.osv):
+    _name = "magento.sale.shop.payment.type"
+
+    _description = "Magento Sale Shop Payment Type"
+    _rec_name = "status"
+
+    _columns = {
+        'method': fields.char('Method', size=255, required=True, help='Code Payment (example, paypal, checkmo, ccsave,...'),
+        'shop_id': fields.many2one('sale.shop','Shop', required=True),
+        'payment_type_id': fields.many2one('payment.type','Payment Type', required=True),
+    }
 
 magento_sale_shop_payment_type()
