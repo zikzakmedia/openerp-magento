@@ -34,6 +34,16 @@ class res_partner(osv.osv):
         'magento_app_customer': fields.one2many('magento.app.customer', 'partner_id', 'Magento Customer'),
     }
 
+    def magento_customer_info(self, magento_app, customer_id):
+        """Get info Magento Customer
+        :magento_app object
+        :return customer
+        """
+        with Customer(magento_app.uri, magento_app.username, magento_app.password) as customer_api:
+            customer = customer_api.info(customer_id)
+
+        return customer
+
     def magento_create_partner(self, cr, uid, magento_app, values, context = None):
         """Create Partner from Magento Values
         Transform dicc by Base External Mapping
@@ -55,15 +65,18 @@ class res_partner(osv.osv):
         if magento_vat:
             country_obj = self.pool.get('res.country')
             country_id = country_obj.search(cr, uid, [('code', 'ilike', magento_vat[:2])], context = context)
+
             if len(country_id) == 0: # The VAT has not a valid country code
                 partner_address_obj = self.pool.get('res.partner.address')
                 country_code = partner_address_obj.magento_get_customer_address_country_code(cr, uid, magento_app, values, context)
                 vat = '%s%s' % (country_code, magento_vat)
             else: # The VAT has a valid country code
                 vat = magento_vat
+
             if hasattr(self, 'check_vat_' + vat[:2].lower()):
                 check = getattr(self, 'check_vat_' + vat[:2].lower())
                 vat_ok = check(vat[2:])
+
             if vat_ok:
                 values['vat'] = vat.upper()
                 """If already exist a partner with the same VAT, skip it"""
@@ -146,9 +159,8 @@ class res_partner_address(osv.osv):
         country_code = False
         for customer_address in customer_addresses:
             country_code = customer_address['country_id']
-            while not customer_address['is_default_billing']:
-                continue
-            break
+            if 'is_default_billing' in customer_address:
+                break
         return country_code
 
     def magento_get_customer_address(self, cr, uid, magento_app, customer, context = None):
@@ -195,7 +207,7 @@ class res_partner_address(osv.osv):
         vals['magento_firstname'] = customer_address['firstname']
         vals['magento_lastname'] = customer_address['lastname']
         if 'email' in customer_address:
-                vals['email'] = customer_address['email']
+            vals['email'] = customer_address['email']
         vals['partner_id'] = partner_id
         vals['type'] =  customer_address['is_default_billing'] and 'invoice' or customer_address['is_default_shipping'] and 'delivery' or 'default'
         country_ids = country_obj.search(cr, uid, [('code', '=', customer_address['country_id'])], context = context)
@@ -205,10 +217,13 @@ class res_partner_address(osv.osv):
 
         partner_address_vals = base_external_mapping_obj.get_external_to_oerp(cr, uid, 'magento.res.partner.address', False, vals, context)
         partner_address_id = self.create(cr, uid, partner_address_vals, context)
-        if mapping:
+        if mapping and ('customer_address_id' in customer_address):
             external_referential_obj.create_external_referential(cr, uid, magento_app, 'res.partner.address', partner_address_id, customer_address['customer_address_id'])
 
-        logger.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, magento id %s" % (magento_app.name, partner_address_id, customer_address['customer_address_id']))
+        if 'customer_address_id' in customer_address:
+            logger.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, magento id %s" % (magento_app.name, partner_address_id, customer_address['customer_address_id']))
+        else:
+            logger.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, %s" % (magento_app.name, partner_address_id, vals['name']))
 
         return partner_address_id
 

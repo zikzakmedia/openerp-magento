@@ -645,12 +645,18 @@ class magento_app(osv.osv):
                     name = partner_obj.magento_get_name(cr, uid, magento_app_customer.partner_id, context)
                     first_name = name['firstname']
                     last_name = name['lastname']
+
+                    store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', magento_app.magento_default_storeview.id)
+                    store_view = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])
+                    store_view = store_view[0]['mgn_id']
+
                     customer_value = {
                         'taxvat': magento_app_customer.partner_id.vat,
                         'group_id': magento_customer_group_id,
                         'email': magento_app_customer.magento_emailid,
                         'lastname': last_name,
                         'firstname': first_name,
+                        'store_id': store_view,
                     }
                     partner_id = magento_app_customer.partner_id.id
 

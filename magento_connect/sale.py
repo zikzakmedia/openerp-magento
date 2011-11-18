@@ -402,7 +402,7 @@ class sale_shop(osv.osv):
 
         return True
 
-    def magento_import_sale_order(self, cr, uid, ids, context=None):
+    def magento_import_orders(self, cr, uid, ids, context=None):
         """
         Sync Orders Magento to OpenERP filterd by magento_sale_shop
         Get ids all sale.order and send one to one to Magento
@@ -424,20 +424,20 @@ class sale_shop(osv.osv):
 
                 #~ Update date last import
                 date_from_import = sale_shop.magento_to_sale_orders and sale_shop.magento_to_sale_orders or time.strftime('%Y-%m-%d %H:%M:%S')
-                self.write(cr, uid, ids, {'magento_from_sale_orders': date_from_import})
-                self.write(cr, uid, ids, {'magento_to_sale_orders': time.strftime('%Y-%m-%d %H:%M:%S')})
+                self.write(cr, uid, ids, {'magento_from_sale_orders': date_from_import,'magento_to_sale_orders':False})
 
                 for order in orders:
                     order_id = order['order_id']
                     code = order['increment_id']
+
                     mgn_order_mapping = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'sale.order', order_id)
+
                     if mgn_order_mapping:
                         logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_ERROR, "Skip! magento %s, order %s, mapping id %s. Not create" % (magento_app.name, code, mgn_order_mapping))
                         continue
-
                     values = order_api.info(code)
                     sale_order_id = self.pool.get('sale.order').magento_create_order(cr, uid, sale_shop, values, context)
-                
+                    cr.commit()
                 if not orders:
                     logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Not Orders available, magento %s, date > %s" % (magento_app.name, creted_filter))
 
@@ -471,6 +471,7 @@ class sale_shop(osv.osv):
                 # product.product modify > date exported last time
                 if  sale_order['write_date'] and last_exported_time < sale_order['write_date'][:19]:
                     sale_order_ids.append(sale_order['id'])
+            sale_order_ids = [x for x in set(sale_order_ids)]
 
             for sale_order in self.pool.get('sale.order').browse(cr, uid, sale_order_ids):
                 if sale_order.invoiced:
@@ -523,7 +524,7 @@ class sale_shop(osv.osv):
 
     def run_import_orders_scheduler(self, cr, uid, context=None):
         """Scheduler Orders Status Cron"""
-        self._sale_shop(cr, uid, self.magento_import_sale_order, context=context)
+        self._sale_shop(cr, uid, self.magento_import_orders, context=context)
 
     def run_update_orders_scheduler(self, cr, uid, context=None):
         """Scheduler Orders Status Cron"""
@@ -552,7 +553,7 @@ class sale_order(osv.osv):
         vals = {}
         confirm = False
         cancel = False
-
+        customer_info = True
         magento_app = sale_shop.magento_website.magento_app_id
 
         """Partner OpenERP.
@@ -561,26 +562,35 @@ class sale_order(osv.osv):
         customer_id = values['customer_id'] and values['customer_id'] or values['billing_address']['customer_id']
         partner_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer_id)
         if not partner_mapping_id:
-            with Customer(magento_app.uri, magento_app.username, magento_app.password) as customer_api:
-                customer = customer_api.info(customer_id)
-                partner_id = self.pool.get('res.partner').magento_create_partner(cr, uid, magento_app, customer, context)
-                magento_app_customer_ids = self.pool.get('magento.app.customer').magento_app_customer_create(cr, uid, magento_app, partner_id, customer, context)
-                partner_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer_id)
+            customer_info = False
+            customer  = self.pool.get('res.partner').magento_customer_info(magento_app, customer_id)
+            partner_id = self.pool.get('res.partner').magento_create_partner(cr, uid, magento_app, customer, context)
+            magento_app_customer_ids = self.pool.get('magento.app.customer').magento_app_customer_create(cr, uid, magento_app, partner_id, customer, context)
+            partner_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer_id)
         partner_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_mapping_id])[0]['oerp_id']
         customer_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_mapping_id])[0]['mgn_id']
 
+                    
         """Partner Address Invoice OpenERP.
         If not, create partner address
         """
-        billing_address = values['billing_address']['customer_address_id']
+        billing_address = None
+        if 'customer_address_id' in values['billing_address']:
+            billing_address = values['billing_address']['customer_address_id']
         # If Create Partner same time create order, Magento Customer Address ID = 0
-        if values['billing_address']['customer_address_id'] == '0' or values['billing_address']['customer_address_id'] == None:
+        if billing_address == '0' or billing_address == None:
             partner_address_invoice_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, values['billing_address'])
         else:
             partner_invoice_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', billing_address)
             if not partner_invoice_mapping_id:
+                if customer_info:
+                    customer_info = False
+                    customer  = self.pool.get('res.partner').magento_customer_info(magento_app, customer_id)
                 with CustomerAddress(magento_app.uri, magento_app.username, magento_app.password) as customer_address_api:
                     customer_address = customer_address_api.info(billing_address)
+                    if not 'customer_address_id' in customer_address:
+                        customer_address['customer_address_id'] = billing_address
+                    customer_address['email'] = customer['email']
                 self.pool.get('res.partner.address').magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address)
                 partner_invoice_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', billing_address)
             partner_address_invoice_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_invoice_mapping_id])[0]['oerp_id']
@@ -588,15 +598,23 @@ class sale_order(osv.osv):
         """Partner Address Delivery OpenERP.
         If not, create partner address
         """
-        shipping_address = values['shipping_address']['customer_address_id']
+        shipping_address = None
+        if 'customer_address_id' in values['shipping_address']:
+            shipping_address = values['shipping_address']['customer_address_id']
         # If Create Partner same time create order, Magento Customer Address ID = 0
-        if values['shipping_address']['customer_address_id'] == '0' or values['shipping_address']['customer_address_id'] == None:
+        if shipping_address == '0' or shipping_address == None:
             partner_address_shipping_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, values['shipping_address'])
         else:
             partner_shipping_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', shipping_address)
             if not partner_shipping_mapping_id:
+                if customer_info:
+                    customer_info = False
+                    customer  = self.pool.get('res.partner').magento_customer_info(magento_app, customer_id)
                 with CustomerAddress(magento_app.uri, magento_app.username, magento_app.password) as customer_address_api:
                     customer_address = customer_address_api.info(shipping_address)
+                    if not 'customer_address_id' in customer_address:
+                        customer_address['customer_address_id'] = shipping_address
+                    customer_address['email'] = customer['email']
                 self.pool.get('res.partner.address').magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address)
                 partner_shipping_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', shipping_address)
             partner_address_shipping_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_shipping_mapping_id])[0]['oerp_id']
@@ -620,7 +638,8 @@ class sale_order(osv.osv):
         vals['partner_shipping_id'] = partner_address_shipping_id
         vals['partner_order_id'] = partner_address_invoice_id
         vals['pricelist_id'] = partner.property_product_pricelist.id
-        vals['note'] = values['customer_note']
+        if 'customer_note' in values:
+            vals['note'] = values['customer_note']
         vals['origin'] = "%s-%s" % (magento_app.name,values['increment_id'])
         if 'gift_message' in values:
             vals['magento_gift_message'] = values['gift_message']
@@ -712,7 +731,8 @@ class sale_order_line(osv.osv):
         product_id = False
         product_uom = magento_app.product_uom_id.id
         product_uom_qty = round(float(item['qty_ordered']),decimals)
-        weight = round(float(item['weight']),decimals)
+        weight = item['weight'] and item['weight'] or 0
+        weight = round(float(weight),decimals)
 
         product_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.product', item['product_id'])
         if product_mapping_id:

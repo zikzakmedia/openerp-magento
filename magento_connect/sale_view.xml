@@ -16,7 +16,7 @@
                                 <page string="Orders">
                                     <group col="5" colspan="4">
                                         <group col="1" colspan="1">
-                                            <button name="magento_import_sale_order" string="Import Orders" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
+                                            <button name="magento_import_orders" string="Import Orders" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
                                             <button name="magento_export_status" string="Export Status Sale Orders" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
                                         </group>
                                         <group col="4" colspan="2">
@@ -86,9 +86,9 @@
             <field name="arch" type="xml">
                 <xpath expr="/form/notebook/page[@string='History']" position="after">
                     <page string="Magento">
+                        <field name="magento_status"/>
                         <separator string="Gift Message" colspan="4" />
                         <field name="magento_gift_message" colspan="4" nolabel="1"/>
-                        <field name="magento_status"/>
                     </page>
                 </xpath>
                 <xpath expr="/form/notebook/page[@string='Sales Order']/field[@name='order_line']/form/notebook/page[@string='History']" position="after">

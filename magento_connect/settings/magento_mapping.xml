@@ -418,15 +418,6 @@ if context['parent_id']:
             <field name='active'>1</field>
         </record>
 
-        <record model='base.external.mapping.line' id='mgnlrpa08'>
-            <field name='mapping_id' ref='magento_connect.mgn05'/>
-            <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','country_id')]" model='ir.model.fields'/>
-            <field name='external_field'>country_id</field>
-            <field name='type'>in_out</field>
-            <field name='external_type'>str</field>
-            <field name='active'>1</field>
-        </record>
-
         <record model='base.external.mapping.line' id='mgnlrpa09'>
             <field name='mapping_id' ref='magento_connect.mgn05'/>
             <field name='field_id' search="[('model_id','=','res.partner.address'),('name','=','city')]" model='ir.model.fields'/>

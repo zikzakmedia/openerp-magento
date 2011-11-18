@@ -4,7 +4,7 @@
 "access_magento_website","magento.website","model_magento_website","base.group_sale_manager",1,0,0,0
 "access_magento_storegroup","magento.storegroup","model_magento_storegroup","base.group_sale_manager",1,0,0,0
 "access_magento_storeview","magento.storeview","model_magento_storeview","base.group_sale_manager",1,0,0,0
-"access_magento_external_referential","magento.external.referential","model_magento_external_referential","base.group_sale_manager",1,0,0,0
+"access_magento_external_referential","magento.external.referential","model_magento_external_referential","base.group_sale_manager",1,1,1,0
 "access_magento_sale_shop_payment_type","magento.sale.shop.payment.type","model_magento_sale_shop_payment_type","base.group_sale_manager",1,1,1,1
 "access_magento_sale_shop_status_type","magento.sale.shop.status.type","model_magento_sale_shop_status_type","base.group_sale_manager",1,1,1,1
 "access_magento_product_product_type","magento.product.product.type","model_magento_product_product_type","base.group_sale_manager",1,1,0,0
@@ -13,3 +13,5 @@
 "access_magento_customer_group","magento.customer.group","model_magento_customer_group","base.group_user",1,0,0,0
 "access_magento_app_customer","magento.app.customer","model_magento_app_customer","base.group_user",1,1,1,0
 "access_magento_region","magento.region","model_magento_region","base.group_sale_manager",1,1,1,0
+"access_base_external_mapping","base_external_mapping.base_external_mapping","base_external_mapping.model_base_external_mapping","base.group_sale_manager",1,1,1,0
+"access_base_external_mapping_line","base_external_mapping.base_external_mapping_line","base_external_mapping.model_base_external_mapping_line","base.group_sale_manager",1,1,1,0

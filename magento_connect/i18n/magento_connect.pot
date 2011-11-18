@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.2\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-10-19 16:01+0000\n"
-"PO-Revision-Date: 2011-10-19 16:01+0000\n"
+"POT-Creation-Date: 2011-11-18 14:46+0000\n"
+"PO-Revision-Date: 2011-11-18 14:46+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,20 +22,36 @@ msgid "Language Default"
 msgstr "Language Default"
 
 #. module: magento_connect
+#: view:magento.app:0
+msgid "Import Regions"
+msgstr "Import Regions"
+
+#. module: magento_connect
 #: field:magento.storeview,magento_last_export_locale_products:0
 #: field:sale.shop,magento_last_export_products:0
 msgid "Last Export Products"
 msgstr "Last Export Products"
 
 #. module: magento_connect
-#: selection:magento.sale.shop.payment.type,picking_policy:0
+#: selection:magento.sale.shop.status.type,picking_policy:0
+#: selection:sale.shop,magento_default_picking_policy:0
 msgid "Partial Delivery"
 msgstr "Partial Delivery"
 
 #. module: magento_connect
-#: help:product.product,magento_sale_shop:0
-msgid "Select yours Sale Shops available this product"
-msgstr "Select yours Sale Shops available this product"
+#: view:product.category:0
+msgid "Sorting method"
+msgstr "Sorting method"
+
+#. module: magento_connect
+#: field:magento.region,region_id:0
+msgid "Region ID"
+msgstr "Region ID"
+
+#. module: magento_connect
+#: help:magento.app,product_discount_default_id:0
+msgid "Default Product Discount"
+msgstr "Default Product Discount"
 
 #. module: magento_connect
 #: view:magento.app:0
@@ -43,14 +59,65 @@ msgid "Authentication"
 msgstr "Authentication"
 
 #. module: magento_connect
-#: field:product.product,magento_visibility:0
-msgid "Visibility"
-msgstr "Visibility"
+#: model:ir.model,name:magento_connect.model_magento_sale_shop_status_type
+msgid "Magento Sale Shop Status Type"
+msgstr "Magento Sale Shop Status Type"
 
 #. module: magento_connect
-#: model:product.template,name:magento_connect.product_product_gift_product_template
-msgid "Gift Certificate"
-msgstr "Gift Certificate"
+#: field:product.images,magento_small_image:0
+msgid "Small Image"
+msgstr "Small Image"
+
+#. module: magento_connect
+#: selection:product.product,magento_visibility:0
+msgid "Nowhere"
+msgstr "Nowhere"
+
+#. module: magento_connect
+#: field:product.product,magento_metatitle:0
+msgid "Title"
+msgstr "Title"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:748
+#, python-format
+msgid "This Magento Store Group not allow to delete"
+msgstr "This Magento Store Group not allow to delete"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.action_magento_region
+#: model:ir.model,name:magento_connect.model_magento_region
+#: view:magento.region:0
+msgid "Magento Region"
+msgstr "Magento Region"
+
+#. module: magento_connect
+#: help:magento.app,from_import_products:0
+msgid "This date is last import. If you need import new products, you can modify this date (filter)"
+msgstr "This date is last import. If you need import new products, you can modify this date (filter)"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:898
+#, python-format
+msgid "This Magento Region not allow to delete"
+msgstr "This Magento Region not allow to delete"
+
+#. module: magento_connect
+#: view:sale.order:0
+#: field:sale.order,magento_gift_message:0
+#: field:sale.order.line,magento_gift_message:0
+msgid "Gift Message"
+msgstr "Gift Message"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Export Customers"
+msgstr "Export Customers"
+
+#. module: magento_connect
+#: field:magento.app,product_uom_id:0
+msgid "Unit of Sale"
+msgstr "Unit of Sale"
 
 #. module: magento_connect
 #: field:product.category,magento_available_sort_by:0
@@ -71,14 +138,30 @@ msgid "Service"
 msgstr "Service"
 
 #. module: magento_connect
-#: field:magento.external.referential,mgn_id:0
-msgid "Magento ID"
-msgstr "Magento ID"
+#: view:magento.app:0
+msgid "Import Magento Product Types"
+msgstr "Import Magento Product Types"
 
 #. module: magento_connect
-#: field:product.product,magento_metatitle:0
-msgid "Title"
-msgstr "Title"
+#: help:magento.sale.shop.status.type,cancel:0
+msgid "Cancel order. Sale Order change state draft to cancel"
+msgstr "Cancel order. Sale Order change state draft to cancel"
+
+#. module: magento_connect
+#: field:magento.app,last_export_product_category:0
+msgid "Last Export Categories"
+msgstr "Last Export Categories"
+
+#. module: magento_connect
+#: field:magento.sale.shop.status.type,picking_policy:0
+#: field:sale.shop,magento_default_picking_policy:0
+msgid "Packing Policy"
+msgstr "Packing Policy"
+
+#. module: magento_connect
+#: field:magento.app,product_delivery_default_id:0
+msgid "Product Delivery"
+msgstr "Product Delivery"
 
 #. module: magento_connect
 #: field:product.category,magento_default_sort_by:0
@@ -86,9 +169,63 @@ msgid "Default Product Listing Sort (Sort By)"
 msgstr "Default Product Listing Sort (Sort By)"
 
 #. module: magento_connect
-#: view:sale.shop:0
-msgid "Export Prices"
-msgstr "Export Prices"
+#: field:magento.customer.group,customer_group_id:0
+msgid "Customer Group ID"
+msgstr "Customer Group ID"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Import Magento Products"
+msgstr "Import Magento Products"
+
+#. module: magento_connect
+#: model:ir.module.module,description:magento_connect.module_meta_information
+msgid "\n"
+"    Magento E-commerce management. Your Magento and OpenERP are connecting.\n"
+"\n"
+"    1. Requirements:\n"
+"     1.1 Install Magento Python from:\n"
+"        - https://github.com/zikzakmedia/magento\n"
+"        - http://pypi.python.org/pypi/magento\n"
+"\n"
+"     1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category \n"
+"        - http://www.magentocommerce.com/magento-connect/Sharoon+Thomas/extension/1827/open-erp-connecotr-by-openlabs\n"
+"\n"
+"    2. Configuration\n"
+"     2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude\n"
+"     2.2 Mapping more product fields go to Administrator -> Customization -> Database Structure -> External Mapping\n"
+"     2.3 Configure yours Magento APP: Sale -> Configuration -> Magento\n"
+"    \n"
+"    3. Other information\n"
+"     3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.\n"
+"     3.2 Also exists another module Magento management we working another projects:\n"
+"        - https://launchpad.net/magentoerpconnect\n"
+"\n"
+"    Special Thanks to Akretion www.akretion.com and OpenLabs www.openlabs.co.in\n"
+"    "
+msgstr "\n"
+"    Magento E-commerce management. Your Magento and OpenERP are connecting.\n"
+"\n"
+"    1. Requirements:\n"
+"     1.1 Install Magento Python from:\n"
+"        - https://github.com/zikzakmedia/magento\n"
+"        - http://pypi.python.org/pypi/magento\n"
+"\n"
+"     1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category \n"
+"        - http://www.magentocommerce.com/magento-connect/Sharoon+Thomas/extension/1827/open-erp-connecotr-by-openlabs\n"
+"\n"
+"    2. Configuration\n"
+"     2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude\n"
+"     2.2 Mapping more product fields go to Administrator -> Customization -> Database Structure -> External Mapping\n"
+"     2.3 Configure yours Magento APP: Sale -> Configuration -> Magento\n"
+"    \n"
+"    3. Other information\n"
+"     3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.\n"
+"     3.2 Also exists another module Magento management we working another projects:\n"
+"        - https://launchpad.net/magentoerpconnect\n"
+"\n"
+"    Special Thanks to Akretion www.akretion.com and OpenLabs www.openlabs.co.in\n"
+"    "
 
 #. module: magento_connect
 #: field:magento.app,from_import_products:0
@@ -96,20 +233,46 @@ msgid "From Import Products"
 msgstr "From Import Products"
 
 #. module: magento_connect
-#: field:sale.shop,magento_scheduler:0
-msgid "Scheduler"
-msgstr "Scheduler"
+#: view:magento.app:0
+msgid "Import Magento Store"
+msgstr "Import Magento Store"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:494
+#: field:magento.app,name:0
+#: field:magento.customer.group,name:0
+#: field:magento.product.product.type,name:0
+#: field:magento.region,name:0
+#: field:magento.storegroup,name:0
+#: field:magento.storeview,name:0
+#: field:magento.website,name:0
+msgid "Name"
+msgstr "Name"
+
+#. module: magento_connect
+#: field:product.images,magento_base_image:0
+msgid "Base Image"
+msgstr "Base Image"
+
+#. module: magento_connect
+#: field:product.images.magento.app,product_images_id:0
+msgid "Product Image"
+msgstr "Product Image"
+
+#. module: magento_connect
+#: field:product.images,magento_filename:0
+msgid "Magento File Name"
+msgstr "Magento File Name"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:766
 #, python-format
 msgid "This Magento Store View not allow to delete"
 msgstr "This Magento Store View not allow to delete"
 
 #. module: magento_connect
-#: view:magento.app:0
-msgid "1 - Export Product Categories"
-msgstr "1 - Export Product Categories"
+#: view:sale.shop:0
+msgid "Export Status Sale Orders"
+msgstr "Export Status Sale Orders"
 
 #. module: magento_connect
 #: field:product.product,magento_metakeyword:0
@@ -117,14 +280,24 @@ msgid "Keyword"
 msgstr "Keyword"
 
 #. module: magento_connect
-#: field:product.category,magento_meta_title:0
-msgid "Meta Title"
-msgstr "Meta Title"
+#: view:magento.app:0
+msgid "Countries"
+msgstr "Countries"
 
 #. module: magento_connect
-#: selection:magento.sale.shop.payment.type,order_policy:0
-msgid "Invoice from the Packing"
-msgstr "Invoice from the Packing"
+#: field:magento.app,magento_region_ids:0
+msgid "Region"
+msgstr "Region"
+
+#. module: magento_connect
+#: field:product.product,magento_sku:0
+msgid "Magento SKU"
+msgstr "Magento SKU"
+
+#. module: magento_connect
+#: field:sale.shop,magento_last_export_images:0
+msgid "Last Export Image"
+msgstr "Last Export Image"
 
 #. module: magento_connect
 #: view:magento.app:0
@@ -137,23 +310,30 @@ msgid "Value"
 msgstr "Value"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:88
+#: field:sale.shop,magento_from_sale_orders:0
+msgid "From Orders"
+msgstr "From Orders"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:96
 #, python-format
 msgid "Error!"
 msgstr "Error!"
 
 #. module: magento_connect
-#: selection:magento.sale.shop.payment.type,order_policy:0
+#: selection:magento.sale.shop.status.type,order_policy:0
+#: selection:sale.shop,magento_default_order_policy:0
 msgid "Payment Before Delivery"
 msgstr "Payment Before Delivery"
 
 #. module: magento_connect
-#: view:magento.app:0
-msgid "5 - Import Magento Products"
-msgstr "5 - Import Magento Products"
+#: model:ir.model,name:magento_connect.model_product_images_magento_app
+msgid "Product Images related with Magento App"
+msgstr "Product Images related with Magento App"
 
 #. module: magento_connect
-#: field:magento.sale.shop.payment.type,order_policy:0
+#: field:magento.sale.shop.status.type,order_policy:0
+#: field:sale.shop,magento_default_order_policy:0
 msgid "Shipping Policy"
 msgstr "Shipping Policy"
 
@@ -163,9 +343,15 @@ msgid "Magento Server - APP"
 msgstr "Magento Server - APP"
 
 #. module: magento_connect
-#: help:magento.app,from_import_products:0
-msgid "This date is last import. If you need import new products, you can modify this date (filter)"
-msgstr "This date is last import. If you need import new products, you can modify this date (filter)"
+#: field:product.images,magento_position:0
+msgid "Position"
+msgstr "Position"
+
+#. module: magento_connect
+#: selection:magento.sale.shop.status.type,order_policy:0
+#: selection:sale.shop,magento_default_order_policy:0
+msgid "Invoice on Order After Delivery"
+msgstr "Invoice on Order After Delivery"
 
 #. module: magento_connect
 #: field:magento.app,product_category_id:0
@@ -174,11 +360,31 @@ msgstr "Root product Category"
 
 #. module: magento_connect
 #: field:magento.sale.shop.payment.type,shop_id:0
+#: field:magento.sale.shop.status.type,shop_id:0
 msgid "Shop"
 msgstr "Shop"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:461
+#: field:product.product,magento_product_type:0
+msgid "Product Type"
+msgstr "Product Type"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.action_magento_storegroup
+#: model:ir.model,name:magento_connect.model_magento_storegroup
+#: model:ir.ui.menu,name:magento_connect.menu_magento_storegroup
+#: view:magento.storegroup:0
+#: field:magento.storeview,magento_storegroup_id:0
+msgid "Magento Store Group"
+msgstr "Magento Store Group"
+
+#. module: magento_connect
+#: help:magento.app,last_export_partners:0
+msgid "This date is last export. If you need export all partners, empty this field (long sync)"
+msgstr "This date is last export. If you need export all partners, empty this field (long sync)"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:733
 #, python-format
 msgid "This Magento Website not allow to delete"
 msgstr "This Magento Website not allow to delete"
@@ -194,30 +400,68 @@ msgid "Cash on delivery"
 msgstr "Cash on delivery"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:84
+#: field:sale.shop,magento_payments:0
+msgid "Payment"
+msgstr "Payment"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:92
 #, python-format
 msgid "Ok!"
 msgstr "Ok!"
 
 #. module: magento_connect
+#: view:sale.shop:0
+msgid "Logistic Default"
+msgstr "Logistic Default"
+
+#. module: magento_connect
 #: model:ir.ui.menu,name:magento_connect.menu_magento
 #: field:product.attributes.group,magento:0
 #: view:product.category:0
+#: view:product.images:0
 #: view:product.product:0
+#: view:res.partner:0
+#: view:sale.order:0
 #: view:sale.shop:0
 msgid "Magento"
 msgstr "Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:86
+#: code:addons/magento_connect/mgn.py:94
 #, python-format
 msgid "Warning!"
 msgstr "Warning!"
 
 #. module: magento_connect
+#: help:sale.shop,magento_last_export_images:0
+msgid "This date correspond to the last export. If you need export all images, left empty this field."
+msgstr "This date correspond to the last export. If you need export all images, left empty this field."
+
+#. module: magento_connect
 #: view:magento.app:0
-msgid "1 - Import Magento Product Types"
-msgstr "1 - Import Magento Product Types"
+msgid "Import Magento Product Images"
+msgstr "Import Magento Product Images"
+
+#. module: magento_connect
+#: view:sale.shop:0
+msgid "Export Status"
+msgstr "Export Status"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_sale_order
+msgid "Sales Order"
+msgstr "Sales Order"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Export Product Categories"
+msgstr "Export Product Categories"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Sales Order Line"
 
 #. module: magento_connect
 #: view:product.product:0
@@ -226,22 +470,39 @@ msgstr "SKU"
 
 #. module: magento_connect
 #: view:magento.app:0
-msgid "2 - Import Magento Attributes Set"
-msgstr "2 - Import Magento Attributes Set"
+msgid "Partners"
+msgstr "Partners"
 
 #. module: magento_connect
+#: view:magento.sale.shop.payment.type:0
 #: field:magento.sale.shop.payment.type,payment_type_id:0
-#: field:sale.shop,magento_payment_types:0
 msgid "Payment Type"
 msgstr "Payment Type"
 
 #. module: magento_connect
-#: field:magento.app,payment_default_id:0
+#: view:magento.app:0
+msgid "Global"
+msgstr "Global"
+
+#. module: magento_connect
+#: help:magento.app,payment_default_id:0
 msgid "Default Payment Term"
 msgstr "Default Payment Term"
 
 #. module: magento_connect
-#: selection:magento.sale.shop.payment.type,invoice_quantity:0
+#: field:magento.sale.shop.status.type,confirm:0
+msgid "Confirm"
+msgstr "Confirm"
+
+#. module: magento_connect
+#: field:magento.app,last_export_partners:0
+#: field:sale.shop,magento_last_export_partners:0
+msgid "Last Export Partners"
+msgstr "Last Export Partners"
+
+#. module: magento_connect
+#: selection:magento.sale.shop.status.type,invoice_quantity:0
+#: selection:sale.shop,magento_default_invoice_quantity:0
 msgid "Shipped Quantities"
 msgstr "Shipped Quantities"
 
@@ -251,15 +512,14 @@ msgid "Label"
 msgstr "Label"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn_referential.py:42
-#, python-format
-msgid "This External mapping not allow to delete"
-msgstr "This External mapping not allow to delete"
+#: constraint:magento.app.customer:0
+msgid "This email is already assigned to another partner in the same Magento Server."
+msgstr "This email is already assigned to another partner in the same Magento Server."
 
 #. module: magento_connect
-#: view:magento.app:0
-msgid "Referential Actions"
-msgstr "Referential Actions"
+#: field:magento.region,res_country_state_id:0
+msgid "State"
+msgstr "State"
 
 #. module: magento_connect
 #: field:magento.app,warehouse_id:0
@@ -267,9 +527,24 @@ msgid "Warehouse"
 msgstr "Warehouse"
 
 #. module: magento_connect
+#: field:product.images,magento_exportable:0
+msgid "Magento Exportable"
+msgstr "Magento Exportable"
+
+#. module: magento_connect
+#: help:sale.shop,magento_last_export_partners:0
+msgid "This date correspond to the last export. If you need export all partners, left empty this field."
+msgstr "This date correspond to the last export. If you need export all partners, left empty this field."
+
+#. module: magento_connect
 #: field:magento.product.product.type,product_type:0
 msgid "Type"
 msgstr "Type"
+
+#. module: magento_connect
+#: field:product.images,magento_thumbnail:0
+msgid "Thumbnail"
+msgstr "Thumbnail"
 
 #. module: magento_connect
 #: view:magento.external.referential:0
@@ -277,9 +552,19 @@ msgid "Search Magento External Referential"
 msgstr "Search Magento External Referential"
 
 #. module: magento_connect
+#: field:sale.shop,magento_last_export_status_orders:0
+msgid "Last Status Orders"
+msgstr "Last Status Orders"
+
+#. module: magento_connect
 #: field:magento.app,username:0
 msgid "Username"
 msgstr "Username"
+
+#. module: magento_connect
+#: help:sale.order,magento_status:0
+msgid "Magento Status"
+msgstr "Magento Status"
 
 #. module: magento_connect
 #: field:sale.shop,magento_last_export_prices:0
@@ -292,6 +577,11 @@ msgid "Product Category"
 msgstr "Product Category"
 
 #. module: magento_connect
+#: field:sale.shop,magento_notify_paid:0
+msgid "Notify Paid"
+msgstr "Notify Paid"
+
+#. module: magento_connect
 #: view:product.product:0
 msgid "Metakeyword"
 msgstr "Metakeyword"
@@ -302,35 +592,56 @@ msgid "Available this Sale Shop crons (import/export)"
 msgstr "Available this Sale Shop crons (import/export)"
 
 #. module: magento_connect
-#: selection:magento.sale.shop.payment.type,invoice_quantity:0
+#: model:ir.actions.act_window,name:magento_connect.action_magento_external_referential
+#: model:ir.ui.menu,name:magento_connect.menu_magento_external_referential
+msgid "Magento External Referentials"
+msgstr "Magento External Referentials"
+
+#. module: magento_connect
+#: selection:magento.sale.shop.status.type,invoice_quantity:0
+#: selection:sale.shop,magento_default_invoice_quantity:0
 msgid "Ordered Quantities"
 msgstr "Ordered Quantities"
 
 #. module: magento_connect
+#: field:magento.app.customer,magento_storeview_ids:0
 #: view:magento.storegroup:0
 msgid "Store Views"
 msgstr "Store Views"
 
 #. module: magento_connect
-#: view:product.category:0
-msgid "Sorting method"
-msgstr "Sorting method"
+#: help:magento.sale.shop.payment.type,method:0
+msgid "Code Payment (example, paypal, checkmo, ccsave,..."
+msgstr "Code Payment (example, paypal, checkmo, ccsave,..."
 
 #. module: magento_connect
+#: view:magento.app:0
 #: selection:product.product,magento_visibility:0
+#: view:sale.shop:0
 msgid "Catalog"
 msgstr "Catalog"
 
 #. module: magento_connect
-#: selection:product.product,magento_visibility:0
-msgid "Nowhere"
-msgstr "Nowhere"
+#: field:product.category,magento_url_key:0
+msgid "URL-key"
+msgstr "URL-key"
 
 #. module: magento_connect
-#: view:product.product:0
-#: field:product.product,magento_shortdescription:0
-msgid "Short Description"
-msgstr "Short Description"
+#: field:product.category,magento_include_in_menu:0
+msgid "Include in menu"
+msgstr "Include in menu"
+
+#. module: magento_connect
+#: selection:product.product,magento_visibility:0
+msgid "Catalog,Search"
+msgstr "Catalog,Search"
+
+#. module: magento_connect
+#: help:sale.shop,magento_notify_delivered:0
+#: help:sale.shop,magento_notify_paid:0
+#: help:sale.shop,magento_notify_paid_delivered:0
+msgid "Magento notification"
+msgstr "Magento notification"
 
 #. module: magento_connect
 #: field:magento.app,pricelist_id:0
@@ -339,9 +650,9 @@ msgid "Pricelist"
 msgstr "Pricelist"
 
 #. module: magento_connect
-#: field:product.product,magento_product_type:0
-msgid "Product Type"
-msgstr "Product Type"
+#: model:product.template,name:magento_connect.product_product_gift_product_template
+msgid "Gift Certificate"
+msgstr "Gift Certificate"
 
 #. module: magento_connect
 #: view:sale.shop:0
@@ -349,12 +660,23 @@ msgid "Export Products"
 msgstr "Export Products"
 
 #. module: magento_connect
-#: selection:magento.sale.shop.payment.type,order_policy:0
-msgid "Invoice on Order After Delivery"
-msgstr "Invoice on Order After Delivery"
+#: field:magento.app,to_import_customers:0
+msgid "To Import Customers"
+msgstr "To Import Customers"
 
 #. module: magento_connect
-#: selection:magento.sale.shop.payment.type,picking_policy:0
+#: view:magento.app:0
+msgid "Import Magento Categories"
+msgstr "Import Magento Categories"
+
+#. module: magento_connect
+#: field:sale.shop,magento_notify_delivered:0
+msgid "Notify Delivered"
+msgstr "Notify Delivered"
+
+#. module: magento_connect
+#: selection:magento.sale.shop.status.type,picking_policy:0
+#: selection:sale.shop,magento_default_picking_policy:0
 msgid "Complete Delivery"
 msgstr "Complete Delivery"
 
@@ -364,19 +686,56 @@ msgid "Url Key"
 msgstr "Url Key"
 
 #. module: magento_connect
-#: field:magento.sale.shop.payment.type,picking_policy:0
-msgid "Packing Policy"
-msgstr "Packing Policy"
+#: help:magento.sale.shop.status.type,confirm:0
+msgid "Confirm order. Sale Order change state draft to done, and generate picking and/or invoice automatlly"
+msgstr "Confirm order. Sale Order change state draft to done, and generate picking and/or invoice automatlly"
 
 #. module: magento_connect
-#: view:magento.app:0
-msgid "4 - Import Magento Categories"
-msgstr "4 - Import Magento Categories"
+#: help:sale.shop,magento_status_paid_delivered:0
+msgid "Status for paid and delivered"
+msgstr "Status for paid and delivered"
+
+#. module: magento_connect
+#: sql_constraint:sale.order:0
+msgid "Order Reference must be unique !"
+msgstr "Order Reference must be unique !"
+
+#. module: magento_connect
+#: field:sale.shop,magento_last_export_stock:0
+msgid "Last Export Stock"
+msgstr "Last Export Stock"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_res_partner
+#: field:magento.app.customer,partner_id:0
+msgid "Partner"
+msgstr "Partner"
 
 #. module: magento_connect
 #: field:magento.external.referential,oerp_id:0
 msgid "OpenERP ID"
 msgstr "OpenERP ID"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_magento_app_customer
+msgid "Magento App Customer"
+msgstr "Magento App Customer"
+
+#. module: magento_connect
+#: selection:magento.sale.shop.status.type,order_policy:0
+#: selection:sale.shop,magento_default_order_policy:0
+msgid "Shipping & Manual Invoice"
+msgstr "Shipping & Manual Invoice"
+
+#. module: magento_connect
+#: field:sale.shop,magento_last_import_sale_orders:0
+msgid "Last Import Status Sale Orders"
+msgstr "Last Import Status Sale Orders"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Import Magento Attributes"
+msgstr "Import Magento Attributes"
 
 #. module: magento_connect
 #: help:magento.app,last_export_product_category:0
@@ -390,13 +749,23 @@ msgstr "Product attributes group for product OpenERP module"
 
 #. module: magento_connect
 #: view:magento.app:0
+msgid "Are you sure to continue? See logs server process. This operation import all categories Magento to OpenERP"
+msgstr "Are you sure to continue? See logs server process. This operation import all categories Magento to OpenERP"
+
+#. module: magento_connect
+#: view:magento.app:0
 msgid "Core Components"
 msgstr "Core Components"
 
 #. module: magento_connect
-#: help:magento.sale.shop.payment.type,app_payment:0
-msgid "Name App Payment module (example, paypal, servired, cash_on_delivery,..."
-msgstr "Name App Payment module (example, paypal, servired, cash_on_delivery,..."
+#: view:magento.app:0
+msgid "Import regions with countries selected. Are you sure to continue? See logs server process"
+msgstr "Import regions with countries selected. Are you sure to continue? See logs server process"
+
+#. module: magento_connect
+#: field:res.partner.address,magento_lastname:0
+msgid "Last Name"
+msgstr "Last Name"
 
 #. module: magento_connect
 #: help:magento.product.product.type,product_type:0
@@ -419,23 +788,24 @@ msgid "If the active field is set to False, it will allow you to hide the produc
 msgstr "If the active field is set to False, it will allow you to hide the product without removing it."
 
 #. module: magento_connect
-#: view:magento.app:0
-msgid "3 - Import Magento Attributes"
-msgstr "3 - Import Magento Attributes"
+#: field:magento.storegroup,magento_storeview_ids:0
+msgid "Store View"
+msgstr "Store View"
 
 #. module: magento_connect
-#: field:magento.app,last_export_product_category:0
-msgid "Last Export Categories"
-msgstr "Last Export Categories"
+#: field:magento.external.referential,mgn_id:0
+msgid "Magento ID"
+msgstr "Magento ID"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:86
+#: code:addons/magento_connect/mgn.py:94
 #, python-format
 msgid "Connection to server are successfully but reconfigure your Magento."
 msgstr "Connection to server are successfully but reconfigure your Magento."
 
 #. module: magento_connect
 #: field:product.category,magento_exportable:0
+#: field:product.images.magento.app,magento_exported:0
 #: field:product.product,magento_exportable:0
 msgid "Exported to Magento?"
 msgstr "Exported to Magento?"
@@ -447,10 +817,20 @@ msgid "Default language this shop. If not select, use lang user"
 msgstr "Default language this shop. If not select, use lang user"
 
 #. module: magento_connect
+#: model:ir.model,name:magento_connect.model_res_partner_address
+msgid "Partner Addresses"
+msgstr "Partner Addresses"
+
+#. module: magento_connect
 #: help:sale.shop,magento_last_export_prices:0
 #: help:sale.shop,magento_last_export_stock:0
 msgid "This date is last export. If you need export all product prices, empty this field (long sync)"
 msgstr "This date is last export. If you need export all product prices, empty this field (long sync)"
+
+#. module: magento_connect
+#: view:sale.shop:0
+msgid "Payments"
+msgstr "Payments"
 
 #. module: magento_connect
 #: field:product.category,magento_is_active:0
@@ -468,9 +848,35 @@ msgid "Real Stock"
 msgstr "Real Stock"
 
 #. module: magento_connect
+#: help:magento.app.customer,magento_vat:0
+msgid "To be able to receive customer VAT number you must set it in Magento Admin Panel, menu System / Configuration / Client Configuration / Name and Address Options."
+msgstr "To be able to receive customer VAT number you must set it in Magento Admin Panel, menu System / Configuration / Client Configuration / Name and Address Options."
+
+#. module: magento_connect
 #: field:magento.app,to_import_products:0
 msgid "To Import Products"
 msgstr "To Import Products"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:939
+#, python-format
+msgid "This Magento Websites/Groups not allow to delete"
+msgstr "This Magento Websites/Groups not allow to delete"
+
+#. module: magento_connect
+#: view:sale.shop:0
+msgid "Export Images"
+msgstr "Export Images"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Import Customer Group"
+msgstr "Import Customer Group"
+
+#. module: magento_connect
+#: field:sale.shop,magento_scheduler:0
+msgid "Scheduler"
+msgstr "Scheduler"
 
 #. module: magento_connect
 #: view:magento.app:0
@@ -478,10 +884,20 @@ msgid "Import"
 msgstr "Import"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:166
+#: code:addons/magento_connect/product.py:168
 #, python-format
 msgid "This Magento Product Type not allow to delete"
 msgstr "This Magento Product Type not allow to delete"
+
+#. module: magento_connect
+#: help:magento.app.customer,magento_emailid:0
+msgid "Magento uses this email ID to match the customer."
+msgstr "Magento uses this email ID to match the customer."
+
+#. module: magento_connect
+#: field:magento.sale.shop.payment.type,method:0
+msgid "Method"
+msgstr "Method"
 
 #. module: magento_connect
 #: view:magento.app:0
@@ -489,9 +905,18 @@ msgid "Store"
 msgstr "Store"
 
 #. module: magento_connect
+#: field:magento.sale.shop.status.type,status:0
 #: field:product.product,magento_status:0
+#: field:sale.order,magento_status:0
+#: view:sale.shop:0
+#: field:sale.shop,magento_status:0
 msgid "Status"
 msgstr "Status"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Customers"
+msgstr "Customers"
 
 #. module: magento_connect
 #: model:ir.module.module,shortdesc:magento_connect.module_meta_information
@@ -499,15 +924,30 @@ msgid "Magento Connector"
 msgstr "Magento Connector"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:88
+#: code:addons/magento_connect/mgn.py:96
 #, python-format
 msgid "Connection to server failed."
 msgstr "Connection to server failed."
 
 #. module: magento_connect
-#: view:magento.app:0
-msgid "1 - Import Magento Store"
-msgstr "1 - Import Magento Store"
+#: help:sale.shop,magento_last_import_sale_orders:0
+msgid "This date correspond to the last export. If you need export all status, left empty this field."
+msgstr "This date correspond to the last export. If you need export all status, left empty this field."
+
+#. module: magento_connect
+#: field:sale.shop,magento_notify_paid_delivered:0
+msgid "Notify Paid/Delivered"
+msgstr "Notify Paid/Delivered"
+
+#. module: magento_connect
+#: field:sale.shop,magento_status_paid:0
+msgid "Paid"
+msgstr "Paid"
+
+#. module: magento_connect
+#: field:magento.app.customer,magento_storeview_id:0
+msgid "Last Store View"
+msgstr "Last Store View"
 
 #. module: magento_connect
 #: model:ir.model,name:magento_connect.model_magento_product_category_attribute_options
@@ -522,9 +962,25 @@ msgid "Magento Product Type"
 msgstr "Magento Product Type"
 
 #. module: magento_connect
+#: help:sale.shop,magento_from_sale_orders:0
+msgid "This date is last import. If you need import news orders, you can modify this date (filter)"
+msgstr "This date is last import. If you need import news orders, you can modify this date (filter)"
+
+#. module: magento_connect
 #: field:magento.product.product.type,active:0
 msgid "Active"
 msgstr "Active"
+
+#. module: magento_connect
+#: view:magento.website:0
+#: field:magento.website,magento_storegroup_ids:0
+msgid "Store Group"
+msgstr "Store Group"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Websites Info"
+msgstr "Websites Info"
 
 #. module: magento_connect
 #: model:ir.model,name:magento_connect.model_magento_external_referential
@@ -553,20 +1009,20 @@ msgid "OpenERP Model"
 msgstr "OpenERP Model"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:509
-#: code:addons/magento_connect/mgn.py:556
+#: code:addons/magento_connect/mgn.py:781
+#: code:addons/magento_connect/mgn.py:828
 #, python-format
 msgid "Select language available this store view"
 msgstr "Select language available this store view"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:202
+#: code:addons/magento_connect/product.py:204
 #, python-format
 msgid "Product '%s' not allow to delete because are active in Magento Shop"
 msgstr "Product '%s' not allow to delete because are active in Magento Shop"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:84
+#: code:addons/magento_connect/mgn.py:92
 #, python-format
 msgid "Connection to server are successfully."
 msgstr "Connection to server are successfully."
@@ -577,7 +1033,6 @@ msgid "Extra Information"
 msgstr "Extra Information"
 
 #. module: magento_connect
-#: view:magento.app:0
 #: field:magento.app,magento_website_ids:0
 #: field:product.product,magento_sale_shop:0
 msgid "Websites"
@@ -589,6 +1044,12 @@ msgid "SEO"
 msgstr "SEO"
 
 #. module: magento_connect
+#: view:product.product:0
+#: field:product.product,magento_shortdescription:0
+msgid "Short Description"
+msgstr "Short Description"
+
+#. module: magento_connect
 #: model:ir.model,name:magento_connect.model_magento_sale_shop_payment_type
 msgid "Magento Sale Shop Payment Type"
 msgstr "Magento Sale Shop Payment Type"
@@ -597,11 +1058,6 @@ msgstr "Magento Sale Shop Payment Type"
 #: view:product.category:0
 msgid "Display Settings"
 msgstr "Display Settings"
-
-#. module: magento_connect
-#: help:magento.app,to_import_products:0
-msgid "This date is from import (filter)"
-msgstr "This date is from import (filter)"
 
 #. module: magento_connect
 #: code:addons/magento_connect/mgn.py:33
@@ -620,9 +1076,14 @@ msgid "Tax Include"
 msgstr "Tax Include"
 
 #. module: magento_connect
-#: field:sale.shop,magento_last_export_stock:0
-msgid "Last Export Stock"
-msgstr "Last Export Stock"
+#: view:sale.shop:0
+msgid "Export Prices"
+msgstr "Export Prices"
+
+#. module: magento_connect
+#: view:product.images.magento.app:0
+msgid "Products Images Magento"
+msgstr "Products Images Magento"
 
 #. module: magento_connect
 #: view:sale.shop:0
@@ -630,10 +1091,10 @@ msgid "Export Stock"
 msgstr "Export Stock"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:476
-#, python-format
-msgid "This Magento Store Group not allow to delete"
-msgstr "This Magento Store Group not allow to delete"
+#: model:ir.actions.act_window,name:magento_connect.act_magento_region
+#: view:magento.app:0
+msgid "Regions"
+msgstr "Regions"
 
 #. module: magento_connect
 #: model:product.template,name:magento_connect.product_product_discount_product_template
@@ -642,25 +1103,22 @@ msgstr "Discount Coupon"
 
 #. module: magento_connect
 #: field:magento.attribute.exclude,name:0
+#: field:magento.region,code:0
 #: field:magento.storeview,code:0
 #: field:magento.website,code:0
 msgid "Code"
 msgstr "Code"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:592
+#: code:addons/magento_connect/mgn.py:864
 #, python-format
 msgid "This Magento Attribute Exclude not allow to delete"
 msgstr "This Magento Attribute Exclude not allow to delete"
 
 #. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.action_magento_storegroup
-#: model:ir.model,name:magento_connect.model_magento_storegroup
-#: model:ir.ui.menu,name:magento_connect.menu_magento_storegroup
-#: view:magento.storegroup:0
-#: field:magento.storeview,magento_storegroup_id:0
-msgid "Magento Store Group"
-msgstr "Magento Store Group"
+#: help:magento.app,product_delivery_default_id:0
+msgid "Default Product Delivery"
+msgstr "Default Product Delivery"
 
 #. module: magento_connect
 #: view:magento.product.product:0
@@ -671,6 +1129,17 @@ msgstr "Magento Product Product Type"
 #: field:magento.app,magento_default_storeview:0
 msgid "Store View Default"
 msgstr "Store View Default"
+
+#. module: magento_connect
+#: help:product.product,magento_sale_shop:0
+msgid "Select yours Sale Shops available this product"
+msgstr "Select yours Sale Shops available this product"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn_referential.py:42
+#, python-format
+msgid "This External mapping not allow to delete"
+msgstr "This External mapping not allow to delete"
 
 #. module: magento_connect
 #: view:magento.app:0
@@ -703,9 +1172,19 @@ msgid "Sale Shop"
 msgstr "Sale Shop"
 
 #. module: magento_connect
-#: field:magento.storegroup,magento_storeview_ids:0
-msgid "Store View"
-msgstr "Store View"
+#: field:magento.app.customer,magento_customer_group_id:0
+msgid "Customer Group"
+msgstr "Customer Group"
+
+#. module: magento_connect
+#: field:magento.sale.shop.status.type,cancel:0
+msgid "Cancel"
+msgstr "Cancel"
+
+#. module: magento_connect
+#: field:product.images,magento_exclude:0
+msgid "Exclude"
+msgstr "Exclude"
 
 #. module: magento_connect
 #: field:product.category,magento_meta_keywords:0
@@ -713,20 +1192,77 @@ msgid "Meta Keyword"
 msgstr "Meta Keyword"
 
 #. module: magento_connect
-#: selection:magento.sale.shop.payment.type,order_policy:0
-msgid "Shipping & Manual Invoice"
-msgstr "Shipping & Manual Invoice"
+#: code:addons/magento_connect/product_images.py:92
+#, python-format
+msgid "This Image can't be deleted"
+msgstr "This Image can't be deleted"
+
+#. module: magento_connect
+#: field:magento.app.customer,magento_vat:0
+msgid "Magento VAT"
+msgstr "Magento VAT"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Regions Mapping"
+msgstr "Regions Mapping"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_product_images
+msgid "Products Image gallery"
+msgstr "Products Image gallery"
+
+#. module: magento_connect
+#: field:sale.shop,magento_status_delivered:0
+msgid "Delivered"
+msgstr "Delivered"
 
 #. module: magento_connect
 #: model:ir.actions.act_window,name:magento_connect.action_magento_app
 #: model:ir.ui.menu,name:magento_connect.menu_magento_app
+#: view:product.images:0
 msgid "Magento Server"
 msgstr "Magento Server"
+
+#. module: magento_connect
+#: help:sale.shop,magento_status_delivered:0
+msgid "Status for delivered (picking)"
+msgstr "Status for delivered (picking)"
+
+#. module: magento_connect
+#: help:magento.sale.shop.status.type,status:0
+msgid "Code Status (example, cancel, pending, processing,..)"
+msgstr "Code Status (example, cancel, pending, processing,..)"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Import Customers"
+msgstr "Import Customers"
+
+#. module: magento_connect
+#: field:res.partner.address,magento_firstname:0
+msgid "First Name"
+msgstr "First Name"
+
+#. module: magento_connect
+#: field:sale.shop,magento_to_sale_orders:0
+msgid "To Orders"
+msgstr "To Orders"
+
+#. module: magento_connect
+#: help:magento.app.customer,magento_storeview_id:0
+msgid "Last store view where the customer has bought."
+msgstr "Last store view where the customer has bought."
 
 #. module: magento_connect
 #: view:product.product:0
 msgid "Metadescription"
 msgstr "Metadescription"
+
+#. module: magento_connect
+#: field:magento.app,uri:0
+msgid "URI"
+msgstr "URI"
 
 #. module: magento_connect
 #: field:sale.shop,magento_sale_stock:0
@@ -751,9 +1287,10 @@ msgid "Description"
 msgstr "Description"
 
 #. module: magento_connect
-#: selection:product.product,magento_visibility:0
-msgid "Select Option"
-msgstr "Select Option"
+#: model:ir.actions.act_window,name:magento_connect.action_product_images_magento_app
+#: model:ir.ui.menu,name:magento_connect.menu_product_images_magento
+msgid "Product Images Magento"
+msgstr "Product Images Magento"
 
 #. module: magento_connect
 #: field:sale.shop,magento_sale_price:0
@@ -761,21 +1298,38 @@ msgid "Price"
 msgstr "Price"
 
 #. module: magento_connect
-#: field:magento.sale.shop.payment.type,app_payment:0
-msgid "App Payment"
-msgstr "App Payment"
+#: field:product.category,magento_meta_title:0
+msgid "Meta Title"
+msgstr "Meta Title"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:383
-#: code:addons/magento_connect/mgn.py:461
-#: code:addons/magento_connect/mgn.py:476
-#: code:addons/magento_connect/mgn.py:494
-#: code:addons/magento_connect/mgn.py:509
-#: code:addons/magento_connect/mgn.py:556
-#: code:addons/magento_connect/mgn.py:592
+#: field:magento.app,product_discount_default_id:0
+msgid "Product Discount"
+msgstr "Product Discount"
+
+#. module: magento_connect
+#: view:magento.app:0
+#: view:sale.shop:0
+msgid "Are you sure to continue? See logs server process"
+msgstr "Are you sure to continue? See logs server process"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:448
+#: code:addons/magento_connect/mgn.py:573
+#: code:addons/magento_connect/mgn.py:617
+#: code:addons/magento_connect/mgn.py:733
+#: code:addons/magento_connect/mgn.py:748
+#: code:addons/magento_connect/mgn.py:766
+#: code:addons/magento_connect/mgn.py:781
+#: code:addons/magento_connect/mgn.py:828
+#: code:addons/magento_connect/mgn.py:864
+#: code:addons/magento_connect/mgn.py:879
+#: code:addons/magento_connect/mgn.py:898
+#: code:addons/magento_connect/mgn.py:939
 #: code:addons/magento_connect/mgn_referential.py:42
-#: code:addons/magento_connect/product.py:166
-#: code:addons/magento_connect/product.py:202
+#: code:addons/magento_connect/product.py:168
+#: code:addons/magento_connect/product.py:204
+#: code:addons/magento_connect/product_images.py:92
 #, python-format
 msgid "Alert"
 msgstr "Alert"
@@ -791,14 +1345,20 @@ msgid "Magento Shop"
 msgstr "Magento Shop"
 
 #. module: magento_connect
+#: field:magento.app,from_import_customers:0
+msgid "From Import Customers"
+msgstr "From Import Customers"
+
+#. module: magento_connect
 #: help:sale.shop,magento_last_export_products:0
 msgid "This date is last export. If you need export new products, you can modify this date (filter)"
 msgstr "This date is last export. If you need export new products, you can modify this date (filter)"
 
 #. module: magento_connect
-#: field:product.product,magento_sku:0
-msgid "Magento SKU"
-msgstr "Magento SKU"
+#: selection:magento.sale.shop.status.type,order_policy:0
+#: selection:sale.shop,magento_default_order_policy:0
+msgid "Invoice from the Packing"
+msgstr "Invoice from the Packing"
 
 #. module: magento_connect
 #: field:magento.app,password:0
@@ -811,65 +1371,23 @@ msgid "If check this value, this product is publishing in Magento Store. For dis
 msgstr "If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere."
 
 #. module: magento_connect
-#: model:ir.module.module,description:magento_connect.module_meta_information
-msgid "\n"
-"    Magento E-commerce management. Your Magento and OpenERP are connecting.\n"
-"\n"
-"    1. Requirements:\n"
-"     1.1 Install Magento Python from:\n"
-"        - https://github.com/zikzakmedia/magento\n"
-"        - http://pypi.python.org/pypi/magento\n"
-"\n"
-"     1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category \n"
-"        - http://www.magentocommerce.com/magento-connect/Sharoon+Thomas/extension/1827/open-erp-connecotr-by-openlabs\n"
-"\n"
-"    2. Configuration\n"
-"     2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude\n"
-"     2.2 Mapping more product fields go to Administrator -> Customization -> Database Structure -> External Mapping\n"
-"     2.3 Configure yours Magento APP: Sale -> Configuration -> Magento\n"
-"    \n"
-"    3. Other information\n"
-"     3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.\n"
-"     3.2 Also exists another module Magento management we working another projects:\n"
-"        - https://launchpad.net/magentoerpconnect\n"
-"\n"
-"    Special Thanks to Akretion www.akretion.com\n"
-"    "
-msgstr "\n"
-"    Magento E-commerce management. Your Magento and OpenERP are connecting.\n"
-"\n"
-"    1. Requirements:\n"
-"     1.1 Install Magento Python from:\n"
-"        - https://github.com/zikzakmedia/magento\n"
-"        - http://pypi.python.org/pypi/magento\n"
-"\n"
-"     1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category \n"
-"        - http://www.magentocommerce.com/magento-connect/Sharoon+Thomas/extension/1827/open-erp-connecotr-by-openlabs\n"
-"\n"
-"    2. Configuration\n"
-"     2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude\n"
-"     2.2 Mapping more product fields go to Administrator -> Customization -> Database Structure -> External Mapping\n"
-"     2.3 Configure yours Magento APP: Sale -> Configuration -> Magento\n"
-"    \n"
-"    3. Other information\n"
-"     3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.\n"
-"     3.2 Also exists another module Magento management we working another projects:\n"
-"        - https://launchpad.net/magentoerpconnect\n"
-"\n"
-"    Special Thanks to Akretion www.akretion.com\n"
-"    "
+#: view:magento.app:0
+msgid "Customer"
+msgstr "Customer"
 
 #. module: magento_connect
-#: field:magento.app,name:0
-#: field:magento.product.product.type,name:0
-#: field:magento.storegroup,name:0
-#: field:magento.storeview,name:0
-#: field:magento.website,name:0
-msgid "Name"
-msgstr "Name"
+#: help:magento.app,product_uom_id:0
+msgid "Default Unit of Sale"
+msgstr "Default Unit of Sale"
 
 #. module: magento_connect
-#: field:magento.sale.shop.payment.type,invoice_quantity:0
+#: field:magento.app.customer,magento_emailid:0
+msgid "Email Address"
+msgstr "Email Address"
+
+#. module: magento_connect
+#: field:magento.sale.shop.status.type,invoice_quantity:0
+#: field:sale.shop,magento_default_invoice_quantity:0
 msgid "Invoice on"
 msgstr "Invoice on"
 
@@ -885,25 +1403,34 @@ msgid "Magento Website"
 msgstr "Magento Website"
 
 #. module: magento_connect
-#: selection:product.product,magento_visibility:0
-msgid "Catalog,Search"
-msgstr "Catalog,Search"
-
-#. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.action_magento_external_referential
-#: model:ir.ui.menu,name:magento_connect.menu_magento_external_referential
-msgid "Magento External Referentials"
-msgstr "Magento External Referentials"
-
-#. module: magento_connect
-#: field:magento.app,uri:0
-msgid "URI"
-msgstr "URI"
+#: field:magento.app,magento_country_ids:0
+msgid "Country"
+msgstr "Country"
 
 #. module: magento_connect
 #: view:magento.app:0
+msgid "Are you sure to continue? See logs server process. This operation import all images Magento to OpenERP"
+msgstr "Are you sure to continue? See logs server process. This operation import all images Magento to OpenERP"
+
+#. module: magento_connect
+#: view:res.partner:0
+msgid "Store views"
+msgstr "Store views"
+
+#. module: magento_connect
+#: help:sale.shop,magento_last_export_status_orders:0
+msgid "This date correspond to the last export. If you need export all orders, left empty this field."
+msgstr "This date correspond to the last export. If you need export all orders, left empty this field."
+
+#. module: magento_connect
+#: view:magento.app:0
+#: field:magento.app.customer,magento_app_id:0
+#: field:magento.customer.group,magento_app_id:0
 #: field:magento.external.referential,magento_app_id:0
+#: field:magento.region,magento_app_id:0
 #: field:magento.website,magento_app_id:0
+#: field:product.images,magento_app_ids:0
+#: field:product.images.magento.app,magento_app_id:0
 msgid "Magento App"
 msgstr "Magento App"
 
@@ -914,10 +1441,15 @@ msgid "vobject Import Error!"
 msgstr "vobject Import Error!"
 
 #. module: magento_connect
-#: view:magento.website:0
-#: field:magento.website,magento_storegroup_ids:0
-msgid "Store Group"
-msgstr "Store Group"
+#: view:res.partner:0
+#: field:res.partner,magento_app_customer:0
+msgid "Magento Customer"
+msgstr "Magento Customer"
+
+#. module: magento_connect
+#: view:sale.shop:0
+msgid "Import Orders"
+msgstr "Import Orders"
 
 #. module: magento_connect
 #: view:magento.app:0
@@ -930,9 +1462,9 @@ msgid "Virtual Stock"
 msgstr "Virtual Stock"
 
 #. module: magento_connect
-#: view:product.product:0
-msgid "Website"
-msgstr "Website"
+#: field:product.product,magento_visibility:0
+msgid "Visibility"
+msgstr "Visibility"
 
 #. module: magento_connect
 #: field:product.category,magento_meta_description:0
@@ -945,9 +1477,20 @@ msgid "Magento Filters..."
 msgstr "Magento Filters..."
 
 #. module: magento_connect
-#: field:product.category,magento_url_key:0
-msgid "URL-key"
-msgstr "URL-key"
+#: code:addons/magento_connect/mgn.py:879
+#, python-format
+msgid "This Magento Customer Group not allow to delete"
+msgstr "This Magento Customer Group not allow to delete"
+
+#. module: magento_connect
+#: help:magento.app,from_import_customers:0
+msgid "This date is last import. If you need import new partners, you can modify this date (filter)"
+msgstr "This date is last import. If you need import new partners, you can modify this date (filter)"
+
+#. module: magento_connect
+#: selection:product.product,magento_visibility:0
+msgid "Select Option"
+msgstr "Select Option"
 
 #. module: magento_connect
 #: help:magento.app,uri:0
@@ -970,12 +1513,19 @@ msgid "Attribute Code"
 msgstr "Attribute Code"
 
 #. module: magento_connect
-#: view:sale.shop:0
-msgid "Actions"
-msgstr "Actions"
+#: view:magento.app:0
+msgid "Import Magento Attributes Set"
+msgstr "Import Magento Attributes Set"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:383
+#: field:magento.app,payment_default_id:0
+msgid "Payment Term"
+msgstr "Payment Term"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:448
+#: code:addons/magento_connect/mgn.py:573
+#: code:addons/magento_connect/mgn.py:617
 #, python-format
 msgid "Select Store View Magento"
 msgstr "Select Store View Magento"
@@ -984,6 +1534,13 @@ msgstr "Select Store View Magento"
 #: field:magento.storeview,magento_last_import_locale_products:0
 msgid "Last Import Products"
 msgstr "Last Import Products"
+
+#. module: magento_connect
+#: help:magento.app,to_import_customers:0
+#: help:magento.app,to_import_products:0
+#: help:sale.shop,magento_to_sale_orders:0
+msgid "This date is to import (filter)"
+msgstr "This date is to import (filter)"
 
 #. module: magento_connect
 #: constraint:product.product:0
@@ -996,7 +1553,36 @@ msgid "Export"
 msgstr "Export"
 
 #. module: magento_connect
+#: help:sale.shop,magento_status_paid:0
+msgid "Status for paid orders (invoice)"
+msgstr "Status for paid orders (invoice)"
+
+#. module: magento_connect
+#: view:magento.sale.shop.status.type:0
 #: view:sale.shop:0
-msgid "Payment Types"
-msgstr "Payment Types"
+msgid "Import Status"
+msgstr "Import Status"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.action_magento_customer_group
+#: model:ir.model,name:magento_connect.model_magento_customer_group
+#: model:ir.ui.menu,name:magento_connect.menu_magento_customer_group
+#: view:magento.customer.group:0
+msgid "Magento Customer Group"
+msgstr "Magento Customer Group"
+
+#. module: magento_connect
+#: view:product.product:0
+msgid "Website"
+msgstr "Website"
+
+#. module: magento_connect
+#: view:sale.shop:0
+msgid "Orders"
+msgstr "Orders"
+
+#. module: magento_connect
+#: field:sale.shop,magento_status_paid_delivered:0
+msgid "Paid/Delivered"
+msgstr "Paid/Delivered"
 

@@ -41,7 +41,7 @@
             <field name="help">You can show/filter external referentials about Magento to OpenERP. This menu only available tree view.</field>
         </record>
 
-        <menuitem action="action_magento_external_referential" id="menu_magento_external_referential" parent="menu_magento" groups="base.group_extended" sequence="50"/>
+        <menuitem action="action_magento_external_referential" id="menu_magento_external_referential" parent="menu_magento" groups="base.group_extended" sequence="10"/>
 
     </data>
 </openerp>
