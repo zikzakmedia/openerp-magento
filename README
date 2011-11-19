@@ -7,6 +7,7 @@
 
  1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category, Newsletter
     - magento_module
+	Magento Module Package. Untgz and copy code and etc directoris in Magento. Remember clean/reload Magento cache. If module is available, check in Magento Admin: System -> Advanced Modules
 
 2. Configuration
  2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude
