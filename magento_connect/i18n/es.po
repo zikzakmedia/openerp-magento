@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.2\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
 "POT-Creation-Date: 2011-11-18 14:46+0000\n"
-"PO-Revision-Date: 2011-11-18 16:30+0100\n"
+"PO-Revision-Date: 2011-11-21 10:44+0100\n"
 "Last-Translator: Raimon Esteve <resteve@zikzakmedia.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1358,7 +1358,7 @@ msgstr "Esta fecha es la última importación. Si necesita la importación de nu
 #: selection:magento.sale.shop.status.type,order_policy:0
 #: selection:sale.shop,magento_default_order_policy:0
 msgid "Invoice from the Packing"
-msgstr "Factura del embalaje"
+msgstr "Factura des del albarán"
 
 #. module: magento_connect
 #: field:magento.app,password:0

@@ -633,6 +633,7 @@ class sale_order(osv.osv):
         """Sale Order"""
         vals['shop_id'] = sale_shop.id
         vals['name'] = values['increment_id']
+        vals['date_order'] = values['created_at'][:10]
         vals['partner_id'] = partner_id
         vals['partner_invoice_id'] = partner_address_invoice_id
         vals['partner_shipping_id'] = partner_address_shipping_id

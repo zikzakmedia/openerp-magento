@@ -79,9 +79,13 @@ class res_partner(osv.osv):
 
             if vat_ok:
                 values['vat'] = vat.upper()
-                """If already exist a partner with the same VAT, skip it"""
+                """If already exist a partner with the same VAT:
+                Create External Referential
+                Return partner_id
+                """
                 partner_id = self.search(cr, uid, [('vat', '=', values['vat'] )], context = context)
                 if len(partner_id) > 0:
+                    external_referential_obj.create_external_referential(cr, uid, magento_app, 'res.partner', partner_id[0], values['customer_id'])
                     return partner_id[0]
 
         context['magento_app'] = magento_app
