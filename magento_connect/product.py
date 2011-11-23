@@ -198,6 +198,11 @@ class product_product(osv.osv):
         'magento_metatitle': fields.char('Title', size=256, translate=True),
     }
 
+    _defaults = {
+        'magento_status':lambda * a:True,
+        'magento_visibility': '4',
+    }
+
     def unlink(self, cr, uid, ids, context=None):
         for val in self.browse(cr, uid, ids):
             if val.magento_exportable:

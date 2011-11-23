@@ -132,7 +132,7 @@ class sale_shop(osv.osv):
 
                 values = dict(product_product_vals[0], **product_template_vals[0])
 
-                mgn_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.product', product.id)
+                mapping_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.product', product.id)
 
                 # get dicc values
                 product_sku = values['sku']
@@ -145,7 +145,10 @@ class sale_shop(osv.osv):
                 del values['type']
                 del values['set']
 
-                if mgn_id: #uptate
+                if mapping_id: #uptate
+                    mappings = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [mapping_id])
+                    product_mgn_id = mappings[0]['mgn_id']
+
                     store_view = None
                     if 'store_view' in context:
                         store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', context['store_view'].id)
@@ -153,17 +156,17 @@ class sale_shop(osv.osv):
                         store_view = store_view[0]['mgn_id']
 
                     #~ print product_sku, values
-                    product_api.update(product_sku, values, store_view)
-                    logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product SKU %s. OpenERP ID %s, Magento ID %s" % (product_sku, product.id, mgn_id))
+                    product_api.update(product_mgn_id, values, store_view)
+                    logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product SKU %s. OpenERP ID %s, Magento ID %s" % (product_sku, product.id, product_mgn_id))
                 else: #create
                     #~ print product_type, product_attribute_set, product_sku, values
-                    mgn_id = product_api.create(product_type, product_attribute_set, product_sku, values)
+                    product_mgn_id = product_api.create(product_type, product_attribute_set, product_sku, values)
                     logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Create Product: %s. OpenERP ID %s, Magento ID %s" % (product_sku, product.id, product_mgn_id))
                     self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.product', product.id, product_mgn_id)
 
         logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Products Export")
 
-        return mgn_id
+        return product_mgn_id
 
     def magento_export_prices(self, cr, uid, ids, context=None):
         """

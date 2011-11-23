@@ -87,7 +87,7 @@
                                     <separator string="Short Description" colspan="4"/>
                                     <field name="magento_shortdescription" nolabel="1" colspan="4"/>
                                     <field name="magento_status"/>
-                                    <field name="magento_visibility"/>
+                                    <field name="magento_visibility" attrs="{'required':[('magento_exportable','==',True)]}"/>
                                 </page>
                                 <page string="SEO">
                                     <field name="magento_url_key" colspan="4" attrs="{'required':[('magento_exportable','==',True)]}"/>
