@@ -30,6 +30,8 @@ import netsvc
 import unicodedata
 import re
 
+LOGGER = netsvc.Logger()
+
 def slugify(value):
     """
     Normalizes string, converts to lowercase, removes non-alpha characters,
@@ -49,7 +51,7 @@ class magento_product_category_attribute_options(osv.osv):
         res = self.search(cr, uid, [['attribute_name', '=', field_name], ['value', '=', value]], context=context)
         return res and res[0] or False
         
-    
+
     def get_create_option_id(self, cr, uid, value, attribute_name, context=None):
         id = self.search(cr, uid, [['attribute_name', '=', attribute_name], ['value', '=', value]], context=context)
         if id:
@@ -61,12 +63,9 @@ class magento_product_category_attribute_options(osv.osv):
                                 'label': value.replace('_', ' '),
                                 }, context=context)
 
-    #TODO to finish : this is just the start of the implementation of attributs for category
     _columns = {
-        #'attribute_id':fields.many2one('magerp.product_attributes', 'Attribute'),
         'attribute_name':fields.char(string='Attribute Code',size=64),
         'value':fields.char('Value', size=200),
-        #'ipcast':fields.char('Type cast', size=50),
         'label':fields.char('Label', size=100),
     }
 
@@ -117,12 +116,11 @@ class product_category(osv.osv):
         """
 
         from magento import Category
-        logger = netsvc.Logger()
 
         with Category(magento_app.uri, magento_app.username, magento_app.password) as category_api:
             category = category_api.info(category_id)
             #~ print category['name'], category['category_id'], category['parent_id']
-            logger.notifyChannel('Magento Sync Categories', netsvc.LOG_INFO, "Name: %s. ID: %s. Parent ID: %s" % (category['name'], category['category_id'], category['parent_id']))
+            LOGGER.notifyChannel('Magento Sync Categories', netsvc.LOG_INFO, "Name: %s. ID: %s. Parent ID: %s" % (category['name'], category['category_id'], category['parent_id']))
             magento_cat_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.category', category['category_id'])
 
             if not magento_cat_id:
@@ -144,9 +142,9 @@ class product_category(osv.osv):
                 product_category_oerp_id = self.pool.get('product.category').create(cr, uid, values, context)
                 self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.category', product_category_oerp_id, category['category_id'])
                 cr.commit()
-                logger.notifyChannel('Magento Sync Product Category', netsvc.LOG_INFO, "Create Product Category: openerp id %s, magento id %s." % (product_category_oerp_id, category['category_id']))
+                LOGGER.notifyChannel('Magento Sync Product Category', netsvc.LOG_INFO, "Create Product Category: openerp id %s, magento id %s." % (product_category_oerp_id, category['category_id']))
             else:
-                logger.notifyChannel('Magento Sync Product Category', netsvc.LOG_INFO, "Skip! Product Category exists: openerp id %s, magento id %s." % (category['category_id'], magento_cat_id))
+                LOGGER.notifyChannel('Magento Sync Product Category', netsvc.LOG_INFO, "Skip! Product Category exists: openerp id %s, magento id %s." % (category['category_id'], magento_cat_id))
 
 product_category()
 
@@ -209,18 +207,15 @@ class product_product(osv.osv):
                 raise osv.except_osv(_("Alert"), _("Product '%s' not allow to delete because are active in Magento Shop") % (val.name))
         return super(product_product, self).unlink(cr, uid, ids, context)
 
-    def magento_create_product(self, cr, uid, magento_app, product, store_view, context = None):
-        """Create Product from Magento Values
+    def magento_product_values(self, cr, uid, magento_app, product, context = None):
+        """Get Product Values from Magento Values
         Transform dicc by Base External Mapping
         :magento_app object
         :product dicc
-        :store_view ID
-        :return product_product_oerp_id
+        :return values
         """
         if context is None:
             context = {}
-
-        logger = netsvc.Logger()
 
         external_referential_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.attributes.group', product['set'])
         attribute_external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [external_referential_id])
@@ -245,9 +240,23 @@ class product_product(osv.osv):
         if len(category_ids)>0:
             values['categ_ids'] = [(6, 0, category_ids)]
 
+        return values
+    
+    def magento_create_product(self, cr, uid, magento_app, product, store_view, context = None):
+        """Create Product from Magento Values
+        :magento_app object
+        :product dicc
+        :store_view ID
+        :return product_product_oerp_id
+        """
+        if context is None:
+            context = {}
+
+        values = self.magento_product_values(cr, uid, magento_app, product, context)
+
         product_product_oerp_id = self.pool.get('product.product').create(cr, uid, values, context)
         self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.product', product_product_oerp_id, product['product_id'])
-        logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Product Product: magento app %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
+        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Product Product: magento app %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
 
         #~ Update product info
         with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
@@ -256,12 +265,13 @@ class product_product(osv.osv):
         product_obj = self.pool.get('product.product').browse(cr, uid, product_product_oerp_id, context)
 
         context['magento_app'] = magento_app
+        context['product_info'] = product_info
         product_product_vals = self.pool.get('base.external.mapping').get_external_to_oerp(cr, uid, 'magento.product.product', product_product_oerp_id, product_info, context)
         product_template_vals = self.pool.get('base.external.mapping').get_external_to_oerp(cr, uid, 'magento.product.template', product_obj.product_tmpl_id.id, product_info, context)
         vals = dict(product_product_vals, **product_template_vals)
         #~ print vals #dicc value to write
         self.pool.get('product.product').write(cr, uid, [product_product_oerp_id], vals)
-        logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Write Product Product: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
+        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Write Product Product: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
 
         cr.commit()
 

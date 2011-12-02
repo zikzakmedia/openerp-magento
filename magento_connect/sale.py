@@ -34,6 +34,8 @@ import binascii
 from magento import *
 from urllib2 import Request, urlopen, URLError, HTTPError
 
+PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable','bundle']
+
 class sale_shop(osv.osv):
     _inherit = "sale.shop"
 
@@ -573,7 +575,6 @@ class sale_order(osv.osv):
         partner_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_mapping_id])[0]['oerp_id']
         customer_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_mapping_id])[0]['mgn_id']
 
-                    
         """Partner Address Invoice OpenERP.
         If not, create partner address
         """
@@ -682,7 +683,8 @@ class sale_order(osv.osv):
 
         """Sale Order Line"""
         for item in values['items']:
-            sale_order_line = self.pool.get('sale.order.line').magento_create_order_line(cr, uid, magento_app, sale_order, item, context)
+            if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
+                sale_order_line = self.pool.get('sale.order.line').magento_create_order_line(cr, uid, magento_app, sale_order, item, context)
             
         """Confirm Order - Change status sale order"""
         if confirm:

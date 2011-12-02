@@ -34,7 +34,8 @@ except:
 
 from magento import *
 
-mgn2oerp_type_fields = {
+LOGGER = netsvc.Logger()
+MGN2OERP_TYPE_FIELDS = {
     'text':'char',
     'textarea':'text',
     'boolean':'boolean',
@@ -107,8 +108,6 @@ class magento_app(osv.osv):
         :return True
         """
 
-        logger = netsvc.Logger()
-
         for magento_app in self.browse(cr, uid, ids):
             with API(magento_app.uri, magento_app.username, magento_app.password) as magento_api:
 
@@ -124,7 +123,7 @@ class magento_app(osv.osv):
                         }
                         website_oerp_id = self.pool.get('magento.website').create(cr, uid, values, context)
                         self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'magento.website', website_oerp_id, website['default_group_id'])
-                        logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Website: magento %s, magento website id %s." % (magento_app.name, website['default_group_id']))
+                        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Website: magento %s, magento website id %s." % (magento_app.name, website['default_group_id']))
                         """Sale Shop"""
                         values = {
                             'name': website['name'],
@@ -139,9 +138,9 @@ class magento_app(osv.osv):
                         }
                         saleshop_oerp_id = self.pool.get('sale.shop').create(cr, uid, values, context)
                         self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'sale.shop', saleshop_oerp_id, website['default_group_id'])
-                        logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Sale Shop: magento %s, Sale Shop id %s." % (magento_app.name, saleshop_oerp_id))
+                        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Sale Shop: magento %s, Sale Shop id %s." % (magento_app.name, saleshop_oerp_id))
                     else:
-                        logger.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Skip! Website exists: magento %s, magento website id %s. Not create" % (magento_app.name, website['default_group_id']))
+                        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Skip! Website exists: magento %s, magento website id %s. Not create" % (magento_app.name, website['default_group_id']))
 
                 """Store Group"""
                 for storegroup in magento_api.call('ol_groups.list', []):
@@ -159,11 +158,11 @@ class magento_app(osv.osv):
                             }
                             storegroup_oerp_id = self.pool.get('magento.storegroup').create(cr, uid, values, context)
                             self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'magento.storegroup', storegroup_oerp_id, storegroup['group_id'])
-                            logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Store Group: magento %s, magento store group id %s." % (magento_app.name, storegroup['group_id']))
+                            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Store Group: magento %s, magento store group id %s." % (magento_app.name, storegroup['group_id']))
                         else:
-                            logger.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Failed to find magento.website with magento %s and Magento ID %s. Not create Store Group." % (magento_app.name, storegroup['default_group_id']))
+                            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Failed to find magento.website with magento %s and Magento ID %s. Not create Store Group." % (magento_app.name, storegroup['default_group_id']))
                     else:
-                        logger.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Skip! Store Group exists: magento %s, magento store group id %s. Not create" % (magento_app.name, storegroup['group_id']))
+                        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Skip! Store Group exists: magento %s, magento store group id %s. Not create" % (magento_app.name, storegroup['group_id']))
 
                 """Store View"""
                 for storeview in magento_api.call('ol_storeviews.list', []):
@@ -180,11 +179,11 @@ class magento_app(osv.osv):
                             }
                             storeview_oerp_id = self.pool.get('magento.storeview').create(cr, uid, values, context)
                             self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'magento.storeview', storeview_oerp_id, storeview['store_id'])
-                            logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Store View: magento app id %s, magento store view id %s." % (storeview_oerp_id, storeview['store_id']))
+                            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Store View: magento app id %s, magento store view id %s." % (storeview_oerp_id, storeview['store_id']))
                         else:
-                            logger.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Failed to find magento.storegroup with magento %s and Magento ID %s. Not create Store Group." % (magento_app.name, storeview['group_id']))
+                            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Failed to find magento.storegroup with magento %s and Magento ID %s. Not create Store Group." % (magento_app.name, storeview['group_id']))
                     else:
-                        logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Store Group exists: magento %s, magento store group id %s. Not create" % (magento_app.name, storeview['store_id']))
+                        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Store Group exists: magento %s, magento store group id %s. Not create" % (magento_app.name, storeview['store_id']))
         return True
         
     def core_sync_regions(self, cr, uid, ids, context):
@@ -195,8 +194,6 @@ class magento_app(osv.osv):
         :return True
         """
 
-        logger = netsvc.Logger()
-        
         for magento_app in self.browse(cr, uid, ids):
             with Region(magento_app.uri, magento_app.username, magento_app.password) as region_api:
                 countries = magento_app.magento_country_ids
@@ -222,9 +219,9 @@ class magento_app(osv.osv):
                             values['region_id'] = region['region_id']
                             values['name'] = region['name']
                             region_id = self.pool.get('magento.region').create(cr, uid, values)
-                            logger.notifyChannel('Magento Sync Region', netsvc.LOG_INFO, "Create Region: magento id %s, magento.region id %s." % (region['region_id'], region_id))
+                            LOGGER.notifyChannel('Magento Sync Region', netsvc.LOG_INFO, "Create Region: magento id %s, magento.region id %s." % (region['region_id'], region_id))
                         else:
-                            logger.notifyChannel('Magento Sync Region', netsvc.LOG_INFO, "Skip! Region: magento id %s, magento.region ids %s." % (region['region_id'], mag_regions))
+                            LOGGER.notifyChannel('Magento Sync Region', netsvc.LOG_INFO, "Skip! Region: magento id %s, magento.region ids %s." % (region['region_id'], mag_regions))
 
         return True
 
@@ -235,8 +232,6 @@ class magento_app(osv.osv):
         :ids list magento app
         :return True
         """
-
-        logger = netsvc.Logger()
 
         for magento_app in self.browse(cr, uid, ids):
             with ProductAttributeSet(magento_app.uri, magento_app.username, magento_app.password) as product_attribute_set_api:
@@ -251,9 +246,9 @@ class magento_app(osv.osv):
                         }
                         attribute_group_oerp_id = self.pool.get('product.attributes.group').create(cr, uid, values, context)
                         self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.attributes.group', attribute_group_oerp_id, product_attribute_set['set_id'])
-                        logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Attribute Group: magento %s, magento attribute set id %s." % (magento_app.name, product_attribute_set['set_id']))
+                        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Attribute Group: magento %s, magento attribute set id %s." % (magento_app.name, product_attribute_set['set_id']))
                     else:
-                        logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Attribute Group exists: magento %s, magento attribute set id %s. Not create" % (magento_app.name, product_attribute_set['set_id']))
+                        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Attribute Group exists: magento %s, magento attribute set id %s. Not create" % (magento_app.name, product_attribute_set['set_id']))
         return True
 
     def core_sync_attributes(self, cr, uid, ids, context):
@@ -265,8 +260,6 @@ class magento_app(osv.osv):
         :ids list magento app
         :return True
         """
-
-        logger = netsvc.Logger()
 
         for magento_app in self.browse(cr, uid, ids):
             with ProductAttribute(magento_app.uri, magento_app.username, magento_app.password) as  product_attribute_api:
@@ -286,8 +279,8 @@ class magento_app(osv.osv):
                                 if not attribute: #create
                                     type = False
                                     if not product_attribute['type'] == '': #title attributes magento are empty
-                                        if product_attribute['type'] in mgn2oerp_type_fields:
-                                            type = mgn2oerp_type_fields[product_attribute['type']]
+                                        if product_attribute['type'] in MGN2OERP_TYPE_FIELDS:
+                                            type = MGN2OERP_TYPE_FIELDS[product_attribute['type']]
                                     if type:
                                         values = {
                                             'name': 'x_'+str(product_attribute['code']),
@@ -311,7 +304,7 @@ class magento_app(osv.osv):
 
                                             if len(values['selection']) > 128:
                                                 values = False
-                                                logger.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Skip! Attribute type selection long: magento %s, magento attribute id %s, attribute type %s. Not create" % (magento_app.name, product_attribute['code'], product_attribute['type']))
+                                                LOGGER.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Skip! Attribute type selection long: magento %s, magento attribute id %s, attribute type %s. Not create" % (magento_app.name, product_attribute['code'], product_attribute['type']))
 
                                         if values:
                                             #if this attribute not exists:
@@ -320,16 +313,16 @@ class magento_app(osv.osv):
                                                 product_attribute_oerp_id = self.pool.get('product.attributes').create(cr, uid, values, context)
                                                 self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'magento.website', product_attribute_oerp_id, product_attribute['attribute_id'])
                                                 cr.commit()
-                                                logger.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Create Attribute Product: magento %s, magento attribute code %s." % (magento_app.name, product_attribute['code']))
+                                                LOGGER.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Create Attribute Product: magento %s, magento attribute code %s." % (magento_app.name, product_attribute['code']))
                                             else:
                                                 product_attribute_oerp_id = product_attributes[0]
-                                                logger.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Skip! Create Attribute Product: magento %s, magento attribute code %s. This attribute exist another mapping or manual" % (magento_app.name, product_attribute['code']))
+                                                LOGGER.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Skip! Create Attribute Product: magento %s, magento attribute code %s. This attribute exist another mapping or manual" % (magento_app.name, product_attribute['code']))
                                             #add list relation group <-> attribute
                                             prod_attribute_oerp_ids.append(product_attribute_oerp_id)
                                     else:
-                                        logger.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Skip! Attribute type not suport: magento %s, magento attribute id %s, attribute type %s. Not create" % (magento_app.name, product_attribute['code'], product_attribute['type']))
+                                        LOGGER.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Skip! Attribute type not suport: magento %s, magento attribute id %s, attribute type %s. Not create" % (magento_app.name, product_attribute['code'], product_attribute['type']))
                                 else:
-                                    logger.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Skip! Attribute exists: magento %s, magento attribute id %s. Not create" % (magento_app.name, product_attribute['code']))
+                                    LOGGER.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Skip! Attribute exists: magento %s, magento attribute id %s. Not create" % (magento_app.name, product_attribute['code']))
 
                     #save attributes relation at product_attribute_group
                     if len(prod_attribute_oerp_ids)>0:
@@ -345,14 +338,12 @@ class magento_app(osv.osv):
         :return True
         """
 
-        logger = netsvc.Logger()
-
         for magento_app in self.browse(cr, uid, ids):
             with Category(magento_app.uri, magento_app.username, magento_app.password) as category_api:
                 categ_tree = category_api.tree()
                 self.pool.get('product.category').magento_record_entire_tree(cr, uid, magento_app, categ_tree)
 
-        logger.notifyChannel('Magento Sync Categories', netsvc.LOG_INFO, "End Sync Categories magento app %s." % (magento_app.name))
+        LOGGER.notifyChannel('Magento Sync Categories', netsvc.LOG_INFO, "End Sync Categories magento app %s." % (magento_app.name))
         return True
 
     def core_export_categories(self, cr, uid, ids, context):
@@ -361,8 +352,6 @@ class magento_app(osv.osv):
         :ids list
         :return: True
         """
-
-        logger = netsvc.Logger()
 
         for magento_app in self.browse(cr, uid, ids):
             product_categories = self.pool.get('product.category').search(cr, uid, [('parent_id', 'child_of', magento_app.product_category_id.id)], context=context)
@@ -384,7 +373,7 @@ class magento_app(osv.osv):
                         if product_cat_mgn_id:
                             #TODO Parent ID not updated. Only vals
                             category_api.update(product_cat_mgn_id, product_category_vals)
-                            logger.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "Update Category Magento ID %s, OpenERP ID %s." % (product_cat_mgn_id, product_category))
+                            LOGGER.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "Update Category Magento ID %s, OpenERP ID %s." % (product_cat_mgn_id, product_category))
                         else:
                             product_cat_parent = product_category_vals['parent_id']
                             product_cat_parent = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.category', product_cat_parent)
@@ -395,11 +384,11 @@ class magento_app(osv.osv):
                             del product_category_vals['parent_id']
                             product_cat_mgn_id = category_api.create(parent_id, product_category_vals)
                             self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.category', product_category, product_cat_mgn_id)
-                            logger.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "Create Category Magento ID %s, OpenERP ID %s." % (product_cat_mgn_id, product_category))
+                            LOGGER.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "Create Category Magento ID %s, OpenERP ID %s." % (product_cat_mgn_id, product_category))
                     except:
-                        logger.notifyChannel('Magento Export Categories', netsvc.LOG_ERROR, "Error to export Category OpenERP ID %s." % (product_category))
+                        LOGGER.notifyChannel('Magento Export Categories', netsvc.LOG_ERROR, "Error to export Category OpenERP ID %s." % (product_category))
 
-            logger.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "End export product categories to magento %s." % (magento_app.name))
+            LOGGER.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "End export product categories to magento %s." % (magento_app.name))
 
             self.write(cr, uid, ids, {'last_export_product_category': time.strftime('%Y-%m-%d %H:%M:%S')})
 
@@ -413,8 +402,6 @@ class magento_app(osv.osv):
         :return True
         """
 
-        logger = netsvc.Logger()
-
         for magento_app in self.browse(cr, uid, ids):
             with ProductTypes(magento_app.uri, magento_app.username, magento_app.password) as product_type_api:
                 for product_type in product_type_api.list():
@@ -426,9 +413,9 @@ class magento_app(osv.osv):
                             'product_type': product_type['type'],
                         }
                         product_type_oerp_id = self.pool.get('magento.product.product.type').create(cr, uid, values, context)
-                        logger.notifyChannel('Magento Sync Product Type', netsvc.LOG_INFO, "Create Product Type: magento app %s, product type %s." % (magento_app.name, product_type['type']))
+                        LOGGER.notifyChannel('Magento Sync Product Type', netsvc.LOG_INFO, "Create Product Type: magento app %s, product type %s." % (magento_app.name, product_type['type']))
                     else:
-                        logger.notifyChannel('Magento Sync Product Type', netsvc.LOG_INFO, "Skip! Product Type exists: %s. Not create" % (product_type['type']))
+                        LOGGER.notifyChannel('Magento Sync Product Type', netsvc.LOG_INFO, "Skip! Product Type exists: %s. Not create" % (product_type['type']))
 
         return True
 
@@ -440,7 +427,7 @@ class magento_app(osv.osv):
         :return True
         """
 
-        logger = netsvc.Logger()
+        product_obj = self.pool.get('product.product')
 
         for magento_app in self.browse(cr, uid, ids):
 
@@ -463,9 +450,13 @@ class magento_app(osv.osv):
                     product_product = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.product', product['product_id'])
 
                     if not product_product: #create
-                        self.pool.get('product.product').magento_create_product(cr, uid, magento_app, product, store_view, context)
+                        if hasattr(product_obj, 'magento_create_product_' + product['type']):
+                            magento_create_product_type = getattr(product_obj, 'magento_create_product_' + product['type'])
+                            magento_create_product_type(cr, uid, magento_app, product, store_view, context)
+                        else:
+                            product_obj.magento_create_product(cr, uid, magento_app, product, store_view, context)
                     else:
-                        logger.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Product exists: magento %s, magento product id %s. Not create" % (magento_app.name, product['product_id']))
+                        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Product exists: magento %s, magento product id %s. Not create" % (magento_app.name, product['product_id']))
 
         return True
 
@@ -476,8 +467,6 @@ class magento_app(osv.osv):
         :ids list
         :return True
         """
-
-        logger = netsvc.Logger()
 
         magento_external_referential_obj = self.pool.get('magento.external.referential')
         product_image_magento_app_obj = self.pool.get('product.images.magento.app')
@@ -496,7 +485,7 @@ class magento_app(osv.osv):
                             if len(image_ids) > 0:
                                 product_image_magento_ids = product_image_magento_app_obj.search(cr, uid, [('magento_app_id', '=', magento_app.id), ('product_images_id', 'in', image_ids)], context=context)
                                 if len(product_image_magento_ids) > 0: #exist
-                                    logger.notifyChannel('Magento Sync Images', netsvc.LOG_INFO, "Image skipped! Image for this product in this Magento App already exists. Not created.")
+                                    LOGGER.notifyChannel('Magento Sync Images', netsvc.LOG_INFO, "Image skipped! Image for this product in this Magento App already exists. Not created.")
                                     continue
 
                             name = product_image['label']
@@ -520,7 +509,7 @@ class magento_app(osv.osv):
                             if len(prod_image_mgn_app_ids)>0:
                                 product_image_magento_app_obj.write(cr, uid, prod_image_mgn_app_ids, {'magento_exported':True})
 
-                            logger.notifyChannel('Magento Sync Images', netsvc.LOG_INFO, " Magento %s, Image %s created, Product ID %s" % (magento_app.name, name, product_id['oerp_id']))
+                            LOGGER.notifyChannel('Magento Sync Images', netsvc.LOG_INFO, " Magento %s, Image %s created, Product ID %s" % (magento_app.name, name, product_id['oerp_id']))
         return True
 
 
@@ -532,14 +521,12 @@ class magento_app(osv.osv):
         :return True
         """
 
-        logger = netsvc.Logger()
-
         for magento_app in self.browse(cr, uid, ids):
             with CustomerGroup(magento_app.uri, magento_app.username, magento_app.password) as customer_group_api:
                 for customer_group in customer_group_api.list():
                     group_ids = self.pool.get('magento.customer.group').search(cr, uid, [('customer_group_id', '=', customer_group['customer_group_id']), ('magento_app_id', 'in', [magento_app.id])])
                     if len(group_ids)>0:
-                        logger.notifyChannel('Magento Sync Customer Group', netsvc.LOG_INFO, "Skip! Magento %s: Group %s already exists. Not created." % (magento_app.name, customer_group['customer_group_code']))
+                        LOGGER.notifyChannel('Magento Sync Customer Group', netsvc.LOG_INFO, "Skip! Magento %s: Group %s already exists. Not created." % (magento_app.name, customer_group['customer_group_code']))
                         continue
 
                     values = {
@@ -550,7 +537,7 @@ class magento_app(osv.osv):
                     magento_customer_group_id = self.pool.get('magento.customer.group').create(cr, uid, values)
                     self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'magento.customer.group', magento_customer_group_id, customer_group['customer_group_id'])
 
-                    logger.notifyChannel('Magento Sync Customer Group', netsvc.LOG_INFO, "Magento %s: Group %s created." % (magento_app.name, customer_group['customer_group_code']))
+                    LOGGER.notifyChannel('Magento Sync Customer Group', netsvc.LOG_INFO, "Magento %s: Group %s created." % (magento_app.name, customer_group['customer_group_code']))
 
         return True
 
@@ -562,7 +549,6 @@ class magento_app(osv.osv):
         :return True
         """
 
-        logger = netsvc.Logger()
         external_referential_obj = self.pool.get('magento.external.referential')
         partner_obj = self.pool.get('res.partner')
         partner_address_obj = self.pool.get('res.partner.address')
@@ -590,7 +576,7 @@ class magento_app(osv.osv):
                             for customer_address in customer_addresses:
                                 partner_address_ids = partner_address_obj.magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address, context)
                     else:
-                        logger.notifyChannel('Magento Sync Customer', netsvc.LOG_INFO, "Skip! Partner already exists: magento %s, magento partner id %s. Partner not created" % (magento_app.name, customer['customer_id']))
+                        LOGGER.notifyChannel('Magento Sync Customer', netsvc.LOG_INFO, "Skip! Partner already exists: magento %s, magento partner id %s. Partner not created" % (magento_app.name, customer['customer_id']))
 
         return True
 
@@ -604,7 +590,6 @@ class magento_app(osv.osv):
         if context is None:
             context = {}
 
-        logger = netsvc.Logger()
         partner_obj = self.pool.get('res.partner')
         partner_address_obj = self.pool.get('res.partner.address')
         extern_ref_obj = self.pool.get('magento.external.referential')
@@ -666,9 +651,9 @@ class magento_app(osv.osv):
                         magento_customer_id = customer_api.create(customer_value)
                         create_address = True
                         customer_id = extern_ref_obj.create_external_referential(cr, uid, magento_app, 'res.partner', partner_id, magento_customer_id)
-                        logger.notifyChannel('Magento Export Customer', netsvc.LOG_INFO, "Create Magento %s: Partner ID %s." % (magento_app.name, partner_id))
+                        LOGGER.notifyChannel('Magento Export Customer', netsvc.LOG_INFO, "Create Magento %s: Partner ID %s." % (magento_app.name, partner_id))
                     except:
-                        logger.notifyChannel('Magento Export Customer', netsvc.LOG_ERROR, "Magento %s: Partner ID %s error." % (magento_app.name, partner_id))
+                        LOGGER.notifyChannel('Magento Export Customer', netsvc.LOG_ERROR, "Magento %s: Partner ID %s error." % (magento_app.name, partner_id))
 
                     """Create Customer Address"""
                     if create_address:
@@ -709,9 +694,9 @@ class magento_app(osv.osv):
                                     try:
                                         magento_customer_address_id = customer_address_api.create(magento_customer_id, data)
                                         customer_address_id = extern_ref_obj.create_external_referential(cr, uid, magento_app, 'res.partner.address', address.id, magento_customer_address_id)
-                                        logger.notifyChannel('Magento Export Customer', netsvc.LOG_INFO, "Create Address magento %s: openerp ID %s." % (magento_customer_address_id, address.id))
+                                        LOGGER.notifyChannel('Magento Export Customer', netsvc.LOG_INFO, "Create Address magento %s: openerp ID %s." % (magento_customer_address_id, address.id))
                                     except:
-                                        logger.notifyChannel('Magento Export Customer', netsvc.LOG_ERROR, "Magento %s: Partner Address ID %s error." % (magento_app.name, address.id))
+                                        LOGGER.notifyChannel('Magento Export Customer', netsvc.LOG_ERROR, "Magento %s: Partner Address ID %s error." % (magento_app.name, address.id))
 
         return True
 
@@ -772,12 +757,10 @@ class magento_storeview(osv.osv):
         :return True
         """
 
-        logger = netsvc.Logger()
-
         product_shop_ids = []
         for storeview in self.browse(cr, uid, ids):
             if not storeview.language_id:
-                logger.notifyChannel('Magento Store View', netsvc.LOG_INFO, "Select language available this store view")
+                LOGGER.notifyChannel('Magento Store View', netsvc.LOG_INFO, "Select language available this store view")
                 raise osv.except_osv(_("Alert"), _("Select language available this store view"))
 
             last_exported_time = storeview.magento_last_import_locale_products
@@ -804,7 +787,7 @@ class magento_storeview(osv.osv):
                     vals = dict(product_product_vals, **product_template_vals)
                     #~ print vals #dicc value to write
                     self.pool.get('product.product').write(cr, uid, [product.id], vals, context)
-                    logger.notifyChannel('Magento Store View', netsvc.LOG_INFO, "Write Product Product Locale: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product.id, product_info['product_id']))
+                    LOGGER.notifyChannel('Magento Store View', netsvc.LOG_INFO, "Write Product Product Locale: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product.id, product_info['product_id']))
 
                     cr.commit()
 
@@ -819,12 +802,10 @@ class magento_storeview(osv.osv):
         :return True
         """
 
-        logger = netsvc.Logger()
-
         product_shop_ids = []
         for storeview in self.browse(cr, uid, ids):
             if not storeview.language_id:
-                logger.notifyChannel('Magento Store View', netsvc.LOG_INFO, "Select language available this store view")
+                LOGGER.notifyChannel('Magento Store View', netsvc.LOG_INFO, "Select language available this store view")
                 raise osv.except_osv(_("Alert"), _("Select language available this store view"))
 
             last_exported_time = storeview.magento_last_export_locale_products
@@ -843,7 +824,7 @@ class magento_storeview(osv.osv):
             context['store_view'] = storeview
 
             self.pool.get('sale.shop').magento_export_products_stepbystep(cr, uid, magento_app, product_shop_ids, context)
-            logger.notifyChannel('Magento Store View', netsvc.LOG_INFO, "Products to export: %s" % (product_shop_ids))
+            LOGGER.notifyChannel('Magento Store View', netsvc.LOG_INFO, "Products to export: %s" % (product_shop_ids))
 
             self.write(cr, uid, ids, {'magento_last_export_locale_products': time.strftime('%Y-%m-%d %H:%M:%S')})
 

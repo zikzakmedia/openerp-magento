@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.2\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
 "POT-Creation-Date: 2011-11-18 14:46+0000\n"
-"PO-Revision-Date: 2011-11-23 13:32+0100\n"
+"PO-Revision-Date: 2011-11-26 11:38+0100\n"
 "Last-Translator: Raimon Esteve <resteve@zikzakmedia.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -441,7 +441,7 @@ msgstr "Esta fecha es la última exportación. Si necesita la exportar todas las
 #. module: magento_connect
 #: view:magento.app:0
 msgid "Import Magento Product Images"
-msgstr "Productos de importación Magento"
+msgstr "Importar imágenes de producto Magento"
 
 #. module: magento_connect
 #: view:sale.shop:0
