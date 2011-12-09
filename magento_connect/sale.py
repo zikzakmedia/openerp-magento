@@ -34,6 +34,7 @@ import binascii
 from magento import *
 from urllib2 import Request, urlopen, URLError, HTTPError
 
+LOGGER = netsvc.Logger()
 PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable','bundle']
 
 class sale_shop(osv.osv):
@@ -87,8 +88,6 @@ class sale_shop(osv.osv):
         :return True
         """
 
-        logger = netsvc.Logger()
-
         product_shop_ids = []
         for shop in self.browse(cr, uid, ids):
             magento_app = shop.magento_website.magento_app_id
@@ -107,7 +106,7 @@ class sale_shop(osv.osv):
             if shop.magento_default_language:
                 context['lang'] = shop.magento_default_language.code
 
-            logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Products to sync: %s" % (product_shop_ids))
+            LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Products to sync: %s" % (product_shop_ids))
 
             context['shop'] = shop
             self.magento_export_products_stepbystep(cr, uid, magento_app, product_shop_ids, context)
@@ -121,8 +120,8 @@ class sale_shop(osv.osv):
         Get values and call magento is step by step (product by product)
         :return mgn_id
         """
-
-        logger = netsvc.Logger()
+        if len(ids) == 0:
+            return True
 
         context['magento_app'] = magento_app
 
@@ -133,7 +132,7 @@ class sale_shop(osv.osv):
                 product_template_vals = self.pool.get('base.external.mapping').get_oerp_to_external(cr, uid, 'magento.product.template',[product.product_tmpl_id.id], context)
 
                 values = dict(product_product_vals[0], **product_template_vals[0])
-
+                print values
                 mapping_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.product', product.id)
 
                 # get dicc values
@@ -159,14 +158,14 @@ class sale_shop(osv.osv):
 
                     #~ print product_sku, values
                     product_api.update(product_mgn_id, values, store_view)
-                    logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product SKU %s. OpenERP ID %s, Magento ID %s" % (product_sku, product.id, product_mgn_id))
+                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product SKU %s. OpenERP ID %s, Magento ID %s" % (product_sku, product.id, product_mgn_id))
                 else: #create
                     #~ print product_type, product_attribute_set, product_sku, values
                     product_mgn_id = product_api.create(product_type, product_attribute_set, product_sku, values)
-                    logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Create Product: %s. OpenERP ID %s, Magento ID %s" % (product_sku, product.id, product_mgn_id))
+                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Create Product: %s. OpenERP ID %s, Magento ID %s" % (product_sku, product.id, product_mgn_id))
                     self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.product', product.id, product_mgn_id)
 
-        logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Products Export")
+        LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Products Export")
 
         return product_mgn_id
 
@@ -176,8 +175,6 @@ class sale_shop(osv.osv):
         Get price products when last export time and send one to one to Magento
         :return True
         """
-
-        logger = netsvc.Logger()
 
         decimal = self.pool.get('decimal.precision').precision_get(cr, uid, 'Sale Price')
 
@@ -225,9 +222,9 @@ class sale_shop(osv.osv):
                     #~ product_mgn_id = product_api.update(mgn_id, data, store_view)
                     product_mgn_id = product_api.update(mgn_id, data)
 
-                    logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Prices: %s. OpenERP ID %s, Magento ID %s" % (price, product.id, mgn_id))
+                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Prices: %s. OpenERP ID %s, Magento ID %s" % (price, product.id, mgn_id))
 
-        logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Prices Export")
+        LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Prices Export")
 
         return True
 
@@ -237,8 +234,6 @@ class sale_shop(osv.osv):
         Get stock all products and send one to one to Magento
         :return True
         """
-
-        logger = netsvc.Logger()
 
         product_shop_ids = []
         for shop in self.browse(cr, uid, ids):
@@ -281,11 +276,11 @@ class sale_shop(osv.osv):
                     data = {'qty':stock, 'is_in_stock':is_in_stock}
                     inventory_api.update(mgn_id, data)
 
-                    logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Stock: %s. OpenERP ID %s, Magento ID %s" % (stock, product.id, mgn_id))
+                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Stock: %s. OpenERP ID %s, Magento ID %s" % (stock, product.id, mgn_id))
 
             self.write(cr, uid, [context['shop'].id], {'magento_last_export_stock': time.strftime('%Y-%m-%d %H:%M:%S')})
 
-        logger.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Stock Export")
+        LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Stock Export")
 
         return True
 
@@ -295,8 +290,6 @@ class sale_shop(osv.osv):
         Get ids all product images and send one to one to Magento
         :return True
         """
-
-        logger = netsvc.Logger()
 
         magento_external_referential_obj = self.pool.get('magento.external.referential')
         product_product_obj = self.pool.get('product.product')
@@ -329,7 +322,7 @@ class sale_shop(osv.osv):
                         product = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [product])
                         product = product[0]['mgn_id']
                     else:
-                        logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Skip! Product not exists. Not create Image ID %s" % (product_image.id))
+                        LOGGER.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Skip! Product not exists. Not create Image ID %s" % (product_image.id))
                         continue
 
                     image_name = product_image.name
@@ -353,9 +346,9 @@ class sale_shop(osv.osv):
                         mgn_file_name = product_image.magento_filename
                         try:
                             product_image_api.update(product, mgn_file_name, data)
-                            logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Update Image %s, Product Mgn ID %s" % (product_image.name, product))
+                            LOGGER.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Update Image %s, Product Mgn ID %s" % (product_image.name, product))
                         except:
-                            logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Error Update Image %s, Product Mgn ID %s" % (product_image.name, product))
+                            LOGGER.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Error Update Image %s, Product Mgn ID %s" % (product_image.name, product))
 
                     else:
                         """
@@ -376,7 +369,7 @@ class sale_shop(osv.osv):
                                     img = open(filename , 'rb')
                                     image = img.read()
                                 except:
-                                    logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Skip! Not exist %s/%s" % (company.local_media_repository, product_image.filename))
+                                    LOGGER.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Skip! Not exist %s/%s" % (company.local_media_repository, product_image.filename))
 
                             if not image:
                                 url = product_image.filename
@@ -385,7 +378,7 @@ class sale_shop(osv.osv):
                                     img = urllib2.urlopen(url)
                                     image = img.read()
                                 except:
-                                    logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Skip! Not exist %s" % (url))
+                                    LOGGER.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Skip! Not exist %s" % (url))
                                     continue
                         else:
                             image_mime = product_image.image and mimetypes.guess_type(product_image.image)[0] or 'image/jpeg'
@@ -395,7 +388,7 @@ class sale_shop(osv.osv):
                         try:
                             mgn_file_name = product_image_api.create(product, image, image_name, image_mime)
                             product_image_api.update(product, mgn_file_name, data)
-                            logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Create Image %s, Product Mgn ID %s" % (product_image.name, product))
+                            LOGGER.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Create Image %s, Product Mgn ID %s" % (product_image.name, product))
                             #update magento filename
                             self.pool.get('product.images').write(cr,uid,[product_image.id],{'magento_filename':mgn_file_name})
                             # update magento_exported
@@ -403,7 +396,7 @@ class sale_shop(osv.osv):
                             if len(prod_images_mgn_apps)>0:
                                 self.pool.get('product.images.magento.app').write(cr,uid,prod_images_mgn_apps,{'magento_exported':True})
                         except:
-                            logger.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Error Create Image %s, Product Mgn ID %s" % (product_image.name, product))
+                            LOGGER.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Error Create Image %s, Product Mgn ID %s" % (product_image.name, product))
 
         return True
 
@@ -413,8 +406,6 @@ class sale_shop(osv.osv):
         Get ids all sale.order and send one to one to Magento
         :return True
         """
-
-        logger = netsvc.Logger()
 
         for sale_shop in self.browse(cr, uid, ids):
             magento_app = sale_shop.magento_website.magento_app_id
@@ -438,13 +429,13 @@ class sale_shop(osv.osv):
                     mgn_order_mapping = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'sale.order', order_id)
 
                     if mgn_order_mapping:
-                        logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_ERROR, "Skip! magento %s, order %s, mapping id %s. Not create" % (magento_app.name, code, mgn_order_mapping))
+                        LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_ERROR, "Skip! magento %s, order %s, mapping id %s. Not create" % (magento_app.name, code, mgn_order_mapping))
                         continue
                     values = order_api.info(code)
                     sale_order_id = self.pool.get('sale.order').magento_create_order(cr, uid, sale_shop, values, context)
                     cr.commit()
                 if not orders:
-                    logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Not Orders available, magento %s, date > %s" % (magento_app.name, creted_filter))
+                    LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Not Orders available, magento %s, date > %s" % (magento_app.name, creted_filter))
 
         return True
 
@@ -455,8 +446,6 @@ class sale_shop(osv.osv):
         :return True
         """
 
-        logger = netsvc.Logger()
-
         status = False
         comment = False
         notify = False
@@ -466,7 +455,7 @@ class sale_shop(osv.osv):
             magento_app = shop.magento_website.magento_app_id
             last_exported_time = shop.magento_last_export_status_orders
 
-            logger.notifyChannel('Magento Sync Sale Order Status', netsvc.LOG_INFO, "magento %s, sale shop %s" % (magento_app.name, shop.id))
+            LOGGER.notifyChannel('Magento Sync Sale Order Status', netsvc.LOG_INFO, "magento %s, sale shop %s" % (magento_app.name, shop.id))
 
             # write sale shop date last export
             self.pool.get('sale.shop').write(cr, uid, shop.id, {'magento_last_export_status_orders': time.strftime('%Y-%m-%d %H:%M:%S')})
@@ -497,7 +486,7 @@ class sale_shop(osv.osv):
                     with Order(magento_app.uri, magento_app.username, magento_app.password) as order_api:
                         order_api.addcomment(sale_order.name, status, comment, notify)
                     self.pool.get('sale.order').write(cr, uid, [sale_order.id], {'magento_status': status})
-                    logger.notifyChannel('Order Status', netsvc.LOG_INFO, "%s, status: %s" % (sale_order.name, status))
+                    LOGGER.notifyChannel('Order Status', netsvc.LOG_INFO, "%s, status: %s" % (sale_order.name, status))
 
         return True
 
@@ -554,7 +543,6 @@ class sale_order(osv.osv):
         :return sale_order_id (OpenERP ID)
         """
 
-        logger = netsvc.Logger()
         vals = {}
         confirm = False
         cancel = False
@@ -688,12 +676,12 @@ class sale_order(osv.osv):
             
         """Confirm Order - Change status sale order"""
         if confirm:
-            logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s change status: Done" % (sale_order_id))
+            LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s change status: Done" % (sale_order_id))
             netsvc.LocalService("workflow").trg_validate(uid, 'sale.order', sale_order_id, 'order_confirm', cr)
 
         """Cancel Order - Change status sale order"""
         if cancel:
-            logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s change status: Cancel" % (sale_order_id))
+            LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s change status: Cancel" % (sale_order_id))
             netsvc.LocalService("workflow").trg_validate(uid, 'sale.order', sale_order_id, 'cancel', cr)
 
         """Magento APP Customer
@@ -704,7 +692,7 @@ class sale_order(osv.osv):
         """Mapping Sale Order"""
         self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'sale.order', sale_order.id, values['order_id'])
 
-        logger.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s, magento %s, openerp id %s, magento id %s" % (values['increment_id'], magento_app.name, sale_order.id, values['order_id']))
+        LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s, magento %s, openerp id %s, magento id %s" % (values['increment_id'], magento_app.name, sale_order.id, values['order_id']))
 
         cr.commit()
 

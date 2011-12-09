@@ -177,7 +177,7 @@ class product_product(osv.osv):
 
     def onchange_name(self, cr, uid, ids, name, slug):
         value = {}
-        if not slug:
+        if not slug and name:
             slug = slugify(unicode(name,'UTF-8'))
             value = {'magento_url_key': slug}
         return {'value':value}
@@ -207,41 +207,29 @@ class product_product(osv.osv):
                 raise osv.except_osv(_("Alert"), _("Product '%s' not allow to delete because are active in Magento Shop") % (val.name))
         return super(product_product, self).unlink(cr, uid, ids, context)
 
-    def magento_product_values(self, cr, uid, magento_app, product, context = None):
-        """Get Product Values from Magento Values
-        Transform dicc by Base External Mapping
+    def magento_create_product_type(self, cr, uid, magento_app, product, store_view, context):
+        """Magento Create Product Type
+        Get magento_create_product_TYPE def, where type is type of product
+        Example: magento_create_product_configurable
         :magento_app object
         :product dicc
+        :store_view Store View ID
         :return values
         """
-        if context is None:
-            context = {}
+        product_obj = self.pool.get('product.product')
 
-        external_referential_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.attributes.group', product['set'])
-        attribute_external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [external_referential_id])
+        product_product = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.product', product['product_id'])
+        if not product_product: #create
+            if hasattr(product_obj, 'magento_create_product_' + product['type']):
+                magento_create_product_type = getattr(product_obj, 'magento_create_product_' + product['type'])
+                magento_create_product_type(cr, uid, magento_app, product, store_view, context)
+            else:
+                self.magento_create_product(cr, uid, magento_app, product, store_view, context)
+        else:
+            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Product exists: magento %s, magento product id %s. Not create" % (magento_app.name, product['product_id']))
 
-        category_ids = []
-        for cat_id in product['category_ids']:
-            category_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.category', cat_id)
-            external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [category_id])
-            category_ids.append(external_referentials[0]['oerp_id'])
+        return True
 
-        values = {
-            'name': product['name'],
-            'magento_sku': product['sku'],
-            'default_code': product['sku'],
-            'magento_exportable': True,
-            'magento_product_type': product['type'],
-            'categ_id':magento_app.product_category_id.id,
-            'attribute_group_id': attribute_external_referentials[0]['oerp_id'],
-            'type': 'product',
-        }
-
-        if len(category_ids)>0:
-            values['categ_ids'] = [(6, 0, category_ids)]
-
-        return values
-    
     def magento_create_product(self, cr, uid, magento_app, product, store_view, context = None):
         """Create Product from Magento Values
         :magento_app object
@@ -253,6 +241,8 @@ class product_product(osv.osv):
             context = {}
 
         values = self.magento_product_values(cr, uid, magento_app, product, context)
+        if 'product_tmpl_id' in context:
+            values['product_tmpl_id'] = context['product_tmpl_id']
 
         product_product_oerp_id = self.pool.get('product.product').create(cr, uid, values, context)
         self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.product', product_product_oerp_id, product['product_id'])
@@ -276,5 +266,45 @@ class product_product(osv.osv):
         cr.commit()
 
         return product_product_oerp_id
+
+    def magento_product_values(self, cr, uid, magento_app, product, context = None):
+        """Get Product Values from Magento Values
+        Transform dicc by Base External Mapping
+        :magento_app object
+        :product dicc
+        :return values
+        """
+        if context is None:
+            context = {}
+
+        external_referential_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.attributes.group', product['set'])
+        attribute_external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [external_referential_id])
+
+        category_ids = []
+        if 'categories' in product:
+            categories = product['categories']
+        if 'category_ids' in product:
+            categories = product['category_ids']
+        if len(categories) > 0:
+            for cat_id in product['category_ids']:
+                category_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.category', cat_id)
+                external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [category_id])
+                category_ids.append(external_referentials[0]['oerp_id'])
+
+        values = {
+            'name': product['name'],
+            'magento_sku': product['sku'],
+            'default_code': product['sku'],
+            'magento_exportable': True,
+            'magento_product_type': product['type'],
+            'categ_id':magento_app.product_category_id.id,
+            'attribute_group_id': attribute_external_referentials[0]['oerp_id'],
+            'type': 'product',
+        }
+
+        if len(category_ids)>0:
+            values['categ_ids'] = [(6, 0, category_ids)]
+
+        return values
 
 product_product()

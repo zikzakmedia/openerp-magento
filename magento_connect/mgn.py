@@ -430,7 +430,6 @@ class magento_app(osv.osv):
         product_obj = self.pool.get('product.product')
 
         for magento_app in self.browse(cr, uid, ids):
-
             if not magento_app.magento_default_storeview:
                 raise osv.except_osv(_("Alert"), _("Select Store View Magento"))
 
@@ -447,16 +446,7 @@ class magento_app(osv.osv):
                 self.write(cr, uid, ids, {'to_import_products': time.strftime('%Y-%m-%d %H:%M:%S')})
 
                 for product in product_api.list(ofilter, store_view):
-                    product_product = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.product', product['product_id'])
-
-                    if not product_product: #create
-                        if hasattr(product_obj, 'magento_create_product_' + product['type']):
-                            magento_create_product_type = getattr(product_obj, 'magento_create_product_' + product['type'])
-                            magento_create_product_type(cr, uid, magento_app, product, store_view, context)
-                        else:
-                            product_obj.magento_create_product(cr, uid, magento_app, product, store_view, context)
-                    else:
-                        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Product exists: magento %s, magento product id %s. Not create" % (magento_app.name, product['product_id']))
+                    self.pool.get('product.product').magento_create_product_type(cr, uid, magento_app, product, store_view, context)
 
         return True
 
