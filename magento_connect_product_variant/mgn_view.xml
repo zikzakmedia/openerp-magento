@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_magento_app_product_variant_form">
+            <field name="name">magento.app.product.variant.form</field>
+            <field name="model">magento.app</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="magento_connect.view_magento_app_form" />
+            <field name="arch" type="xml">
+                <button name="core_sync_attributes" position="after">
+                    <button name="core_sync_attributes_dimension_type" string="Import Magento Attributes Configurable (Dimension Type)" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
+                </button>
+            </field>
+        </record>
+
+    </data>
+</openerp>

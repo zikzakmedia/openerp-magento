@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+        <!-- Product Template View -->
+        <record model="ir.ui.view" id="view_magento_product_template_form">
+            <field name="name">magento.product.template.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/form/group/field[@name='name']" position="replace">
+                        <field name="name" on_change="onchange_name(name, magento_url_key)"/>
+                    </xpath>
+                    <xpath expr="/form/group/field[@name='purchase_ok']" position="after">
+                        <field name="magento_exportable"/>
+                    </xpath>
+                    <xpath expr="/form/notebook" position="inside">
+                        <page string="Magento" attrs="{'invisible':[('magento_exportable','=',False)]}">
+                            <notebook colspan="4">
+                                <page string="General">
+                                    <field name="magento_sku" attrs="{'required':[('magento_exportable','==',True)]}"/>
+                                    <field name="attribute_group_id" attrs="{'required':[('magento_exportable','==',True)]}" widget="selection"/>
+
+                                    <field name="magento_status"/>
+                                    <field name="magento_visibility" attrs="{'required':[('magento_exportable','==',True)]}"/>
+                                    <separator string="Short Description" colspan="4"/>
+                                    <field name="magento_shortdescription" nolabel="1" colspan="4"/>
+                                </page>
+                                <page string="SEO">
+                                    <field name="magento_url_key" colspan="4" attrs="{'required':[('magento_exportable','==',True)]}"/>
+                                    <separator string="Metadescription" colspan="4"/>
+                                    <field name="magento_metadescription" nolabel="1" colspan="4"/>
+                                    <separator string="Metakeyword" colspan="4"/>
+                                    <field name="magento_metakeyword" nolabel="1" colspan="4"/>
+                                    <field name="magento_metatitle" colspan="4"/>
+                                </page>
+                                <page string="Website">
+                                    <separator string="Website" colspan="4" />
+                                    <field name="magento_configurable_sale_shop" colspan="4" nolabel="1" domain="[('magento_shop','=',True)]"/>
+                                </page>
+                            </notebook>
+                        </page>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</openerp>

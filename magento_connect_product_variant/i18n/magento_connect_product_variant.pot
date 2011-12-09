@@ -1,0 +1,235 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* magento_connect_product_variant
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 6.0.2\n"
+"Report-Msgid-Bugs-To: support@openerp.com\n"
+"POT-Creation-Date: 2011-12-09 12:28+0000\n"
+"PO-Revision-Date: 2011-12-09 12:28+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: magento_connect_product_variant
+#: field:product.template,magento_metatitle:0
+msgid "Title"
+msgstr "Title"
+
+#. module: magento_connect_product_variant
+#: help:product.template,magento_configurable_sale_shop:0
+msgid "Select yours Sale Shops available this product (configurable product)"
+msgstr "Select yours Sale Shops available this product (configurable product)"
+
+#. module: magento_connect_product_variant
+#: constraint:product.template:0
+msgid "Error: The default UOM and the purchase UOM must be in the same category."
+msgstr "Error: The default UOM and the purchase UOM must be in the same category."
+
+#. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/product_variant.py:86
+#, python-format
+msgid "This Magento Product Dimension Option not allow to delete"
+msgstr "This Magento Product Dimension Option not allow to delete"
+
+#. module: magento_connect_product_variant
+#: field:product.template,magento_visibility:0
+msgid "Visibility"
+msgstr "Visibility"
+
+#. module: magento_connect_product_variant
+#: view:product.template:0
+msgid "Metadescription"
+msgstr "Metadescription"
+
+#. module: magento_connect_product_variant
+#: field:product.template,magento_status:0
+msgid "Status"
+msgstr "Status"
+
+#. module: magento_connect_product_variant
+#: model:ir.model,name:magento_connect_product_variant.model_product_product
+msgid "Product"
+msgstr "Product"
+
+#. module: magento_connect_product_variant
+#: constraint:product.product:0
+msgid "Several dimension values for the same dimension type"
+msgstr "Several dimension values for the same dimension type"
+
+#. module: magento_connect_product_variant
+#: field:product.template,magento_metadescription:0
+msgid "Description"
+msgstr "Description"
+
+#. module: magento_connect_product_variant
+#: selection:product.template,magento_visibility:0
+msgid "Select Option"
+msgstr "Select Option"
+
+#. module: magento_connect_product_variant
+#: view:product.template:0
+msgid "Metakeyword"
+msgstr "Metakeyword"
+
+#. module: magento_connect_product_variant
+#: view:sale.shop:0
+msgid "Export Product Templates"
+msgstr "Export Product Templates"
+
+#. module: magento_connect_product_variant
+#: help:sale.shop,magento_last_export_product_templates:0
+msgid "This date is last export (Configurable products). If you need export new templates, you can modify this date (filter)"
+msgstr "This date is last export (Configurable products). If you need export new templates, you can modify this date (filter)"
+
+#. module: magento_connect_product_variant
+#: view:magento.app:0
+#: view:sale.shop:0
+msgid "Are you sure to continue? See logs server process"
+msgstr "Are you sure to continue? See logs server process"
+
+#. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/mgn.py:82
+#: code:addons/magento_connect_product_variant/product_variant.py:43
+#: code:addons/magento_connect_product_variant/product_variant.py:86
+#, python-format
+msgid "Alert"
+msgstr "Alert"
+
+#. module: magento_connect_product_variant
+#: selection:product.template,magento_visibility:0
+msgid "Catalog"
+msgstr "Catalog"
+
+#. module: magento_connect_product_variant
+#: selection:product.template,magento_visibility:0
+msgid "Nowhere"
+msgstr "Nowhere"
+
+#. module: magento_connect_product_variant
+#: model:ir.model,name:magento_connect_product_variant.model_sale_shop
+msgid "Sales Shop"
+msgstr "Sales Shop"
+
+#. module: magento_connect_product_variant
+#: field:product.template,magento_sku:0
+msgid "Magento SKU"
+msgstr "Magento SKU"
+
+#. module: magento_connect_product_variant
+#: view:magento.app:0
+msgid "Import Magento Attributes Configurable (Dimension Type)"
+msgstr "Import Magento Attributes Configurable (Dimension Type)"
+
+#. module: magento_connect_product_variant
+#: field:product.template,magento_url_key:0
+msgid "Url Key"
+msgstr "Url Key"
+
+#. module: magento_connect_product_variant
+#: help:product.template,magento_exportable:0
+msgid "If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere."
+msgstr "If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere."
+
+#. module: magento_connect_product_variant
+#: view:product.template:0
+msgid "Website"
+msgstr "Website"
+
+#. module: magento_connect_product_variant
+#: selection:product.template,magento_visibility:0
+msgid "Search"
+msgstr "Search"
+
+#. module: magento_connect_product_variant
+#: field:product.template,magento_metakeyword:0
+msgid "Keyword"
+msgstr "Keyword"
+
+#. module: magento_connect_product_variant
+#: selection:product.template,magento_visibility:0
+msgid "Catalog,Search"
+msgstr "Catalog,Search"
+
+#. module: magento_connect_product_variant
+#: field:product.template,magento_configurable_sale_shop:0
+msgid "Websites"
+msgstr "Websites"
+
+#. module: magento_connect_product_variant
+#: field:sale.shop,magento_last_export_product_templates:0
+msgid "Last Export Product Templates"
+msgstr "Last Export Product Templates"
+
+#. module: magento_connect_product_variant
+#: model:ir.model,name:magento_connect_product_variant.model_product_template
+msgid "Product Template"
+msgstr "Product Template"
+
+#. module: magento_connect_product_variant
+#: view:product.template:0
+#: field:product.template,magento_shortdescription:0
+msgid "Short Description"
+msgstr "Short Description"
+
+#. module: magento_connect_product_variant
+#: model:ir.model,name:magento_connect_product_variant.model_magento_app
+msgid "Magento Server - APP"
+msgstr "Magento Server - APP"
+
+#. module: magento_connect_product_variant
+#: field:product.variant.dimension.type,code:0
+msgid "Code"
+msgstr "Code"
+
+#. module: magento_connect_product_variant
+#: view:product.template:0
+msgid "SEO"
+msgstr "SEO"
+
+#. module: magento_connect_product_variant
+#: view:product.template:0
+msgid "General"
+msgstr "General"
+
+#. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/mgn.py:82
+#, python-format
+msgid "Select Store View Magento"
+msgstr "Select Store View Magento"
+
+#. module: magento_connect_product_variant
+#: constraint:product.product:0
+msgid "Error: Invalid ean code"
+msgstr "Error: Invalid ean code"
+
+#. module: magento_connect_product_variant
+#: view:product.template:0
+msgid "Magento"
+msgstr "Magento"
+
+#. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/product_variant.py:43
+#, python-format
+msgid "This Magento Product Dimension Type not allow to delete"
+msgstr "This Magento Product Dimension Type not allow to delete"
+
+#. module: magento_connect_product_variant
+#: field:product.template,magento_exportable:0
+msgid "Exported to Magento?"
+msgstr "Exported to Magento?"
+
+#. module: magento_connect_product_variant
+#: model:ir.model,name:magento_connect_product_variant.model_product_variant_dimension_type
+msgid "Dimension Type"
+msgstr "Dimension Type"
+
+#. module: magento_connect_product_variant
+#: model:ir.model,name:magento_connect_product_variant.model_product_variant_dimension_option
+msgid "Dimension Option"
+msgstr "Dimension Option"
+
