@@ -163,4 +163,8 @@ class sale_shop(osv.osv):
 
         return product_mgn_ids
 
+    def run_export_catalog_configurable_scheduler(self, cr, uid, context=None):
+        """Scheduler Catalog Product Configurables Cron"""
+        self._sale_shop(cr, uid, self.magento_export_product_templates, context=context)
+
 sale_shop()

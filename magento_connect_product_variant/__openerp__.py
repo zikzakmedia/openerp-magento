@@ -39,6 +39,7 @@
     "demo_xml" : [],
     "update_xml" : [
         "settings/magento_mapping.xml",
+        "settings/magento_data.xml",
         "mgn_view.xml",
         "product_view.xml",
         "sale_view.xml",

@@ -71,6 +71,12 @@ class product_template(osv.osv):
         'magento_tpl_visibility': '4',
     }
 
+    def unlink(self, cr, uid, ids, context=None):
+        for val in self.browse(cr, uid, ids):
+            if val.magento_tpl_exportable:
+                raise osv.except_osv(_("Alert"), _("Template '%s' not allow to delete because are active in Magento Shop") % (val.name))
+        return super(product_product, self).unlink(cr, uid, ids, context)
+
     def product_product_variants_vals(self, cr, uid, product_temp, variant, context):
         """Return Dicc to Product Product Values
         :product_temp Object
@@ -81,10 +87,11 @@ class product_template(osv.osv):
         if  product_temp.magento_tpl_exportable:
             variant = self.pool.get('product.variant.dimension.value').browse(cr, uid, variant[0])
             code = variant.option_id.code and variant.option_id.code or variant.option_id.name
-            
+            code_slug = slugify(code) and slugify(code) or code
+
             vals['magento_exportable'] = True
-            vals['magento_product_type'] = 'simple'
             vals['magento_sku'] =  "%s-%s" % (product_temp.magento_tpl_sku, code)
+            vals['magento_url_key'] = "%s-%s" % (product_temp.magento_tpl_url_key, code_slug)
             vals['magento_shortdescription'] = product_temp.magento_tpl_shortdescription
             vals['magento_metadescription'] = product_temp.magento_tpl_metadescription
             vals['magento_metakeyword'] = product_temp.magento_tpl_metakeyword
@@ -92,7 +99,8 @@ class product_template(osv.osv):
             vals['attribute_group_id'] = product_temp.magento_tpl_attribute_group_id.id
             vals['magento_sale_shop'] = [(6,0, [x.id for x in product_temp.magento_tpl_sale_shop])]
 
-        vals['magento_url_key'] = product_temp.magento_tpl_url_key
+        #some data are also written
+        vals['magento_product_type'] = 'simple'
         vals['magento_status'] = True
         vals['magento_visibility'] = '1' #Nowhere
 

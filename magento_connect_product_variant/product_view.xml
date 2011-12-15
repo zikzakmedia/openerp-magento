@@ -14,7 +14,7 @@
                         <field name="name" on_change="onchange_name(name, magento_url_key)"/>
                     </xpath>
                     <xpath expr="/form/group/field[@name='purchase_ok']" position="after">
-                        <field name="magento_tpl_exportable"/>
+                        <field name="magento_tpl_exportable" attrs="{'invisible':[('magento_tpl_exportable','==',True)]}"/>
                     </xpath>
                     <xpath expr="/form/notebook" position="inside">
                         <page string="Magento" attrs="{'invisible':[('magento_tpl_exportable','=',False)]}">
