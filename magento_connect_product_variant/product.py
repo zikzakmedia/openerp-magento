@@ -49,27 +49,54 @@ class product_template(osv.osv):
         value = {}
         if not slug:
             slug = slugify(unicode(name,'UTF-8'))
-            value = {'magento_url_key': slug}
+            value = {'magento_tpl_url_key': slug}
         return {'value':value}
 
     _columns = {
-        'magento_sku':fields.char('Magento SKU', size=64),
-        'magento_exportable':fields.boolean('Exported to Magento?', change_default=True, help='If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere.'),
-        'magento_configurable_sale_shop': fields.many2many('sale.shop', 'magento_configurable_sale_shop_rel', 'product_template_id', 'sale_shop_id', 'Websites', help='Select yours Sale Shops available this product (configurable product)'),
-        'magento_status':fields.boolean('Status'),
-        'magento_visibility': fields.selection([('0','Select Option'),('1','Nowhere'),('2','Catalog'),('3','Search'),('4','Catalog,Search')], 'Visibility'),
-        'magento_url_key': fields.char('Url Key', size=256, translate=True),
-        'magento_shortdescription': fields.text('Short Description', translate=True),
-        'magento_metadescription': fields.text('Description', translate=True),
-        'magento_metakeyword': fields.text('Keyword', translate=True),
-        'magento_metatitle': fields.char('Title', size=256, translate=True),
-        'attribute_group_id': fields.many2one('product.attributes.group', 'Attribute'),
+        'magento_tpl_sku':fields.char('Magento SKU', size=64),
+        'magento_tpl_exportable':fields.boolean('Exported to Magento?', change_default=True, help='If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere.'),
+        'magento_tpl_sale_shop': fields.many2many('sale.shop', 'magento_configurable_sale_shop_rel', 'product_template_id', 'sale_shop_id', 'Websites', help='Select yours Sale Shops available this product (configurable product)'),
+        'magento_tpl_status':fields.boolean('Status'),
+        'magento_tpl_visibility': fields.selection([('0','Select Option'),('1','Nowhere'),('2','Catalog'),('3','Search'),('4','Catalog,Search')], 'Visibility'),
+        'magento_tpl_url_key': fields.char('Url Key', size=256, translate=True),
+        'magento_tpl_shortdescription': fields.text('Short Description', translate=True),
+        'magento_tpl_metadescription': fields.text('Description', translate=True),
+        'magento_tpl_metakeyword': fields.text('Keyword', translate=True),
+        'magento_tpl_metatitle': fields.char('Title', size=256, translate=True),
+        'magento_tpl_attribute_group_id': fields.many2one('product.attributes.group', 'Attribute'),
     }
 
     _defaults = {
-        'magento_status':lambda * a:True,
-        'magento_visibility': '4',
+        'magento_tpl_status':lambda * a:True,
+        'magento_tpl_visibility': '4',
     }
+
+    def product_product_variants_vals(self, cr, uid, product_temp, variant, context):
+        """Return Dicc to Product Product Values
+        :product_temp Object
+        :return vals"""
+        
+        vals = super(product_template, self).product_product_variants_vals(cr, uid, product_temp, variant, context)
+
+        if  product_temp.magento_tpl_exportable:
+            variant = self.pool.get('product.variant.dimension.value').browse(cr, uid, variant[0])
+            code = variant.option_id.code and variant.option_id.code or variant.option_id.name
+            
+            vals['magento_exportable'] = True
+            vals['magento_product_type'] = 'simple'
+            vals['magento_sku'] =  "%s-%s" % (product_temp.magento_tpl_sku, code)
+            vals['magento_shortdescription'] = product_temp.magento_tpl_shortdescription
+            vals['magento_metadescription'] = product_temp.magento_tpl_metadescription
+            vals['magento_metakeyword'] = product_temp.magento_tpl_metakeyword
+            vals['magento_metatitle'] = product_temp.magento_tpl_metatitle
+            vals['attribute_group_id'] = product_temp.magento_tpl_attribute_group_id.id
+            vals['magento_sale_shop'] = [(6,0, [x.id for x in product_temp.magento_tpl_sale_shop])]
+
+        vals['magento_url_key'] = product_temp.magento_tpl_url_key
+        vals['magento_status'] = True
+        vals['magento_visibility'] = '1' #Nowhere
+
+        return vals
 
 product_template()
 

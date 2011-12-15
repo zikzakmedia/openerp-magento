@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.2\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-12-09 12:28+0000\n"
-"PO-Revision-Date: 2011-12-09 12:28+0000\n"
+"POT-Creation-Date: 2011-12-15 10:43+0000\n"
+"PO-Revision-Date: 2011-12-15 10:43+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: magento_connect_product_variant
-#: field:product.template,magento_metatitle:0
+#: field:product.template,magento_tpl_metatitle:0
 msgid "Title"
 msgstr "Title"
 
 #. module: magento_connect_product_variant
-#: help:product.template,magento_configurable_sale_shop:0
+#: help:product.template,magento_tpl_sale_shop:0
 msgid "Select yours Sale Shops available this product (configurable product)"
 msgstr "Select yours Sale Shops available this product (configurable product)"
 
@@ -37,7 +37,7 @@ msgid "This Magento Product Dimension Option not allow to delete"
 msgstr "This Magento Product Dimension Option not allow to delete"
 
 #. module: magento_connect_product_variant
-#: field:product.template,magento_visibility:0
+#: field:product.template,magento_tpl_visibility:0
 msgid "Visibility"
 msgstr "Visibility"
 
@@ -47,7 +47,7 @@ msgid "Metadescription"
 msgstr "Metadescription"
 
 #. module: magento_connect_product_variant
-#: field:product.template,magento_status:0
+#: field:product.template,magento_tpl_status:0
 msgid "Status"
 msgstr "Status"
 
@@ -62,12 +62,12 @@ msgid "Several dimension values for the same dimension type"
 msgstr "Several dimension values for the same dimension type"
 
 #. module: magento_connect_product_variant
-#: field:product.template,magento_metadescription:0
+#: field:product.template,magento_tpl_metadescription:0
 msgid "Description"
 msgstr "Description"
 
 #. module: magento_connect_product_variant
-#: selection:product.template,magento_visibility:0
+#: selection:product.template,magento_tpl_visibility:0
 msgid "Select Option"
 msgstr "Select Option"
 
@@ -78,8 +78,8 @@ msgstr "Metakeyword"
 
 #. module: magento_connect_product_variant
 #: view:sale.shop:0
-msgid "Export Product Templates"
-msgstr "Export Product Templates"
+msgid "Export Product Templates (And Product Simples)"
+msgstr "Export Product Templates (And Product Simples)"
 
 #. module: magento_connect_product_variant
 #: help:sale.shop,magento_last_export_product_templates:0
@@ -101,12 +101,12 @@ msgid "Alert"
 msgstr "Alert"
 
 #. module: magento_connect_product_variant
-#: selection:product.template,magento_visibility:0
+#: selection:product.template,magento_tpl_visibility:0
 msgid "Catalog"
 msgstr "Catalog"
 
 #. module: magento_connect_product_variant
-#: selection:product.template,magento_visibility:0
+#: selection:product.template,magento_tpl_visibility:0
 msgid "Nowhere"
 msgstr "Nowhere"
 
@@ -116,7 +116,7 @@ msgid "Sales Shop"
 msgstr "Sales Shop"
 
 #. module: magento_connect_product_variant
-#: field:product.template,magento_sku:0
+#: field:product.template,magento_tpl_sku:0
 msgid "Magento SKU"
 msgstr "Magento SKU"
 
@@ -126,12 +126,12 @@ msgid "Import Magento Attributes Configurable (Dimension Type)"
 msgstr "Import Magento Attributes Configurable (Dimension Type)"
 
 #. module: magento_connect_product_variant
-#: field:product.template,magento_url_key:0
+#: field:product.template,magento_tpl_url_key:0
 msgid "Url Key"
 msgstr "Url Key"
 
 #. module: magento_connect_product_variant
-#: help:product.template,magento_exportable:0
+#: help:product.template,magento_tpl_exportable:0
 msgid "If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere."
 msgstr "If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere."
 
@@ -141,22 +141,22 @@ msgid "Website"
 msgstr "Website"
 
 #. module: magento_connect_product_variant
-#: selection:product.template,magento_visibility:0
+#: selection:product.template,magento_tpl_visibility:0
 msgid "Search"
 msgstr "Search"
 
 #. module: magento_connect_product_variant
-#: field:product.template,magento_metakeyword:0
+#: field:product.template,magento_tpl_metakeyword:0
 msgid "Keyword"
 msgstr "Keyword"
 
 #. module: magento_connect_product_variant
-#: selection:product.template,magento_visibility:0
+#: selection:product.template,magento_tpl_visibility:0
 msgid "Catalog,Search"
 msgstr "Catalog,Search"
 
 #. module: magento_connect_product_variant
-#: field:product.template,magento_configurable_sale_shop:0
+#: field:product.template,magento_tpl_sale_shop:0
 msgid "Websites"
 msgstr "Websites"
 
@@ -172,7 +172,7 @@ msgstr "Product Template"
 
 #. module: magento_connect_product_variant
 #: view:product.template:0
-#: field:product.template,magento_shortdescription:0
+#: field:product.template,magento_tpl_shortdescription:0
 msgid "Short Description"
 msgstr "Short Description"
 
@@ -180,6 +180,15 @@ msgstr "Short Description"
 #: model:ir.model,name:magento_connect_product_variant.model_magento_app
 msgid "Magento Server - APP"
 msgstr "Magento Server - APP"
+
+#. module: magento_connect_product_variant
+#: model:ir.module.module,description:magento_connect_product_variant.module_meta_information
+msgid "\n"
+"    Magento E-commerce management. This module will be able to create variant of product in Magento (Configurable products).\n"
+"    "
+msgstr "\n"
+"    Magento E-commerce management. This module will be able to create variant of product in Magento (Configurable products).\n"
+"    "
 
 #. module: magento_connect_product_variant
 #: field:product.variant.dimension.type,code:0
@@ -190,6 +199,11 @@ msgstr "Code"
 #: view:product.template:0
 msgid "SEO"
 msgstr "SEO"
+
+#. module: magento_connect_product_variant
+#: field:product.template,magento_tpl_attribute_group_id:0
+msgid "Attribute"
+msgstr "Attribute"
 
 #. module: magento_connect_product_variant
 #: view:product.template:0
@@ -219,7 +233,7 @@ msgid "This Magento Product Dimension Type not allow to delete"
 msgstr "This Magento Product Dimension Type not allow to delete"
 
 #. module: magento_connect_product_variant
-#: field:product.template,magento_exportable:0
+#: field:product.template,magento_tpl_exportable:0
 msgid "Exported to Magento?"
 msgstr "Exported to Magento?"
 
@@ -227,6 +241,11 @@ msgstr "Exported to Magento?"
 #: model:ir.model,name:magento_connect_product_variant.model_product_variant_dimension_type
 msgid "Dimension Type"
 msgstr "Dimension Type"
+
+#. module: magento_connect_product_variant
+#: model:ir.module.module,shortdesc:magento_connect_product_variant.module_meta_information
+msgid "Magento Connector Product Variant"
+msgstr "Magento Connector Product Variant"
 
 #. module: magento_connect_product_variant
 #: model:ir.model,name:magento_connect_product_variant.model_product_variant_dimension_option

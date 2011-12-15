@@ -62,7 +62,7 @@ class sale_shop(osv.osv):
             # write sale shop date last export
             self.pool.get('sale.shop').write(cr, uid, shop.id, {'magento_last_export_product_templates': time.strftime('%Y-%m-%d %H:%M:%S')})
 
-            product_template_product_ids = self.pool.get('product.template').search(cr, uid, [('magento_exportable','=',True),('magento_configurable_sale_shop','in',shop.id)])
+            product_template_product_ids = self.pool.get('product.template').search(cr, uid, [('magento_tpl_exportable','=',True),('magento_tpl_sale_shop','in',shop.id)])
 
             for product_template in self.pool.get('product.template').perm_read(cr, uid, product_template_product_ids):
                 # product.product create/modify > date exported last time
@@ -84,18 +84,22 @@ class sale_shop(osv.osv):
         Get all IDs product templates to create/write to Magento
         Use Base External Mapping to transform values
         Get values and call magento is step by step (product by product)
-        :return mgn_id
+        :return mgn_ids
         """
 
+        magento_external_referential = self.pool.get('magento.external.referential')
         context['magento_app'] = magento_app
+        product_mgn_ids = []
+        attributes = {}
 
         with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
             for product_template in self.pool.get('product.template').browse(cr, uid, ids, context):
-                context['product_id'] = product_template.id
-                values = self.pool.get('base.external.mapping').get_oerp_to_external(cr, uid, 'magento.product.configurable',[product_template.id], context)[0]
+                product_template_id = product_template.id
+                context['product_id'] = product_template_id
+                values = self.pool.get('base.external.mapping').get_oerp_to_external(cr, uid, 'magento.product.configurable',[product_template_id], context)[0]
 
-                mapping_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.template', product_template.id)
- 
+                mapping_id = magento_external_referential.check_oerp2mgn(cr, uid, magento_app, 'product.template', product_template_id)
+
                 # get dicc values
                 product_sku = values['sku']
                 product_type = 'configurable'
@@ -107,30 +111,56 @@ class sale_shop(osv.osv):
                 del values['set']
 
                 if mapping_id: #uptate
-                    mappings = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [mapping_id])
+                    mappings = magento_external_referential.get_external_referential(cr, uid, [mapping_id])
                     product_mgn_id = mappings[0]['mgn_id']
 
                     store_view = None
                     if 'store_view' in context:
-                        store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', context['store_view'].id)
-                        store_view = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])
+                        store_view = magento_external_referential.check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', context['store_view'].id)
+                        store_view = magento_external_referential.get_external_referential(cr, uid, [store_view])
                         store_view = store_view[0]['mgn_id']
 
                     #~ print product_sku, values
                     product_api.update(product_mgn_id, values, store_view)
-                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product SKU %s. OpenERP ID %s, Magento ID %s" % (product_sku, product_template.id, product_mgn_id))
+                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product SKU %s. OpenERP ID %s, Magento ID %s" % (product_sku, product_template_id, product_mgn_id))
                 else: #create
                     #~ print product_type, product_attribute_set, product_sku, values
                     product_mgn_id = product_api.create(product_type, product_attribute_set, product_sku, values)
-                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Create Product: %s. OpenERP ID %s, Magento ID %s" % (product_sku, product_template.id, product_mgn_id))
-                    self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.template', product_template.id, product_mgn_id)
 
-                # set Super Attribute Values
-                
-                # set product simples (update)
-                
+                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Create Product: %s. OpenERP ID %s, Magento ID %s" % (product_sku, product_template_id, product_mgn_id))
+                    magento_external_referential.create_external_referential(cr, uid, magento_app, 'product.template', product_template_id, product_mgn_id)
+
+                with ProductConfigurable(magento_app.uri, magento_app.username, magento_app.password) as productconfigurable_api:
+                    # set Super Attribute Values
+                    for dimension_type_id in product_template.dimension_type_ids:
+                        dimension_mapping = magento_external_referential.check_oerp2mgn(cr, uid, magento_app, 'product.variant.dimension.type', dimension_type_id)
+                        if dimension_mapping:
+                            mappings = magento_external_referential.get_external_referential(cr, uid, [dimension_mapping])
+                            attribute_mgn_id = mappings[0]['mgn_id']
+                            if attribute_mgn_id:
+                                product = productconfigurable_api.setSuperAttributeValues(product_mgn_id, attribute_mgn_id)
+
+                    # set product simples (update)
+                    products = []
+                    for product_id in self.pool.get('product.product').search(cr, uid, [('product_tmpl_id','=',product_template_id)]):
+                        product_mapping = magento_external_referential.check_oerp2mgn(cr, uid, magento_app, 'product.product', product_id)
+                        if product_mapping:
+                            mappings = magento_external_referential.get_external_referential(cr, uid, [product_mapping])
+                            product_mgn = mappings[0]['mgn_id']
+                            products.append(product_mgn)
+                    if len(products)>0:
+                        try:
+                            product = productconfigurable_api.update(product_mgn_id, products, attributes)
+                        except:
+                            LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Product Configurable: Magento product ID %s, Products ID %s" % (product_mgn_id, products))
+
+                cr.commit()
+
+                # return []
+                product_mgn_ids.append(product_mgn_id)
+
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Products Export")
 
-        return product_mgn_id
+        return product_mgn_ids
 
 sale_shop()

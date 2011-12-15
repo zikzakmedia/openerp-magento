@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <openerp>
-    <data noupdate='1'>
+    <data noupdate='0'>
 
         <!--Product Product-->
         <record model='base.external.mapping.line' id='mgnclpp01'>
@@ -21,7 +21,7 @@
 
         <record model='base.external.mapping.line' id='mgnclpt01'>
             <field name='mapping_id' ref='magento_connect_product_variant.mgnc01'/>
-            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_sku')]" model='ir.model.fields'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_tpl_sku')]" model='ir.model.fields'/>
             <field name='external_field'>sku</field>
             <field name='type'>in_out</field>
             <field name='external_type'>str</field>
@@ -30,7 +30,7 @@
 
         <record model='base.external.mapping.line' id='mgnclpt02'>
             <field name='mapping_id' ref='magento_connect_product_variant.mgnc01'/>
-            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_status')]" model='ir.model.fields'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_tpl_status')]" model='ir.model.fields'/>
             <field name='external_field'>status</field>
             <field name='type'>in_out</field>
             <field name='external_type'>str</field>
@@ -39,7 +39,7 @@
 
         <record model='base.external.mapping.line' id='mgnclpt03'>
             <field name='mapping_id' ref='magento_connect_product_variant.mgnc01'/>
-            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_visibility')]" model='ir.model.fields'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_tpl_visibility')]" model='ir.model.fields'/>
             <field name='external_field'>visibility</field>
             <field name='type'>in_out</field>
             <field name='external_type'>str</field>
@@ -48,7 +48,7 @@
 
         <record model='base.external.mapping.line' id='mgnclpt04'>
             <field name='mapping_id' ref='magento_connect_product_variant.mgnc01'/>
-            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_url_key')]" model='ir.model.fields'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_tpl_url_key')]" model='ir.model.fields'/>
             <field name='external_field'>url_key</field>
             <field name='type'>in_out</field>
             <field name='external_type'>str</field>
@@ -57,7 +57,7 @@
 
         <record model='base.external.mapping.line' id='mgnclpt05'>
             <field name='mapping_id' ref='magento_connect_product_variant.mgnc01'/>
-            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_shortdescription')]" model='ir.model.fields'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_tpl_shortdescription')]" model='ir.model.fields'/>
             <field name='external_field'>short_description</field>
             <field name='type'>in_out</field>
             <field name='external_type'>str</field>
@@ -66,7 +66,7 @@
 
         <record model='base.external.mapping.line' id='mgnclpt06'>
             <field name='mapping_id' ref='magento_connect_product_variant.mgnc01'/>
-            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_metadescription')]" model='ir.model.fields'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_tpl_metadescription')]" model='ir.model.fields'/>
             <field name='external_field'>meta_description</field>
             <field name='type'>in_out</field>
             <field name='external_type'>str</field>
@@ -75,7 +75,7 @@
 
         <record model='base.external.mapping.line' id='mgnclpt07'>
             <field name='mapping_id' ref='magento_connect_product_variant.mgnc01'/>
-            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_metakeyword')]" model='ir.model.fields'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_tpl_metakeyword')]" model='ir.model.fields'/>
             <field name='external_field'>meta_keyword</field>
             <field name='type'>in_out</field>
             <field name='external_type'>str</field>
@@ -84,7 +84,7 @@
 
         <record model='base.external.mapping.line' id='mgnclpt08'>
             <field name='mapping_id' ref='magento_connect_product_variant.mgnc01'/>
-            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_metatitle')]" model='ir.model.fields'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_tpl_metatitle')]" model='ir.model.fields'/>
             <field name='external_field'>meta_title</field>
             <field name='type'>in_out</field>
             <field name='external_type'>str</field>
@@ -93,7 +93,7 @@
 
         <record model='base.external.mapping.line' id='mgnclpt09'>
             <field name='mapping_id' ref='magento_connect.mgn01'/>
-            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_configurable_sale_shop')]" model='ir.model.fields'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_tpl_sale_shop')]" model='ir.model.fields'/>
             <field name='external_field'>websites</field>
             <field name='type'>in_out</field>
             <field name='external_type'>str</field>
@@ -108,7 +108,7 @@ value = [(6, 0, saleshops)]</field>
             <field name='out_function'>value = []
 if context['product_id']:
     product = self.pool.get('product.template').browse(cr, uid, context['product_id'])
-    for sale_shop in product.magento_configurable_sale_shop:
+    for sale_shop in product.magento_tpl_sale_shop:
         shop_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, context['magento_app'], 'sale.shop', sale_shop.id)
         shop_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [shop_id])
         if len(shop_id)>0:
@@ -126,7 +126,7 @@ if context['product_id']:
 
         <record model='base.external.mapping.line' id='mgnclpt11'>
             <field name='mapping_id' ref='magento_connect_product_variant.mgnc01'/>
-            <field name='field_id' search="[('model_id','=','product.template'),('name','=','attribute_group_id')]" model='ir.model.fields'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_tpl_attribute_group_id')]" model='ir.model.fields'/>
             <field name='external_field'>set</field>
             <field name='type'>out</field>
             <field name='external_type'>str</field>
@@ -134,11 +134,38 @@ if context['product_id']:
             <field name='out_function'>value = ''
 if context['product_id']:
     product = self.pool.get('product.template').browse(cr, uid, context['product_id'])
-    if product.attribute_group_id.id:
-        set_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, context['magento_app'], 'product.attributes.group', product.attribute_group_id.id)
+    if product.magento_tpl_attribute_group_id.id:
+        set_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, context['magento_app'], 'product.attributes.group', product.magento_tpl_attribute_group_id.id)
         set_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [set_id])
         if len(set_id)>0:
             value = set_id[0]['mgn_id']</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnclpt12'>
+            <field name='mapping_id' ref='magento_connect_product_variant.mgnc01'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','categ_ids')]" model='ir.model.fields'/>
+            <field name='external_field'>categories</field>
+            <field name='type'>out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+            <field name='out_function'>value = []
+if context['product_id']:
+    product = self.pool.get('product.template').browse(cr, uid, context['product_id'])
+    for category in product.categ_ids:
+        cat_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, context['magento_app'], 'product.category', category.id)
+        if cat_id:
+            cat_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [cat_id])
+            if len(cat_id)>0:
+                value.append(cat_id[0]['mgn_id'])</field>
+        </record>
+
+        <record model='base.external.mapping.line' id='mgnclpt13'>
+            <field name='mapping_id' ref='magento_connect_product_variant.mgnc01'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','description_sale')]" model='ir.model.fields'/>
+            <field name='external_field'>description</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
         </record>
 
     </data>

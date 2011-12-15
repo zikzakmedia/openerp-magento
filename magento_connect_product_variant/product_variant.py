@@ -106,6 +106,7 @@ class product_variant_dimension_option(osv.osv):
                 if len(dimesion_option) == 0:
                     values = {
                         'name': dimension_name,
+                        'code': dimension_name,
                         'dimension_id': dimension_id,
                     }
                     dimesion_option_id = self.create(cr, uid, values)
