@@ -177,7 +177,7 @@ if context['product_id']:
         <record model='base.external.mapping.line' id='mgnlpt05'>
             <field name='mapping_id' ref='magento_connect.mgn02'/>
             <field name='field_id' search="[('model_id','=','product.template'),('name','=','categ_ids')]" model='ir.model.fields'/>
-            <field name='external_field'>category_ids</field>
+            <field name='external_field'>categories</field>
             <field name='type'>out</field>
             <field name='external_type'>str</field>
             <field name='active'>1</field>
@@ -462,7 +462,6 @@ if context['parent_id']:
             <field name='external_type'>str</field>
             <field name='active'>1</field>
         </record>
-
 
     </data>
 </openerp>
