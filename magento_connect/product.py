@@ -182,6 +182,20 @@ class product_product(osv.osv):
             value = {'magento_url_key': slug}
         return {'value':value}
 
+    def _check_magento_sku(self, cr, uid, ids, context=None):
+        """Check if this Magento SKU exists another product
+        :param ids list
+        :return True/False
+        """
+        if context is None:
+            context = {}
+        products = self.browse(cr, uid, ids, context=context)
+        for product in products:
+            prods = self.search(cr, uid, [('magento_sku','=',product.magento_sku),('id','!=',product.id)])
+            if len(prods)>0:
+                return False
+        return True
+
     _columns = {
         'magento_sku':fields.char('Magento SKU', size=64),
         'magento_exportable':fields.boolean('Exported to Magento?', change_default=True, help='If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere.'),
@@ -200,6 +214,9 @@ class product_product(osv.osv):
         'magento_status':lambda * a:True,
         'magento_visibility': '4',
     }
+    _constraints = [
+        (_check_magento_sku, 'Error! Magento SKU must be unique', ['magento_sku']),
+    ]
 
     def unlink(self, cr, uid, ids, context=None):
         for val in self.browse(cr, uid, ids):

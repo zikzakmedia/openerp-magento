@@ -160,10 +160,12 @@ class sale_shop(osv.osv):
                     product_api.update(product_mgn_id, values, store_view)
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product SKU %s. OpenERP ID %s, Magento ID %s" % (product_sku, product.id, product_mgn_id))
                 else: #create
-                    #~ print product_type, product_attribute_set, product_sku, values
-                    product_mgn_id = product_api.create(product_type, product_attribute_set, product_sku, values)
-                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Create Product: %s. OpenERP ID %s, Magento ID %s" % (product_sku, product.id, product_mgn_id))
-                    self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.product', product.id, product_mgn_id)
+                    try:
+                        product_mgn_id = product_api.create(product_type, product_attribute_set, product_sku, values)
+                        LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Create Product: %s. OpenERP ID %s, Magento ID %s" % (product_sku, product.id, product_mgn_id))
+                        self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.product', product.id, product_mgn_id)
+                    except:
+                        LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Magento Create Product: %s %s." % (product_sku, product.id))
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Products Export")
 
