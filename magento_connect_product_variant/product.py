@@ -52,6 +52,33 @@ class product_template(osv.osv):
             value = {'magento_tpl_url_key': slug}
         return {'value':value}
 
+    def _check_magento_sku(self, cr, uid, ids, context=None):
+        """Check if this Magento SKU exists another product
+        :param ids list
+        :return True/False
+        """
+        if context is None:
+            context = {}
+        products = self.browse(cr, uid, ids, context=context)
+        for product in products:
+            tpl_prods = self.search(cr, uid, [('magento_tpl_sku','=',product.magento_tpl_sku),('id','!=',product.id)])
+            prods = self.pool.get('product.product').search(cr, uid, [('magento_sku','=',product.magento_tpl_sku)])
+            if len(prods)>0 or len(tpl_prods)>0:
+                return False
+        return True
+
+    def _magento_tax_class(self, cr, uid, context=None):
+        """Get Taxes Magento. Selection values are available in Product Attributes
+        :return [('','')]
+        """
+        product_attributes_obj = self.pool.get('product.attributes')
+        ids = product_attributes_obj.search(cr, uid, [('name','=','x_tax_class_id')]) #TODO: Use multimagento app (servers)
+        if len(ids)>0:
+            taxes = product_attributes_obj.browse(cr, uid, ids[0])
+            if taxes.selection:
+                return eval(taxes.selection.encode('utf8'))
+        return [('','')]
+
     _columns = {
         'magento_tpl_sku':fields.char('Magento SKU', size=64),
         'magento_tpl_exportable':fields.boolean('Exported to Magento?', change_default=True, help='If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere.'),
@@ -64,12 +91,16 @@ class product_template(osv.osv):
         'magento_tpl_metakeyword': fields.text('Keyword', translate=True),
         'magento_tpl_metatitle': fields.char('Title', size=256, translate=True),
         'magento_tpl_attribute_group_id': fields.many2one('product.attributes.group', 'Attribute'),
+        'magento_tpl_tax_class': fields.selection(_magento_tax_class, 'Magento Tax'),
     }
 
     _defaults = {
         'magento_tpl_status':lambda * a:True,
         'magento_tpl_visibility': '4',
     }
+    _constraints = [
+        (_check_magento_sku, 'Error! Magento SKU must be unique', ['magento_sku']),
+    ]
 
     def unlink(self, cr, uid, ids, context=None):
         for val in self.browse(cr, uid, ids):

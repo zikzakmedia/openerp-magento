@@ -22,9 +22,9 @@
                                 <page string="General">
                                     <field name="magento_tpl_sku" attrs="{'required':[('magento_tpl_exportable','==',True)]}"/>
                                     <field name="magento_tpl_attribute_group_id" attrs="{'required':[('magento_tpl_exportable','==',True)]}" widget="selection"/>
-
                                     <field name="magento_tpl_status"/>
                                     <field name="magento_tpl_visibility" attrs="{'required':[('magento_tpl_exportable','==',True)]}"/>
+                                    <field name="magento_tpl_tax_class" attrs="{'required':[('magento_tpl_exportable','==',True)]}"/>
                                     <separator string="Short Description" colspan="4"/>
                                     <field name="magento_tpl_shortdescription" nolabel="1" colspan="4" attrs="{'required':[('magento_tpl_exportable','==',True)]}"/>
                                 </page>
