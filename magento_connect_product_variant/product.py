@@ -52,20 +52,19 @@ class product_template(osv.osv):
             value = {'magento_tpl_url_key': slug}
         return {'value':value}
 
-    def _check_magento_sku(self, cr, uid, ids, context=None):
+    def _check_magento_sku(self, cr, uid, magento_sku, id=False):
         """Check if this Magento SKU exists another product
-        :param ids list
+        :param id int
+        :magento_sku = str
         :return True/False
         """
-        if context is None:
-            context = {}
-        products = self.browse(cr, uid, ids, context=context)
-        for product in products:
-            tpl_prods = self.search(cr, uid, [('magento_tpl_sku','=',product.magento_tpl_sku),('id','!=',product.id)])
-            prods = self.pool.get('product.product').search(cr, uid, [('magento_sku','=',product.magento_tpl_sku)])
-            if len(prods)>0 or len(tpl_prods)>0:
-                return False
-        return True
+        condition = [('magento_tpl_sku','=',magento_sku),('magento_tpl_exportable','=',True)]
+        if id:
+            condition.append(('id','!=',id))
+        prods = self.search(cr, uid, condition)
+        if len(prods)>0:
+            return True
+        return False
 
     def _magento_tax_class(self, cr, uid, context=None):
         """Get Taxes Magento. Selection values are available in Product Attributes
@@ -98,9 +97,21 @@ class product_template(osv.osv):
         'magento_tpl_status':lambda * a:True,
         'magento_tpl_visibility': '4',
     }
-    _constraints = [
-        (_check_magento_sku, 'Error! Magento SKU must be unique', ['magento_sku']),
-    ]
+
+    def create(self, cr, uid, vals, context):
+        if 'magento_tpl_sku' in vals:
+            if self._check_magento_sku(cr, uid, vals['magento_tpl_sku']):
+                raise osv.except_osv(_("Alert"), _("Error! Magento SKU %s must be unique") % (vals['magento_tpl_sku']))
+
+        return super(product_template, self).create(cr, uid, vals, context)
+
+    # def write(self, cr, uid, ids, vals, context):
+        # for id in ids:
+            # if 'magento_tpl_sku' in vals:
+                # if self._check_magento_sku(cr, uid, vals['magento_tpl_sku'], id):
+                    # raise osv.except_osv(_("Alert"), _("Error! Magento SKU %s must be unique") % (vals['magento_tpl_sku']))
+
+        # return super(product_template, self).write(cr, uid, ids, vals, context)
 
     def unlink(self, cr, uid, ids, context=None):
         for val in self.browse(cr, uid, ids):
@@ -144,6 +155,7 @@ class product_product(osv.osv):
 
     def magento_create_product_configurable(self, cr, uid, magento_app, product, store_view, context = None):
         """Create Product Variant (configurable) from Magento Values
+        This method is better defined product.template, but product.product have dinamic methos to call, it's available in product.product
         :magento_app object
         :product dicc
         :store_view ID
@@ -184,7 +196,7 @@ class product_product(osv.osv):
             vals = self.pool.get('base.external.mapping').get_external_to_oerp(cr, uid, 'magento.product.configurable', product_template_obj.id, product_template_info, context)
 
             # Vals add
-            vals['magento_exportable'] = True
+            vals['magento_tpl_exportable'] = True
 
             dimesion_types = []
             if product_attributes:
@@ -205,7 +217,7 @@ class product_product(osv.osv):
             if len(dimesion_types)>0:
                 vals['dimension_type_ids'] = [(6,0,dimesion_types)]
 
-            self.pool.get('product.template').write(cr, uid, [product_template_oerp_id], vals)
+            self.pool.get('product.template').write(cr, uid, [product_template_oerp_id], vals, context)
             LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Write Product Template: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product_template_oerp_id, product['product_id']))
 
             # Add all options dimension value

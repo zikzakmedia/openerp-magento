@@ -128,9 +128,15 @@ if context['product_id']:
             <field name='mapping_id' ref='magento_connect_product_variant.mgnc01'/>
             <field name='field_id' search="[('model_id','=','product.template'),('name','=','magento_tpl_attribute_group_id')]" model='ir.model.fields'/>
             <field name='external_field'>set</field>
-            <field name='type'>out</field>
+            <field name='type'>in_out</field>
             <field name='external_type'>str</field>
             <field name='active'>1</field>
+            <field name='in_function'>value = False
+if values:
+    values = self.pool.get('magento.external.referential').get_mgnreferential_ids(cr, uid, context['magento_app'], 'product.attributes.group', values)
+    values = self.pool.get('magento.external.referential').get_external_referential(cr, uid, values)
+    if len(values)>0:
+        value = values[0]['magento_app_id']</field>
             <field name='out_function'>value = ''
 if context['product_id']:
     product = self.pool.get('product.template').browse(cr, uid, context['product_id'])

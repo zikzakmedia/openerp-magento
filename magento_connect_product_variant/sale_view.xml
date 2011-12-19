@@ -27,5 +27,33 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="view_magento_product_variant_prices_sale_shop_form">
+            <field name="name">magento_product_variant_prices_sale_shop_form</field>
+            <field name="model">sale.shop</field>
+            <field name="inherit_id" ref="magento_connect.view_magento_sale_shop_form" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <data>
+                    <button name="magento_export_prices" position="after">
+                        <button name="magento_export_prices_templates" string="Export Product Templates Prices" colspan="1" type="object" confirm="Are you sure to continue? See logs server process"/>
+                    </button>
+                </data>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_magento_product_variant_prices_buttom_sale_shop_form">
+            <field name="name">magento_product_variant_prices_buttom_sale_shop_form</field>
+            <field name="model">sale.shop</field>
+            <field name="inherit_id" ref="magento_connect.view_magento_sale_shop_form" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="magento_last_export_prices" position="after">
+                        <field name="magento_last_export_prices_templates"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
     </data>
 </openerp>
