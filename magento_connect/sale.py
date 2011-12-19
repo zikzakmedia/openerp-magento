@@ -73,6 +73,10 @@ class sale_shop(osv.osv):
         'magento_notify_delivered': fields.boolean('Notify Delivered', size=128, help='Magento notification'),
         'magento_status_paid_delivered': fields.char('Paid/Delivered', size=128, help='Status for paid and delivered'),
         'magento_notify_paid_delivered': fields.boolean('Notify Paid/Delivered', size=128, help='Magento notification'),
+        'magento_status_paidinweb': fields.char('Paid in web', size=128, help='Status for paid in  web'),
+        'magento_notify_paidinweb': fields.boolean('Notify Paid in web', size=128, help='Magento notification'),
+        'magento_status_paidinweb_delivered': fields.char('Paid in web/Delivered', size=128, help='Status for paid in web and delivered'),
+        'magento_notify_paidinweb_delivered': fields.boolean('Notify Paid in web/Delivered', size=128, help='Magento notification'),
     }
 
     _defaults = {
@@ -206,7 +210,7 @@ class sale_shop(osv.osv):
 
                     price = ''
                     if not mgn_id:#not product created/exist in Magento. Create
-                        mgn_id = self.magento_export_products_stepbystep(cr, uid, magento_app, ids, context)
+                        mgn_id = self.magento_export_products_stepbystep(cr, uid, magento_app, [product.id], context)
 
                     if shop.magento_sale_price == 'pricelist' and shop.pricelist_id:
                         price = self.pool.get('product.pricelist').price_get(cr, uid, [shop.pricelist_id.id], product.id, 1.0)[shop.pricelist_id.id]
@@ -470,6 +474,9 @@ class sale_shop(osv.osv):
             sale_order_ids = [x for x in set(sale_order_ids)]
 
             for sale_order in self.pool.get('sale.order').browse(cr, uid, sale_order_ids):
+                if sale_order.magento_paidinweb:
+                    notify = shop.magento_notify_paidinweb
+                    status = shop.magento_status_paidinweb
                 if sale_order.invoiced:
                     notify = shop.magento_notify_paid
                     status = shop.magento_status_paid
@@ -479,6 +486,9 @@ class sale_shop(osv.osv):
                 if sale_order.invoiced and sale_order.shipped:
                     notify = shop.magento_notify_paid_delivered
                     status = shop.magento_status_paid_delivered
+                if sale_order.magento_paidinweb and sale_order.shipped:
+                    notify = shop.magento_notify_paidinweb_delivered
+                    status = shop.magento_status_paidinweb_delivered
 
                 #not update status if status not change
                 if status == sale_order.magento_status:
@@ -534,6 +544,7 @@ class sale_order(osv.osv):
     _columns = {
         'magento_status': fields.char('Status', size=128, readonly=True, help='Magento Status'),
         'magento_gift_message': fields.text('Gift Message'),
+        'magento_paidinweb': fields.boolean('Paid in web', help='Check this option if this sale order is paid by web payment'),
     }
 
     def magento_create_order(self, cr, uid, sale_shop, values, context=None):
@@ -660,6 +671,8 @@ class sale_order(osv.osv):
                 confirm = True
             if mgn_status.cancel:
                 cancel = True
+            if mgn_status.paidinweb:
+                vals['magento_paidinweb'] = True
 
         sale_order_id = self.create(cr, uid, vals, context)
         sale_order = self.browse(cr, uid, sale_order_id)
@@ -837,6 +850,7 @@ class magento_sale_shop_status_type(osv.osv):
         'invoice_quantity': fields.selection([('order', 'Ordered Quantities'), ('procurement', 'Shipped Quantities')], 'Invoice on'),
         'confirm': fields.boolean('Confirm', help="Confirm order. Sale Order change state draft to done, and generate picking and/or invoice automatlly"),
         'cancel': fields.boolean('Cancel', help="Cancel order. Sale Order change state draft to cancel"),
+        'paidinweb': fields.boolean('Paid in web', help="Paid in web. Sale Order is paid in web"),
      }
 
 magento_sale_shop_status_type()

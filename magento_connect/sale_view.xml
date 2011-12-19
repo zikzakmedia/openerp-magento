@@ -67,6 +67,10 @@
                                     <field name="magento_notify_delivered"/>
                                     <field name="magento_status_paid_delivered" attrs="{'required':[('magento_shop','=', True)]}"/>
                                     <field name="magento_notify_paid_delivered"/>
+                                    <field name="magento_status_paidinweb" attrs="{'required':[('magento_shop','=', True)]}"/>
+                                    <field name="magento_notify_paidinweb"/>
+                                    <field name="magento_status_paidinweb_delivered" attrs="{'required':[('magento_shop','=', True)]}"/>
+                                    <field name="magento_notify_paidinweb_delivered"/>
                                 </page>
                                 <page string="Payments">
                                     <field name="magento_payments" colspan="4" nolabel="1"/>
@@ -86,6 +90,7 @@
             <field name="arch" type="xml">
                 <xpath expr="/form/notebook/page[@string='History']" position="after">
                     <page string="Magento">
+                        <field name="magento_paidinweb"/>
                         <field name="magento_status"/>
                         <separator string="Gift Message" colspan="4" />
                         <field name="magento_gift_message" colspan="4" nolabel="1"/>
@@ -114,6 +119,7 @@
                     <field name="invoice_quantity"/>
                     <field name="confirm"/>
                     <field name="cancel"/>
+                    <field name="paidinweb"/>
                 </form>
             </field>
         </record>
