@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.2\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-12-15 10:43+0000\n"
-"PO-Revision-Date: 2011-12-15 10:43+0000\n"
+"POT-Creation-Date: 2011-12-19 13:32+0000\n"
+"PO-Revision-Date: 2011-12-19 13:32+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -31,15 +31,21 @@ msgid "Error: The default UOM and the purchase UOM must be in the same category.
 msgstr "Error: The default UOM and the purchase UOM must be in the same category."
 
 #. module: magento_connect_product_variant
+#: view:sale.shop:0
+msgid "Export Product Templates Prices"
+msgstr "Export Product Templates Prices"
+
+#. module: magento_connect_product_variant
 #: code:addons/magento_connect_product_variant/product_variant.py:86
 #, python-format
 msgid "This Magento Product Dimension Option not allow to delete"
 msgstr "This Magento Product Dimension Option not allow to delete"
 
 #. module: magento_connect_product_variant
-#: field:product.template,magento_tpl_visibility:0
-msgid "Visibility"
-msgstr "Visibility"
+#: code:addons/magento_connect_product_variant/product.py:119
+#, python-format
+msgid "Template '%s' not allow to delete because are active in Magento Shop"
+msgstr "Template '%s' not allow to delete because are active in Magento Shop"
 
 #. module: magento_connect_product_variant
 #: view:product.template:0
@@ -72,9 +78,9 @@ msgid "Select Option"
 msgstr "Select Option"
 
 #. module: magento_connect_product_variant
-#: view:product.template:0
-msgid "Metakeyword"
-msgstr "Metakeyword"
+#: field:product.template,magento_tpl_tax_class:0
+msgid "Magento Tax"
+msgstr "Magento Tax"
 
 #. module: magento_connect_product_variant
 #: view:sale.shop:0
@@ -94,6 +100,9 @@ msgstr "Are you sure to continue? See logs server process"
 
 #. module: magento_connect_product_variant
 #: code:addons/magento_connect_product_variant/mgn.py:82
+#: code:addons/magento_connect_product_variant/product.py:104
+#: code:addons/magento_connect_product_variant/product.py:112
+#: code:addons/magento_connect_product_variant/product.py:119
 #: code:addons/magento_connect_product_variant/product_variant.py:43
 #: code:addons/magento_connect_product_variant/product_variant.py:86
 #, python-format
@@ -177,6 +186,18 @@ msgid "Short Description"
 msgstr "Short Description"
 
 #. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/product.py:104
+#: code:addons/magento_connect_product_variant/product.py:112
+#, python-format
+msgid "Error! Magento SKU %s must be unique"
+msgstr "Error! Magento SKU %s must be unique"
+
+#. module: magento_connect_product_variant
+#: field:product.template,magento_tpl_visibility:0
+msgid "Visibility"
+msgstr "Visibility"
+
+#. module: magento_connect_product_variant
 #: model:ir.model,name:magento_connect_product_variant.model_magento_app
 msgid "Magento Server - APP"
 msgstr "Magento Server - APP"
@@ -191,9 +212,19 @@ msgstr "\n"
 "    "
 
 #. module: magento_connect_product_variant
+#: help:sale.shop,magento_last_export_prices_templates:0
+msgid "This date is last export. If you need export all product templates prices, empty this field (long sync)"
+msgstr "This date is last export. If you need export all product templates prices, empty this field (long sync)"
+
+#. module: magento_connect_product_variant
 #: field:product.variant.dimension.type,code:0
 msgid "Code"
 msgstr "Code"
+
+#. module: magento_connect_product_variant
+#: field:sale.shop,magento_last_export_prices_templates:0
+msgid "Last Export Prices Templates"
+msgstr "Last Export Prices Templates"
 
 #. module: magento_connect_product_variant
 #: view:product.template:0
@@ -204,6 +235,11 @@ msgstr "SEO"
 #: field:product.template,magento_tpl_attribute_group_id:0
 msgid "Attribute"
 msgstr "Attribute"
+
+#. module: magento_connect_product_variant
+#: view:product.template:0
+msgid "Metakeyword"
+msgstr "Metakeyword"
 
 #. module: magento_connect_product_variant
 #: view:product.template:0
