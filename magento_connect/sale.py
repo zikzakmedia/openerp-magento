@@ -447,6 +447,8 @@ class sale_shop(osv.osv):
                 if not orders:
                     LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Not Orders available, magento %s, date > %s" % (magento_app.name, creted_filter))
 
+        LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "End Import Magento Orders %s" % (magento_app.name))
+
         return True
 
     def magento_export_status(self, cr, uid, ids, context=None):

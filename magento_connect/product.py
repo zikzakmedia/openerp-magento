@@ -182,19 +182,19 @@ class product_product(osv.osv):
             value = {'magento_url_key': slug}
         return {'value':value}
 
-    def _check_magento_sku(self, cr, uid, ids, context=None):
+    def _check_magento_sku(self, cr, uid, magento_sku, id=False):
         """Check if this Magento SKU exists another product
-        :param ids list
+        :param id int
+        :magento_sku = str
         :return True/False
         """
-        if context is None:
-            context = {}
-        products = self.browse(cr, uid, ids, context=context)
-        for product in products:
-            prods = self.search(cr, uid, [('magento_sku','=',product.magento_sku),('id','!=',product.id)])
-            if len(prods)>0:
-                return False
-        return True
+        condition = [('magento_sku','=',magento_sku),('magento_exportable','=',True)]
+        if id:
+            condition.append(('id','!=',id))
+        prods = self.search(cr, uid, condition)
+        if len(prods)>0:
+            return True
+        return False
 
     _columns = {
         'magento_sku':fields.char('Magento SKU', size=64),
@@ -214,9 +214,21 @@ class product_product(osv.osv):
         'magento_status':lambda * a:True,
         'magento_visibility': '4',
     }
-    _constraints = [
-        (_check_magento_sku, 'Error! Magento SKU must be unique', ['magento_sku']),
-    ]
+
+    def create(self, cr, uid, vals, context):
+        if 'magento_sku' in vals:
+            if self._check_magento_sku(cr, uid, vals['magento_sku']):
+                raise osv.except_osv(_("Alert"), _("Error! Magento SKU %s must be unique") % (vals['magento_sku']))
+
+        return super(product_product, self).create(cr, uid, vals, context)
+
+    # def write(self, cr, uid, ids, vals, context):
+        # for id in ids:
+            # if 'magento_sku' in vals:
+                # if self._check_magento_sku(cr, uid, vals['magento_sku'], id):
+                    # raise osv.except_osv(_("Alert"), _("Error! Magento SKU %s must be unique") % (vals['magento_sku']))
+
+        # return super(product_product, self).write(cr, uid, ids, vals, context)
 
     def unlink(self, cr, uid, ids, context=None):
         for val in self.browse(cr, uid, ids):
@@ -302,7 +314,7 @@ class product_product(osv.osv):
             categories = product['categories']
         if 'category_ids' in product:
             categories = product['category_ids']
-        if len(categories) > 0:
+        if len(categories) > 0 and 'category_ids' in product:
             for cat_id in product['category_ids']:
                 category_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.category', cat_id)
                 external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [category_id])
