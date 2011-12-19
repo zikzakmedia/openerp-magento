@@ -108,12 +108,14 @@ class magento_app(osv.osv):
         :return True
         """
 
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
+
         for magento_app in self.browse(cr, uid, ids):
             with API(magento_app.uri, magento_app.username, magento_app.password) as magento_api:
 
                 """Websites"""
                 for website in magento_api.call('ol_websites.list', []):
-                    web_site = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'magento.website', website['default_group_id'])
+                    web_site = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'magento.website', website['default_group_id'])
 
                     if not web_site: #create
                         values = {
@@ -122,7 +124,7 @@ class magento_app(osv.osv):
                             'magento_app_id': magento_app.id,
                         }
                         website_oerp_id = self.pool.get('magento.website').create(cr, uid, values, context)
-                        self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'magento.website', website_oerp_id, website['default_group_id'])
+                        magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'magento.website', website_oerp_id, website['default_group_id'])
                         LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Website: magento %s, magento website id %s." % (magento_app.name, website['default_group_id']))
                         """Sale Shop"""
                         values = {
@@ -137,27 +139,27 @@ class magento_app(osv.osv):
                             'magento_default_invoice_quantity': 'order',
                         }
                         saleshop_oerp_id = self.pool.get('sale.shop').create(cr, uid, values, context)
-                        self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'sale.shop', saleshop_oerp_id, website['default_group_id'])
+                        magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'sale.shop', saleshop_oerp_id, website['default_group_id'])
                         LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Sale Shop: magento %s, Sale Shop id %s." % (magento_app.name, saleshop_oerp_id))
                     else:
                         LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Skip! Website exists: magento %s, magento website id %s. Not create" % (magento_app.name, website['default_group_id']))
 
                 """Store Group"""
                 for storegroup in magento_api.call('ol_groups.list', []):
-                    store_group = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'magento.storegroup', storegroup['group_id'])
+                    store_group = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'magento.storegroup', storegroup['group_id'])
 
                     if not store_group: #create
-                        magento_website_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'magento.website', storegroup['website_id'])
+                        magento_website_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'magento.website', storegroup['website_id'])
 
                         if magento_website_id:
-                            external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [magento_website_id])
+                            external_referentials = magento_external_referential_obj.get_external_referential(cr, uid, [magento_website_id])
                             values = {
                                 'name': storegroup['name'],
                                 'magento_app_id': magento_app.id,
                                 'magento_website_id': external_referentials[0]['oerp_id'],
                             }
                             storegroup_oerp_id = self.pool.get('magento.storegroup').create(cr, uid, values, context)
-                            self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'magento.storegroup', storegroup_oerp_id, storegroup['group_id'])
+                            magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'magento.storegroup', storegroup_oerp_id, storegroup['group_id'])
                             LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Store Group: magento %s, magento store group id %s." % (magento_app.name, storegroup['group_id']))
                         else:
                             LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Failed to find magento.website with magento %s and Magento ID %s. Not create Store Group." % (magento_app.name, storegroup['default_group_id']))
@@ -166,11 +168,11 @@ class magento_app(osv.osv):
 
                 """Store View"""
                 for storeview in magento_api.call('ol_storeviews.list', []):
-                    store_view = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'magento.storeview', storeview['store_id'])
+                    store_view = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'magento.storeview', storeview['store_id'])
 
                     if not store_view: #create
-                        store_group = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'magento.storegroup', storeview['group_id'])
-                        external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_group])
+                        store_group = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'magento.storegroup', storeview['group_id'])
+                        external_referentials = magento_external_referential_obj.get_external_referential(cr, uid, [store_group])
                         if len(external_referentials)>0:
                             values = {
                                 'name': storeview['name'],
@@ -178,7 +180,7 @@ class magento_app(osv.osv):
                                 'magento_storegroup_id': external_referentials[0]['oerp_id'],
                             }
                             storeview_oerp_id = self.pool.get('magento.storeview').create(cr, uid, values, context)
-                            self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'magento.storeview', storeview_oerp_id, storeview['store_id'])
+                            magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'magento.storeview', storeview_oerp_id, storeview['store_id'])
                             LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Store View: magento app id %s, magento store view id %s." % (storeview_oerp_id, storeview['store_id']))
                         else:
                             LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Failed to find magento.storegroup with magento %s and Magento ID %s. Not create Store Group." % (magento_app.name, storeview['group_id']))
@@ -233,10 +235,12 @@ class magento_app(osv.osv):
         :return True
         """
 
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
+
         for magento_app in self.browse(cr, uid, ids):
             with ProductAttributeSet(magento_app.uri, magento_app.username, magento_app.password) as product_attribute_set_api:
                 for product_attribute_set in product_attribute_set_api.list():
-                    attribute_set = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.attributes.group', product_attribute_set['set_id'])
+                    attribute_set = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'product.attributes.group', product_attribute_set['set_id'])
 
                     if not attribute_set: #create
                         values = {
@@ -245,7 +249,7 @@ class magento_app(osv.osv):
                             'magento': True,
                         }
                         attribute_group_oerp_id = self.pool.get('product.attributes.group').create(cr, uid, values, context)
-                        self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.attributes.group', attribute_group_oerp_id, product_attribute_set['set_id'])
+                        magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'product.attributes.group', attribute_group_oerp_id, product_attribute_set['set_id'])
                         LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Attribute Group: magento %s, magento attribute set id %s." % (magento_app.name, product_attribute_set['set_id']))
                     else:
                         LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Attribute Group exists: magento %s, magento attribute set id %s. Not create" % (magento_app.name, product_attribute_set['set_id']))
@@ -261,20 +265,22 @@ class magento_app(osv.osv):
         :return True
         """
 
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
+
         for magento_app in self.browse(cr, uid, ids):
             with ProductAttribute(magento_app.uri, magento_app.username, magento_app.password) as  product_attribute_api:
                 product_attributes = self.pool.get('product.attributes.group').search(cr, uid, [('magento','=',True)])
 
                 prod_attribute_oerp_ids  = []
                 for prod_attribute in self.pool.get('product.attributes.group').browse(cr, uid, product_attributes):
-                    external_referential = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.attributes.group', prod_attribute.id)
-                    external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [external_referential])
+                    external_referential = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'product.attributes.group', prod_attribute.id)
+                    external_referentials = magento_external_referential_obj.get_external_referential(cr, uid, [external_referential])
                     if len(external_referentials)>0:
                         for product_attribute in product_attribute_api.list(external_referentials[0]['mgn_id']):
                             #this attribute is exclude?
                             product_attribute_excludes = self.pool.get('magento.attribute.exclude').search(cr, uid, [('name','=',product_attribute['code'])])
                             if not len(product_attribute_excludes)>0:
-                                attribute = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'magento.website', product_attribute['attribute_id'])
+                                attribute = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'magento.website', product_attribute['attribute_id'])
 
                                 if not attribute: #create
                                     type = False
@@ -311,7 +317,7 @@ class magento_app(osv.osv):
                                             product_attributes = self.pool.get('product.attributes').search(cr, uid, [('name','=',values['name'])])
                                             if not len(product_attributes)>0:
                                                 product_attribute_oerp_id = self.pool.get('product.attributes').create(cr, uid, values, context)
-                                                self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'magento.website', product_attribute_oerp_id, product_attribute['attribute_id'])
+                                                magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'magento.website', product_attribute_oerp_id, product_attribute['attribute_id'])
                                                 cr.commit()
                                                 LOGGER.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Create Attribute Product: magento %s, magento attribute code %s." % (magento_app.name, product_attribute['code']))
                                             else:
@@ -353,6 +359,8 @@ class magento_app(osv.osv):
         :return: True
         """
 
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
+
         for magento_app in self.browse(cr, uid, ids):
             product_categories = self.pool.get('product.category').search(cr, uid, [('parent_id', 'child_of', magento_app.product_category_id.id)], context=context)
             product_categories.remove(magento_app.product_category_id.id) #remove top parent category
@@ -361,9 +369,9 @@ class magento_app(osv.osv):
                 context["category_id"] = product_category
                 product_category_vals = self.pool.get('base.external.mapping').get_oerp_to_external(cr, uid, 'magento.product.category', [product_category], context)[0]
 
-                product_cat = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.category', product_category_vals['id'])
+                product_cat = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'product.category', product_category_vals['id'])
                 if product_cat:
-                    product_cat = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [product_cat])
+                    product_cat = magento_external_referential_obj.get_external_referential(cr, uid, [product_cat])
                     product_cat_mgn_id = product_cat[0]['mgn_id']
 
                 del product_category_vals['id']
@@ -378,12 +386,12 @@ class magento_app(osv.osv):
                             product_cat_parent = product_category_vals['parent_id']
                             product_cat_parent = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.category', product_cat_parent)
                             if product_cat_parent:
-                                product_cat_parent = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [product_cat_parent])
+                                product_cat_parent = magento_external_referential_obj.get_external_referential(cr, uid, [product_cat_parent])
                                 parent_id = product_cat_parent[0]['mgn_id']
 
                             del product_category_vals['parent_id']
                             product_cat_mgn_id = category_api.create(parent_id, product_category_vals)
-                            self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.category', product_category, product_cat_mgn_id)
+                            magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'product.category', product_category, product_cat_mgn_id)
                             LOGGER.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "Create Category Magento ID %s, OpenERP ID %s." % (product_cat_mgn_id, product_category))
                     except:
                         LOGGER.notifyChannel('Magento Export Categories', netsvc.LOG_ERROR, "Error to export Category OpenERP ID %s." % (product_category))
@@ -428,6 +436,7 @@ class magento_app(osv.osv):
         """
 
         product_obj = self.pool.get('product.product')
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
 
         for magento_app in self.browse(cr, uid, ids):
             if not magento_app.magento_default_storeview:
@@ -436,8 +445,8 @@ class magento_app(osv.osv):
             with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
                 ofilter = {'created_at':{'from':magento_app.from_import_products, 'to':magento_app.to_import_products}}
 
-                store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', magento_app.magento_default_storeview.id)
-                store_view = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])
+                store_view = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', magento_app.magento_default_storeview.id)
+                store_view = magento_external_referential_obj.get_external_referential(cr, uid, [store_view])
                 store_view = store_view[0]['mgn_id']
 
                 #~ Update date last import
@@ -539,7 +548,7 @@ class magento_app(osv.osv):
         :return True
         """
 
-        external_referential_obj = self.pool.get('magento.external.referential')
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
         partner_obj = self.pool.get('res.partner')
         partner_address_obj = self.pool.get('res.partner.address')
         magento_app_customer_obj = self.pool.get('magento.app.customer')
@@ -557,7 +566,7 @@ class magento_app(osv.osv):
                 self.write(cr, uid, ids, {'to_import_customers': time.strftime('%Y-%m-%d %H:%M:%S')})
 
                 for customer in customer_api.list(ofilter):
-                    res_partner = external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer['customer_id'])
+                    res_partner = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer['customer_id'])
                     if not res_partner: #create
                         partner_id = partner_obj.magento_create_partner(cr, uid, magento_app, customer, context)
                         magento_app_customer_ids = magento_app_customer_obj.magento_app_customer_create(cr, uid, magento_app, partner_id, customer, context)
@@ -747,6 +756,10 @@ class magento_storeview(osv.osv):
         :return True
         """
 
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
+        product_product_obj = self.pool.get('product.product')
+        base_external_mapping_obj = self.pool.get('base.external.mapping')
+
         product_shop_ids = []
         for storeview in self.browse(cr, uid, ids):
             if not storeview.language_id:
@@ -760,23 +773,23 @@ class magento_storeview(osv.osv):
             context['magento_app'] = magento_app
 
             for shop in storeview.magento_storegroup_id.magento_website_id.sale_shop:
-                product_shop_ids = self.pool.get('product.product').search(cr, uid, [('magento_exportable','=',True),('magento_sale_shop','in',shop.id)])
+                product_shop_ids = product_product_obj.search(cr, uid, [('magento_exportable','=',True),('magento_sale_shop','in',shop.id)])
 
-            for product in self.pool.get('product.product').browse(cr, uid, product_shop_ids):
-                store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', storeview.id)
-                store_view = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])
+            for product in product_product_obj.browse(cr, uid, product_shop_ids):
+                store_view = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', storeview.id)
+                store_view = magento_external_referential_obj.get_external_referential(cr, uid, [store_view])
                 store_view = store_view[0]['mgn_id']
 
                 with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
                     product_info = product_api.info(product['magento_sku'],store_view)
 
-                    product_obj = self.pool.get('product.product').browse(cr, uid, product.id, context)
+                    product_obj = product_product_obj.browse(cr, uid, product.id, context)
 
-                    product_product_vals = self.pool.get('base.external.mapping').get_external_to_oerp(cr, uid, 'magento.product.product', product.id, product_info, context)
-                    product_template_vals = self.pool.get('base.external.mapping').get_external_to_oerp(cr, uid, 'magento.product.template', product_obj.product_tmpl_id.id, product_info, context)
+                    product_product_vals = base_external_mapping_obj.get_external_to_oerp(cr, uid, 'magento.product.product', product.id, product_info, context)
+                    product_template_vals = base_external_mapping_obj.get_external_to_oerp(cr, uid, 'magento.product.template', product_obj.product_tmpl_id.id, product_info, context)
                     vals = dict(product_product_vals, **product_template_vals)
                     #~ print vals #dicc value to write
-                    self.pool.get('product.product').write(cr, uid, [product.id], vals, context)
+                    product_product_obj.write(cr, uid, [product.id], vals, context)
                     LOGGER.notifyChannel('Magento Store View', netsvc.LOG_INFO, "Write Product Product Locale: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product.id, product_info['product_id']))
 
                     cr.commit()
@@ -792,6 +805,8 @@ class magento_storeview(osv.osv):
         :return True
         """
 
+        product_product_obj = self.pool.get('product.product')
+
         product_shop_ids = []
         for storeview in self.browse(cr, uid, ids):
             if not storeview.language_id:
@@ -802,9 +817,9 @@ class magento_storeview(osv.osv):
             magento_app = storeview.magento_storegroup_id.magento_website_id.magento_app_id
 
             for shop in storeview.magento_storegroup_id.magento_website_id.sale_shop:
-                product_product_ids = self.pool.get('product.product').search(cr, uid, [('magento_exportable','=',True),('magento_sale_shop','in',shop.id)])
+                product_product_ids = product_product_obj.search(cr, uid, [('magento_exportable','=',True),('magento_sale_shop','in',shop.id)])
 
-                for product_product in self.pool.get('product.product').perm_read(cr, uid, product_product_ids):
+                for product_product in product_product_obj.perm_read(cr, uid, product_product_ids):
                     # product.product create/modify > date exported last time
                     if last_exported_time < product_product['create_date'][:19] or (product_product['write_date'] and last_exported_time < product_product['write_date'][:19]):
                         product_shop_ids.append(product_product['id'])
@@ -919,7 +934,7 @@ class magento_app_customer(osv.osv):
         if context is None:
             context = {}
 
-        external_referential_obj = self.pool.get('magento.external.referential')
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
         magento_customer_group_id = self.pool.get('magento.customer.group').search(cr, uid, [('customer_group_id', '=', customer['group_id']), ('magento_app_id', 'in', [magento_app.id])])[0]
         email = customer['email']
         #check if exist this email. Yes, add -copy
@@ -937,7 +952,7 @@ class magento_app_customer(osv.osv):
             vals['magento_vat'] = customer['taxvat']
 
         magento_app_customer_id = self.create(cr, uid, vals, context)
-        external_referential_obj.create_external_referential(cr, uid, magento_app, 'magento.app.customer', magento_customer_group_id, customer['group_id'])
+        magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'magento.app.customer', magento_customer_group_id, customer['group_id'])
 
         return magento_app_customer_id
 
@@ -949,14 +964,16 @@ class magento_app_customer(osv.osv):
         :return True
         """
 
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
+
         magento_app_customers = self.search(cr, uid, [
                 ('partner_id','=',partner.id),
                 ('magento_app_id','=',magento_app.id),
             ])
         if len(magento_app_customers)>0:
-            store_view_ids = self.pool.get('magento.external.referential').search(cr, uid, [('model_id.model', '=', 'magento.storeview'), ('magento_app_id', 'in', [magento_app.id])])
+            store_view_ids = magento_external_referential_obj.search(cr, uid, [('model_id.model', '=', 'magento.storeview'), ('magento_app_id', 'in', [magento_app.id])])
             if len(store_view_ids)>0:
-                store_view = self.pool.get('magento.external.referential').read(cr, uid, store_view_ids, ['oerp_id', 'mgn_id'])[0]
+                store_view = magento_external_referential_obj.read(cr, uid, store_view_ids, ['oerp_id', 'mgn_id'])[0]
                 values =  {
                     'magento_storeview_id':store_view['oerp_id'],
                     'magento_storeview_ids':[(6, 0, [store_view['oerp_id']])],

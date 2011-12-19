@@ -128,6 +128,7 @@ class sale_shop(osv.osv):
             return True
 
         context['magento_app'] = magento_app
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
 
         with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
             for product in self.pool.get('product.product').browse(cr, uid, ids, context):
@@ -137,7 +138,7 @@ class sale_shop(osv.osv):
 
                 values = dict(product_product_vals[0], **product_template_vals[0])
                 print values
-                mapping_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.product', product.id)
+                mapping_id = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'product.product', product.id)
 
                 # get dicc values
                 product_sku = values['sku']
@@ -151,13 +152,13 @@ class sale_shop(osv.osv):
                 del values['set']
 
                 if mapping_id: #uptate
-                    mappings = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [mapping_id])
+                    mappings = magento_external_referential_obj.get_external_referential(cr, uid, [mapping_id])
                     product_mgn_id = mappings[0]['mgn_id']
 
                     store_view = None
                     if 'store_view' in context:
-                        store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', context['store_view'].id)
-                        store_view = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])
+                        store_view = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', context['store_view'].id)
+                        store_view = magento_external_referential_obj.get_external_referential(cr, uid, [store_view])
                         store_view = store_view[0]['mgn_id']
 
                     #~ print product_sku, values
@@ -167,7 +168,7 @@ class sale_shop(osv.osv):
                     try:
                         product_mgn_id = product_api.create(product_type, product_attribute_set, product_sku, values)
                         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Create Product: %s. OpenERP ID %s, Magento ID %s" % (product_sku, product.id, product_mgn_id))
-                        self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.product', product.id, product_mgn_id)
+                        magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'product.product', product.id, product_mgn_id)
                     except:
                         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Magento Create Product: %s %s." % (product_sku, product.id))
 
@@ -183,6 +184,7 @@ class sale_shop(osv.osv):
         """
 
         decimal = self.pool.get('decimal.precision').precision_get(cr, uid, 'Sale Price')
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
 
         product_shop_ids = []
         for shop in self.browse(cr, uid, ids):
@@ -202,9 +204,9 @@ class sale_shop(osv.osv):
             with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
                 context['shop'] = shop
                 for product in self.pool.get('product.product').browse(cr, uid, product_shop_ids, context):
-                    mgn_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.product', product.id)
+                    mgn_id = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'product.product', product.id)
                     if mgn_id:
-                        mgn_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [mgn_id])[0]['mgn_id']
+                        mgn_id = magento_external_referential_obj.get_external_referential(cr, uid, [mgn_id])[0]['mgn_id']
                     #~ store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', shop.id)
                     #~ store_view  = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])[0]['mgn_id']
 
@@ -241,6 +243,8 @@ class sale_shop(osv.osv):
         :return True
         """
 
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
+
         product_shop_ids = []
         for shop in self.browse(cr, uid, ids):
             magento_app = shop.magento_website.magento_app_id
@@ -263,9 +267,9 @@ class sale_shop(osv.osv):
                 context['shop'] = shop
                 for product in self.pool.get('product.product').browse(cr, uid, product_ids, context):
                     stock = 0
-                    mgn_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.product', product.id)
+                    mgn_id = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'product.product', product.id)
                     if mgn_id:
-                        mgn_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [mgn_id])[0]['mgn_id']
+                        mgn_id = magento_external_referential_obj.get_external_referential(cr, uid, [mgn_id])[0]['mgn_id']
 
                     if not mgn_id:#not product created/exist in Magento. Create
                         mgn_id = self.magento_export_products_stepbystep(cr, uid, magento_app, ids, context)
@@ -323,9 +327,9 @@ class sale_shop(osv.osv):
                 for product_image in self.pool.get('product.images').browse(cr, uid, magento_product_images_ids):
                     is_last_exported = self.pool.get('product.images.magento.app').search(cr, uid, [('magento_app_id','=',magento_app.id),('product_images_id','=',product_image.id),('magento_exported','=',True)])
 
-                    product = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.product', product_image.product_id.id)
+                    product = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'product.product', product_image.product_id.id)
                     if product:
-                        product = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [product])
+                        product = magento_external_referential_obj.get_external_referential(cr, uid, [product])
                         product = product[0]['mgn_id']
                     else:
                         LOGGER.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Skip! Product not exists. Not create Image ID %s" % (product_image.id))
@@ -547,6 +551,13 @@ class sale_order(osv.osv):
         'magento_paidinweb': fields.boolean('Paid in web', help='Check this option if this sale order is paid by web payment'),
     }
 
+    def unlink(self, cr, uid, ids, context=None):
+        for id in ids:
+            order = self.pool.get('magento.external.referential').search(cr, uid, [('model_id.model', '=', 'sale.order'), ('oerp_id', '=', id)])
+            if order:
+                raise osv.except_osv(_("Alert"), _("Sale Order ID '%s' not allow to delete because are active in Magento") % (id))
+        return super(sale_order, self).unlink(cr, uid, ids, context)
+
     def magento_create_order(self, cr, uid, sale_shop, values, context=None):
         """
         Create Magento Order
@@ -555,6 +566,8 @@ class sale_order(osv.osv):
         :values: dicc order
         :return sale_order_id (OpenERP ID)
         """
+
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
 
         vals = {}
         confirm = False
@@ -566,15 +579,15 @@ class sale_order(osv.osv):
         If not, create partner
         """
         customer_id = values['customer_id'] and values['customer_id'] or values['billing_address']['customer_id']
-        partner_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer_id)
+        partner_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer_id)
         if not partner_mapping_id:
             customer_info = False
             customer  = self.pool.get('res.partner').magento_customer_info(magento_app, customer_id)
             partner_id = self.pool.get('res.partner').magento_create_partner(cr, uid, magento_app, customer, context)
             magento_app_customer_ids = self.pool.get('magento.app.customer').magento_app_customer_create(cr, uid, magento_app, partner_id, customer, context)
-            partner_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer_id)
-        partner_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_mapping_id])[0]['oerp_id']
-        customer_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_mapping_id])[0]['mgn_id']
+            partner_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer_id)
+        partner_id = magento_external_referential_obj.get_external_referential(cr, uid, [partner_mapping_id])[0]['oerp_id']
+        customer_id = magento_external_referential_obj.get_external_referential(cr, uid, [partner_mapping_id])[0]['mgn_id']
 
         """Partner Address Invoice OpenERP.
         If not, create partner address
@@ -586,7 +599,7 @@ class sale_order(osv.osv):
         if billing_address == '0' or billing_address == None:
             partner_address_invoice_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, values['billing_address'])
         else:
-            partner_invoice_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', billing_address)
+            partner_invoice_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', billing_address)
             if not partner_invoice_mapping_id:
                 if customer_info:
                     customer_info = False
@@ -597,8 +610,8 @@ class sale_order(osv.osv):
                         customer_address['customer_address_id'] = billing_address
                     customer_address['email'] = customer['email']
                 self.pool.get('res.partner.address').magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address)
-                partner_invoice_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', billing_address)
-            partner_address_invoice_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_invoice_mapping_id])[0]['oerp_id']
+                partner_invoice_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', billing_address)
+            partner_address_invoice_id = magento_external_referential_obj.get_external_referential(cr, uid, [partner_invoice_mapping_id])[0]['oerp_id']
 
         """Partner Address Delivery OpenERP.
         If not, create partner address
@@ -610,7 +623,7 @@ class sale_order(osv.osv):
         if shipping_address == '0' or shipping_address == None:
             partner_address_shipping_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, values['shipping_address'])
         else:
-            partner_shipping_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', shipping_address)
+            partner_shipping_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', shipping_address)
             if not partner_shipping_mapping_id:
                 if customer_info:
                     customer_info = False
@@ -621,8 +634,8 @@ class sale_order(osv.osv):
                         customer_address['customer_address_id'] = shipping_address
                     customer_address['email'] = customer['email']
                 self.pool.get('res.partner.address').magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address)
-                partner_shipping_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', shipping_address)
-            partner_address_shipping_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [partner_shipping_mapping_id])[0]['oerp_id']
+                partner_shipping_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', shipping_address)
+            partner_address_shipping_id = magento_external_referential_obj.get_external_referential(cr, uid, [partner_shipping_mapping_id])[0]['oerp_id']
 
         partner = self.pool.get('res.partner').browse(cr, uid, partner_id, context)
 
@@ -705,7 +718,7 @@ class sale_order(osv.osv):
         self.pool.get('magento.app.customer').magento_last_store(cr, uid, magento_app, partner, values)
 
         """Mapping Sale Order"""
-        self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'sale.order', sale_order.id, values['order_id'])
+        magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'sale.order', sale_order.id, values['order_id'])
 
         LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s, magento %s, openerp id %s, magento id %s" % (values['increment_id'], magento_app.name, sale_order.id, values['order_id']))
 
@@ -733,6 +746,7 @@ class sale_order_line(osv.osv):
         """
 
         vals_line = {}
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
 
         decimals = self.pool.get('decimal.precision').precision_get(cr, uid, 'Sale Price')
         
@@ -743,10 +757,10 @@ class sale_order_line(osv.osv):
         weight = item['weight'] and item['weight'] or 0
         weight = round(float(weight),decimals)
 
-        product_mapping_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.product', item['product_id'])
+        product_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'product.product', item['product_id'])
         if product_mapping_id:
             """Product is mapping. Get Product OpenERP"""
-            product_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [product_mapping_id])[0]['oerp_id']
+            product_id = magento_external_referential_obj.get_external_referential(cr, uid, [product_mapping_id])[0]['oerp_id']
             product = self.pool.get('product.product').browse(cr, uid, product_id)
             product_uom = product.uos_id.id and product.uos_id.id or product.uom_id.id
             product_id_change = self.pool.get('sale.order.line').product_id_change(cr, uid,
