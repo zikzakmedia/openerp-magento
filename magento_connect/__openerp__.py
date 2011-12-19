@@ -33,10 +33,9 @@
     1. Requirements:
      1.1 Install Magento Python from:
         - https://github.com/zikzakmedia/magento
-        - http://pypi.python.org/pypi/magento
 
      1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category 
-        - http://www.magentocommerce.com/magento-connect/Sharoon+Thomas/extension/1827/open-erp-connecotr-by-openlabs
+        - https://github.com/zikzakmedia/magento_webservices
 
     2. Configuration
      2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude
