@@ -34,6 +34,13 @@ class res_partner(osv.osv):
         'magento_app_customer': fields.one2many('magento.app.customer', 'partner_id', 'Magento Customer'),
     }
 
+    def unlink(self, cr, uid, ids, context=None):
+        for id in ids:
+            order = self.pool.get('magento.external.referential').search(cr, uid, [('model_id.model', '=', 'res.partner'), ('oerp_id', '=', id)])
+            if order:
+                raise osv.except_osv(_("Alert"), _("Partner ID '%s' not allow to delete because are active in Magento") % (id))
+        return super(res_partner, self).unlink(cr, uid, ids, context)
+    
     def magento_customer_info(self, magento_app, customer_id):
         """Get info Magento Customer
         :magento_app object
@@ -149,6 +156,13 @@ class res_partner_address(osv.osv):
         'magento_firstname':fields.char('First Name', size=100),
         'magento_lastname':fields.char('Last Name', size=100),
     }
+
+    def unlink(self, cr, uid, ids, context=None):
+        for id in ids:
+            order = self.pool.get('magento.external.referential').search(cr, uid, [('model_id.model', '=', 'res.partner.address'), ('oerp_id', '=', id)])
+            if order:
+                raise osv.except_osv(_("Alert"), _("Partner Address ID '%s' not allow to delete because are active in Magento") % (id))
+        return super(res_partner_address, self).unlink(cr, uid, ids, context)
 
     def magento_get_customer_address_country_code(self, cr, uid, magento_app, customer, context = None):
         """Get Country Code Customer Billing Address

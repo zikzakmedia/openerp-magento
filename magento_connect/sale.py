@@ -85,6 +85,13 @@ class sale_shop(osv.osv):
         'magento_from_sale_orders': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'),
     }
 
+    def unlink(self, cr, uid, ids, context=None):
+        for id in ids:
+            order = self.pool.get('magento.external.referential').search(cr, uid, [('model_id.model', '=', 'sale.shop'), ('oerp_id', '=', id)])
+            if order:
+                raise osv.except_osv(_("Alert"), _("Sale shop ID '%s' not allow to delete because are active in Magento") % (id))
+        return super(sale_shop, self).unlink(cr, uid, ids, context)
+
     def magento_export_products(self, cr, uid, ids, context=None):
         """
         Sync Products to Magento Site filterd by magento_sale_shop
@@ -137,7 +144,7 @@ class sale_shop(osv.osv):
                 product_template_vals = self.pool.get('base.external.mapping').get_oerp_to_external(cr, uid, 'magento.product.template',[product.product_tmpl_id.id], context)
 
                 values = dict(product_product_vals[0], **product_template_vals[0])
-                print values
+
                 mapping_id = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'product.product', product.id)
 
                 # get dicc values
@@ -421,11 +428,14 @@ class sale_shop(osv.osv):
             magento_app = sale_shop.magento_website.magento_app_id
 
             with Order(magento_app.uri, magento_app.username, magento_app.password) as order_api:
-                creted_filter = {'from':sale_shop.magento_from_sale_orders}
-                if sale_shop.magento_to_sale_orders:
-                    creted_filter['to'] = sale_shop.magento_to_sale_orders
+                if 'ofilter' in context:
+                    ofilter = context['ofilter']
+                else:
+                    creted_filter = {'from':sale_shop.magento_from_sale_orders}
+                    if sale_shop.magento_to_sale_orders:
+                        creted_filter['to'] = sale_shop.magento_to_sale_orders
+                    ofilter = {'created_at':creted_filter}
 
-                ofilter = {'created_at':creted_filter}
                 orders = order_api.list(ofilter)
 
                 #~ Update date last import

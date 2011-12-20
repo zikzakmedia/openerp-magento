@@ -82,7 +82,10 @@ class magento_app(osv.osv):
                 raise osv.except_osv(_("Alert"), _("Select Store View Magento"))
 
             with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
-                ofilter = {'created_at':{'from':magento_app.from_import_products, 'to':magento_app.to_import_products}}
+                if 'ofilter' in context:
+                    ofilter = context['ofilter']
+                else:
+                    ofilter = {'created_at':{'from':magento_app.from_import_products, 'to':magento_app.to_import_products}}
 
                 store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', magento_app.magento_default_storeview.id)
                 store_view = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])
