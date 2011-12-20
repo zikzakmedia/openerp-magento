@@ -317,7 +317,7 @@ class magento_app(osv.osv):
                                             product_attributes = self.pool.get('product.attributes').search(cr, uid, [('name','=',values['name'])])
                                             if not len(product_attributes)>0:
                                                 product_attribute_oerp_id = self.pool.get('product.attributes').create(cr, uid, values, context)
-                                                magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'magento.website', product_attribute_oerp_id, product_attribute['attribute_id'])
+                                                magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'product.attributes', product_attribute_oerp_id, product_attribute['attribute_id'])
                                                 cr.commit()
                                                 LOGGER.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Create Attribute Product: magento %s, magento attribute code %s." % (magento_app.name, product_attribute['code']))
                                             else:
