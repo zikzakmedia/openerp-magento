@@ -95,9 +95,10 @@ class product_category(osv.osv):
     }
 
     _defaults = {
-        'magento_available_sort_by': lambda self,cr,uid,c: self.pool.get('magento.product_category_attribute_options')._get_default_option(cr, uid, 'available_sort_by', 'None', context=c),
-        'magento_default_sort_by': lambda self,cr,uid,c: self.pool.get('magento.product_category_attribute_options')._get_default_option(cr, uid, 'default_sort_by', 'None', context=c),
+        # 'magento_available_sort_by': lambda self,cr,uid,c: self.pool.get('magento.product_category_attribute_options')._get_default_option(cr, uid, 'available_sort_by', 'None', context=c),
+        # 'magento_default_sort_by': lambda self,cr,uid,c: self.pool.get('magento.product_category_attribute_options')._get_default_option(cr, uid, 'default_sort_by', 'None', context=c),
         'magento_include_in_menu': lambda *a: 1,
+        'magento_is_active': lambda *a: 1,
     }
 
     def magento_record_entire_tree(self, cr, uid, magento_app, categ_tree, context={}):
@@ -215,7 +216,7 @@ class product_product(osv.osv):
         'magento_visibility': '4',
     }
 
-    def create(self, cr, uid, vals, context):
+    def create(self, cr, uid, vals, context=None):
         if 'magento_sku' in vals:
             if self._check_magento_sku(cr, uid, vals['magento_sku']):
                 raise osv.except_osv(_("Alert"), _("Error! Magento SKU %s must be unique") % (vals['magento_sku']))

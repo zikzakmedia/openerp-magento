@@ -303,7 +303,6 @@
                     <field name="res_country_state_id"/>
                     <field name="code"/>
                     <field name="region_id"/>
-                    <field name="name"/>
                 </tree>
             </field>
         </record>
@@ -318,7 +317,6 @@
                     <field name="res_country_state_id"/>
                     <field name="code" select="1"/>
                     <field name="region_id" select="1"/>
-                    <field name="name" select="1"/>
                 </form>
             </field>
         </record>
@@ -336,6 +334,7 @@
             src_model="magento.app"
             id="act_magento_region"/>
 
+        <menuitem action="act_magento_region" id="menu_magento_region" parent="menu_magento" groups="base.group_extended" sequence="50"/>
         <menuitem action="action_magento_customer_group" id="menu_magento_customer_group" parent="menu_magento" groups="base.group_extended" sequence="50"/>
 
     </data>

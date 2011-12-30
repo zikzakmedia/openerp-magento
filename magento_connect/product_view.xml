@@ -14,27 +14,24 @@
                 </xpath>
                 <xpath expr="/form/field[@name='sequence']" position="after">
                     <group colspan="4" col="4">
+                        <separator string="Magento Information" colspan="4" />
                         <field name="magento_exportable" attrs="{'invisible':[('magento_exportable','==',True)]}"/>
                         <notebook colspan="4">
                             <page string="Magento" attrs="{'invisible':[('magento_exportable','==',False)]}">
-                                <notebook colspan="4">
-                                    <page string="Meta Information">
-                                        <field name="magento_url_key" colspan="4" attrs="{'required':[('magento_exportable','==',True)]}"/>
-                                        <field name="magento_meta_title" colspan="4" />
-                                        <field name="magento_meta_keywords" colspan="4" />
-                                        <field name="magento_meta_description" colspan="4" />
-                                    </page>
-                                    <page string="Description">
-                                        <field name="magento_description" colspan="4" nolabel="1"/>
-                                    </page>
-                                    <page string="Display Settings">
-                                        <field name="magento_is_active" />
-                                        <field name="magento_include_in_menu" />
-                                        <separator string="Sorting method" colspan="4" />
-                                        <field name="magento_available_sort_by" widget="selection" domain="[('attribute_name', '=', 'available_sort_by')]"/>
-                                        <field name="magento_default_sort_by" widget="selection" domain="[('attribute_name', '=', 'default_sort_by')]"/>
-                                    </page>
-                                </notebook>
+                                <field name="magento_url_key" colspan="4" attrs="{'required':[('magento_exportable','==',True)]}"/>
+                                <field name="magento_meta_title" colspan="4" />
+                                <field name="magento_meta_keywords" colspan="4" />
+                                <field name="magento_meta_description" colspan="4" />
+                            </page>
+                            <page string="Description">
+                                <field name="magento_description" colspan="4" nolabel="1"/>
+                            </page>
+                            <page string="Display Settings">
+                                <field name="magento_is_active" />
+                                <field name="magento_include_in_menu" />
+                                <separator string="Sorting method" colspan="4" />
+                                <field name="magento_available_sort_by" widget="selection" domain="[('attribute_name', '=', 'available_sort_by')]"/>
+                                <field name="magento_default_sort_by" widget="selection" domain="[('attribute_name', '=', 'default_sort_by')]"/>
                             </page>
                         </notebook>
                     </group>

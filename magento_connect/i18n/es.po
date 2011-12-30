@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.2\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-12-20 08:59+0000\n"
-"PO-Revision-Date: 2011-12-20 10:00+0100\n"
+"POT-Creation-Date: 2011-12-23 16:08+0000\n"
+"PO-Revision-Date: 2011-12-23 17:09+0100\n"
 "Last-Translator: Raimon Esteve <resteve@zikzakmedia.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -79,7 +79,7 @@ msgid "Title"
 msgstr "Título"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:732
+#: code:addons/magento_connect/mgn.py:736
 #, python-format
 msgid "This Magento Store Group not allow to delete"
 msgstr "No se puede borrar este grupo de tiendas Magento"
@@ -97,7 +97,7 @@ msgid "This date is last import. If you need import new products, you can modify
 msgstr "Esta es la fecha de última importación. Si necesita importar nuevos productos, puede modificar esta fecha (filtro)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:884
+#: code:addons/magento_connect/mgn.py:888
 #, python-format
 msgid "This Magento Region not allow to delete"
 msgstr "Estas regiones no se pueden eliminar"
@@ -215,7 +215,7 @@ msgid "Magento File Name"
 msgstr "Nombre del archivo"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:750
+#: code:addons/magento_connect/mgn.py:754
 #, python-format
 msgid "This Magento Store View not allow to delete"
 msgstr "No está permitido borrar esta vista de tienda de Magento"
@@ -343,7 +343,7 @@ msgid "This date is last export. If you need export all partners, empty this fie
 msgstr "Esta es la fecha de última exportación. Si necesita la exportación de todas las empresas, deje vacía esta fecha (sincronización larga)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:717
+#: code:addons/magento_connect/mgn.py:721
 #, python-format
 msgid "This Magento Website not allow to delete"
 msgstr "No se puede borrar este sitio web Magento"
@@ -354,7 +354,6 @@ msgid "Error ! You can not create recursive categories."
 msgstr "¡Error! No puede crear categorías recursivas."
 
 #. module: magento_connect
-#: model:product.product,name:magento_connect.product_product_cash_on_delivery
 #: model:product.template,name:magento_connect.product_product_cash_on_delivery_product_template
 msgid "Cash on delivery"
 msgstr "Contrareembolso"
@@ -484,7 +483,7 @@ msgstr "Este correo electrónico ya está siendo utilizado por otra empresa en e
 #. module: magento_connect
 #: field:magento.region,res_country_state_id:0
 msgid "State"
-msgstr "Estado"
+msgstr "Provincia"
 
 #. module: magento_connect
 #: field:magento.app,warehouse_id:0
@@ -507,9 +506,34 @@ msgid "Type"
 msgstr "Tipo"
 
 #. module: magento_connect
-#: help:magento.sale.shop.status.type,paidinweb:0
-msgid "Paid in web. Sale Order is paid in web"
-msgstr "Paid in web. Sale Order is paid in web"
+#: model:ir.module.module,description:magento_connect.module_meta_information
+msgid ""
+"\n"
+"    Magento E-commerce management. Your Magento and OpenERP are connecting.\n"
+"\n"
+"    1. Requirements:\n"
+"     1.1 Install Magento Python from:\n"
+"        - https://github.com/zikzakmedia/magento\n"
+"\n"
+"     1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category \n"
+"        - https://github.com/zikzakmedia/magento_webservices\n"
+"\n"
+"    2. Configuration\n"
+"     2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude\n"
+"     2.2 Mapping more product fields go to Administrator -> Customization -> Database Structure -> External Mapping\n"
+"     2.3 Configure yours Magento APP: Sale -> Configuration -> Magento\n"
+"    \n"
+"    3. Other information\n"
+"     3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.\n"
+"     3.2 Also exists another module Magento management we working another projects:\n"
+"        - https://launchpad.net/magentoerpconnect\n"
+"        \n"
+"    Documentation available at (spanish):\n"
+"    http://wiki.zikzakmedia.com/openerp:magentoconnect\n"
+"\n"
+"    Special Thanks to Akretion www.akretion.com and OpenLabs www.openlabs.co.in\n"
+"    "
+msgstr "Idioma por defecto"
 
 #. module: magento_connect
 #: view:magento.external.referential:0
@@ -617,7 +641,6 @@ msgid "Pricelist"
 msgstr "Tarifa"
 
 #. module: magento_connect
-#: model:product.product,name:magento_connect.product_product_gift
 #: model:product.template,name:magento_connect.product_product_gift_product_template
 msgid "Gift Certificate"
 msgstr "Mensaje de regalo"
@@ -859,7 +882,7 @@ msgid "To Import Products"
 msgstr "Productos hasta la fecha"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:925
+#: code:addons/magento_connect/mgn.py:929
 #, python-format
 msgid "This Magento Websites/Groups not allow to delete"
 msgstr "No se puede borrar este sitio de Magento"
@@ -875,12 +898,12 @@ msgid "Import Customer Group"
 msgstr "Importar grupos de clientes"
 
 #. module: magento_connect
-#: field:sale.shop,magento_scheduler:0
-msgid "Scheduler"
-msgstr "Scheduler"
+#: view:product.category:0
+msgid "Magento Information"
+msgstr "Información Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:567
+#: code:addons/magento_connect/sale.py:570
 #, python-format
 msgid "Sale Order ID '%s' not allow to delete because are active in Magento"
 msgstr "No se puede borrar el pedido '%s' porque está activo en la tienda Magento"
@@ -937,6 +960,11 @@ msgid "Connection to server failed."
 msgstr "La conexión al servidor ha fallado."
 
 #. module: magento_connect
+#: field:sale.shop,magento_scheduler:0
+msgid "Scheduler"
+msgstr "Scheduler"
+
+#. module: magento_connect
 #: help:sale.shop,magento_last_import_sale_orders:0
 msgid "This date correspond to the last export. If you need export all status, left empty this field."
 msgstr "Esta es la fecha de la última exportación. Si necesita exportar todos los estados, deje vacía esta fecha (sincronización larga)"
@@ -990,6 +1018,11 @@ msgid "Websites Info"
 msgstr "Información de sitios web"
 
 #. module: magento_connect
+#: sql_constraint:product.category:0
+msgid "Slug must be unique"
+msgstr "Slug must be unique"
+
+#. module: magento_connect
 #: model:ir.model,name:magento_connect.model_magento_external_referential
 msgid "Magento External Referential"
 msgstr "Referencia externa Magento"
@@ -1016,8 +1049,8 @@ msgid "OpenERP Model"
 msgstr "Modelo OpenERP"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:767
-#: code:addons/magento_connect/mgn.py:814
+#: code:addons/magento_connect/mgn.py:771
+#: code:addons/magento_connect/mgn.py:818
 #, python-format
 msgid "Select language available this store view"
 msgstr "Seleccionar idioma disponible para la vista de la tienda"
@@ -1078,56 +1111,6 @@ msgid "Magento Attribute Group"
 msgstr "Grupo de atributos Magento"
 
 #. module: magento_connect
-#: model:ir.module.module,description:magento_connect.module_meta_information
-msgid ""
-"\n"
-"    Magento E-commerce management. Your Magento and OpenERP are connecting.\n"
-"\n"
-"    1. Requirements:\n"
-"     1.1 Install Magento Python from:\n"
-"        - https://github.com/zikzakmedia/magento\n"
-"        - http://pypi.python.org/pypi/magento\n"
-"\n"
-"     1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category \n"
-"        - http://www.magentocommerce.com/magento-connect/Sharoon+Thomas/extension/1827/open-erp-connecotr-by-openlabs\n"
-"\n"
-"    2. Configuration\n"
-"     2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude\n"
-"     2.2 Mapping more product fields go to Administrator -> Customization -> Database Structure -> External Mapping\n"
-"     2.3 Configure yours Magento APP: Sale -> Configuration -> Magento\n"
-"    \n"
-"    3. Other information\n"
-"     3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.\n"
-"     3.2 Also exists another module Magento management we working another projects:\n"
-"        - https://launchpad.net/magentoerpconnect\n"
-"        \n"
-"    Documentation available at (spanish):\n"
-"    http://wiki.zikzakmedia.com/openerp:magentoconnect\n"
-"\n"
-"    Special Thanks to Akretion www.akretion.com and OpenLabs www.openlabs.co.in\n"
-"    "
-msgstr ""
-"\n"
-"    Gestor de Magento E-Commerce. Su conector de Magento a OpenERP.\n"
-"\n"
-"    Requisitos:\n"
-"    Instalar Magento Python desde:\n"
-"        - https://github.com/zikzakmedia/magento\n"
-"\n"
-"    Instalar la API del módulo extendido de Magento. Este módulo es el mismo que el utilizado por magentoeprconnect. Añade los métodos de la API adicionales para utilizar el sitio multi web, multi tienda, categoría multi producto:\n"
-"        - http://www.magentocommerce.com/magento-connect/Sharoon+Thomas/extension/1827/open-erp-connecotr-by-openlabs\n"
-"\n"
-"    Configure su aplicación Magento: Ventas -> Configuración -> Magento\n"
-"    Para asignar más campos de productos abrir Administrador -> Personalización -> Estructura de la base de datos -> External Mapping\n"
-"\n"
-"    El módulo Magento utiliza los atributos de producto para añadir nuevos campos al modelo producto. Este módulo no utiliza EAV (Entity-attribute-value model) y hay un máximo de campos disponibles en la tabla producto de PostgreSQL.\n"
-"\n"
-"    También existe otro módulo para gestionar Magento.\n"
-"        - https://launchpad.net/magentoerpconnect\n"
-"Agredecimientos a Akretion www.akretion.com\n"
-"    "
-
-#. module: magento_connect
 #: field:sale.shop,magento_tax_include:0
 msgid "Tax Include"
 msgstr "Impuestos incluidos"
@@ -1149,12 +1132,12 @@ msgstr "Exportar stock"
 
 #. module: magento_connect
 #: model:ir.actions.act_window,name:magento_connect.act_magento_region
+#: model:ir.ui.menu,name:magento_connect.menu_magento_region
 #: view:magento.app:0
 msgid "Regions"
 msgstr "Provincias"
 
 #. module: magento_connect
-#: model:product.product,name:magento_connect.product_product_discount
 #: model:product.template,name:magento_connect.product_product_discount_product_template
 msgid "Discount Coupon"
 msgstr "Cupón descuento"
@@ -1168,7 +1151,7 @@ msgid "Code"
 msgstr "Código"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:850
+#: code:addons/magento_connect/mgn.py:854
 #, python-format
 msgid "This Magento Attribute Exclude not allow to delete"
 msgstr "No se puede borrar este atributo de exclusión de Magento"
@@ -1328,7 +1311,6 @@ msgid "Stock"
 msgstr "Estoc"
 
 #. module: magento_connect
-#: model:product.product,name:magento_connect.product_product_shipping
 #: model:product.template,name:magento_connect.product_product_shipping_product_template
 msgid "Shipping and Handling"
 msgstr "Envío y manipulación"
@@ -1373,17 +1355,17 @@ msgstr "¿Está seguro de continuar? Revise el historial del servidor."
 
 #. module: magento_connect
 #: code:addons/magento_connect/mgn.py:443
-#: code:addons/magento_connect/mgn.py:558
-#: code:addons/magento_connect/mgn.py:601
-#: code:addons/magento_connect/mgn.py:717
-#: code:addons/magento_connect/mgn.py:732
-#: code:addons/magento_connect/mgn.py:750
-#: code:addons/magento_connect/mgn.py:767
-#: code:addons/magento_connect/mgn.py:814
-#: code:addons/magento_connect/mgn.py:850
-#: code:addons/magento_connect/mgn.py:865
-#: code:addons/magento_connect/mgn.py:884
-#: code:addons/magento_connect/mgn.py:925
+#: code:addons/magento_connect/mgn.py:562
+#: code:addons/magento_connect/mgn.py:605
+#: code:addons/magento_connect/mgn.py:721
+#: code:addons/magento_connect/mgn.py:736
+#: code:addons/magento_connect/mgn.py:754
+#: code:addons/magento_connect/mgn.py:771
+#: code:addons/magento_connect/mgn.py:818
+#: code:addons/magento_connect/mgn.py:854
+#: code:addons/magento_connect/mgn.py:869
+#: code:addons/magento_connect/mgn.py:888
+#: code:addons/magento_connect/mgn.py:929
 #: code:addons/magento_connect/mgn_referential.py:42
 #: code:addons/magento_connect/partner.py:41
 #: code:addons/magento_connect/partner.py:164
@@ -1393,7 +1375,7 @@ msgstr "¿Está seguro de continuar? Revise el historial del servidor."
 #: code:addons/magento_connect/product.py:236
 #: code:addons/magento_connect/product_images.py:92
 #: code:addons/magento_connect/sale.py:92
-#: code:addons/magento_connect/sale.py:567
+#: code:addons/magento_connect/sale.py:570
 #, python-format
 msgid "Alert"
 msgstr "Alerta"
@@ -1423,11 +1405,6 @@ msgstr "Esta es la fecha de la última importación. Si necesita la importación
 #: selection:sale.shop,magento_default_order_policy:0
 msgid "Invoice from the Packing"
 msgstr "Factura desde el albarán"
-
-#. module: magento_connect
-#: constraint:product.product:0
-msgid "Several dimension values for the same dimension type"
-msgstr "Several dimension values for the same dimension type"
 
 #. module: magento_connect
 #: field:magento.app,password:0
@@ -1497,6 +1474,11 @@ msgid "Sale"
 msgstr "Venta"
 
 #. module: magento_connect
+#: help:magento.sale.shop.status.type,paidinweb:0
+msgid "Paid in web. Sale Order is paid in web"
+msgstr "Paid in web. Sale Order is paid in web"
+
+#. module: magento_connect
 #: view:magento.app:0
 #: field:magento.app.customer,magento_app_id:0
 #: field:magento.customer.group,magento_app_id:0
@@ -1556,7 +1538,7 @@ msgid "Magento Filters..."
 msgstr "Magento filtros..."
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:865
+#: code:addons/magento_connect/mgn.py:869
 #, python-format
 msgid "This Magento Customer Group not allow to delete"
 msgstr "No se puede borrar este grupo de clientes de Magento"
@@ -1575,11 +1557,6 @@ msgstr "Seleccionar opción"
 #: help:magento.app,uri:0
 msgid "URI Magento App. http://yourmagento.com/ (with / at end URI)"
 msgstr "URI de aplicaciones Magento. http://yourmagento.com/ (con / al final de la URI)"
-
-#. module: magento_connect
-#: view:product.category:0
-msgid "Meta Information"
-msgstr "Meta información"
 
 #. module: magento_connect
 #: view:magento.storeview:0
@@ -1603,8 +1580,8 @@ msgstr "Plazo de pago"
 
 #. module: magento_connect
 #: code:addons/magento_connect/mgn.py:443
-#: code:addons/magento_connect/mgn.py:558
-#: code:addons/magento_connect/mgn.py:601
+#: code:addons/magento_connect/mgn.py:562
+#: code:addons/magento_connect/mgn.py:605
 #, python-format
 msgid "Select Store View Magento"
 msgstr "Seleccione la vista de la tienda Magento"
@@ -1676,6 +1653,8 @@ msgstr "Esta es la fecha de la última exportación. Si necesita la exportación
 msgid "Paid/Delivered"
 msgstr "Pagado/Entregado"
 
+#~ msgid "Several dimension values for the same dimension type"
+#~ msgstr "Several dimension values for the same dimension type"
 #~ msgid "Referential Actions"
 #~ msgstr "Acciones de referencia"
 #~ msgid "Actions"

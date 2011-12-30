@@ -459,7 +459,8 @@ class magento_app(osv.osv):
 
                 for product in product_api.list(ofilter, store_view):
                     self.pool.get('product.product').magento_create_product_type(cr, uid, magento_app, product, store_view, context)
-
+                    
+        LOGGER.notifyChannel('Magento Sync Products', netsvc.LOG_INFO, "End Sync Products magento app %s." % (magento_app.name))
         return True
 
     def core_sync_images(self, cr, uid, ids, context):
@@ -880,7 +881,7 @@ class magento_region(osv.osv):
         'res_country_state_id': fields.many2one('res.country.state', 'State'),
         'code': fields.char('Code', size=256, required=True, readonly=True),
         'region_id': fields.integer('Region ID', required=True, readonly=True),
-        'name': fields.char('Name', size=256, readonly=True),
+        'name': fields.char('Name', size=256, readonly=True), #this field are available in magento and Null, but we don't use it
     }
 
     def unlink(self, cr, uid, ids, context=None):

@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 6.0.2\n"
+"Project-Id-Version: OpenERP Server 6.0.3\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-12-20 08:59+0000\n"
-"PO-Revision-Date: 2011-12-20 08:59+0000\n"
+"POT-Creation-Date: 2011-12-23 16:08+0000\n"
+"PO-Revision-Date: 2011-12-23 16:08+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -79,7 +79,7 @@ msgid "Title"
 msgstr "Title"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:732
+#: code:addons/magento_connect/mgn.py:736
 #, python-format
 msgid "This Magento Store Group not allow to delete"
 msgstr "This Magento Store Group not allow to delete"
@@ -97,7 +97,7 @@ msgid "This date is last import. If you need import new products, you can modify
 msgstr "This date is last import. If you need import new products, you can modify this date (filter)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:884
+#: code:addons/magento_connect/mgn.py:888
 #, python-format
 msgid "This Magento Region not allow to delete"
 msgstr "This Magento Region not allow to delete"
@@ -215,7 +215,7 @@ msgid "Magento File Name"
 msgstr "Magento File Name"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:750
+#: code:addons/magento_connect/mgn.py:754
 #, python-format
 msgid "This Magento Store View not allow to delete"
 msgstr "This Magento Store View not allow to delete"
@@ -343,7 +343,7 @@ msgid "This date is last export. If you need export all partners, empty this fie
 msgstr "This date is last export. If you need export all partners, empty this field (long sync)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:717
+#: code:addons/magento_connect/mgn.py:721
 #, python-format
 msgid "This Magento Website not allow to delete"
 msgstr "This Magento Website not allow to delete"
@@ -354,7 +354,6 @@ msgid "Error ! You can not create recursive categories."
 msgstr "Error ! You can not create recursive categories."
 
 #. module: magento_connect
-#: model:product.product,name:magento_connect.product_product_cash_on_delivery
 #: model:product.template,name:magento_connect.product_product_cash_on_delivery_product_template
 msgid "Cash on delivery"
 msgstr "Cash on delivery"
@@ -507,9 +506,57 @@ msgid "Type"
 msgstr "Type"
 
 #. module: magento_connect
-#: help:magento.sale.shop.status.type,paidinweb:0
-msgid "Paid in web. Sale Order is paid in web"
-msgstr "Paid in web. Sale Order is paid in web"
+#: model:ir.module.module,description:magento_connect.module_meta_information
+msgid "\n"
+"    Magento E-commerce management. Your Magento and OpenERP are connecting.\n"
+"\n"
+"    1. Requirements:\n"
+"     1.1 Install Magento Python from:\n"
+"        - https://github.com/zikzakmedia/magento\n"
+"\n"
+"     1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category \n"
+"        - https://github.com/zikzakmedia/magento_webservices\n"
+"\n"
+"    2. Configuration\n"
+"     2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude\n"
+"     2.2 Mapping more product fields go to Administrator -> Customization -> Database Structure -> External Mapping\n"
+"     2.3 Configure yours Magento APP: Sale -> Configuration -> Magento\n"
+"    \n"
+"    3. Other information\n"
+"     3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.\n"
+"     3.2 Also exists another module Magento management we working another projects:\n"
+"        - https://launchpad.net/magentoerpconnect\n"
+"        \n"
+"    Documentation available at (spanish):\n"
+"    http://wiki.zikzakmedia.com/openerp:magentoconnect\n"
+"\n"
+"    Special Thanks to Akretion www.akretion.com and OpenLabs www.openlabs.co.in\n"
+"    "
+msgstr "\n"
+"    Magento E-commerce management. Your Magento and OpenERP are connecting.\n"
+"\n"
+"    1. Requirements:\n"
+"     1.1 Install Magento Python from:\n"
+"        - https://github.com/zikzakmedia/magento\n"
+"\n"
+"     1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category \n"
+"        - https://github.com/zikzakmedia/magento_webservices\n"
+"\n"
+"    2. Configuration\n"
+"     2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude\n"
+"     2.2 Mapping more product fields go to Administrator -> Customization -> Database Structure -> External Mapping\n"
+"     2.3 Configure yours Magento APP: Sale -> Configuration -> Magento\n"
+"    \n"
+"    3. Other information\n"
+"     3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.\n"
+"     3.2 Also exists another module Magento management we working another projects:\n"
+"        - https://launchpad.net/magentoerpconnect\n"
+"        \n"
+"    Documentation available at (spanish):\n"
+"    http://wiki.zikzakmedia.com/openerp:magentoconnect\n"
+"\n"
+"    Special Thanks to Akretion www.akretion.com and OpenLabs www.openlabs.co.in\n"
+"    "
 
 #. module: magento_connect
 #: view:magento.external.referential:0
@@ -617,7 +664,6 @@ msgid "Pricelist"
 msgstr "Pricelist"
 
 #. module: magento_connect
-#: model:product.product,name:magento_connect.product_product_gift
 #: model:product.template,name:magento_connect.product_product_gift_product_template
 msgid "Gift Certificate"
 msgstr "Gift Certificate"
@@ -859,7 +905,7 @@ msgid "To Import Products"
 msgstr "To Import Products"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:925
+#: code:addons/magento_connect/mgn.py:929
 #, python-format
 msgid "This Magento Websites/Groups not allow to delete"
 msgstr "This Magento Websites/Groups not allow to delete"
@@ -875,12 +921,12 @@ msgid "Import Customer Group"
 msgstr "Import Customer Group"
 
 #. module: magento_connect
-#: field:sale.shop,magento_scheduler:0
-msgid "Scheduler"
-msgstr "Scheduler"
+#: view:product.category:0
+msgid "Magento Information"
+msgstr "Magento Information"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:567
+#: code:addons/magento_connect/sale.py:570
 #, python-format
 msgid "Sale Order ID '%s' not allow to delete because are active in Magento"
 msgstr "Sale Order ID '%s' not allow to delete because are active in Magento"
@@ -937,6 +983,11 @@ msgid "Connection to server failed."
 msgstr "Connection to server failed."
 
 #. module: magento_connect
+#: field:sale.shop,magento_scheduler:0
+msgid "Scheduler"
+msgstr "Scheduler"
+
+#. module: magento_connect
 #: help:sale.shop,magento_last_import_sale_orders:0
 msgid "This date correspond to the last export. If you need export all status, left empty this field."
 msgstr "This date correspond to the last export. If you need export all status, left empty this field."
@@ -990,6 +1041,11 @@ msgid "Websites Info"
 msgstr "Websites Info"
 
 #. module: magento_connect
+#: sql_constraint:product.category:0
+msgid "Slug must be unique"
+msgstr "Slug must be unique"
+
+#. module: magento_connect
 #: model:ir.model,name:magento_connect.model_magento_external_referential
 msgid "Magento External Referential"
 msgstr "Magento External Referential"
@@ -1016,8 +1072,8 @@ msgid "OpenERP Model"
 msgstr "OpenERP Model"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:767
-#: code:addons/magento_connect/mgn.py:814
+#: code:addons/magento_connect/mgn.py:771
+#: code:addons/magento_connect/mgn.py:818
 #, python-format
 msgid "Select language available this store view"
 msgstr "Select language available this store view"
@@ -1078,61 +1134,6 @@ msgid "Magento Attribute Group"
 msgstr "Magento Attribute Group"
 
 #. module: magento_connect
-#: model:ir.module.module,description:magento_connect.module_meta_information
-msgid "\n"
-"    Magento E-commerce management. Your Magento and OpenERP are connecting.\n"
-"\n"
-"    1. Requirements:\n"
-"     1.1 Install Magento Python from:\n"
-"        - https://github.com/zikzakmedia/magento\n"
-"        - http://pypi.python.org/pypi/magento\n"
-"\n"
-"     1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category \n"
-"        - http://www.magentocommerce.com/magento-connect/Sharoon+Thomas/extension/1827/open-erp-connecotr-by-openlabs\n"
-"\n"
-"    2. Configuration\n"
-"     2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude\n"
-"     2.2 Mapping more product fields go to Administrator -> Customization -> Database Structure -> External Mapping\n"
-"     2.3 Configure yours Magento APP: Sale -> Configuration -> Magento\n"
-"    \n"
-"    3. Other information\n"
-"     3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.\n"
-"     3.2 Also exists another module Magento management we working another projects:\n"
-"        - https://launchpad.net/magentoerpconnect\n"
-"        \n"
-"    Documentation available at (spanish):\n"
-"    http://wiki.zikzakmedia.com/openerp:magentoconnect\n"
-"\n"
-"    Special Thanks to Akretion www.akretion.com and OpenLabs www.openlabs.co.in\n"
-"    "
-msgstr "\n"
-"    Magento E-commerce management. Your Magento and OpenERP are connecting.\n"
-"\n"
-"    1. Requirements:\n"
-"     1.1 Install Magento Python from:\n"
-"        - https://github.com/zikzakmedia/magento\n"
-"        - http://pypi.python.org/pypi/magento\n"
-"\n"
-"     1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category \n"
-"        - http://www.magentocommerce.com/magento-connect/Sharoon+Thomas/extension/1827/open-erp-connecotr-by-openlabs\n"
-"\n"
-"    2. Configuration\n"
-"     2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude\n"
-"     2.2 Mapping more product fields go to Administrator -> Customization -> Database Structure -> External Mapping\n"
-"     2.3 Configure yours Magento APP: Sale -> Configuration -> Magento\n"
-"    \n"
-"    3. Other information\n"
-"     3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.\n"
-"     3.2 Also exists another module Magento management we working another projects:\n"
-"        - https://launchpad.net/magentoerpconnect\n"
-"        \n"
-"    Documentation available at (spanish):\n"
-"    http://wiki.zikzakmedia.com/openerp:magentoconnect\n"
-"\n"
-"    Special Thanks to Akretion www.akretion.com and OpenLabs www.openlabs.co.in\n"
-"    "
-
-#. module: magento_connect
 #: field:sale.shop,magento_tax_include:0
 msgid "Tax Include"
 msgstr "Tax Include"
@@ -1154,12 +1155,12 @@ msgstr "Export Stock"
 
 #. module: magento_connect
 #: model:ir.actions.act_window,name:magento_connect.act_magento_region
+#: model:ir.ui.menu,name:magento_connect.menu_magento_region
 #: view:magento.app:0
 msgid "Regions"
 msgstr "Regions"
 
 #. module: magento_connect
-#: model:product.product,name:magento_connect.product_product_discount
 #: model:product.template,name:magento_connect.product_product_discount_product_template
 msgid "Discount Coupon"
 msgstr "Discount Coupon"
@@ -1173,7 +1174,7 @@ msgid "Code"
 msgstr "Code"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:850
+#: code:addons/magento_connect/mgn.py:854
 #, python-format
 msgid "This Magento Attribute Exclude not allow to delete"
 msgstr "This Magento Attribute Exclude not allow to delete"
@@ -1333,7 +1334,6 @@ msgid "Stock"
 msgstr "Stock"
 
 #. module: magento_connect
-#: model:product.product,name:magento_connect.product_product_shipping
 #: model:product.template,name:magento_connect.product_product_shipping_product_template
 msgid "Shipping and Handling"
 msgstr "Shipping and Handling"
@@ -1378,17 +1378,17 @@ msgstr "Are you sure to continue? See logs server process"
 
 #. module: magento_connect
 #: code:addons/magento_connect/mgn.py:443
-#: code:addons/magento_connect/mgn.py:558
-#: code:addons/magento_connect/mgn.py:601
-#: code:addons/magento_connect/mgn.py:717
-#: code:addons/magento_connect/mgn.py:732
-#: code:addons/magento_connect/mgn.py:750
-#: code:addons/magento_connect/mgn.py:767
-#: code:addons/magento_connect/mgn.py:814
-#: code:addons/magento_connect/mgn.py:850
-#: code:addons/magento_connect/mgn.py:865
-#: code:addons/magento_connect/mgn.py:884
-#: code:addons/magento_connect/mgn.py:925
+#: code:addons/magento_connect/mgn.py:562
+#: code:addons/magento_connect/mgn.py:605
+#: code:addons/magento_connect/mgn.py:721
+#: code:addons/magento_connect/mgn.py:736
+#: code:addons/magento_connect/mgn.py:754
+#: code:addons/magento_connect/mgn.py:771
+#: code:addons/magento_connect/mgn.py:818
+#: code:addons/magento_connect/mgn.py:854
+#: code:addons/magento_connect/mgn.py:869
+#: code:addons/magento_connect/mgn.py:888
+#: code:addons/magento_connect/mgn.py:929
 #: code:addons/magento_connect/mgn_referential.py:42
 #: code:addons/magento_connect/partner.py:41
 #: code:addons/magento_connect/partner.py:164
@@ -1398,7 +1398,7 @@ msgstr "Are you sure to continue? See logs server process"
 #: code:addons/magento_connect/product.py:236
 #: code:addons/magento_connect/product_images.py:92
 #: code:addons/magento_connect/sale.py:92
-#: code:addons/magento_connect/sale.py:567
+#: code:addons/magento_connect/sale.py:570
 #, python-format
 msgid "Alert"
 msgstr "Alert"
@@ -1428,11 +1428,6 @@ msgstr "This date is last export. If you need export new products, you can modif
 #: selection:sale.shop,magento_default_order_policy:0
 msgid "Invoice from the Packing"
 msgstr "Invoice from the Packing"
-
-#. module: magento_connect
-#: constraint:product.product:0
-msgid "Several dimension values for the same dimension type"
-msgstr "Several dimension values for the same dimension type"
 
 #. module: magento_connect
 #: field:magento.app,password:0
@@ -1502,6 +1497,11 @@ msgid "Sale"
 msgstr "Sale"
 
 #. module: magento_connect
+#: help:magento.sale.shop.status.type,paidinweb:0
+msgid "Paid in web. Sale Order is paid in web"
+msgstr "Paid in web. Sale Order is paid in web"
+
+#. module: magento_connect
 #: view:magento.app:0
 #: field:magento.app.customer,magento_app_id:0
 #: field:magento.customer.group,magento_app_id:0
@@ -1561,7 +1561,7 @@ msgid "Magento Filters..."
 msgstr "Magento Filters..."
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:865
+#: code:addons/magento_connect/mgn.py:869
 #, python-format
 msgid "This Magento Customer Group not allow to delete"
 msgstr "This Magento Customer Group not allow to delete"
@@ -1580,11 +1580,6 @@ msgstr "Select Option"
 #: help:magento.app,uri:0
 msgid "URI Magento App. http://yourmagento.com/ (with / at end URI)"
 msgstr "URI Magento App. http://yourmagento.com/ (with / at end URI)"
-
-#. module: magento_connect
-#: view:product.category:0
-msgid "Meta Information"
-msgstr "Meta Information"
 
 #. module: magento_connect
 #: view:magento.storeview:0
@@ -1608,8 +1603,8 @@ msgstr "Payment Term"
 
 #. module: magento_connect
 #: code:addons/magento_connect/mgn.py:443
-#: code:addons/magento_connect/mgn.py:558
-#: code:addons/magento_connect/mgn.py:601
+#: code:addons/magento_connect/mgn.py:562
+#: code:addons/magento_connect/mgn.py:605
 #, python-format
 msgid "Select Store View Magento"
 msgstr "Select Store View Magento"

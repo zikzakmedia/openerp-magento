@@ -866,14 +866,14 @@ class magento_sale_shop_status_type(osv.osv):
     _columns = {
         'status': fields.char('Status', size=255, required=True, help='Code Status (example, cancel, pending, processing,..)'),
         'shop_id': fields.many2one('sale.shop','Shop', required=True),
-        'picking_policy': fields.selection([('direct', 'Partial Delivery'), ('one', 'Complete Delivery')], 'Packing Policy'),
+        'picking_policy': fields.selection([('direct', 'Partial Delivery'), ('one', 'Complete Delivery')], 'Packing Policy', required=True),
         'order_policy': fields.selection([
          ('prepaid', 'Payment Before Delivery'),
          ('manual', 'Shipping & Manual Invoice'),
          ('postpaid', 'Invoice on Order After Delivery'),
          ('picking', 'Invoice from the Packing'),
-        ], 'Shipping Policy'),
-        'invoice_quantity': fields.selection([('order', 'Ordered Quantities'), ('procurement', 'Shipped Quantities')], 'Invoice on'),
+        ], 'Shipping Policy', required=True),
+        'invoice_quantity': fields.selection([('order', 'Ordered Quantities'), ('procurement', 'Shipped Quantities')], 'Invoice on', required=True),
         'confirm': fields.boolean('Confirm', help="Confirm order. Sale Order change state draft to done, and generate picking and/or invoice automatlly"),
         'cancel': fields.boolean('Cancel', help="Cancel order. Sale Order change state draft to cancel"),
         'paidinweb': fields.boolean('Paid in web', help="Paid in web. Sale Order is paid in web"),
