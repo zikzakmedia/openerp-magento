@@ -42,6 +42,7 @@ class sale_shop(osv.osv):
 
     _columns = {
         'magento_shop': fields.boolean('Magento Shop', readonly=True),
+        'magento_reference': fields.boolean('Magento Reference', help='Use Magento Reference (Increment) in order name'),
         'magento_website': fields.many2one('magento.website', 'Magento Website'),
         'magento_scheduler': fields.boolean('Scheduler', help='Available this Sale Shop crons (import/export)'),
         'magento_tax_include': fields.boolean('Tax Include'),
@@ -80,6 +81,7 @@ class sale_shop(osv.osv):
     }
 
     _defaults = {
+        'magento_reference': lambda *a: 1,
         'magento_sale_price': 'saleprice',
         'magento_sale_stock': 'virtualstock',
         'magento_from_sale_orders': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'),
@@ -558,6 +560,7 @@ class sale_order(osv.osv):
     _inherit = "sale.order"
 
     _columns = {
+        'magento_increment_id': fields.char('Magento Increment ID', size=128, readonly=True),
         'magento_status': fields.char('Status', size=128, readonly=True, help='Magento Status'),
         'magento_gift_message': fields.text('Gift Message'),
         'magento_paidinweb': fields.boolean('Paid in web', help='Check this option if this sale order is paid by web payment'),
@@ -661,8 +664,13 @@ class sale_order(osv.osv):
                 vals['payment_type'] = payment_type[0]['payment_type_id'][0]
 
         """Sale Order"""
+        if sale_shop.magento_reference:
+            vals['name'] = values['increment_id']
+        else:
+            vals['name'] = self.pool.get('ir.sequence').get(cr, uid, 'sale.order')
+
+        vals['magento_increment_id'] = values['increment_id']
         vals['shop_id'] = sale_shop.id
-        vals['name'] = values['increment_id']
         vals['date_order'] = values['created_at'][:10]
         vals['partner_id'] = partner_id
         vals['partner_invoice_id'] = partner_address_invoice_id

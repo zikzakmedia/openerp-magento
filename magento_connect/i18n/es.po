@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.2\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-12-23 16:08+0000\n"
-"PO-Revision-Date: 2011-12-23 17:09+0100\n"
-"Last-Translator: Raimon Esteve <resteve@zikzakmedia.com>\n"
+"POT-Creation-Date: 2012-01-05 16:56+0000\n"
+"PO-Revision-Date: 2012-01-05 17:59+0100\n"
+"Last-Translator: Raimon Esteve Cusiné <resteve@zikzakmedia.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -279,8 +279,8 @@ msgid "Payment Before Delivery"
 msgstr "Pago antes de la entrega"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:221
-#: code:addons/magento_connect/product.py:229
+#: code:addons/magento_connect/product.py:222
+#: code:addons/magento_connect/product.py:230
 #, python-format
 msgid "Error! Magento SKU %s must be unique"
 msgstr "Error! Magento SKU %s must be unique"
@@ -546,9 +546,9 @@ msgid "Last Status Orders"
 msgstr "Fecha últimos estados"
 
 #. module: magento_connect
-#: field:magento.app,username:0
-msgid "Username"
-msgstr "Nombre de usuario"
+#: model:product.template,name:magento_connect.product_product_shipping_product_template
+msgid "Shipping and Handling"
+msgstr "Envío y manipulación"
 
 #. module: magento_connect
 #: help:sale.order,magento_status:0
@@ -689,15 +689,15 @@ msgid "Confirm order. Sale Order change state draft to done, and generate pickin
 msgstr "Confirmar pedidos. Los pedidos de venta pasarán de borrador a realizado, y generarán albarán y/o factura según política."
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:92
+#: code:addons/magento_connect/sale.py:94
 #, python-format
 msgid "Sale shop ID '%s' not allow to delete because are active in Magento"
 msgstr "No se puede borrar la tienda '%s' porque está activo en la tienda Magento"
 
 #. module: magento_connect
-#: sql_constraint:sale.order:0
-msgid "Order Reference must be unique !"
-msgstr "El número de pedido debe ser único!"
+#: field:sale.order,magento_increment_id:0
+msgid "Magento Increment ID"
+msgstr "Magento Incremento ID"
 
 #. module: magento_connect
 #: field:sale.shop,magento_last_export_stock:0
@@ -825,6 +825,11 @@ msgid "Default language this shop. If not select, use lang user"
 msgstr "Idioma por defecto para esta tienda. Si no se selecciona ninguna, se utiliza el idioma del usuario."
 
 #. module: magento_connect
+#: sql_constraint:sale.order:0
+msgid "Order Reference must be unique !"
+msgstr "El número de pedido debe ser único!"
+
+#. module: magento_connect
 #: model:ir.model,name:magento_connect.model_res_partner_address
 msgid "Partner Addresses"
 msgstr "Direcciones de empresas"
@@ -903,7 +908,7 @@ msgid "Magento Information"
 msgstr "Información Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:570
+#: code:addons/magento_connect/sale.py:573
 #, python-format
 msgid "Sale Order ID '%s' not allow to delete because are active in Magento"
 msgstr "No se puede borrar el pedido '%s' porque está activo en la tienda Magento"
@@ -914,7 +919,7 @@ msgid "Import"
 msgstr "Importar"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:166
+#: code:addons/magento_connect/product.py:167
 #, python-format
 msgid "This Magento Product Type not allow to delete"
 msgstr "No se puede borrar este tipo de producto Magento"
@@ -1018,11 +1023,6 @@ msgid "Websites Info"
 msgstr "Información de sitios web"
 
 #. module: magento_connect
-#: sql_constraint:product.category:0
-msgid "Slug must be unique"
-msgstr "Slug must be unique"
-
-#. module: magento_connect
 #: model:ir.model,name:magento_connect.model_magento_external_referential
 msgid "Magento External Referential"
 msgstr "Referencia externa Magento"
@@ -1056,7 +1056,7 @@ msgid "Select language available this store view"
 msgstr "Seleccionar idioma disponible para la vista de la tienda"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:236
+#: code:addons/magento_connect/product.py:237
 #, python-format
 msgid "Product '%s' not allow to delete because are active in Magento Shop"
 msgstr "No se puede borrar el producto '%s' porque está activo en la tienda Magento"
@@ -1311,9 +1311,9 @@ msgid "Stock"
 msgstr "Estoc"
 
 #. module: magento_connect
-#: model:product.template,name:magento_connect.product_product_shipping_product_template
-msgid "Shipping and Handling"
-msgstr "Envío y manipulación"
+#: field:sale.shop,magento_reference:0
+msgid "Magento Reference"
+msgstr "Referencia de Magento"
 
 #. module: magento_connect
 #: model:ir.model,name:magento_connect.model_product_product
@@ -1369,13 +1369,13 @@ msgstr "¿Está seguro de continuar? Revise el historial del servidor."
 #: code:addons/magento_connect/mgn_referential.py:42
 #: code:addons/magento_connect/partner.py:41
 #: code:addons/magento_connect/partner.py:164
-#: code:addons/magento_connect/product.py:166
-#: code:addons/magento_connect/product.py:221
-#: code:addons/magento_connect/product.py:229
-#: code:addons/magento_connect/product.py:236
+#: code:addons/magento_connect/product.py:167
+#: code:addons/magento_connect/product.py:222
+#: code:addons/magento_connect/product.py:230
+#: code:addons/magento_connect/product.py:237
 #: code:addons/magento_connect/product_images.py:92
-#: code:addons/magento_connect/sale.py:92
-#: code:addons/magento_connect/sale.py:570
+#: code:addons/magento_connect/sale.py:94
+#: code:addons/magento_connect/sale.py:573
 #, python-format
 msgid "Alert"
 msgstr "Alerta"
@@ -1420,6 +1420,11 @@ msgstr "Si activa este valor, este producto se publicará a la tienda Magento. P
 #: view:magento.app:0
 msgid "Customer"
 msgstr "Cliente"
+
+#. module: magento_connect
+#: field:magento.app,username:0
+msgid "Username"
+msgstr "Nombre de usuario"
 
 #. module: magento_connect
 #: help:magento.app,product_uom_id:0
@@ -1626,6 +1631,11 @@ msgid "Partner"
 msgstr "Empresa"
 
 #. module: magento_connect
+#: help:sale.shop,magento_reference:0
+msgid "Use Magento Reference (Increment) in order name"
+msgstr "Utiliza la referencia de Magento (Incremento) como nombre de pedido"
+
+#. module: magento_connect
 #: model:ir.actions.act_window,name:magento_connect.action_magento_customer_group
 #: model:ir.model,name:magento_connect.model_magento_customer_group
 #: model:ir.ui.menu,name:magento_connect.menu_magento_customer_group
@@ -1653,6 +1663,8 @@ msgstr "Esta es la fecha de la última exportación. Si necesita la exportación
 msgid "Paid/Delivered"
 msgstr "Pagado/Entregado"
 
+#~ msgid "Slug must be unique"
+#~ msgstr "Slug must be unique"
 #~ msgid "Several dimension values for the same dimension type"
 #~ msgstr "Several dimension values for the same dimension type"
 #~ msgid "Referential Actions"

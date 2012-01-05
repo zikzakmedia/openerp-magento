@@ -81,10 +81,10 @@
                             <notebook colspan="4">
                                 <page string="General">
                                     <field name="magento_product_type" attrs="{'required':[('magento_exportable','==',True)], 'readonly':[('magento_exported', '==', True)],'invisible':[('magento_exportable','==',False)]}" colspan="4"/>
-                                    <separator string="Short Description" colspan="4"/>
-                                    <field name="magento_shortdescription" nolabel="1" colspan="4" attrs="{'required':[('magento_tpl_exportable','==',True)]}"/>
                                     <field name="magento_status"/>
                                     <field name="magento_visibility" attrs="{'required':[('magento_exportable','==',True)]}"/>
+                                    <separator string="Short Description" colspan="4"/>
+                                    <field name="magento_shortdescription" nolabel="1" colspan="4" attrs="{'required':[('magento_tpl_exportable','==',True)]}"/>
                                 </page>
                                 <page string="SEO">
                                     <field name="magento_url_key" colspan="4" attrs="{'required':[('magento_exportable','==',True)]}"/>

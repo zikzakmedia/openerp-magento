@@ -204,7 +204,7 @@ class product_product(osv.osv):
         'magento_product_type': fields.selection(_product_type_get, 'Product Type'),
         'magento_status':fields.boolean('Status'),
         'magento_visibility': fields.selection([('0','Select Option'),('1','Nowhere'),('2','Catalog'),('3','Search'),('4','Catalog,Search')], 'Visibility'),
-        'magento_url_key': fields.char('Url Key', size=256, translate=True),
+        'magento_url_key': fields.char('Url Key', size=256),
         'magento_shortdescription': fields.text('Short Description', translate=True),
         'magento_metadescription': fields.text('Description', translate=True),
         'magento_metakeyword': fields.text('Keyword', translate=True),
@@ -217,7 +217,7 @@ class product_product(osv.osv):
     }
 
     def create(self, cr, uid, vals, context=None):
-        if 'magento_sku' in vals:
+        if 'magento_sku' in vals and vals['magento_sku'] is not False:
             if self._check_magento_sku(cr, uid, vals['magento_sku']):
                 raise osv.except_osv(_("Alert"), _("Error! Magento SKU %s must be unique") % (vals['magento_sku']))
 
@@ -280,7 +280,7 @@ class product_product(osv.osv):
 
         #~ Update product info
         with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
-            product_info = product_api.info(product['product_id'], store_view)
+            product_info = product_api.info(int(product['product_id']), store_view)
 
         product_obj = self.pool.get('product.product').browse(cr, uid, product_product_oerp_id, context)
 
@@ -317,9 +317,12 @@ class product_product(osv.osv):
             categories = product['category_ids']
         if len(categories) > 0 and 'category_ids' in product:
             for cat_id in product['category_ids']:
-                category_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.category', cat_id)
-                external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [category_id])
-                category_ids.append(external_referentials[0]['oerp_id'])
+                try:
+                    category_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.category', cat_id)
+                    external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [category_id])
+                    category_ids.append(external_referentials[0]['oerp_id'])
+                except:
+                    continue
 
         values = {
             'name': product['name'],
