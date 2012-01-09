@@ -42,7 +42,7 @@
                                         </group>
                                     </group>
                                 </page>
-                                <page string="Extra Information">
+                                <page string="Shop configuration">
                                     <group col="4" colspan="4">
                                         <field name="magento_shop"/>
                                         <field name="magento_reference"/>
@@ -51,6 +51,7 @@
                                         <field name="magento_sale_stock"/>
                                         <field name="magento_sale_price"/>
                                         <field name="magento_tax_include"/>
+                                        <field name="magento_check_vat_partner"/>
                                         <field name="magento_default_language"/>
                                         <separator string="Logistic Default" colspan="4"/>
                                         <field name="magento_default_picking_policy" attrs="{'required':[('magento_shop','=', True)]}"/>

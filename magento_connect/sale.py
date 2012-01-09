@@ -46,6 +46,7 @@ class sale_shop(osv.osv):
         'magento_website': fields.many2one('magento.website', 'Magento Website'),
         'magento_scheduler': fields.boolean('Scheduler', help='Available this Sale Shop crons (import/export)'),
         'magento_tax_include': fields.boolean('Tax Include'),
+        'magento_check_vat_partner': fields.boolean('Check Vat', help='Check Partner Vat exists in OpenERP. If this vat exists, not create partner and use this partner'),
         'magento_status': fields.one2many('magento.sale.shop.status.type', 'shop_id', 'Status'),
         'magento_payments': fields.one2many('magento.sale.shop.payment.type', 'shop_id', 'Payment'),
         'magento_default_language': fields.many2one('res.lang', 'Language Default', help='Default language this shop. If not select, use lang user'),
@@ -85,6 +86,7 @@ class sale_shop(osv.osv):
         'magento_sale_price': 'saleprice',
         'magento_sale_stock': 'virtualstock',
         'magento_from_sale_orders': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'),
+        'magento_check_vat_partner': lambda *a: 1,
     }
 
     def unlink(self, cr, uid, ids, context=None):
@@ -583,6 +585,8 @@ class sale_order(osv.osv):
         """
 
         magento_external_referential_obj = self.pool.get('magento.external.referential')
+        partner_obj = self.pool.get('res.partner')
+        partner_address_obj = self.pool.get('res.partner.address')
 
         vals = {}
         confirm = False
@@ -597,8 +601,24 @@ class sale_order(osv.osv):
         partner_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer_id)
         if not partner_mapping_id:
             customer_info = False
-            customer  = self.pool.get('res.partner').magento_customer_info(magento_app, customer_id)
-            partner_id = self.pool.get('res.partner').magento_create_partner(cr, uid, magento_app, customer, context)
+            customer  = partner_obj.magento_customer_info(magento_app, customer_id)
+
+            #if partner exists (check same vat), not duplicity same partner
+            partner_id = False
+            if sale_shop.magento_check_vat_partner:
+                if 'taxvat' in customer:
+                    country_code = partner_address_obj.magento_get_customer_address_country_code(cr, uid, magento_app, customer, context)
+                    vat = '%s%s' % (country_code, customer['taxvat'])
+                    partner_ids = partner_obj.search(cr, uid, [('vat','=',vat)])
+                    if len(partner_ids)>0:
+                        partner_id = partner_ids[0]
+                        magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'res.partner', partner_id, customer['customer_id'])
+                        LOGGER.notifyChannel('Magento Sync Partner', netsvc.LOG_INFO, "Only Mapping: same vat %s partner %s magento %s" % (vat, partner_id, customer['customer_id']))
+
+            #create partner
+            if not partner_id:
+                partner_id = partner_obj.magento_create_partner(cr, uid, magento_app, customer, context)
+
             magento_app_customer_ids = self.pool.get('magento.app.customer').magento_app_customer_create(cr, uid, magento_app, partner_id, customer, context)
             partner_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner', customer_id)
         partner_id = magento_external_referential_obj.get_external_referential(cr, uid, [partner_mapping_id])[0]['oerp_id']

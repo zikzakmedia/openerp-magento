@@ -68,6 +68,7 @@ class res_partner(osv.osv):
         logger = netsvc.Logger()
 
         external_referential_obj = self.pool.get('magento.external.referential')
+        res_partner_vals_obj = self.pool.get('base.external.mapping')
 
         if magento_vat:
             country_obj = self.pool.get('res.country')
@@ -97,7 +98,6 @@ class res_partner(osv.osv):
 
         context['magento_app'] = magento_app
         values['name'] = '%s %s' % (values['firstname'], values['lastname'])
-        res_partner_vals_obj = self.pool.get('base.external.mapping')
         res_partner_vals = res_partner_vals_obj.get_external_to_oerp(cr, uid, 'magento.res.partner', False, values, context)
         res_partner_vals['customer'] = True #fix this partner is customer
         partner_id = self.create(cr, uid, res_partner_vals, context)
