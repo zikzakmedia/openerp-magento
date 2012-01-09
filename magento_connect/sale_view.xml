@@ -45,6 +45,7 @@
                                 <page string="Extra Information">
                                     <group col="4" colspan="4">
                                         <field name="magento_shop"/>
+                                        <field name="magento_reference"/>
                                         <field name="magento_website" readonly="1"/>
                                         <field name="magento_scheduler"/>
                                         <field name="magento_sale_stock"/>
@@ -90,6 +91,7 @@
             <field name="arch" type="xml">
                 <xpath expr="/form/notebook/page[@string='History']" position="after">
                     <page string="Magento">
+                        <field name="magento_increment_id"/>
                         <field name="magento_paidinweb"/>
                         <field name="magento_status"/>
                         <separator string="Gift Message" colspan="4" />

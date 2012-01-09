@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.3\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-12-23 16:08+0000\n"
-"PO-Revision-Date: 2011-12-23 16:08+0000\n"
+"POT-Creation-Date: 2012-01-05 16:56+0000\n"
+"PO-Revision-Date: 2012-01-05 16:56+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -279,8 +279,8 @@ msgid "Payment Before Delivery"
 msgstr "Payment Before Delivery"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:221
-#: code:addons/magento_connect/product.py:229
+#: code:addons/magento_connect/product.py:222
+#: code:addons/magento_connect/product.py:230
 #, python-format
 msgid "Error! Magento SKU %s must be unique"
 msgstr "Error! Magento SKU %s must be unique"
@@ -569,9 +569,9 @@ msgid "Last Status Orders"
 msgstr "Last Status Orders"
 
 #. module: magento_connect
-#: field:magento.app,username:0
-msgid "Username"
-msgstr "Username"
+#: model:product.template,name:magento_connect.product_product_shipping_product_template
+msgid "Shipping and Handling"
+msgstr "Shipping and Handling"
 
 #. module: magento_connect
 #: help:sale.order,magento_status:0
@@ -712,15 +712,15 @@ msgid "Confirm order. Sale Order change state draft to done, and generate pickin
 msgstr "Confirm order. Sale Order change state draft to done, and generate picking and/or invoice automatlly"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:92
+#: code:addons/magento_connect/sale.py:94
 #, python-format
 msgid "Sale shop ID '%s' not allow to delete because are active in Magento"
 msgstr "Sale shop ID '%s' not allow to delete because are active in Magento"
 
 #. module: magento_connect
-#: sql_constraint:sale.order:0
-msgid "Order Reference must be unique !"
-msgstr "Order Reference must be unique !"
+#: field:sale.order,magento_increment_id:0
+msgid "Magento Increment ID"
+msgstr "Magento Increment ID"
 
 #. module: magento_connect
 #: field:sale.shop,magento_last_export_stock:0
@@ -848,6 +848,11 @@ msgid "Default language this shop. If not select, use lang user"
 msgstr "Default language this shop. If not select, use lang user"
 
 #. module: magento_connect
+#: sql_constraint:sale.order:0
+msgid "Order Reference must be unique !"
+msgstr "Order Reference must be unique !"
+
+#. module: magento_connect
 #: model:ir.model,name:magento_connect.model_res_partner_address
 msgid "Partner Addresses"
 msgstr "Partner Addresses"
@@ -926,7 +931,7 @@ msgid "Magento Information"
 msgstr "Magento Information"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:570
+#: code:addons/magento_connect/sale.py:573
 #, python-format
 msgid "Sale Order ID '%s' not allow to delete because are active in Magento"
 msgstr "Sale Order ID '%s' not allow to delete because are active in Magento"
@@ -937,7 +942,7 @@ msgid "Import"
 msgstr "Import"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:166
+#: code:addons/magento_connect/product.py:167
 #, python-format
 msgid "This Magento Product Type not allow to delete"
 msgstr "This Magento Product Type not allow to delete"
@@ -1041,11 +1046,6 @@ msgid "Websites Info"
 msgstr "Websites Info"
 
 #. module: magento_connect
-#: sql_constraint:product.category:0
-msgid "Slug must be unique"
-msgstr "Slug must be unique"
-
-#. module: magento_connect
 #: model:ir.model,name:magento_connect.model_magento_external_referential
 msgid "Magento External Referential"
 msgstr "Magento External Referential"
@@ -1079,7 +1079,7 @@ msgid "Select language available this store view"
 msgstr "Select language available this store view"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:236
+#: code:addons/magento_connect/product.py:237
 #, python-format
 msgid "Product '%s' not allow to delete because are active in Magento Shop"
 msgstr "Product '%s' not allow to delete because are active in Magento Shop"
@@ -1334,9 +1334,9 @@ msgid "Stock"
 msgstr "Stock"
 
 #. module: magento_connect
-#: model:product.template,name:magento_connect.product_product_shipping_product_template
-msgid "Shipping and Handling"
-msgstr "Shipping and Handling"
+#: field:sale.shop,magento_reference:0
+msgid "Magento Reference"
+msgstr "Magento Reference"
 
 #. module: magento_connect
 #: model:ir.model,name:magento_connect.model_product_product
@@ -1392,13 +1392,13 @@ msgstr "Are you sure to continue? See logs server process"
 #: code:addons/magento_connect/mgn_referential.py:42
 #: code:addons/magento_connect/partner.py:41
 #: code:addons/magento_connect/partner.py:164
-#: code:addons/magento_connect/product.py:166
-#: code:addons/magento_connect/product.py:221
-#: code:addons/magento_connect/product.py:229
-#: code:addons/magento_connect/product.py:236
+#: code:addons/magento_connect/product.py:167
+#: code:addons/magento_connect/product.py:222
+#: code:addons/magento_connect/product.py:230
+#: code:addons/magento_connect/product.py:237
 #: code:addons/magento_connect/product_images.py:92
-#: code:addons/magento_connect/sale.py:92
-#: code:addons/magento_connect/sale.py:570
+#: code:addons/magento_connect/sale.py:94
+#: code:addons/magento_connect/sale.py:573
 #, python-format
 msgid "Alert"
 msgstr "Alert"
@@ -1443,6 +1443,11 @@ msgstr "If check this value, this product is publishing in Magento Store. For di
 #: view:magento.app:0
 msgid "Customer"
 msgstr "Customer"
+
+#. module: magento_connect
+#: field:magento.app,username:0
+msgid "Username"
+msgstr "Username"
 
 #. module: magento_connect
 #: help:magento.app,product_uom_id:0
@@ -1647,6 +1652,11 @@ msgstr "Import Status"
 #: field:magento.app.customer,partner_id:0
 msgid "Partner"
 msgstr "Partner"
+
+#. module: magento_connect
+#: help:sale.shop,magento_reference:0
+msgid "Use Magento Reference (Increment) in order name"
+msgstr "Use Magento Reference (Increment) in order name"
 
 #. module: magento_connect
 #: model:ir.actions.act_window,name:magento_connect.action_magento_customer_group
