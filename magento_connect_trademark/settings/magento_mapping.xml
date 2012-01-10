@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<openerp>
+    <data noupdate='1'>
+
+<!--Product Template-->
+
+        <record model='base.external.mapping.line' id='mgnlptrademark01'>
+            <field name='mapping_id' ref='magento_connect.mgn02'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','manufacturer')]" model='ir.model.fields'/>
+            <field name='external_field'>manufacturer</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+            <field name='in_function'>value = False
+if values:
+    options = self.pool.get('magento.manufacturer').search(cr, uid, [('value','=',values),('magento_app_id','=',context['magento_app'].id)])
+    if len(options)>0:
+        value = self.pool.get('magento.manufacturer').browse(cr, uid, options[0]).manufacturer_id.id</field>
+            <field name='out_function'>value = ''
+if context['product_id']:
+    product = self.pool.get('product.product').browse(cr, uid, context['product_id'])
+    if product.manufacturer.id:
+        magento_manufacturers = self.pool.get('magento.manufacturer').search(cr, uid, [('manufacturer_id','=',product.manufacturer.id),('magento_app_id','=',context['magento_app'].id)])
+        if len(magento_manufacturers)>0:
+            value = self.pool.get('magento.manufacturer').browse(cr, uid, magento_manufacturers[0]).value</field>
+        </record>
+
+    </data>
+</openerp>

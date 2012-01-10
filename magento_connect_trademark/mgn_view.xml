@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_magento_trademark_form">
+            <field name="name">magento_trademark_form</field>
+            <field name="model">magento.app</field>
+            <field name="inherit_id" ref="magento_connect.view_magento_app_form" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/form/group/notebook/page[@string='Global']/button[@name='core_sync_attributes']" position="after">
+                        <button name="core_sync_attributes_manafacturer" string="Import Magento Attributes Manafacturer" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</openerp>
