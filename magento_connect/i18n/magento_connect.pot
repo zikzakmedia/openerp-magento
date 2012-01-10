@@ -6,13 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.3\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-<<<<<<< HEAD
 "POT-Creation-Date: 2012-01-09 18:17+0000\n"
 "PO-Revision-Date: 2012-01-09 18:17+0000\n"
-=======
-"POT-Creation-Date: 2012-01-05 16:56+0000\n"
-"PO-Revision-Date: 2012-01-05 16:56+0000\n"
->>>>>>> 3d3a87298be4657efd8239aab2650f0abc8ce46a
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -290,11 +285,7 @@ msgstr "Payment Before Delivery"
 
 #. module: magento_connect
 #: code:addons/magento_connect/product.py:222
-<<<<<<< HEAD
 #: code:addons/magento_connect/product.py:234
-=======
-#: code:addons/magento_connect/product.py:230
->>>>>>> 3d3a87298be4657efd8239aab2650f0abc8ce46a
 #, python-format
 msgid "Error! Magento SKU %s must be unique"
 msgstr "Error! Magento SKU %s must be unique"
@@ -726,11 +717,7 @@ msgid "Confirm order. Sale Order change state draft to done, and generate pickin
 msgstr "Confirm order. Sale Order change state draft to done, and generate picking and/or invoice automatlly"
 
 #. module: magento_connect
-<<<<<<< HEAD
 #: code:addons/magento_connect/sale.py:96
-=======
-#: code:addons/magento_connect/sale.py:94
->>>>>>> 3d3a87298be4657efd8239aab2650f0abc8ce46a
 #, python-format
 msgid "Sale shop ID '%s' not allow to delete because are active in Magento"
 msgstr "Sale shop ID '%s' not allow to delete because are active in Magento"
@@ -949,11 +936,7 @@ msgid "Magento Information"
 msgstr "Magento Information"
 
 #. module: magento_connect
-<<<<<<< HEAD
 #: code:addons/magento_connect/sale.py:575
-=======
-#: code:addons/magento_connect/sale.py:573
->>>>>>> 3d3a87298be4657efd8239aab2650f0abc8ce46a
 #, python-format
 msgid "Sale Order ID '%s' not allow to delete because are active in Magento"
 msgstr "Sale Order ID '%s' not allow to delete because are active in Magento"
@@ -1101,16 +1084,12 @@ msgid "Select language available this store view"
 msgstr "Select language available this store view"
 
 #. module: magento_connect
-<<<<<<< HEAD
 #: view:sale.shop:0
 msgid "Shop configuration"
 msgstr "Shop configuration"
 
 #. module: magento_connect
 #: code:addons/magento_connect/product.py:245
-=======
-#: code:addons/magento_connect/product.py:237
->>>>>>> 3d3a87298be4657efd8239aab2650f0abc8ce46a
 #, python-format
 msgid "Product '%s' not allow to delete because are active in Magento Shop"
 msgstr "Product '%s' not allow to delete because are active in Magento Shop"
@@ -1420,19 +1399,11 @@ msgstr "Are you sure to continue? See logs server process"
 #: code:addons/magento_connect/partner.py:164
 #: code:addons/magento_connect/product.py:167
 #: code:addons/magento_connect/product.py:222
-<<<<<<< HEAD
 #: code:addons/magento_connect/product.py:234
 #: code:addons/magento_connect/product.py:245
 #: code:addons/magento_connect/product_images.py:92
 #: code:addons/magento_connect/sale.py:96
 #: code:addons/magento_connect/sale.py:575
-=======
-#: code:addons/magento_connect/product.py:230
-#: code:addons/magento_connect/product.py:237
-#: code:addons/magento_connect/product_images.py:92
-#: code:addons/magento_connect/sale.py:94
-#: code:addons/magento_connect/sale.py:573
->>>>>>> 3d3a87298be4657efd8239aab2650f0abc8ce46a
 #, python-format
 msgid "Alert"
 msgstr "Alert"

@@ -97,7 +97,7 @@ class res_partner(osv.osv):
                     return partner_id[0]
 
         context['magento_app'] = magento_app
-        values['name'] = '%s %s' % (values['firstname'], values['lastname'])
+        values['name'] = '%s %s' % (values['firstname'].capitalize(), values['lastname'].capitalize())
         res_partner_vals = res_partner_vals_obj.get_external_to_oerp(cr, uid, 'magento.res.partner', False, values, context)
         res_partner_vals['customer'] = True #fix this partner is customer
         partner_id = self.create(cr, uid, res_partner_vals, context)
@@ -217,10 +217,10 @@ class res_partner_address(osv.osv):
 
         partner_address_ids = []
         vals = {}
-        vals['name'] = '%s %s' % (customer_address['firstname'], customer_address['lastname'])
-        vals['city'] = customer_address['city']
+        vals['name'] = '%s %s' % (customer_address['firstname'].capitalize(), customer_address['lastname'].capitalize())
+        vals['city'] = customer_address['city'].capitalize()
         vals['phone'] = customer_address['telephone']
-        vals['street'] = customer_address['street']
+        vals['street'] = customer_address['street'].capitalize()
         vals['zip'] = customer_address['postcode']
         vals['magento_firstname'] = customer_address['firstname']
         vals['magento_lastname'] = customer_address['lastname']
@@ -230,8 +230,9 @@ class res_partner_address(osv.osv):
         vals['type'] =  customer_address['is_default_billing'] and 'invoice' or customer_address['is_default_shipping'] and 'delivery' or 'default'
         country_ids = country_obj.search(cr, uid, [('code', '=', customer_address['country_id'])], context = context)
         vals['country_id'] = country_ids and country_ids[0] or False
-        state_ids = state_obj.search(cr, uid, [('name', '=', customer_address['region'])], context = context)
-        vals['state_id'] = state_ids and state_ids[0] or False
+        if 'region' in customer_address:
+            state_ids = state_obj.search(cr, uid, [('name', '=', customer_address['region'])], context = context)
+            vals['state_id'] = state_ids and state_ids[0] or False
 
         partner_address_vals = base_external_mapping_obj.get_external_to_oerp(cr, uid, 'magento.res.partner.address', False, vals, context)
         partner_address_id = self.create(cr, uid, partner_address_vals, context)
@@ -302,14 +303,14 @@ class res_partner_address(osv.osv):
             else:
                 firstname = ''.join(partner_name[:1])
             partner_name.remove(partner_name[0])
-        result['firstname'] = firstname
+        result['firstname'] = firstname.capitalize()
 
         if partner_address.magento_lastname:
             lastname = partner_address.magento_lastname
         else:
             lastname = ' '.join(partner_name)
 
-        result['lastname'] = lastname
+        result['lastname'] = lastname.capitalize()
         if result['lastname'] == '': #not empty
             result['lastname'] = '--'
 
