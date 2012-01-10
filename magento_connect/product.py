@@ -217,6 +217,8 @@ class product_product(osv.osv):
     }
 
     def create(self, cr, uid, vals, context=None):
+        """Convert url key slug line"""
+
         if 'magento_sku' in vals and vals['magento_sku'] is not False:
             if self._check_magento_sku(cr, uid, vals['magento_sku']):
                 raise osv.except_osv(_("Alert"), _("Error! Magento SKU %s must be unique") % (vals['magento_sku']))
@@ -227,7 +229,11 @@ class product_product(osv.osv):
 
         return super(product_product, self).create(cr, uid, vals, context)
 
-    def write(self, cr, uid, ids, vals, context):
+    def write(self, cr, uid, ids, vals, context=None):
+        """Convert url key slug line"""
+
+        result = True
+
         for id in ids:
             # if 'magento_sku' in vals:
                 # if self._check_magento_sku(cr, uid, vals['magento_sku'], id):
@@ -237,7 +243,9 @@ class product_product(osv.osv):
                 slug = slugify(unicode(vals['magento_url_key'],'UTF-8'))
                 vals['magento_url_key']  = slug
 
-        return super(product_product, self).write(cr, uid, ids, vals, context)
+            result = result and super(product_product, self).write(cr, uid, [id], vals, context)
+
+        return result
 
     def unlink(self, cr, uid, ids, context=None):
         for val in self.browse(cr, uid, ids):

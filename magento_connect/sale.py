@@ -144,6 +144,7 @@ class sale_shop(osv.osv):
         with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
             for product in self.pool.get('product.product').browse(cr, uid, ids, context):
                 context['product_id'] = product.id
+                context['magento_app'] = magento_app
                 product_product_vals = self.pool.get('base.external.mapping').get_oerp_to_external(cr, uid, 'magento.product.product',[product.id], context)
                 product_template_vals = self.pool.get('base.external.mapping').get_oerp_to_external(cr, uid, 'magento.product.template',[product.product_tmpl_id.id], context)
 
@@ -299,7 +300,7 @@ class sale_shop(osv.osv):
 
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Stock: %s. OpenERP ID %s, Magento ID %s" % (stock, product.id, mgn_id))
 
-            self.write(cr, uid, [context['shop'].id], {'magento_last_export_stock': time.strftime('%Y-%m-%d %H:%M:%S')})
+            self.write(cr, uid, [shop.id], {'magento_last_export_stock': time.strftime('%Y-%m-%d %H:%M:%S')})
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Stock Export")
 

@@ -10,7 +10,7 @@
             <field name="arch" type="xml">
                 <data>
                     <form position="inside">
-                        <group col="4" colspan="4" attrs="{'invisible':[('magento_shop','!=', True)]}">
+                        <group name="magento" col="4" colspan="4" attrs="{'invisible':[('magento_shop','!=', True)]}">
                             <separator string="Magento" colspan="4"/>
                             <notebook colspan="4">
                                 <page string="Orders">
