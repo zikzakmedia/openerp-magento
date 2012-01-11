@@ -233,6 +233,8 @@ class product_product(osv.osv):
         """Convert url key slug line"""
 
         result = True
+        if not isinstance(ids, list):
+            ids = [ids]
 
         for id in ids:
             # if 'magento_sku' in vals:
