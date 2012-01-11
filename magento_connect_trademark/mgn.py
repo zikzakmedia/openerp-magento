@@ -54,6 +54,8 @@ class magento_app(osv.osv):
                     raise osv.except_osv(_("Alert"), _("Not exist manufacturer attribute"))
 
                 for option in attribute_options:
+                    partner_id = False
+
                     #check  if manufacturer attribute exists in magento.manufacturer
                     manufacturer_ids = magento_manufacturer_obj.search(cr, uid, [
                                             ('magento_app_id','=',magento_app.id),
@@ -71,11 +73,12 @@ class magento_app(osv.osv):
                     if len(partner_ids)>0:
                         partner_id = partner_ids[0]
                     else:
-                        vals = {
-                            'name': option['label'],
-                            'manufacturer': True,
-                        }
-                        partner_id = partner_obj.create(cr, uid, vals)
+                        if option.get('value',False):
+                            vals = {
+                                'name': option['label'],
+                                'manufacturer': True,
+                            }
+                            partner_id = partner_obj.create(cr, uid, vals)
 
                     if not partner_id:
                         LOGGER.notifyChannel('Magento Attribute Manufacturer', netsvc.LOG_ERROR, "Manufacturer %s not create partner ID" % (option['label']))
