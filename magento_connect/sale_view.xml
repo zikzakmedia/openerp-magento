@@ -120,8 +120,8 @@
                     <field name="order_policy"/>
                     <field name="picking_policy"/>
                     <field name="invoice_quantity"/>
-                    <field name="confirm"/>
-                    <field name="cancel"/>
+                    <field name="confirm" attrs="{'invisible':[('cancel','==',True)]}"/>
+                    <field name="cancel" attrs="{'invisible':[('confirm','==',True)]}"/>
                     <field name="paidinweb"/>
                 </form>
             </field>

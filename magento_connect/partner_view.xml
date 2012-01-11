@@ -13,7 +13,7 @@
                         <field colspan="4" mode="tree,form" name="magento_app_customer" nolabel="1" select="1" height="260">
                                <form string="Magento Customer">
                                     <field name="magento_app_id" widget="selection"/>
-                                    <field name="magento_customer_group_id" widget="selection"/>
+                                    <field name="magento_customer_group_id" domain="[('magento_app_id','=',magento_app_id)]"/>
                                     <field name="magento_emailid" />
                                     <field name="magento_vat" />
 <!--
