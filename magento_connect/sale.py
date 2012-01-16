@@ -284,7 +284,7 @@ class sale_shop(osv.osv):
                         mgn_id = magento_external_referential_obj.get_external_referential(cr, uid, [mgn_id])[0]['mgn_id']
 
                     if not mgn_id:#not product created/exist in Magento. Create
-                        mgn_id = self.magento_export_products_stepbystep(cr, uid, magento_app, ids, context)
+                        mgn_id = self.magento_export_products_stepbystep(cr, uid, magento_app, [product.id], context)
 
                     """Calculate Stock from real stock or virtual Stock"""
                     if shop.magento_sale_price == 'realstock':
