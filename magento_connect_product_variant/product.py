@@ -104,7 +104,10 @@ class product_template(osv.osv):
                 raise osv.except_osv(_("Alert"), _("Error! Magento SKU %s must be unique") % (vals['magento_tpl_sku']))
 
         if 'magento_tpl_url_key' in vals:
-            slug = slugify(unicode(vals['magento_tpl_url_key'],'UTF-8'))
+            slug = vals['magento_tpl_url_key']
+            if not isinstance(slug, unicode):
+                slug = unicode(slug,'UTF-8')
+            slug = slugify(slug)
             vals['magento_tpl_url_key'] = slug
 
         return super(product_template, self).create(cr, uid, vals, context)
@@ -129,12 +132,29 @@ class product_template(osv.osv):
 
         return result
 
-
     def unlink(self, cr, uid, ids, context=None):
         for val in self.browse(cr, uid, ids):
             if val.magento_tpl_exportable:
                 raise osv.except_osv(_("Alert"), _("Template '%s' not allow to delete because are active in Magento Shop") % (val.name))
         return super(product_template, self).unlink(cr, uid, ids, context)
+
+    def copy(self, cr, uid, id, default={}, context=None, done_list=[], local=False):
+        """ 
+        When copy, magento url key add -copy if exist magento_url_key
+        """
+
+        product = self.browse(cr, uid, id, context=context)
+        if not default:
+            default = {}
+        if product.magento_tpl_url_key:
+            default = default.copy()
+            slug = product.magento_tpl_url_key
+            while self.search(cr, uid, [('magento_tpl_url_key','=',slug)]):
+                slug += _('-copy')
+            default['magento_tpl_url_key'] = slug
+        if product.magento_tpl_sku:
+            default['magento_tpl_sku'] = "%s-copy" % (product.magento_tpl_sku)
+        return super(product_template, self).copy(cr, uid, id, default, context=context)
 
     def product_product_variants_vals(self, cr, uid, product_temp, variant, context):
         """Return Dicc to Product Product Values

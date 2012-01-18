@@ -101,10 +101,26 @@ class product_category(osv.osv):
         'magento_is_active': lambda *a: 1,
     }
 
+    def copy(self, cr, uid, id, default={}, context=None, done_list=[], local=False):
+        """ 
+        When copy, magento url key add -copy if exist magento_url_key
+        """
+
+        category = self.browse(cr, uid, id, context=context)
+        if not default:
+            default = {}
+        if category.magento_url_key:
+            default = default.copy()
+            slug = category.magento_url_key
+            while self.search(cr, uid, [('magento_url_key','=',slug)]):
+                slug += _('-copy')
+            default['magento_url_key'] = slug
+        return super(product_category, self).copy(cr, uid, id, default, context=context)
+
     def magento_record_entire_tree(self, cr, uid, magento_app, categ_tree, context={}):
         """
-        for categories magento { childre:[ {} ]}
-        call magento_record_category to add values
+        For categories magento { children:[ {} ]}
+        Call magento_record_category to add values
         """
         self.magento_record_category(cr, uid, magento_app, int(categ_tree['category_id']))
         for each in categ_tree['children']:
@@ -224,7 +240,10 @@ class product_product(osv.osv):
                 raise osv.except_osv(_("Alert"), _("Error! Magento SKU %s must be unique") % (vals['magento_sku']))
 
         if 'magento_url_key' in vals:
-            slug = slugify(unicode(vals['magento_url_key'],'UTF-8'))
+            slug = vals['magento_url_key']
+            if not isinstance(slug, unicode):
+                slug = unicode(slug,'UTF-8')
+            slug = slugify(slug)
             vals['magento_url_key'] = slug
 
         return super(product_product, self).create(cr, uid, vals, context)
@@ -248,6 +267,24 @@ class product_product(osv.osv):
             result = result and super(product_product, self).write(cr, uid, [id], vals, context)
 
         return result
+
+    def copy(self, cr, uid, id, default={}, context=None, done_list=[], local=False):
+        """ 
+        When copy, magento url key add -copy if exist magento_url_key
+        """
+
+        product = self.browse(cr, uid, id, context=context)
+        if not default:
+            default = {}
+        if product.magento_url_key:
+            default = default.copy()
+            slug = product.magento_url_key
+            while self.search(cr, uid, [('magento_url_key','=',slug)]):
+                slug += _('-copy')
+            default['magento_url_key'] = slug
+        if product.magento_sku:
+            default['magento_sku'] = "%s-copy" % (product.magento_sku)
+        return super(product_product, self).copy(cr, uid, id, default, context=context)
 
     def unlink(self, cr, uid, ids, context=None):
         for val in self.browse(cr, uid, ids):
