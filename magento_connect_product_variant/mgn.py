@@ -54,6 +54,15 @@ class magento_app(osv.osv):
                     for product_attribute in product_attributes:
                         attribute = product_attribute_api.info(product_attribute['attribute_id'])
 
+                        if not isinstance(attribute, dict):
+                            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Atribute dicc blank! %s" % (product_attribute['attribute_id']))
+                            continue
+
+                        is_global = attribute.get('is_global',False)
+                        if not is_global:
+                            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Error get attribute values! %s" % (product_attribute['attribute_id']))
+                            continue
+
                         if(int(attribute['is_global']) == 1 and int(attribute['is_configurable']) == 1 and attribute['frontend_input'] == 'select'):
                             # print "Attribut Configurable %s"  % attribute['frontend_label']
                             attribute_options = product_attribute_api.options(attribute['attribute_code'])
