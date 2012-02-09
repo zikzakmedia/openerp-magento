@@ -61,6 +61,7 @@
         "product_attributes",
         "product_m2mcategories",
         "product_images_olbs",
+        "sale_margin",
         "sale_payment",
     ],
     "init_xml" : [],

@@ -813,6 +813,7 @@ class sale_order_line(osv.osv):
             vals_line['type'] = product_id_change['value']['type']
             tax_ids = [self.pool.get('account.tax').browse(cr, uid, t_id).id for t_id in product_id_change['value']['tax_id']]
             vals_line['tax_id'] = [(6, 0, tax_ids)]
+            vals_line['purchase_price'] = product_id_change['value']['purchase_price']
 
         vals_line['order_id'] = sale_order.id
         vals_line['product_id'] = product_id

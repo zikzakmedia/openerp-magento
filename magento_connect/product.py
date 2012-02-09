@@ -46,11 +46,11 @@ class magento_product_category_attribute_options(osv.osv):
     _name = "magento.product_category_attribute_options"
     _description = "Option products category Attributes"
     _rec_name = "label"
-    
+
     def _get_default_option(self, cr, uid, field_name, value, context=None):
         res = self.search(cr, uid, [['attribute_name', '=', field_name], ['value', '=', value]], context=context)
         return res and res[0] or False
-        
+
 
     def get_create_option_id(self, cr, uid, value, attribute_name, context=None):
         id = self.search(cr, uid, [['attribute_name', '=', attribute_name], ['value', '=', value]], context=context)
@@ -64,7 +64,7 @@ class magento_product_category_attribute_options(osv.osv):
                                 }, context=context)
 
     _columns = {
-        'attribute_name':fields.char(string='Attribute Code',size=64),
+        'attribute_name':fields.char(string='Attribute Code', size=64),
         'value':fields.char('Value', size=200),
         'label':fields.char('Label', size=100),
     }
@@ -77,7 +77,7 @@ class product_category(osv.osv):
     def onchange_name(self, cr, uid, ids, name, slug):
         value = {}
         if not slug:
-            slug = slugify(unicode(name,'UTF-8'))
+            slug = slugify(unicode(name, 'UTF-8'))
             value = {'magento_url_key': slug}
         return {'value':value}
 
@@ -97,8 +97,8 @@ class product_category(osv.osv):
     _defaults = {
         # 'magento_available_sort_by': lambda self,cr,uid,c: self.pool.get('magento.product_category_attribute_options')._get_default_option(cr, uid, 'available_sort_by', 'None', context=c),
         # 'magento_default_sort_by': lambda self,cr,uid,c: self.pool.get('magento.product_category_attribute_options')._get_default_option(cr, uid, 'default_sort_by', 'None', context=c),
-        'magento_include_in_menu': lambda *a: 1,
-        'magento_is_active': lambda *a: 1,
+        'magento_include_in_menu': lambda * a: 1,
+        'magento_is_active': lambda * a: 1,
     }
 
     def copy(self, cr, uid, id, default={}, context=None, done_list=[], local=False):
@@ -112,7 +112,7 @@ class product_category(osv.osv):
         if category.magento_url_key:
             default = default.copy()
             slug = category.magento_url_key
-            while self.search(cr, uid, [('magento_url_key','=',slug)]):
+            while self.search(cr, uid, [('magento_url_key', '=', slug)]):
                 slug += _('-copy')
             default['magento_url_key'] = slug
         return super(product_category, self).copy(cr, uid, id, default, context=context)
@@ -176,7 +176,7 @@ class magento_product_product_type(osv.osv):
     }
 
     _defaults = {
-        'active': lambda *a: 1,
+        'active': lambda * a: 1,
     }
 
     def unlink(self, cr, uid, ids, context=None):
@@ -188,14 +188,14 @@ class product_product(osv.osv):
     _inherit = "product.product"
 
     def _product_type_get(self, cr, uid, context=None):
-        ids = self.pool.get('magento.product.product.type').search(cr, uid, [('active','=',True)], order='id')
-        product_types = self.pool.get('magento.product.product.type').read(cr, uid, ids, ['product_type','name'], context=context)
+        ids = self.pool.get('magento.product.product.type').search(cr, uid, [('active', '=', True)], order='id')
+        product_types = self.pool.get('magento.product.product.type').read(cr, uid, ids, ['product_type', 'name'], context=context)
         return [(pt['product_type'], pt['name']) for pt in product_types]
 
     def onchange_name(self, cr, uid, ids, name, slug):
         value = {}
         if not slug and name:
-            slug = slugify(unicode(name,'UTF-8'))
+            slug = slugify(unicode(name, 'UTF-8'))
             value = {'magento_url_key': slug}
         return {'value':value}
 
@@ -205,11 +205,11 @@ class product_product(osv.osv):
         :magento_sku = str
         :return True/False
         """
-        condition = [('magento_sku','=',magento_sku),('magento_exportable','=',True)]
+        condition = [('magento_sku', '=', magento_sku), ('magento_exportable', '=', True)]
         if id:
-            condition.append(('id','!=',id))
+            condition.append(('id', '!=', id))
         prods = self.search(cr, uid, condition)
-        if len(prods)>0:
+        if len(prods) > 0:
             return True
         return False
 
@@ -219,7 +219,7 @@ class product_product(osv.osv):
         'magento_sale_shop': fields.many2many('sale.shop', 'magento_sale_shop_rel', 'product_product_id', 'sale_shop_id', 'Websites', help='Select yours Sale Shops available this product'),
         'magento_product_type': fields.selection(_product_type_get, 'Product Type'),
         'magento_status':fields.boolean('Status'),
-        'magento_visibility': fields.selection([('0','Select Option'),('1','Nowhere'),('2','Catalog'),('3','Search'),('4','Catalog,Search')], 'Visibility'),
+        'magento_visibility': fields.selection([('0', 'Select Option'), ('1', 'Nowhere'), ('2', 'Catalog'), ('3', 'Search'), ('4', 'Catalog,Search')], 'Visibility'),
         'magento_url_key': fields.char('Url Key', size=256),
         'magento_shortdescription': fields.text('Short Description', translate=True),
         'magento_metadescription': fields.text('Description', translate=True),
@@ -242,11 +242,20 @@ class product_product(osv.osv):
         if 'magento_url_key' in vals:
             slug = vals['magento_url_key']
             if not isinstance(slug, unicode):
-                slug = unicode(slug,'UTF-8')
+                slug = unicode(slug, 'UTF-8')
             slug = slugify(slug)
             vals['magento_url_key'] = slug
 
-        return super(product_product, self).create(cr, uid, vals, context)
+        product_id = super(product_product, self).create(cr, uid, vals, context)
+
+        val = {}
+        if 'default_code' in vals and 'magento_sku' not in vals or \
+                                                    not vals['magento_sku']:
+            val['default_code'] = self.browse(cr, uid, product_id, context).default_code
+            val['magento_sku'] = val['default_code']
+            super(product_product, self).write(cr, uid, [product_id], val, context)
+
+        return product_id
 
     def write(self, cr, uid, ids, vals, context=None):
         """Convert url key slug line"""
@@ -261,8 +270,8 @@ class product_product(osv.osv):
                     # raise osv.except_osv(_("Alert"), _("Error! Magento SKU %s must be unique") % (vals['magento_sku']))
 
             if 'magento_url_key' in vals:
-                slug = slugify(unicode(vals['magento_url_key'],'UTF-8'))
-                vals['magento_url_key']  = slug
+                slug = slugify(unicode(vals['magento_url_key'], 'UTF-8'))
+                vals['magento_url_key'] = slug
 
             result = result and super(product_product, self).write(cr, uid, [id], vals, context)
 
@@ -279,7 +288,7 @@ class product_product(osv.osv):
         if product.magento_url_key:
             default = default.copy()
             slug = product.magento_url_key
-            while self.search(cr, uid, [('magento_url_key','=',slug)]):
+            while self.search(cr, uid, [('magento_url_key', '=', slug)]):
                 slug += _('-copy')
             default['magento_url_key'] = slug
         if product.magento_sku:
@@ -315,7 +324,7 @@ class product_product(osv.osv):
 
         return True
 
-    def magento_create_product(self, cr, uid, magento_app, product, store_view, context = None):
+    def magento_create_product(self, cr, uid, magento_app, product, store_view, context=None):
         """Create Product from Magento Values
         :magento_app object
         :product dicc
@@ -352,7 +361,7 @@ class product_product(osv.osv):
 
         return product_product_oerp_id
 
-    def magento_product_values(self, cr, uid, magento_app, product, context = None):
+    def magento_product_values(self, cr, uid, magento_app, product, context=None):
         """Get Product Values from Magento Values
         Transform dicc by Base External Mapping
         :magento_app object
@@ -390,7 +399,7 @@ class product_product(osv.osv):
             'type': 'product',
         }
 
-        if len(category_ids)>0:
+        if len(category_ids) > 0:
             values['categ_ids'] = [(6, 0, category_ids)]
 
         return values
