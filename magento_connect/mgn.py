@@ -481,8 +481,9 @@ class magento_app(osv.osv):
                 magento_external_referential_ids = magento_external_referential_obj.search(cr, uid, [('model_id.model', '=', 'product.product'), ('magento_app_id', 'in', [magento_app.id])], context = context)
                 product_ids = magento_external_referential_obj.read(cr, uid, magento_external_referential_ids, ['oerp_id', 'mgn_id'], context)
 
-                for product_id in product_ids:
-                    with ProductImages(magento_app.uri, magento_app.username, magento_app.password) as product_image_api:
+                with ProductImages(magento_app.uri, magento_app.username, magento_app.password) as product_image_api:
+                    for product_id in product_ids:
+                        LOGGER.notifyChannel('Magento Sync Images', netsvc.LOG_INFO, "Check Magento ID %s images..." % (product_id['mgn_id']))
                         for product_image in product_image_api.list(product_id['mgn_id']):
                             image_ids = product_images_obj.search(cr, uid, [('filename', '=', product_image['url'])], context = context)
                             if len(image_ids) > 0:
@@ -492,26 +493,51 @@ class magento_app(osv.osv):
                                     continue
 
                             name = product_image['label']
+                            if 'url' in product_image: #magento = 1.3
+                                url = product_image['url']
+                            else: #magento < 1.5
+                                url = product_image['filename']
+
                             if not name:
-                                splited_name = product_image['file'].split('/')
+                                splited_name = url.split('/')
                                 name = splited_name[len(splited_name)-1]
+
+                            exclude = False
+                            if product_image['exclude'] == '1':
+                                exclude = True
+                            
+                            base_image = False
+                            small_image = False
+                            thumbnail = False
+                            if 'image' in product_image['types']:
+                                base_image = True
+                            if 'small_image' in product_image['types']:
+                                small_image = True
+                            if 'thumbnail' in product_image['types']:
+                                thumbnail = True
 
                             vals = {
                                 'name': name,
                                 'link': True,
-                                'filename': product_image['url'],
-                                'magento_exclude': product_image['exclude'],
+                                'filename': url,
+                                'magento_base_image':base_image,
+                                'magento_small_image':small_image,
+                                'magento_thumbnail':thumbnail,
+                                'magento_exclude': exclude,
                                 'magento_position': product_image['position'],
                                 'product_id': product_id['oerp_id'],
-                                'magento_filename': product_image['file'],
+                                'magento_filename': name,
                                 'magento_exportable': True,
                                 'magento_app_ids': [(6, 0, [magento_app.id])],
                             }
+
                             product_images_id =  product_images_obj.create(cr, uid, vals, context)
+
                             prod_image_mgn_app_ids = product_image_magento_app_obj.search(cr, uid, [('product_images_id','=',product_images_id),('magento_app_id','=',magento_app.id)])
                             if len(prod_image_mgn_app_ids)>0:
                                 product_image_magento_app_obj.write(cr, uid, prod_image_mgn_app_ids, {'magento_exported':True})
 
+                            cr.commit()
                             LOGGER.notifyChannel('Magento Sync Images', netsvc.LOG_INFO, " Magento %s, Image %s created, Product ID %s" % (magento_app.name, name, product_id['oerp_id']))
         return True
 
