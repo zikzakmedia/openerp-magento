@@ -539,6 +539,8 @@ class magento_app(osv.osv):
 
                             cr.commit()
                             LOGGER.notifyChannel('Magento Sync Images', netsvc.LOG_INFO, " Magento %s, Image %s created, Product ID %s" % (magento_app.name, name, product_id['oerp_id']))
+
+                LOGGER.notifyChannel('Magento Sync Products', netsvc.LOG_INFO, "End Sync Images magento app %s." % (magento_app.name))
         return True
 
 

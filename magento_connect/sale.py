@@ -30,6 +30,8 @@ import mimetypes
 import os
 import urllib, urllib2
 import binascii
+import pooler
+import threading
 
 from magento import *
 from urllib2 import Request, urlopen, URLError, HTTPError
@@ -124,11 +126,17 @@ class sale_shop(osv.osv):
             LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Products to sync: %s" % (product_shop_ids))
 
             context['shop'] = shop
-            self.magento_export_products_stepbystep(cr, uid, magento_app, product_shop_ids, context)
+
+            cr.commit()
+            thread1 = threading.Thread(target=self.magento_export_products_stepbystep, args=(cr.dbname, uid, magento_app.id, product_shop_ids, context))
+            thread1.start()
+            
+            # context['shop'] = shop
+            # self.magento_export_products_stepbystep(cr, uid, magento_app, product_shop_ids, context)
 
         return True
 
-    def magento_export_products_stepbystep(self, cr, uid, magento_app, ids, context=None):
+    def magento_export_products_stepbystep(self, db_name, uid, magentoapp, ids, context=None):
         """
         Get all IDs products to create/write to Magento
         Use Base External Mapping to transform values
@@ -137,6 +145,11 @@ class sale_shop(osv.osv):
         """
         if len(ids) == 0:
             return True
+
+        db, pool = pooler.get_db_and_pool(db_name)
+        cr = db.cursor()
+
+        magento_app = self.pool.get('magento.app').browse(cr, uid, magentoapp)
 
         context['magento_app'] = magento_app
         magento_external_referential_obj = self.pool.get('magento.external.referential')
@@ -185,6 +198,9 @@ class sale_shop(osv.osv):
                         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Magento Create Product: %s %s." % (product_sku, product.id))
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Products Export")
+
+        cr.commit()
+        cr.close()
 
         return product_mgn_id
 

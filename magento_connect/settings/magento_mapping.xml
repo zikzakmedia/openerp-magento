@@ -73,7 +73,7 @@ if context['product_id']:
             <field name='field_id' search="[('model_id','=','product.product'),('name','=','magento_status')]" model='ir.model.fields'/>
             <field name='external_field'>status</field>
             <field name='type'>in_out</field>
-            <field name='external_type'>str</field>
+            <field name='external_type'>bool</field>
             <field name='active'>1</field>
         </record>
 
@@ -204,7 +204,7 @@ if context['product_id']:
             <field name='field_id' search="[('model_id','=','product.category'),('name','=','magento_is_active')]" model='ir.model.fields'/>
             <field name='external_field'>is_active</field>
             <field name='type'>in_out</field>
-            <field name='external_type'>str</field>
+            <field name='external_type'>bool</field>
             <field name='active'>1</field>
         </record>
 
