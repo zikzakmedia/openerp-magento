@@ -26,6 +26,7 @@
                             <field name="product_uom_id"/>
                             <field name="product_delivery_default_id"/>
                             <field name="product_discount_default_id"/>
+                            <field name="inventory"/>
                         </page>
                         <page string="Authentication">
                             <field name="username"/>

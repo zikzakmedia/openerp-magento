@@ -77,6 +77,7 @@ class magento_app(osv.osv):
         'last_export_partners': fields.datetime('Last Export Partners', help='This date is last export. If you need export all partners, empty this field (long sync)'),
         'magento_country_ids': fields.many2many('res.country','magento_app_country_rel', 'magento_app_id','country_id','Country'),
         'magento_region_ids': fields.one2many('magento.region', 'magento_app_id', 'Region'),
+        'inventory': fields.boolean('Force Inventory', help='When create new product, this force inventory available'),
     }
 
     def core_sync_test(self, cr, uid, ids, context):
@@ -281,6 +282,7 @@ class magento_app(osv.osv):
                             product_attribute_excludes = self.pool.get('magento.attribute.exclude').search(cr, uid, [('name','=',product_attribute['code'])])
                             if not len(product_attribute_excludes)>0:
                                 attribute = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'magento.website', product_attribute['attribute_id'])
+                                LOGGER.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Waitting %s..." % (product_attribute['code']))
 
                                 if not attribute: #create
                                     type = False

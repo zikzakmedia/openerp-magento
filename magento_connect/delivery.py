@@ -21,12 +21,14 @@
 #
 ##############################################################################
 
-import delivery
-import mgn
-import mgn_referential
-import partner
-import product
-import product_attributes
-import product_images
-import sale
-import wizard
+from osv import osv, fields
+from tools.translate import _
+
+class delivery_carrier(osv.osv):
+    _inherit = "delivery.carrier"
+
+    _columns = {
+        'code': fields.char('Code', size=64, required=True),
+    }
+
+delivery_carrier()

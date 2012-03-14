@@ -30,6 +30,8 @@ import mimetypes
 import os
 import urllib, urllib2
 import binascii
+import pooler
+import threading
 
 from magento import *
 
@@ -76,11 +78,14 @@ class sale_shop(osv.osv):
             LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Product Templates to sync: %s" % (product_template_shop_ids))
 
             context['shop'] = shop
-            self.magento_export_product_templates_stepbystep(cr, uid, magento_app, product_template_shop_ids, context)
+
+            cr.commit()
+            thread1 = threading.Thread(target=self.magento_export_product_templates_stepbystep, args=(cr.dbname, uid, magento_app.id, product_template_shop_ids, context))
+            thread1.start()
 
         return True
 
-    def magento_export_product_templates_stepbystep(self, cr, uid, magento_app, ids, context=None):
+    def magento_export_product_templates_stepbystep(self, db_name, uid, magentoapp, ids, context=None):
         """
         Get all IDs product templates to create/write to Magento
         Use Base External Mapping to transform values
@@ -88,8 +93,18 @@ class sale_shop(osv.osv):
         :return mgn_ids
         """
 
-        magento_external_referential = self.pool.get('magento.external.referential')
+        if len(ids) == 0:
+            LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Templates Export")
+            return True
+
+        db, pool = pooler.get_db_and_pool(db_name)
+        cr = db.cursor()
+
+        magento_app = self.pool.get('magento.app').browse(cr, uid, magentoapp)
+
         context['magento_app'] = magento_app
+        magento_external_referential = self.pool.get('magento.external.referential')
+
         product_mgn_ids = []
         attributes = {}
 
@@ -155,8 +170,9 @@ class sale_shop(osv.osv):
                         if len(products)>0:
                             try:
                                 product = productconfigurable_api.update(product_mgn_id, products, attributes)
+                                LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Configurable %s. OpenERP ID %s, Magento ID %s" % (product_sku, product_template_id, product_mgn_id))
                             except:
-                                LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Product Configurable: Magento product ID %s, Products ID %s" % (product_mgn_id, products))
+                                LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Error Product Configurable: Magento product ID %s, Products ID %s" % (product_mgn_id, products))
                     # return []
                     product_mgn_ids.append(product_mgn_id)
 
@@ -173,7 +189,6 @@ class sale_shop(osv.osv):
         :return True
         """
 
-        decimal = self.pool.get('decimal.precision').precision_get(cr, uid, 'Sale Price')
 
         product_shop_ids = []
         for shop in self.browse(cr, uid, ids):
@@ -190,36 +205,73 @@ class sale_shop(osv.osv):
                 if last_exported_time < product_template['create_date'][:19] or (product_template['write_date'] and last_exported_time < product_template['write_date'][:19]):
                     product_shop_ids.append(product_template['id'])
 
-            with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
-                context['shop'] = shop
-                for product in self.pool.get('product.template').browse(cr, uid, product_shop_ids, context):
-                    mgn_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.template', product.id)
-                    if mgn_id:
-                        mgn_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [mgn_id])[0]['mgn_id']
-                    #~ store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', shop.id)
-                    #~ store_view  = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])[0]['mgn_id']
+            LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Products Price to sync: %s" % (product_shop_ids))
 
-                    price = ''
-                    if not mgn_id:#not product created/exist in Magento. Create
-                        mgn_id = self.magento_export_product_templates_stepbystep(cr, uid, magento_app, [product.id], context)
+            cr.commit()
+            thread1 = threading.Thread(target=self.magento_export_prices_templates_stepbystep, args=(cr.dbname, uid, magento_app.id, shop.id, product_shop_ids, context))
+            thread1.start()
 
-                    if shop.magento_sale_price == 'pricelist' and shop.pricelist_id:
-                        price = self.pool.get('product.pricelist').price_get(cr, uid, [shop.pricelist_id.id], product.id, 1.0)[shop.pricelist_id.id]
-                    else:
-                        price = product.list_price
+        return True
 
-                    if shop.magento_tax_include:
-                        price_compute_all = self.pool.get('account.tax').compute_all(cr, uid, product.taxes_id, price, 1, address_id=None, product=product, partner=None)
-                        price = price_compute_all['total_included']
+    def magento_export_prices_templates_stepbystep(self, db_name, uid, magentoapp, saleshop, ids, context=None):
+        """
+        Get all IDs products to update Prices in Magento
+        :param dbname: str
+        :magentoapp: int
+        :saleshop: int
+        :ids: list
+        :return mgn_id
+        """
 
-                    if price:
-                        price = '%.*f' % (decimal, price) #decimal precision
+        if len(ids) == 0:
+            LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Templates Prices Export")
+            return True
 
-                    data = {'price':price}
-                    #~ product_mgn_id = product_api.update(mgn_id, data, store_view)
-                    product_mgn_id = product_api.update(mgn_id, data)
+        db, pool = pooler.get_db_and_pool(db_name)
+        cr = db.cursor()
 
-                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Template Prices: %s. OpenERP ID %s, Magento ID %s" % (price, product.id, mgn_id))
+        decimal = self.pool.get('decimal.precision').precision_get(cr, uid, 'Sale Price')
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
+
+        magento_app = self.pool.get('magento.app').browse(cr, uid, magentoapp)
+        context['magento_app'] = magento_app
+
+        shop = self.pool.get('sale.shop').browse(cr, uid, saleshop)
+        context['shop'] = shop
+
+        decimal = self.pool.get('decimal.precision').precision_get(cr, uid, 'Sale Price')
+
+        with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
+            for product in self.pool.get('product.template').browse(cr, uid, ids, context):
+                LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Waiting OpenERP ID %s...." % (product.id))
+                mgn_id = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.template', product.id)
+                if mgn_id:
+                    mgn_id = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [mgn_id])[0]['mgn_id']
+                #~ store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', shop.id)
+                #~ store_view  = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])[0]['mgn_id']
+
+                price = ''
+                if not mgn_id:#not product created/exist in Magento. Create
+                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Force create product ID %s" % (product.id))
+                    mgn_id = self.magento_export_product_templates_stepbystep(cr.dbname, uid, magento_app.id, [product.id], context)
+
+                if shop.magento_sale_price == 'pricelist' and shop.pricelist_id:
+                    price = self.pool.get('product.pricelist').price_get(cr, uid, [shop.pricelist_id.id], product.id, 1.0)[shop.pricelist_id.id]
+                else:
+                    price = product.list_price
+
+                if shop.magento_tax_include:
+                    price_compute_all = self.pool.get('account.tax').compute_all(cr, uid, product.taxes_id, price, 1, address_id=None, product=product, partner=None)
+                    price = price_compute_all['total_included']
+
+                if price:
+                    price = '%.*f' % (decimal, price) #decimal precision
+
+                data = {'price':price}
+                #~ product_mgn_id = product_api.update(mgn_id, data, store_view)
+                product_mgn_id = product_api.update(mgn_id, data)
+
+                LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Template Prices: %s. OpenERP ID %s, Magento ID %s" % (price, product.id, mgn_id))
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Template Prices Export")
 

@@ -192,6 +192,15 @@ if context['product_id']:
                 value.append(cat_id[0]['mgn_id'])</field>
         </record>
 
+        <record model='base.external.mapping.line' id='mgnlpt06'>
+            <field name='mapping_id' ref='magento_connect.mgn02'/>
+            <field name='field_id' search="[('model_id','=','product.template'),('name','=','weight')]" model='ir.model.fields'/>
+            <field name='external_field'>weight</field>
+            <field name='type'>in_out</field>
+            <field name='external_type'>str</field>
+            <field name='active'>1</field>
+        </record>
+
 <!--Product Category-->
         <record model='base.external.mapping' id='mgn03'>
             <field name='name'>magento.product.category</field>

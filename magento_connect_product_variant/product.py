@@ -112,25 +112,25 @@ class product_template(osv.osv):
 
         return super(product_template, self).create(cr, uid, vals, context)
 
-    def write(self, cr, uid, ids, vals, context):
-        """Convert url key slug line"""
-
-        result = True
-        if not isinstance(ids, list):
-            ids = [ids]
-
-        for id in ids:
-            # if 'magento_tpl_sku' in vals:
-                # if self._check_magento_sku(cr, uid, vals['magento_tpl_sku'], id):
-                    # raise osv.except_osv(_("Alert"), _("Error! Magento SKU %s must be unique") % (vals['magento_tpl_sku']))
-
-            if 'magento_tpl_url_key' in vals:
-                slug = slugify(unicode(vals['magento_tpl_url_key'],'UTF-8'))
-                vals['magento_tpl_url_key'] = slug
-
-            result = result and super(product_template, self).write(cr, uid, [id], vals, context)
-
-        return result
+    # def write(self, cr, uid, ids, vals, context):
+        # """Convert url key slug line"""
+# 
+        # result = True
+        # if not isinstance(ids, list):
+            # ids = [ids]
+# 
+        # for id in ids:
+            ## if 'magento_tpl_sku' in vals:
+                ## if self._check_magento_sku(cr, uid, vals['magento_tpl_sku'], id):
+                    ## raise osv.except_osv(_("Alert"), _("Error! Magento SKU %s must be unique") % (vals['magento_tpl_sku']))
+# 
+            # if 'magento_tpl_url_key' in vals:
+                # slug = slugify(unicode(vals['magento_tpl_url_key'],'UTF-8'))
+                # vals['magento_tpl_url_key'] = slug
+# 
+            # result = result and super(product_template, self).write(cr, uid, [id], vals, context)
+# 
+        # return result
 
     def unlink(self, cr, uid, ids, context=None):
         for val in self.browse(cr, uid, ids):
@@ -198,6 +198,8 @@ class product_product(osv.osv):
         :store_view ID
         :return product_product_oerp_id
         """
+        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Waitting... %s" % (product['product_id']))
+
         product_template_oerp_id = None
         product_template_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.template', product['product_id'])
         if not product_template_id:

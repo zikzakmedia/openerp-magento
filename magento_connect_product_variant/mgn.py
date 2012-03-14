@@ -73,7 +73,8 @@ class magento_app(osv.osv):
                 magento_id = product_variant_dimension_type[type_name]
                 dimension_id = self.pool.get('product.variant.dimension.type').magento_dimension_type(cr, uid, magento_app, type_name, magento_id)
                 self.pool.get('product.variant.dimension.option').magento_dimension_option(cr, uid, magento_app, dimension_id, dimension_options)
-                
+
+            LOGGER.notifyChannel('Magento Import Dimensions', netsvc.LOG_INFO, "End import dimensions magento %s." % (magento_app.name))
         return True
 
     def core_sync_products(self, cr, uid, ids, context):
@@ -114,6 +115,7 @@ class magento_app(osv.osv):
                     if product['type'] == 'configurable':
                         self.pool.get('product.product').magento_create_product_type(cr, uid, magento_app, product, store_view, context)
 
+                #Uncomment second part import only configurable products (id from to)
                 for product in products:
                     if product['type'] != 'configurable':
                         self.pool.get('product.product').magento_create_product_type(cr, uid, magento_app, product, store_view, context)

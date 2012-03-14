@@ -51,7 +51,7 @@ class res_partner(osv.osv):
 
         return customer
 
-    def magento_create_partner(self, cr, uid, magento_app, values, context = None):
+    def magento_create_partner(self, cr, uid, magento_app, values, mapping = True, context = None):
         """Create Partner from Magento Values
         Transform dicc by Base External Mapping
         :return partner_id
@@ -101,7 +101,9 @@ class res_partner(osv.osv):
         res_partner_vals = res_partner_vals_obj.get_external_to_oerp(cr, uid, 'magento.res.partner', False, values, context)
         res_partner_vals['customer'] = True #fix this partner is customer
         partner_id = self.create(cr, uid, res_partner_vals, context)
-        external_referential_obj.create_external_referential(cr, uid, magento_app, 'res.partner', partner_id, values['customer_id'])
+
+        if mapping and ('customer_id' in values):
+            external_referential_obj.create_external_referential(cr, uid, magento_app, 'res.partner', partner_id, values['customer_id'])
 
         logger.notifyChannel('Magento Sync Partner', netsvc.LOG_INFO, "Create Partner: magento %s, openerp id %s, magento id %s" % (magento_app.name, partner_id, values['customer_id']))
 
@@ -196,13 +198,15 @@ class res_partner_address(osv.osv):
                 customer_addresses.append(customer_address)
         return customer_addresses
 
-    def magento_create_partner_address(self, cr, uid, magento_app, partner_id, customer_address, mapping = True, context = None):
+    def magento_create_partner_address(self, cr, uid, magento_app, partner_id, customer_address, mapping = True, type = 'default', context = None):
         """Create Partner Address from Magento Values
         Transform dicc by Base External Mapping
         Remember add email in customer_address dicc
         :magento_app: object
-        :customer_address: [dicc]
         :partner_id: ID
+        :customer_address: [dicc]
+        :mapping: True/False
+        :type: default, invoice, delivery
         :return partner_address_id
         """
         if context is None:
@@ -227,7 +231,7 @@ class res_partner_address(osv.osv):
         if 'email' in customer_address:
             vals['email'] = customer_address['email']
         vals['partner_id'] = partner_id
-        vals['type'] =  customer_address['is_default_billing'] and 'invoice' or customer_address['is_default_shipping'] and 'delivery' or 'default'
+        vals['type'] =  type
         country_ids = country_obj.search(cr, uid, [('code', '=', customer_address['country_id'])], context = context)
         vals['country_id'] = country_ids and country_ids[0] or False
         if 'region' in customer_address:
@@ -278,8 +282,21 @@ class res_partner_address(osv.osv):
                         create_ghost_address = False
                         return self.magento_create_partner_address(cr, uid, magento_app, partner_id, address, mapping = True)
                 # 3
-                if create_ghost_address:
+                if len(customer_address)>0:
                     return self.magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address[0], mapping = False)
+                else:
+                    customer_address = {}
+                    customer_address['firstname'] = values['firstname']
+                    customer_address['lastname'] = values['lastname']
+                    customer_address['city'] = values['city']
+                    customer_address['telephone'] = values['telephone']
+                    customer_address['street'] = values['street']
+                    customer_address['postcode'] = values['postcode']
+                    customer_address['email'] = values['email']
+                    customer_address['country_id'] = values['country_id']
+                    customer_address['region'] = values['region_id']
+                    return self.magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address, mapping = False)
+
 
     def magento_get_address_name(self, cr, uid, partner_address, context = None):
         """Split the name of the partner into magento_firstname and magento_lastname

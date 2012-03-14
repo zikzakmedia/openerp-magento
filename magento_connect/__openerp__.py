@@ -79,6 +79,11 @@
         "product_images_view.xml",
         "sale_view.xml",
         "partner_view.xml",
+        "delivery_view.xml",
+        "wizard/wizard_product_product.xml",
+        "wizard/wizard_product_stock.xml",
+        "wizard/wizard_product_price.xml",
+        "wizard/wizard_product_images.xml",
     ],
     "active": False,
     "installable": True

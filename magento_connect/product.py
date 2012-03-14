@@ -249,8 +249,7 @@ class product_product(osv.osv):
         product_id = super(product_product, self).create(cr, uid, vals, context)
 
         val = {}
-        if 'default_code' in vals and 'magento_sku' not in vals or \
-                                                    not vals['magento_sku']:
+        if 'default_code' in vals and not 'magento_sku' in vals:
             val['default_code'] = self.browse(cr, uid, product_id, context).default_code
             val['magento_sku'] = val['default_code']
             super(product_product, self).write(cr, uid, [product_id], val, context)
