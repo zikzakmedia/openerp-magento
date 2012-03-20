@@ -1064,7 +1064,6 @@ class sale_order_line(osv.osv):
         :return sale_order_line_id (OpenERP ID)
         """
 
-        vals_line = {}
         magento_external_referential_obj = self.pool.get('magento.external.referential')
 
         decimals = self.pool.get('decimal.precision').precision_get(cr, uid, 'Sale Price')
@@ -1076,38 +1075,68 @@ class sale_order_line(osv.osv):
         weight = item['weight'] and item['weight'] or 0
         weight = round(float(weight),decimals)
 
-        if 'tax_id' in item:
-            vals_line['tax_id'] = item['tax_id']
+        products = []
+        if magento_app.options and 'sku' in item:
+            """Split SKU item (order line) by -
+            Use Magneto ID in products (not Product ID OpenERP)"""
+            skus = item['sku'].split('-') #order line magento, we get all products join by -
+            if len(skus)>0:
+                for sku in skus:
+                    product = self.pool.get('product.product').search(cr, uid, [('magento_sku','=',sku)])
+                    if len(product)>0:
+                        product_mapping_id = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'product.product', product[0])
+                        if product_mapping_id:
+                            mgn_id = magento_external_referential_obj.get_external_referential(cr, uid, [product_mapping_id])[0]['mgn_id']
+                            products.append(mgn_id)
+                        else:
+                            products.append(item['product_id'])
+                    else:
+                        products.append(item['product_id'])
+            else:
+                products.append(item['product_id'])
+        else:
+            products.append(item['product_id'])
 
-        product_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'product.product', item['product_id'])
-        if product_mapping_id:
-            """Product is mapping. Get Product OpenERP"""
-            product_id = magento_external_referential_obj.get_external_referential(cr, uid, [product_mapping_id])[0]['oerp_id']
-            product = self.pool.get('product.product').browse(cr, uid, product_id)
-            product_uom = product.uos_id.id and product.uos_id.id or product.uom_id.id
-            product_id_change = self.pool.get('sale.order.line').product_id_change(cr, uid,
-                [sale_order.id], sale_order.partner_id.property_product_pricelist.id, product.id,
-                product_uom_qty, product_uom, partner_id=sale_order.partner_id.id)
+        first = True
+        for prod in products:
+            vals_line = {}
+            if 'tax_id' in item:
+                vals_line['tax_id'] = item['tax_id']
+            product_name = item['name']
 
-            vals_line['delay'] = product_id_change['value']['delay']
-            weight = product_id_change['value']['th_weight']
-            vals_line['type'] = product_id_change['value']['type']
-            tax_ids = [self.pool.get('account.tax').browse(cr, uid, t_id).id for t_id in product_id_change['value']['tax_id']]
-            vals_line['tax_id'] = [(6, 0, tax_ids)]
-            vals_line['purchase_price'] = product_id_change['value']['purchase_price']
+            product_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'product.product', prod)
+            if product_mapping_id:
+                """Product is mapping. Get Product OpenERP"""
+                product_id = magento_external_referential_obj.get_external_referential(cr, uid, [product_mapping_id])[0]['oerp_id']
+                product = self.pool.get('product.product').browse(cr, uid, product_id)
+                product_uom = product.uos_id.id and product.uos_id.id or product.uom_id.id
+                product_id_change = self.pool.get('sale.order.line').product_id_change(cr, uid,
+                    [sale_order.id], sale_order.partner_id.property_product_pricelist.id, product.id,
+                    product_uom_qty, product_uom, partner_id=sale_order.partner_id.id)
 
-        vals_line['order_id'] = sale_order.id
-        vals_line['product_id'] = product_id
-        vals_line['name'] = item['name']
-        vals_line['price_unit'] = float(item['price'])
-        vals_line['product_uom_qty'] = product_uom_qty
-        vals_line['product_uom'] = product_uom
-        vals_line['notes'] = item['description']
-        vals_line['th_weight'] = weight
-        if 'gift_message' in item:
-            vals_line['magento_gift_message'] = item['gift_message']
+                product_name = product_id_change['value']['name']
+                vals_line['delay'] = product_id_change['value']['delay']
+                weight = product_id_change['value']['th_weight']
+                vals_line['type'] = product_id_change['value']['type']
+                tax_ids = [self.pool.get('account.tax').browse(cr, uid, t_id).id for t_id in product_id_change['value']['tax_id']]
+                vals_line['tax_id'] = [(6, 0, tax_ids)]
+                vals_line['purchase_price'] = product_id_change['value']['purchase_price']
 
-        sale_order_line_id = self.create(cr, uid, vals_line, context)
+            vals_line['name'] = product_name
+            vals_line['order_id'] = sale_order.id
+            vals_line['product_id'] = product_id
+            vals_line['product_uom_qty'] = product_uom_qty
+            vals_line['product_uom'] = product_uom
+            vals_line['th_weight'] = weight
+
+            if first: #only first loop add price
+                vals_line['price_unit'] = float(item['price'])
+                if 'gift_message' in item:
+                    vals_line['magento_gift_message'] = item['gift_message']
+                vals_line['notes'] = item['description']
+                first = False
+
+            sale_order_line_id = self.create(cr, uid, vals_line, context)
 
         return sale_order_line_id
 
@@ -1125,25 +1154,27 @@ class sale_order_line(osv.osv):
 
         delivery_product = magento_app.product_delivery_default_id
         delivery_ids = self.pool.get('delivery.carrier').search(cr, uid, [('code','=',values['shipping_method'])])
+
         if len(delivery_ids)>0:
             delivery = self.pool.get('delivery.carrier').browse(cr, uid, delivery_ids[0], context)
             delivery_product = delivery.product_id
 
-        item = {
+        vals_line = {
+            'order_id': sale_order.id,
             'product_id': delivery_product.id,
             'qty_ordered': 1,
             'weight': delivery_product.weight and delivery_product.weight or 0,
             'name': delivery_product.name,
-            'price': values['base_shipping_amount'],
-            'description': '',
+            'price_unit': values['base_shipping_amount'],
             'notes': values['shipping_description'],
+            'product_uom': delivery_product.uom_id.id,
         }
 
         #ADD taxes from shipping product
         tax_ids = [t.id for t in delivery_product.taxes_id]
-        item['tax_id'] = [(6, 0, tax_ids)]
+        vals_line['tax_id'] = [(6, 0, tax_ids)]
 
-        sale_order_line_id = self.magento_create_order_line(cr, uid, magento_app, sale_order, item, context)
+        sale_order_line_id = self.create(cr, uid, vals_line, context)
 
         return sale_order_line_id
 
@@ -1161,15 +1192,17 @@ class sale_order_line(osv.osv):
 
         discount_product = magento_app.product_discount_default_id
 
-        item = {
+        vals_line = {
+            'order_id': sale_order.id,
             'product_id': discount_product.id,
             'qty_ordered': 1,
             'weight': discount_product.weight and discount_product.weight or 0,
             'name': discount_product.name,
-            'price': values['discount_amount'],
-            'description': '',
+            'price_unit': values['discount_amount'],
+            'product_uom': discount_product.uom_id.id,
         }
-        sale_order_line_id = self.magento_create_order_line(cr, uid, magento_app, sale_order, item, context)
+
+        sale_order_line_id = self.create(cr, uid, vals_line, context)
 
         return sale_order_line_id
 
