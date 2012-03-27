@@ -207,9 +207,11 @@ class sale_shop(osv.osv):
                             with Inventory(magento_app.uri, magento_app.username, magento_app.password) as inventory_api:
                                 data = {
                                     'qty':1,
-                                    'is_in_stock':True
+                                    'is_in_stock':True,
+                                    'manage_stock': True,
                                 }
-                                inventory_api.update(product_mgn_id, data)
+                                # inventory_api.update(product_mgn_id, data)
+                                inventory_api.update(product.magento_sku, data) #mgn 151 use sku, not ID
                                 LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Force Inventory Available: Magento ID %s" % (product_mgn_id))
                     except:
                         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Error: Magento Create Product: SKU %s OpenERP ID %s." % (product_sku, product.id))
@@ -398,9 +400,13 @@ class sale_shop(osv.osv):
                 """Is in Stock"""
                 is_in_stock = int(stock > 0) or False
 
-                data = {'qty':stock, 'is_in_stock':is_in_stock}
+                product = self.pool.get('product.product').browse(cr, uid, product.id)
+
+                data = {'qty':stock, 'is_in_stock':is_in_stock,'manage_stock': product.magento_manage_stock}
+                print data
                 try:
-                    inventory_api.update(mgn_id, data)
+                    # inventory_api.update(mgn_id, data)
+                    inventory_api.update(product.magento_sku, data) #mgn 151 use sku, not ID
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Stock: %s. OpenERP ID %s, Magento ID %s" % (stock, product.id, mgn_id))
                 except:
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Error: Magento Stock Product: OpenERP ID %s Magento ID %s" % (product.id, mgn_id))
@@ -1153,18 +1159,20 @@ class sale_order_line(osv.osv):
             return False
 
         delivery_product = magento_app.product_delivery_default_id
-        delivery_ids = self.pool.get('delivery.carrier').search(cr, uid, [('code','=',values['shipping_method'])])
+        name = delivery_product.name
 
+        delivery_ids = self.pool.get('delivery.carrier').search(cr, uid, [('code','=',values['shipping_method'])])
         if len(delivery_ids)>0:
             delivery = self.pool.get('delivery.carrier').browse(cr, uid, delivery_ids[0], context)
             delivery_product = delivery.product_id
+            name = "%s - %s" % (delivery.name, delivery_product.name)
 
         vals_line = {
             'order_id': sale_order.id,
             'product_id': delivery_product.id,
             'qty_ordered': 1,
             'weight': delivery_product.weight and delivery_product.weight or 0,
-            'name': delivery_product.name,
+            'name': name,
             'price_unit': values['base_shipping_amount'],
             'notes': values['shipping_description'],
             'product_uom': delivery_product.uom_id.id,

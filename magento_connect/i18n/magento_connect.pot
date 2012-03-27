@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.3\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2012-03-14 16:49+0000\n"
-"PO-Revision-Date: 2012-03-14 16:49+0000\n"
+"POT-Creation-Date: 2012-03-27 08:18+0000\n"
+"PO-Revision-Date: 2012-03-27 08:18+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -84,7 +84,7 @@ msgid "Title"
 msgstr "Title"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:766
+#: code:addons/magento_connect/mgn.py:767
 #, python-format
 msgid "This Magento Store Group not allow to delete"
 msgstr "This Magento Store Group not allow to delete"
@@ -102,7 +102,7 @@ msgid "This date is last import. If you need import new products, you can modify
 msgstr "This date is last import. If you need import new products, you can modify this date (filter)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:918
+#: code:addons/magento_connect/mgn.py:919
 #, python-format
 msgid "This Magento Region not allow to delete"
 msgstr "This Magento Region not allow to delete"
@@ -179,6 +179,11 @@ msgid "Customer Group ID"
 msgstr "Customer Group ID"
 
 #. module: magento_connect
+#: view:magento.app:0
+msgid "Test Connection"
+msgstr "Test Connection"
+
+#. module: magento_connect
 #: field:product.images,magento_exclude:0
 msgid "Exclude"
 msgstr "Exclude"
@@ -230,7 +235,7 @@ msgid "Magento File Name"
 msgstr "Magento File Name"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:784
+#: code:addons/magento_connect/mgn.py:785
 #, python-format
 msgid "This Magento Store View not allow to delete"
 msgstr "This Magento Store View not allow to delete"
@@ -293,7 +298,7 @@ msgid "From Orders"
 msgstr "From Orders"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:98
+#: code:addons/magento_connect/mgn.py:99
 #: code:addons/magento_connect/wizard/wizard_product_images.py:54
 #: code:addons/magento_connect/wizard/wizard_product_price.py:54
 #: code:addons/magento_connect/wizard/wizard_product_product.py:54
@@ -309,8 +314,8 @@ msgid "Payment Before Delivery"
 msgstr "Payment Before Delivery"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:240
-#: code:addons/magento_connect/product.py:269
+#: code:addons/magento_connect/product.py:242
+#: code:addons/magento_connect/product.py:271
 #, python-format
 msgid "Error! Magento SKU %s must be unique"
 msgstr "Error! Magento SKU %s must be unique"
@@ -378,7 +383,7 @@ msgid "This date is last export. If you need export all partners, empty this fie
 msgstr "This date is last export. If you need export all partners, empty this field (long sync)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:751
+#: code:addons/magento_connect/mgn.py:752
 #, python-format
 msgid "This Magento Website not allow to delete"
 msgstr "This Magento Website not allow to delete"
@@ -410,7 +415,7 @@ msgid "Payment"
 msgstr "Payment"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:94
+#: code:addons/magento_connect/mgn.py:95
 #, python-format
 msgid "Ok!"
 msgstr "Ok!"
@@ -439,7 +444,7 @@ msgid "Magento"
 msgstr "Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:96
+#: code:addons/magento_connect/mgn.py:97
 #, python-format
 msgid "Warning!"
 msgstr "Warning!"
@@ -879,7 +884,7 @@ msgid "Export Translations Products"
 msgstr "Export Translations Products"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:98
+#: code:addons/magento_connect/mgn.py:99
 #, python-format
 msgid "Connection to server failed."
 msgstr "Connection to server failed."
@@ -910,7 +915,7 @@ msgid "Magento ID"
 msgstr "Magento ID"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:96
+#: code:addons/magento_connect/mgn.py:97
 #, python-format
 msgid "Connection to server are successfully but reconfigure your Magento."
 msgstr "Connection to server are successfully but reconfigure your Magento."
@@ -1005,7 +1010,12 @@ msgid "To Import Products"
 msgstr "To Import Products"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:959
+#: help:magento.app,options:0
+msgid "Orders with product options. Split reference order line by -"
+msgstr "Orders with product options. Split reference order line by -"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:960
 #, python-format
 msgid "This Magento Websites/Groups not allow to delete"
 msgstr "This Magento Websites/Groups not allow to delete"
@@ -1035,13 +1045,13 @@ msgstr "Magento Information"
 
 #. module: magento_connect
 #: code:addons/magento_connect/product.py:116
-#: code:addons/magento_connect/product.py:291
+#: code:addons/magento_connect/product.py:293
 #, python-format
 msgid "-copy"
 msgstr "-copy"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:788
+#: code:addons/magento_connect/sale.py:798
 #, python-format
 msgid "Sale Order ID '%s' not allow to delete because are active in Magento"
 msgstr "Sale Order ID '%s' not allow to delete because are active in Magento"
@@ -1185,8 +1195,8 @@ msgid "OpenERP Model"
 msgstr "OpenERP Model"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:801
-#: code:addons/magento_connect/mgn.py:848
+#: code:addons/magento_connect/mgn.py:802
+#: code:addons/magento_connect/mgn.py:849
 #, python-format
 msgid "Select language available this store view"
 msgstr "Select language available this store view"
@@ -1197,19 +1207,19 @@ msgid "Shop configuration"
 msgstr "Shop configuration"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:300
+#: code:addons/magento_connect/product.py:302
 #, python-format
 msgid "Product '%s' not allow to delete because are active in Magento Shop"
 msgstr "Product '%s' not allow to delete because are active in Magento Shop"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:94
+#: code:addons/magento_connect/mgn.py:95
 #, python-format
 msgid "Connection to server are successfully."
 msgstr "Connection to server are successfully."
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:884
+#: code:addons/magento_connect/mgn.py:885
 #, python-format
 msgid "This Magento Attribute Exclude not allow to delete"
 msgstr "This Magento Attribute Exclude not allow to delete"
@@ -1348,6 +1358,11 @@ msgstr "This External mapping not allow to delete"
 #: view:product.product:0
 msgid "General"
 msgstr "General"
+
+#. module: magento_connect
+#: field:magento.app,options:0
+msgid "Product Options"
+msgstr "Product Options"
 
 #. module: magento_connect
 #: selection:sale.shop,magento_sale_price:0
@@ -1532,28 +1547,28 @@ msgid "Are you sure to continue? See logs server process"
 msgstr "Are you sure to continue? See logs server process"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:445
-#: code:addons/magento_connect/mgn.py:592
-#: code:addons/magento_connect/mgn.py:635
-#: code:addons/magento_connect/mgn.py:751
-#: code:addons/magento_connect/mgn.py:766
-#: code:addons/magento_connect/mgn.py:784
-#: code:addons/magento_connect/mgn.py:801
-#: code:addons/magento_connect/mgn.py:848
-#: code:addons/magento_connect/mgn.py:884
-#: code:addons/magento_connect/mgn.py:899
-#: code:addons/magento_connect/mgn.py:918
-#: code:addons/magento_connect/mgn.py:959
+#: code:addons/magento_connect/mgn.py:446
+#: code:addons/magento_connect/mgn.py:593
+#: code:addons/magento_connect/mgn.py:636
+#: code:addons/magento_connect/mgn.py:752
+#: code:addons/magento_connect/mgn.py:767
+#: code:addons/magento_connect/mgn.py:785
+#: code:addons/magento_connect/mgn.py:802
+#: code:addons/magento_connect/mgn.py:849
+#: code:addons/magento_connect/mgn.py:885
+#: code:addons/magento_connect/mgn.py:900
+#: code:addons/magento_connect/mgn.py:919
+#: code:addons/magento_connect/mgn.py:960
 #: code:addons/magento_connect/mgn_referential.py:42
 #: code:addons/magento_connect/partner.py:41
 #: code:addons/magento_connect/partner.py:166
 #: code:addons/magento_connect/product.py:183
-#: code:addons/magento_connect/product.py:240
-#: code:addons/magento_connect/product.py:269
-#: code:addons/magento_connect/product.py:300
+#: code:addons/magento_connect/product.py:242
+#: code:addons/magento_connect/product.py:271
+#: code:addons/magento_connect/product.py:302
 #: code:addons/magento_connect/product_images.py:92
 #: code:addons/magento_connect/sale.py:98
-#: code:addons/magento_connect/sale.py:788
+#: code:addons/magento_connect/sale.py:798
 #, python-format
 msgid "Alert"
 msgstr "Alert"
@@ -1709,9 +1724,9 @@ msgid "Notify Paid in web"
 msgstr "Notify Paid in web"
 
 #. module: magento_connect
-#: view:magento.app:0
-msgid "Test Connection"
-msgstr "Test Connection"
+#: field:product.product,magento_manage_stock:0
+msgid "Manage Stock"
+msgstr "Manage Stock"
 
 #. module: magento_connect
 #: field:sale.shop,magento_check_vat_partner:0
@@ -1739,7 +1754,7 @@ msgid "Magento Filters..."
 msgstr "Magento Filters..."
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:899
+#: code:addons/magento_connect/mgn.py:900
 #, python-format
 msgid "This Magento Customer Group not allow to delete"
 msgstr "This Magento Customer Group not allow to delete"
@@ -1788,9 +1803,9 @@ msgid "Products to sync..."
 msgstr "Products to sync..."
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:445
-#: code:addons/magento_connect/mgn.py:592
-#: code:addons/magento_connect/mgn.py:635
+#: code:addons/magento_connect/mgn.py:446
+#: code:addons/magento_connect/mgn.py:593
+#: code:addons/magento_connect/mgn.py:636
 #, python-format
 msgid "Select Store View Magento"
 msgstr "Select Store View Magento"
