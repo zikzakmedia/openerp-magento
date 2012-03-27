@@ -1011,6 +1011,12 @@ class sale_order(osv.osv):
             if mgn_status.paidinweb:
                 vals['magento_paidinweb'] = True
 
+        """Delivery Carrier"""
+        if 'shipping_method' in values:
+            delivery_ids = self.pool.get('delivery.carrier').search(cr, uid, [('code','=',values['shipping_method'])])
+            if len(delivery_ids)>0:
+                vals['carrier_id'] = delivery_ids[0]
+
         sale_order_id = self.create(cr, uid, vals, context)
         sale_order = self.browse(cr, uid, sale_order_id)
 
