@@ -117,7 +117,7 @@ class magento_app(osv.osv):
 
                 """Websites"""
                 for website in magento_api.call('ol_websites.list', []):
-                    web_site = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'magento.website', website['default_group_id'])
+                    web_site = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'magento.website', website['website_id'])
 
                     if not web_site: #create
                         values = {
@@ -126,8 +126,8 @@ class magento_app(osv.osv):
                             'magento_app_id': magento_app.id,
                         }
                         website_oerp_id = self.pool.get('magento.website').create(cr, uid, values, context)
-                        magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'magento.website', website_oerp_id, website['default_group_id'])
-                        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Website: magento %s, magento website id %s." % (magento_app.name, website['default_group_id']))
+                        magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'magento.website', website_oerp_id, website['website_id'])
+                        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Website: magento %s, magento website id %s." % (magento_app.name, website['website_id']))
                         """Sale Shop"""
                         values = {
                             'name': website['name'],
@@ -141,10 +141,10 @@ class magento_app(osv.osv):
                             'magento_default_invoice_quantity': 'order',
                         }
                         saleshop_oerp_id = self.pool.get('sale.shop').create(cr, uid, values, context)
-                        magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'sale.shop', saleshop_oerp_id, website['default_group_id'])
+                        magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'sale.shop', saleshop_oerp_id, website['website_id'])
                         LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Sale Shop: magento %s, Sale Shop id %s." % (magento_app.name, saleshop_oerp_id))
                     else:
-                        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Skip! Website exists: magento %s, magento website id %s. Not create" % (magento_app.name, website['default_group_id']))
+                        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Skip! Website exists: magento %s, magento website id %s. Not create" % (magento_app.name, website['website_id']))
 
                 """Store Group"""
                 for storegroup in magento_api.call('ol_groups.list', []):
@@ -164,7 +164,7 @@ class magento_app(osv.osv):
                             magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'magento.storegroup', storegroup_oerp_id, storegroup['group_id'])
                             LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Store Group: magento %s, magento store group id %s." % (magento_app.name, storegroup['group_id']))
                         else:
-                            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Failed to find magento.website with magento %s and Magento ID %s. Not create Store Group." % (magento_app.name, storegroup['default_group_id']))
+                            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Failed to find magento.website with magento %s. Not create Store Group." % (magento_app.name))
                     else:
                         LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Skip! Store Group exists: magento %s, magento store group id %s. Not create" % (magento_app.name, storegroup['group_id']))
 
@@ -174,6 +174,7 @@ class magento_app(osv.osv):
 
                     if not store_view: #create
                         store_group = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'magento.storegroup', storeview['group_id'])
+
                         external_referentials = magento_external_referential_obj.get_external_referential(cr, uid, [store_group])
                         if len(external_referentials)>0:
                             values = {
