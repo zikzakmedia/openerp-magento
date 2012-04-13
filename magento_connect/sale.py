@@ -168,6 +168,11 @@ class sale_shop(osv.osv):
 
                 values = dict(product_product_vals[0], **product_template_vals[0])
 
+                #Force status value. If status is False, Magento neeed status = 2
+                status = values.get('status',True)
+                if not status:
+                    values['status'] = '2' # 2 is dissable
+
                 mapping_id = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'product.product', product.id)
 
                 # get dicc values
