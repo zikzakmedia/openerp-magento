@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.2\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2012-03-27 08:18+0000\n"
-"PO-Revision-Date: 2012-03-27 10:21+0100\n"
+"POT-Creation-Date: 2012-04-13 10:16+0000\n"
+"PO-Revision-Date: 2012-04-13 12:21+0100\n"
 "Last-Translator: Raimon Esteve <resteve@zikzakmedia.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,118 +16,16 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: magento_connect
-#: field:magento.storeview,language_id:0
-#: field:sale.shop,magento_default_language:0
-msgid "Language Default"
-msgstr "Idioma per defecte"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Import Regions"
-msgstr "Importar Províncies"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_magento_sync_product_wizard
-msgid "magento.sync.product.wizard"
-msgstr "magento.sync.product.wizard"
-
-#. module: magento_connect
-#: field:magento.storeview,magento_last_export_locale_products:0
-#: field:sale.shop,magento_last_export_products:0
-msgid "Last Export Products"
-msgstr "Darrers productes exportats"
-
-#. module: magento_connect
 #: selection:magento.sale.shop.status.type,picking_policy:0
 #: selection:sale.shop,magento_default_picking_policy:0
 msgid "Partial Delivery"
 msgstr "Entrega parcial"
 
 #. module: magento_connect
-#: view:product.category:0
-msgid "Sorting method"
-msgstr "Mètode d'ordenació"
-
-#. module: magento_connect
-#: field:magento.region,region_id:0
-msgid "Region ID"
-msgstr "Identificador de regió"
-
-#. module: magento_connect
-#: help:magento.app,product_discount_default_id:0
-msgid "Default Product Discount"
-msgstr "Producte descompte per defecte"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Authentication"
-msgstr "Autenticació"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_magento_sale_shop_status_type
-msgid "Magento Sale Shop Status Type"
-msgstr "Estats de magento"
-
-#. module: magento_connect
-#: field:product.images,magento_small_image:0
-msgid "Small Image"
-msgstr "Imatge petita"
-
-#. module: magento_connect
-#: selection:product.product,magento_visibility:0
-msgid "Nowhere"
-msgstr "Enlloc"
-
-#. module: magento_connect
-#: field:product.product,magento_metatitle:0
-msgid "Title"
-msgstr "Títol"
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:767
-#, python-format
-msgid "This Magento Store Group not allow to delete"
-msgstr "No es pot esborrar aquest grup de botigues Magento"
-
-#. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.action_magento_region
-#: model:ir.model,name:magento_connect.model_magento_region
-#: view:magento.region:0
-msgid "Magento Region"
-msgstr "Província de Magento"
-
-#. module: magento_connect
-#: help:magento.app,from_import_products:0
-msgid "This date is last import. If you need import new products, you can modify this date (filter)"
-msgstr "Aquesta és la data de darrera importació. Si necessiteu importar nous productes, podeu modificar aquesta data (filtre)"
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:919
+#: code:addons/magento_connect/mgn.py:967
 #, python-format
 msgid "This Magento Region not allow to delete"
 msgstr "Aquestes regions no es poden eliminar"
-
-#. module: magento_connect
-#: view:sale.order:0
-#: field:sale.order,magento_gift_message:0
-#: field:sale.order.line,magento_gift_message:0
-msgid "Gift Message"
-msgstr "Missatge de regal"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Export Customers"
-msgstr "Exportar Clients"
-
-#. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.act_magento_sync_images
-msgid "Export Images Magento"
-msgstr "Exporta  Imatges a Magento"
-
-#. module: magento_connect
-#: field:product.category,magento_available_sort_by:0
-msgid "Available Product Listing (Sort By)"
-msgstr "Llistat de productes disponibles (Sort By)"
 
 #. module: magento_connect
 #: model:ir.actions.act_window,name:magento_connect.action_magento_attribute_exclude
@@ -138,60 +36,19 @@ msgid "Magento Attribute Exclude"
 msgstr "Excloure atributs Magento"
 
 #. module: magento_connect
-#: model:product.category,name:magento_connect.mag0
-msgid "Service"
-msgstr "Servei"
+#: field:product.product,magento_metatitle:0
+msgid "Title"
+msgstr "Títol"
+
+#. module: magento_connect
+#: field:magento.app,to_import_products:0
+msgid "To Import Products"
+msgstr "Productes fins a la data"
 
 #. module: magento_connect
 #: view:magento.app:0
-msgid "Import Magento Product Types"
-msgstr "Importar tipus de producte Magento"
-
-#. module: magento_connect
-#: help:magento.sale.shop.status.type,cancel:0
-msgid "Cancel order. Sale Order change state draft to cancel"
-msgstr "Cancel·la comanda. Les comandes de venda passaran de esborrall a cancel·lat."
-
-#. module: magento_connect
-#: field:magento.app,last_export_product_category:0
-msgid "Last Export Categories"
-msgstr "Darreres categories exportades"
-
-#. module: magento_connect
-#: field:magento.sale.shop.status.type,picking_policy:0
-#: field:sale.shop,magento_default_picking_policy:0
-msgid "Packing Policy"
-msgstr "Política d'embalatge"
-
-#. module: magento_connect
-#: field:sale.shop,magento_status_paid:0
-msgid "Paid"
-msgstr "Pagat"
-
-#. module: magento_connect
-#: field:product.category,magento_default_sort_by:0
-msgid "Default Product Listing Sort (Sort By)"
-msgstr "Llistat de productes per defecte (Ordenat per)"
-
-#. module: magento_connect
-#: field:magento.customer.group,customer_group_id:0
-msgid "Customer Group ID"
-msgstr "Identificador de grup de clients"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Test Connection"
-msgstr "Test de connexió"
-
-#. module: magento_connect
-#: field:product.images,magento_exclude:0
-msgid "Exclude"
-msgstr "Excloure"
-
-#. module: magento_connect
-#: view:sale.shop:0
-msgid "Are you sure to continue? This action is in background. See logs server process"
-msgstr "Esteu segur de continuar? Aquesta acció s'executarà com a tasca oculta. Reviseu l'historial del servidor."
+msgid "Import Magento Products"
+msgstr "Importa productes Magento"
 
 #. module: magento_connect
 #: view:magento.app:0
@@ -199,56 +56,9 @@ msgid "Import Magento Store"
 msgstr "Importa Magento Store"
 
 #. module: magento_connect
-#: field:magento.app,name:0
-#: field:magento.customer.group,name:0
-#: field:magento.product.product.type,name:0
-#: field:magento.region,name:0
-#: field:magento.storegroup,name:0
-#: field:magento.storeview,name:0
-#: field:magento.website,name:0
-msgid "Name"
-msgstr "Nom"
-
-#. module: magento_connect
-#: field:magento.app,product_delivery_default_id:0
-msgid "Product Delivery"
-msgstr "Producte d'entrega"
-
-#. module: magento_connect
-#: field:product.images,magento_base_image:0
-msgid "Base Image"
-msgstr "Imatge base"
-
-#. module: magento_connect
-#: field:product.images.magento.app,product_images_id:0
-msgid "Product Image"
-msgstr "Imatge del producte"
-
-#. module: magento_connect
-#: help:magento.app,inventory:0
-msgid "When create new product, this force inventory available"
-msgstr "Quan es crea un producte nou, aquest es força l'inventari perquè el producte estigui disponible"
-
-#. module: magento_connect
-#: field:product.images,magento_filename:0
-msgid "Magento File Name"
-msgstr "Nom de l'arxiu"
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:785
-#, python-format
-msgid "This Magento Store View not allow to delete"
-msgstr "No es pot esborrar aquesta vista de botiga de Magento"
-
-#. module: magento_connect
-#: help:sale.shop,magento_check_vat_partner:0
-msgid "Check Partner Vat exists in OpenERP. If this vat exists, not create partner and use this partner"
-msgstr "Comprova si el CIF/NIF de la empresa existeix a OpenERP. Si existeix, no crea la empresa i l'associa amb aquesta"
-
-#. module: magento_connect
-#: view:sale.shop:0
-msgid "Export Status Sale Orders"
-msgstr "Exportar estat de les comandes de venda"
+#: field:sale.shop,magento_scheduler:0
+msgid "Scheduler"
+msgstr "Scheduler"
 
 #. module: magento_connect
 #: field:product.product,magento_metakeyword:0
@@ -261,20 +71,9 @@ msgid "Countries"
 msgstr "Països"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:183
-#, python-format
-msgid "This Magento Product Type not allow to delete"
-msgstr "No es pot esborrar aquest tipus de producte Magento"
-
-#. module: magento_connect
 #: field:magento.app,magento_region_ids:0
 msgid "Region"
 msgstr "Províncies"
-
-#. module: magento_connect
-#: field:product.product,magento_sku:0
-msgid "Magento SKU"
-msgstr "Magento SKU"
 
 #. module: magento_connect
 #: field:sale.shop,magento_last_export_images:0
@@ -282,30 +81,9 @@ msgid "Last Export Image"
 msgstr "Darrera exportació d'imatges"
 
 #. module: magento_connect
-#: code:addons/magento_connect/partner.py:41
-#, python-format
-msgid "Partner ID '%s' not allow to delete because are active in Magento"
-msgstr "La  empresa ID '%s' no es pot esborrar per que s'usa en el canal de venta Magento"
-
-#. module: magento_connect
-#: field:magento.product_category_attribute_options,value:0
-msgid "Value"
-msgstr "Valor"
-
-#. module: magento_connect
-#: field:sale.shop,magento_from_sale_orders:0
-msgid "From Orders"
-msgstr "Des de comandes"
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:99
-#: code:addons/magento_connect/wizard/wizard_product_images.py:54
-#: code:addons/magento_connect/wizard/wizard_product_price.py:54
-#: code:addons/magento_connect/wizard/wizard_product_product.py:54
-#: code:addons/magento_connect/wizard/wizard_product_stock.py:54
-#, python-format
-msgid "Error!"
-msgstr "Error!"
+#: view:magento.app:0
+msgid "Sale"
+msgstr "Venda"
 
 #. module: magento_connect
 #: selection:magento.sale.shop.status.type,order_policy:0
@@ -318,39 +96,7 @@ msgstr "Pagament abans de l'entrega"
 #: code:addons/magento_connect/product.py:271
 #, python-format
 msgid "Error! Magento SKU %s must be unique"
-msgstr "Error! Magento SKU %s must be unique"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_product_images_magento_app
-msgid "Product Images related with Magento App"
-msgstr "Imatges de producte relacionades amb Magento APP"
-
-#. module: magento_connect
-#: field:magento.sale.shop.status.type,order_policy:0
-#: field:sale.shop,magento_default_order_policy:0
-msgid "Shipping Policy"
-msgstr "Política de facturació"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_magento_app
-msgid "Magento Server - APP"
-msgstr "Servidor Magento - APP"
-
-#. module: magento_connect
-#: field:product.images,magento_position:0
-msgid "Position"
-msgstr "Posició"
-
-#. module: magento_connect
-#: selection:magento.sale.shop.status.type,order_policy:0
-#: selection:sale.shop,magento_default_order_policy:0
-msgid "Invoice on Order After Delivery"
-msgstr "Factura en comanda després de l'entrega"
-
-#. module: magento_connect
-#: help:sale.shop,magento_status_paidinweb_delivered:0
-msgid "Status for paid in web and delivered"
-msgstr "Estat per pagat en web i entregat"
+msgstr "Error! Magento SKU %s ha de ser únic"
 
 #. module: magento_connect
 #: field:magento.app,product_category_id:0
@@ -358,35 +104,9 @@ msgid "Root product Category"
 msgstr "Categoria de producte arrel"
 
 #. module: magento_connect
-#: field:magento.sale.shop.payment.type,shop_id:0
-#: field:magento.sale.shop.status.type,shop_id:0
-msgid "Shop"
-msgstr "Botiga"
-
-#. module: magento_connect
-#: field:product.product,magento_product_type:0
-msgid "Product Type"
-msgstr "Tipus de producte"
-
-#. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.action_magento_storegroup
-#: model:ir.model,name:magento_connect.model_magento_storegroup
-#: model:ir.ui.menu,name:magento_connect.menu_magento_storegroup
-#: view:magento.storegroup:0
-#: field:magento.storeview,magento_storegroup_id:0
-msgid "Magento Store Group"
-msgstr "Grup de botigues Magento"
-
-#. module: magento_connect
-#: help:magento.app,last_export_partners:0
-msgid "This date is last export. If you need export all partners, empty this field (long sync)"
-msgstr "Aquesta és la data de la darrera exportació. Si necessiteu l'exportació de totes les empreses, deixeu buida aquesta data (sincronització llarga)"
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:752
-#, python-format
-msgid "This Magento Website not allow to delete"
-msgstr "No es pot esborrar aquest lloc web Magento"
+#: help:magento.app,product_delivery_default_id:0
+msgid "Default Product Delivery"
+msgstr "Producte defecte entrega"
 
 #. module: magento_connect
 #: constraint:product.category:0
@@ -399,20 +119,12 @@ msgid "Cash on delivery"
 msgstr "Contrareemborsament"
 
 #. module: magento_connect
-#: code:addons/magento_connect/wizard/wizard_product_images.py:78
+#: code:addons/magento_connect/wizard/wizard_product_price.py:72
+#: code:addons/magento_connect/wizard/wizard_product_product.py:72
+#: code:addons/magento_connect/wizard/wizard_product_stock.py:73
 #, python-format
-msgid "Not available some Magento Images to export"
-msgstr "No hi ha cap imatge de Magento per a exportar"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_magento_sync_stock_wizard
-msgid "magento.sync.stock.wizard"
-msgstr "magento.sync.stock.wizard"
-
-#. module: magento_connect
-#: field:sale.shop,magento_payments:0
-msgid "Payment"
-msgstr "Pagaments"
+msgid "Not available some Magento Products to export"
+msgstr "No hi ha cap producte de Magento per exportar"
 
 #. module: magento_connect
 #: code:addons/magento_connect/mgn.py:95
@@ -426,38 +138,10 @@ msgid "Logistic Default"
 msgstr "Valors per defecte de logística"
 
 #. module: magento_connect
-#: selection:product.product,magento_visibility:0
-msgid "Catalog,Search"
-msgstr "Catàleg, Cerca"
-
-#. module: magento_connect
-#: model:ir.ui.menu,name:magento_connect.menu_magento
-#: field:product.attributes.group,magento:0
-#: view:product.category:0
-#: view:product.images:0
-#: view:product.product:0
-#: view:res.partner:0
-#: view:res.partner.address:0
-#: view:sale.order:0
-#: view:sale.shop:0
-msgid "Magento"
-msgstr "Magento"
-
-#. module: magento_connect
 #: code:addons/magento_connect/mgn.py:97
 #, python-format
 msgid "Warning!"
 msgstr "Atenció!"
-
-#. module: magento_connect
-#: help:sale.shop,magento_last_export_images:0
-msgid "This date correspond to the last export. If you need export all images, left empty this field."
-msgstr "Aquesta és la data de la darrera exportació. Si necessiteu exportar totes les imatges, deixeu buida aquesta data (sincronització llarga)"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Import Magento Product Images"
-msgstr "Importar imatges de productes Magento"
 
 #. module: magento_connect
 #: view:sale.shop:0
@@ -465,45 +149,9 @@ msgid "Export Status"
 msgstr "Estat de l'exportació"
 
 #. module: magento_connect
-#: model:ir.model,name:magento_connect.model_sale_order
-msgid "Sales Order"
-msgstr "Comandes de venda"
-
-#. module: magento_connect
 #: view:magento.app:0
 msgid "Export Product Categories"
 msgstr "Exporta categories de producte"
-
-#. module: magento_connect
-#: help:magento.app,last_export_product_category:0
-msgid "This date is to export (filter)"
-msgstr "Aquesta data és per exportar (filtre)"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_sale_order_line
-msgid "Sales Order Line"
-msgstr "Línia de comanda de venda"
-
-#. module: magento_connect
-#: view:product.product:0
-msgid "SKU"
-msgstr "SKU"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Partners"
-msgstr "Empreses"
-
-#. module: magento_connect
-#: view:magento.sale.shop.payment.type:0
-#: field:magento.sale.shop.payment.type,payment_type_id:0
-msgid "Payment Type"
-msgstr "Tipus de pagament"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Global"
-msgstr "Global"
 
 #. module: magento_connect
 #: help:magento.app,payment_default_id:0
@@ -511,9 +159,9 @@ msgid "Default Payment Term"
 msgstr "Termini de pagament per defecte"
 
 #. module: magento_connect
-#: field:magento.sale.shop.status.type,confirm:0
-msgid "Confirm"
-msgstr "Confirma"
+#: view:magento.app:0
+msgid "Import Magento Categories"
+msgstr "Importa categories Magento"
 
 #. module: magento_connect
 #: field:magento.app,last_export_partners:0
@@ -522,20 +170,9 @@ msgid "Last Export Partners"
 msgstr "Data darreres empreses exportades"
 
 #. module: magento_connect
-#: selection:magento.sale.shop.status.type,invoice_quantity:0
-#: selection:sale.shop,magento_default_invoice_quantity:0
-msgid "Shipped Quantities"
-msgstr "Quantitats enviades"
-
-#. module: magento_connect
 #: field:magento.product_category_attribute_options,label:0
 msgid "Label"
 msgstr "Etiquetas"
-
-#. module: magento_connect
-#: constraint:magento.app.customer:0
-msgid "This email is already assigned to another partner in the same Magento Server."
-msgstr "Aquest correu electrònic ja està essent utilitzat per una altre empresa al mateix Magento. Heu d'utilitzar un altre."
 
 #. module: magento_connect
 #: field:magento.region,res_country_state_id:0
@@ -547,22 +184,506 @@ msgid "State"
 msgstr "Província"
 
 #. module: magento_connect
-#: field:magento.app,warehouse_id:0
-msgid "Warehouse"
-msgstr "Magatzem"
+#: field:sale.shop,magento_last_export_status_orders:0
+msgid "Last Status Orders"
+msgstr "Data darrers estats"
 
 #. module: magento_connect
-#: field:product.images,magento_exportable:0
-msgid "Magento Exportable"
-msgstr "Exporta a Magento"
+#: help:sale.order,magento_status:0
+msgid "Magento Status"
+msgstr "Estat Magento"
+
+#. module: magento_connect
+#: field:sale.shop,magento_notify_paid:0
+msgid "Notify Paid"
+msgstr "Notifica el pagament"
 
 #. module: magento_connect
 #: view:magento.sync.images.wizard:0
 #: view:magento.sync.price.wizard:0
 #: view:magento.sync.product.wizard:0
 #: view:magento.sync.stock.wizard:0
-msgid "Exportation is running.... This action is in background. See logs server process"
-msgstr "L'exportació s'està executant... Aquesta acció es realitza com a tasca filla. Reviseu l'historial del servidor."
+msgid "Export Product"
+msgstr "Exporta productes"
+
+#. module: magento_connect
+#: view:magento.sync.images.wizard:0
+#: view:magento.sync.price.wizard:0
+#: view:magento.sync.product.wizard:0
+#: view:magento.sync.stock.wizard:0
+msgid "Products to sync..."
+msgstr "Productes sincronitzant..."
+
+#. module: magento_connect
+#: selection:magento.sale.shop.status.type,invoice_quantity:0
+#: selection:sale.shop,magento_default_invoice_quantity:0
+msgid "Ordered Quantities"
+msgstr "Quantitat sol·licitada"
+
+#. module: magento_connect
+#: view:product.category:0
+msgid "Sorting method"
+msgstr "Mètode d'ordenació"
+
+#. module: magento_connect
+#: selection:product.product,magento_visibility:0
+msgid "Nowhere"
+msgstr "Enlloc"
+
+#. module: magento_connect
+#: help:sale.shop,magento_notify_delivered:0
+#: help:sale.shop,magento_notify_paid:0
+#: help:sale.shop,magento_notify_paid_delivered:0
+#: help:sale.shop,magento_notify_paidinweb:0
+#: help:sale.shop,magento_notify_paidinweb_delivered:0
+msgid "Magento notification"
+msgstr "Notificació Magento"
+
+#. module: magento_connect
+#: field:product.product,magento_product_type:0
+msgid "Product Type"
+msgstr "Tipus de producte"
+
+#. module: magento_connect
+#: field:magento.app,product_uom_id:0
+msgid "Unit of Sale"
+msgstr "Unitat de venda"
+
+#. module: magento_connect
+#: help:sale.shop,magento_status_paid_delivered:0
+msgid "Status for paid and delivered"
+msgstr "Estat del pagament i enviament"
+
+#. module: magento_connect
+#: field:magento.app.customer,magento_storeview_id:0
+msgid "Last Store View"
+msgstr "Darrera botiga de compra"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:584
+#, python-format
+msgid "Successfully create image %s"
+msgstr "Imatge creada  %s"
+
+#. module: magento_connect
+#: help:magento.app,last_export_product_category:0
+msgid "This date is to export (filter)"
+msgstr "Aquesta data és per exportar (filtre)"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_product_attributes_group
+msgid "Product attributes group for product OpenERP module"
+msgstr "Grup d'atributs de producte per al mòdul producte d'OpenERP"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.act_magento_sync_stock
+msgid "Export Stock Magento"
+msgstr "Exporta estoc a Magento"
+
+#. module: magento_connect
+#: field:res.partner.address,magento_lastname:0
+msgid "Last Name"
+msgstr "Cognoms"
+
+#. module: magento_connect
+#: view:magento.storeview:0
+msgid "Export Translations Products"
+msgstr "Exporta traduccions de productes"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:97
+#, python-format
+msgid "Connection to server are successfully but reconfigure your Magento."
+msgstr "La connexió amb el servidor Magento a tingut èxit, però s'ha de re-configurar Magento."
+
+#. module: magento_connect
+#: field:product.category,magento_exportable:0
+#: field:product.images.magento.app,magento_exported:0
+#: field:product.product,magento_exportable:0
+msgid "Exported to Magento?"
+msgstr "Exporta a Magento?"
+
+#. module: magento_connect
+#: help:sale.shop,magento_last_export_prices:0
+#: help:sale.shop,magento_last_export_stock:0
+msgid "This date is last export. If you need export all product prices, empty this field (long sync)"
+msgstr "Aquesta és la data de darrera importació. Si necessiteu la importació de nous productes, deixeu buida questa data (sincronització llarga)"
+
+#. module: magento_connect
+#: field:sale.shop,magento_status_paidinweb_delivered:0
+msgid "Paid in web/Delivered"
+msgstr "Pagat en web/Entregat"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_magento_sale_shop_status_type
+msgid "Magento Sale Shop Status Type"
+msgstr "Estats de magento"
+
+#. module: magento_connect
+#: field:magento.app,inventory:0
+msgid "Force Inventory"
+msgstr "Forçar inventari"
+
+#. module: magento_connect
+#: help:magento.app,options:0
+msgid "Orders with product options. Split reference order line by -"
+msgstr "Comandes amb opcions de producte. Divideix la referencia de la línia de comanda per -"
+
+#. module: magento_connect
+#: view:product.category:0
+msgid "Magento Information"
+msgstr "Informació Magento"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Import"
+msgstr "Importa"
+
+#. module: magento_connect
+#: field:magento.log,status:0
+#: field:magento.sale.shop.status.type,status:0
+#: field:product.product,magento_status:0
+#: field:sale.order,magento_status:0
+#: view:sale.shop:0
+#: field:sale.shop,magento_status:0
+msgid "Status"
+msgstr "Estat"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Customers"
+msgstr "Clients"
+
+#. module: magento_connect
+#: field:magento.sale.shop.status.type,picking_policy:0
+#: field:sale.shop,magento_default_picking_policy:0
+msgid "Packing Policy"
+msgstr "Política d'embalatge"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_magento_product_category_attribute_options
+msgid "Option products category Attributes"
+msgstr "Opcions d'atributs de categoria de productes"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:204
+#, python-format
+msgid "Successfully update product"
+msgstr "Actualitzat producte"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:850
+#: code:addons/magento_connect/mgn.py:897
+#, python-format
+msgid "Select language available this store view"
+msgstr "Selecciona idioma disponible per a la vista de la botiga"
+
+#. module: magento_connect
+#: field:magento.app,magento_website_ids:0
+#: field:product.product,magento_sale_shop:0
+msgid "Websites"
+msgstr "Llocs web"
+
+#. module: magento_connect
+#: field:sale.shop,magento_status_paid_delivered:0
+msgid "Paid/Delivered"
+msgstr "Pagat/Entregat"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_magento_sync_images_wizard
+msgid "magento.sync.images.wizard"
+msgstr "magento.sync.images.wizard"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:227
+#, python-format
+msgid "Error create product"
+msgstr "Error crear producte"
+
+#. module: magento_connect
+#: code:addons/magento_connect/partner.py:41
+#, python-format
+msgid "Partner ID '%s' not allow to delete because are active in Magento"
+msgstr "La  empresa ID '%s' no es pot esborrar per que s'usa en el canal de venta Magento"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.action_magento_storegroup
+#: model:ir.model,name:magento_connect.model_magento_storegroup
+#: model:ir.ui.menu,name:magento_connect.menu_magento_storegroup
+#: view:magento.storegroup:0
+#: field:magento.storeview,magento_storegroup_id:0
+msgid "Magento Store Group"
+msgstr "Grup de botigues Magento"
+
+#. module: magento_connect
+#: help:sale.shop,magento_last_export_partners:0
+msgid "This date correspond to the last export. If you need export all partners, left empty this field."
+msgstr "Aquesta és la data de la darrera exportació. Si necessiteu exportar totes les empreses, deixeu buida aquesta data (sincronització llarga)"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,help:magento_connect.action_magento_external_referential
+msgid "You can show/filter external referentials about Magento to OpenERP. This menu only available tree view."
+msgstr "Podeu mostrar/filtrar referencies externes quant a Magento per a OpenERP. Aquest menú només està disponible a les vistes d'arbre."
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.action_magento_storeview
+#: model:ir.model,name:magento_connect.model_magento_storeview
+#: model:ir.ui.menu,name:magento_connect.menu_magento_storeview
+#: view:magento.storeview:0
+msgid "Magento Store View"
+msgstr "Vista de botiga Magento"
+
+#. module: magento_connect
+#: field:magento.storegroup,magento_storeview_ids:0
+msgid "Store View"
+msgstr "Vista de botiga"
+
+#. module: magento_connect
+#: field:product.category,magento_meta_keywords:0
+msgid "Meta Keyword"
+msgstr "Meta paraula clau"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Import Customers"
+msgstr "Importar clients"
+
+#. module: magento_connect
+#: field:sale.shop,magento_to_sale_orders:0
+msgid "To Orders"
+msgstr "Comandes fins a"
+
+#. module: magento_connect
+#: help:magento.app.customer,magento_storeview_id:0
+msgid "Last store view where the customer has bought."
+msgstr "Darrera botiga a la que ha comprat el client."
+
+#. module: magento_connect
+#: view:product.product:0
+msgid "Metadescription"
+msgstr "Meta descripció"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:428
+#, python-format
+msgid "Error update stock: %s"
+msgstr "Error actualitzat stock: %s"
+
+#. module: magento_connect
+#: model:product.template,name:magento_connect.product_product_shipping_product_template
+msgid "Shipping and Handling"
+msgstr "Enviament i manipulació"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_product_images
+msgid "Products Image gallery"
+msgstr "Galeria de productes"
+
+#. module: magento_connect
+#: field:sale.shop,magento_payments:0
+msgid "Payment"
+msgstr "Pagaments"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:224
+#, python-format
+msgid "Successfully create product"
+msgstr "Creat producte"
+
+#. module: magento_connect
+#: field:sale.shop,magento_reference:0
+msgid "Magento Reference"
+msgstr "Referència de Magento"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.action_magento_external_referential
+#: model:ir.ui.menu,name:magento_connect.menu_magento_external_referential
+msgid "Magento External Referentials"
+msgstr "Referències externes Magento"
+
+#. module: magento_connect
+#: help:magento.app,from_import_customers:0
+msgid "This date is last import. If you need import new partners, you can modify this date (filter)"
+msgstr "Aquesta és la data de la darrera importació. Si necessiteu la importació de nous clients, podeu modificar aquesta data (filtro)"
+
+#. module: magento_connect
+#: selection:sale.shop,magento_sale_stock:0
+msgid "Virtual Stock"
+msgstr "Estoc virtual"
+
+#. module: magento_connect
+#: field:magento.attribute.exclude,model_id:0
+#: field:magento.external.referential,model_id:0
+#: field:magento.log,model_id:0
+msgid "OpenERP Model"
+msgstr "Model OpenERP"
+
+#. module: magento_connect
+#: view:magento.storeview:0
+msgid "Locale"
+msgstr "Lloc"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:447
+#: code:addons/magento_connect/mgn.py:594
+#: code:addons/magento_connect/mgn.py:637
+#, python-format
+msgid "Select Store View Magento"
+msgstr "Seleccioneu la vista de la botiga Magento"
+
+#. module: magento_connect
+#: help:magento.app,to_import_customers:0
+#: help:magento.app,to_import_products:0
+#: help:sale.shop,magento_to_sale_orders:0
+msgid "This date is to import (filter)"
+msgstr "Aquesta data és per importar (filtre)"
+
+#. module: magento_connect
+#: constraint:product.product:0
+msgid "Error: Invalid ean code"
+msgstr "Error: Codi EAN invàlid"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:665
+#, python-format
+msgid "Successfully create sale order: %s"
+msgstr "Creat comanda de venda: %s"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.action_magento_customer_group
+#: model:ir.model,name:magento_connect.model_magento_customer_group
+#: model:ir.ui.menu,name:magento_connect.menu_magento_customer_group
+#: view:magento.customer.group:0
+msgid "Magento Customer Group"
+msgstr "Grup de clientes Magento"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_magento_sync_product_wizard
+msgid "magento.sync.product.wizard"
+msgstr "magento.sync.product.wizard"
+
+#. module: magento_connect
+#: help:product.product,magento_sale_shop:0
+msgid "Select yours Sale Shops available this product"
+msgstr "Seleccioneu la vostra botiga de venda disponible per aquest producte"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:447
+#: code:addons/magento_connect/mgn.py:594
+#: code:addons/magento_connect/mgn.py:637
+#: code:addons/magento_connect/mgn.py:759
+#: code:addons/magento_connect/mgn.py:800
+#: code:addons/magento_connect/mgn.py:815
+#: code:addons/magento_connect/mgn.py:833
+#: code:addons/magento_connect/mgn.py:850
+#: code:addons/magento_connect/mgn.py:897
+#: code:addons/magento_connect/mgn.py:933
+#: code:addons/magento_connect/mgn.py:948
+#: code:addons/magento_connect/mgn.py:967
+#: code:addons/magento_connect/mgn.py:1008
+#: code:addons/magento_connect/mgn_referential.py:42
+#: code:addons/magento_connect/partner.py:41
+#: code:addons/magento_connect/partner.py:169
+#: code:addons/magento_connect/product.py:183
+#: code:addons/magento_connect/product.py:242
+#: code:addons/magento_connect/product.py:271
+#: code:addons/magento_connect/product.py:302
+#: code:addons/magento_connect/product_images.py:92
+#: code:addons/magento_connect/sale.py:98
+#: code:addons/magento_connect/sale.py:839
+#, python-format
+msgid "Alert"
+msgstr "Alerta"
+
+#. module: magento_connect
+#: sql_constraint:sale.order:0
+msgid "Order Reference must be unique !"
+msgstr "El número de comanda ha de ser únic!"
+
+#. module: magento_connect
+#: field:magento.external.referential,oerp_id:0
+#: field:magento.log,oerp_id:0
+msgid "OpenERP ID"
+msgstr "Identificador OpenERP"
+
+#. module: magento_connect
+#: help:sale.shop,magento_status_paidinweb:0
+msgid "Status for paid in  web"
+msgstr "Estat del pagament pagat en web"
+
+#. module: magento_connect
+#: field:product.images.magento.app,product_images_id:0
+msgid "Product Image"
+msgstr "Imatge del producte"
+
+#. module: magento_connect
+#: field:product.category,magento_default_sort_by:0
+msgid "Default Product Listing Sort (Sort By)"
+msgstr "Llistat de productes per defecte (Ordenat per)"
+
+#. module: magento_connect
+#: view:sale.shop:0
+msgid "Are you sure to continue? This action is in background. See logs server process"
+msgstr "Esteu segur de continuar? Aquesta acció s'executarà com a tasca oculta. Reviseu l'historial del servidor."
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:833
+#, python-format
+msgid "This Magento Store View not allow to delete"
+msgstr "No es pot esborrar aquesta vista de botiga de Magento"
+
+#. module: magento_connect
+#: field:magento.app,uri:0
+msgid "URI"
+msgstr "URI"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_magento_app
+msgid "Magento Server - APP"
+msgstr "Servidor Magento - APP"
+
+#. module: magento_connect
+#: help:magento.app,from_import_products:0
+msgid "This date is last import. If you need import new products, you can modify this date (filter)"
+msgstr "Aquesta és la data de darrera importació. Si necessiteu importar nous productes, podeu modificar aquesta data (filtre)"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:800
+#, python-format
+msgid "This Magento Website not allow to delete"
+msgstr "No es pot esborrar aquest lloc web Magento"
+
+#. module: magento_connect
+#: code:addons/magento_connect/wizard/wizard_product_images.py:78
+#, python-format
+msgid "Not available some Magento Images to export"
+msgstr "No hi ha cap imatge de Magento per a exportar"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línia de comanda de venda"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Global"
+msgstr "Global"
+
+#. module: magento_connect
+#: constraint:magento.app.customer:0
+msgid "This email is already assigned to another partner in the same Magento Server."
+msgstr "Aquest correu electrònic ja està essent utilitzat per una altre empresa al mateix Magento. Heu d'utilitzar un altre."
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn_referential.py:42
+#, python-format
+msgid "This External mapping not allow to delete"
+msgstr "No es pot esborrar aquesta assignació externa"
+
+#. module: magento_connect
+#: field:magento.app,warehouse_id:0
+msgid "Warehouse"
+msgstr "Magatzem"
 
 #. module: magento_connect
 #: field:magento.product.product.type,product_type:0
@@ -619,47 +740,14 @@ msgstr ""
 "    "
 
 #. module: magento_connect
-#: view:magento.external.referential:0
-msgid "Search Magento External Referential"
-msgstr "Cerca referència externa de Magento"
+#: field:magento.app,product_delivery_default_id:0
+msgid "Product Delivery"
+msgstr "Producte d'entrega"
 
 #. module: magento_connect
-#: field:sale.shop,magento_last_export_status_orders:0
-msgid "Last Status Orders"
-msgstr "Data darrers estats"
-
-#. module: magento_connect
-#: model:product.template,name:magento_connect.product_product_shipping_product_template
-msgid "Shipping and Handling"
-msgstr "Enviament i manipulació"
-
-#. module: magento_connect
-#: help:sale.order,magento_status:0
-msgid "Magento Status"
-msgstr "Estat Magento"
-
-#. module: magento_connect
-#: field:sale.shop,magento_last_export_prices:0
-msgid "Last Export Prices"
-msgstr "Darrers preus exportats"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_product_category
-msgid "Product Category"
-msgstr "Categoria de producte"
-
-#. module: magento_connect
-#: field:sale.shop,magento_notify_paid:0
-msgid "Notify Paid"
-msgstr "Notifica el pagament"
-
-#. module: magento_connect
-#: view:magento.sync.images.wizard:0
-#: view:magento.sync.price.wizard:0
-#: view:magento.sync.product.wizard:0
-#: view:magento.sync.stock.wizard:0
-msgid "Export Product"
-msgstr "Exporta productes"
+#: field:magento.app,username:0
+msgid "Username"
+msgstr "Nom d'usuari"
 
 #. module: magento_connect
 #: view:product.product:0
@@ -672,16 +760,442 @@ msgid "Available this Sale Shop crons (import/export)"
 msgstr "Estableix aquesta botiga a disponible a la importació automàtica (importació/exportació)"
 
 #. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.action_magento_external_referential
-#: model:ir.ui.menu,name:magento_connect.menu_magento_external_referential
-msgid "Magento External Referentials"
-msgstr "Referències externes Magento"
+#: help:sale.shop,magento_last_export_images:0
+msgid "This date correspond to the last export. If you need export all images, left empty this field."
+msgstr "Aquesta és la data de la darrera exportació. Si necessiteu exportar totes les imatges, deixeu buida aquesta data (sincronització llarga)"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:933
+#, python-format
+msgid "This Magento Attribute Exclude not allow to delete"
+msgstr "No es pot esborrar aquest atribut d'exclusió de Magento"
+
+#. module: magento_connect
+#: field:magento.app,pricelist_id:0
+#: selection:sale.shop,magento_sale_price:0
+msgid "Pricelist"
+msgstr "Tarifa"
+
+#. module: magento_connect
+#: view:sale.shop:0
+msgid "Export Products"
+msgstr "Exporta productes"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_magento_sync_stock_wizard
+msgid "magento.sync.stock.wizard"
+msgstr "magento.sync.stock.wizard"
+
+#. module: magento_connect
+#: field:sale.shop,magento_notify_delivered:0
+msgid "Notify Delivered"
+msgstr "Notifica entregat"
+
+#. module: magento_connect
+#: view:magento.log:0
+msgid "Search Log"
+msgstr "Cerca Log"
+
+#. module: magento_connect
+#: help:sale.order,magento_paidinweb:0
+msgid "Check this option if this sale order is paid by web payment"
+msgstr "Marca aquesta opció si la comanda és pagada via web"
+
+#. module: magento_connect
+#: field:sale.shop,magento_notify_paidinweb_delivered:0
+msgid "Notify Paid in web/Delivered"
+msgstr "Notificar Pagat en web / Entregat"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Websites Info"
+msgstr "Informació de llocs web"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Core Components"
+msgstr "Components de núcli"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_magento_attribute_exclude
+msgid "Magento Attributes Exclude"
+msgstr "Excloure atributs de Magento"
+
+#. module: magento_connect
+#: field:product.category,magento_is_active:0
+msgid "Active?"
+msgstr "Activa?"
+
+#. module: magento_connect
+#: view:magento.storeview:0
+msgid "Import Translations Products"
+msgstr "Importa traduccions de productes"
+
+#. module: magento_connect
+#: view:sale.shop:0
+msgid "Export Prices"
+msgstr "Exporta preus"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:839
+#, python-format
+msgid "Sale Order ID '%s' not allow to delete because are active in Magento"
+msgstr "La comanda ID '%s' no es pot esborrar perque s'usa en el canal de venta Magento"
+
+#. module: magento_connect
+#: code:addons/magento_connect/product.py:183
+#, python-format
+msgid "This Magento Product Type not allow to delete"
+msgstr "No es pot esborrar aquest tipus de producte Magento"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.action_product_images_magento_app
+msgid "Product Images Magento"
+msgstr "Imatges de producte"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:777
+#, python-format
+msgid "Successfully update %s status: %s"
+msgstr "Actualitzat  %s l'estat: %s"
+
+#. module: magento_connect
+#: view:product.product:0
+msgid "Website"
+msgstr "Lloc web"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:534
+#, python-format
+msgid "Successfully update image %s"
+msgstr "Actualitzat la imatge %s"
+
+#. module: magento_connect
+#: view:product.product:0
+msgid "SEO"
+msgstr "SEO"
+
+#. module: magento_connect
+#: selection:product.product,magento_visibility:0
+msgid "Search"
+msgstr "Cerca"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_sale_shop
+msgid "Sales Shop"
+msgstr "Botiga"
+
+#. module: magento_connect
+#: code:addons/magento_connect/product.py:302
+#, python-format
+msgid "Product '%s' not allow to delete because are active in Magento Shop"
+msgstr "No es pot esborrar el producte '%s' perquè està actiu a la botiga Magento"
+
+#. module: magento_connect
+#: code:addons/magento_connect/wizard/wizard_product_images.py:54
+#: code:addons/magento_connect/wizard/wizard_product_price.py:54
+#: code:addons/magento_connect/wizard/wizard_product_product.py:54
+#: code:addons/magento_connect/wizard/wizard_product_stock.py:54
+#, python-format
+msgid "Select products to export"
+msgstr "Selecciona productes a exportar"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_magento_sale_shop_payment_type
+msgid "Magento Sale Shop Payment Type"
+msgstr "Tipus de pagament de la botiga Magento"
+
+#. module: magento_connect
+#: help:product.attributes.group,magento:0
+msgid "Magento Attribute Group"
+msgstr "Grup d'atributs Magento"
+
+#. module: magento_connect
+#: field:delivery.carrier,code:0
+#: field:magento.attribute.exclude,name:0
+#: field:magento.region,code:0
+#: field:magento.storeview,code:0
+#: field:magento.website,code:0
+msgid "Code"
+msgstr "Codi"
+
+#. module: magento_connect
+#: field:magento.sale.shop.status.type,cancel:0
+#: view:magento.sync.images.wizard:0
+#: view:magento.sync.price.wizard:0
+#: view:magento.sync.product.wizard:0
+#: view:magento.sync.stock.wizard:0
+msgid "Cancel"
+msgstr "Cancel·la"
+
+#. module: magento_connect
+#: field:magento.app.customer,magento_vat:0
+msgid "Magento VAT"
+msgstr "Magento CIF/NIF"
+
+#. module: magento_connect
+#: help:sale.shop,magento_status_delivered:0
+msgid "Status for delivered (picking)"
+msgstr "Estat per entregar (albarà)"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.act_magento_region
+#: model:ir.ui.menu,name:magento_connect.menu_magento_region
+#: view:magento.app:0
+msgid "Regions"
+msgstr "Provícies"
+
+#. module: magento_connect
+#: field:res.partner.address,magento_firstname:0
+msgid "First Name"
+msgstr "Nom"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:537
+#, python-format
+msgid "Error update image %s"
+msgstr "Error actualitzant imatge %s"
+
+#. module: magento_connect
+#: field:sale.shop,magento_sale_price:0
+msgid "Price"
+msgstr "Preu"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:328
+#, python-format
+msgid "Error update price: %s"
+msgstr "Error actualitzant preu: %s"
+
+#. module: magento_connect
+#: field:sale.shop,magento_shop:0
+msgid "Magento Shop"
+msgstr "Botiga Magento"
+
+#. module: magento_connect
+#: help:sale.shop,magento_last_export_products:0
+msgid "This date is last export. If you need export new products, you can modify this date (filter)"
+msgstr "Aquesta és la data de la darrera importació. Si necessiteu la importació de nous productes, podeu modificar aquesta data (filtro)"
+
+#. module: magento_connect
+#: help:product.product,magento_exportable:0
+msgid "If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere."
+msgstr "Si activeu aquest valor, aquest producte es publicarà a la botiga Magento. Per desactivar el producte de la botiga, canvieu la visibilitat a Cap lloc (Nowhere)."
+
+#. module: magento_connect
+#: field:magento.app,name:0
+#: field:magento.customer.group,name:0
+#: field:magento.product.product.type,name:0
+#: field:magento.region,name:0
+#: field:magento.storegroup,name:0
+#: field:magento.storeview,name:0
+#: field:magento.website,name:0
+msgid "Name"
+msgstr "Nom"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.action_magento_website
+#: model:ir.model,name:magento_connect.model_magento_website
+#: model:ir.ui.menu,name:magento_connect.menu_magento_website
+#: view:magento.external.referential:0
+#: field:magento.storegroup,magento_website_id:0
+#: view:magento.website:0
+#: field:sale.shop,magento_website:0
+msgid "Magento Website"
+msgstr "Lloc web Magento"
+
+#. module: magento_connect
+#: selection:product.product,magento_visibility:0
+msgid "Catalog,Search"
+msgstr "Catàleg, Cerca"
+
+#. module: magento_connect
+#: view:res.partner:0
+#: field:res.partner,magento_app_customer:0
+msgid "Magento Customer"
+msgstr "Client Magento"
+
+#. module: magento_connect
+#: view:product.product:0
+msgid "Magento Filters..."
+msgstr "Magento filtres..."
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:207
+#, python-format
+msgid "Error update product"
+msgstr "Error actualitzar producte"
+
+#. module: magento_connect
+#: field:magento.storeview,magento_last_import_locale_products:0
+msgid "Last Import Products"
+msgstr "Darrers productes importats"
+
+#. module: magento_connect
+#: view:magento.app:0
+#: view:magento.sync.images.wizard:0
+#: view:magento.sync.price.wizard:0
+#: view:magento.sync.product.wizard:0
+#: view:magento.sync.stock.wizard:0
+msgid "Export"
+msgstr "Exporta"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:325
+#, python-format
+msgid "Successfully update price: %s"
+msgstr "Actualitzat el preu: %s"
+
+#. module: magento_connect
+#: field:magento.storeview,language_id:0
+#: field:sale.shop,magento_default_language:0
+msgid "Language Default"
+msgstr "Idioma per defecte"
+
+#. module: magento_connect
+#: help:magento.app,product_discount_default_id:0
+msgid "Default Product Discount"
+msgstr "Producte descompte per defecte"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Authentication"
+msgstr "Autenticació"
+
+#. module: magento_connect
+#: model:product.template,name:magento_connect.product_product_gift_product_template
+msgid "Gift Certificate"
+msgstr "Missatge de regal"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.act_magento_sync_images
+msgid "Export Images Magento"
+msgstr "Exporta  Imatges a Magento"
+
+#. module: magento_connect
+#: field:product.category,magento_available_sort_by:0
+msgid "Available Product Listing (Sort By)"
+msgstr "Llistat de productes disponibles (Sort By)"
+
+#. module: magento_connect
+#: model:product.category,name:magento_connect.mag0
+msgid "Service"
+msgstr "Servei"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Import Magento Product Types"
+msgstr "Importar tipus de producte Magento"
+
+#. module: magento_connect
+#: help:magento.sale.shop.status.type,cancel:0
+msgid "Cancel order. Sale Order change state draft to cancel"
+msgstr "Cancel·la comanda. Les comandes de venda passaran de esborrall a cancel·lat."
+
+#. module: magento_connect
+#: field:magento.app,last_export_product_category:0
+msgid "Last Export Categories"
+msgstr "Darreres categories exportades"
+
+#. module: magento_connect
+#: field:magento.app,from_import_products:0
+msgid "From Import Products"
+msgstr "Productes des de la data"
+
+#. module: magento_connect
+#: field:product.images,magento_base_image:0
+msgid "Base Image"
+msgstr "Imatge base"
+
+#. module: magento_connect
+#: field:product.category,magento_meta_title:0
+msgid "Meta Title"
+msgstr "Meta títol"
+
+#. module: magento_connect
+#: help:magento.app,inventory:0
+msgid "When create new product, this force inventory available"
+msgstr "Quan es crea un producte nou, aquest es força l'inventari perquè el producte estigui disponible"
+
+#. module: magento_connect
+#: field:magento.product_category_attribute_options,value:0
+msgid "Value"
+msgstr "Valor"
+
+#. module: magento_connect
+#: field:sale.shop,magento_from_sale_orders:0
+msgid "From Orders"
+msgstr "Des de comandes"
+
+#. module: magento_connect
+#: field:magento.sale.shop.status.type,order_policy:0
+#: field:sale.shop,magento_default_order_policy:0
+msgid "Shipping Policy"
+msgstr "Política de facturació"
+
+#. module: magento_connect
+#: model:ir.ui.menu,name:magento_connect.menu_magento
+#: field:product.attributes.group,magento:0
+#: view:product.category:0
+#: view:product.images:0
+#: view:product.product:0
+#: view:res.partner:0
+#: view:res.partner.address:0
+#: view:sale.order:0
+#: view:sale.shop:0
+msgid "Magento"
+msgstr "Magento"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:425
+#, python-format
+msgid "Successfully update stock: %s"
+msgstr "Actualitzat l'estoc: %s"
+
+#. module: magento_connect
+#: view:product.product:0
+msgid "SKU"
+msgstr "SKU"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Partners"
+msgstr "Empreses"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:1008
+#, python-format
+msgid "This Magento Websites/Groups not allow to delete"
+msgstr "No es pot esborrar aquest lloc de Magento"
+
+#. module: magento_connect
+#: field:magento.log,create:0
+msgid "Create"
+msgstr "Creat"
 
 #. module: magento_connect
 #: selection:magento.sale.shop.status.type,invoice_quantity:0
 #: selection:sale.shop,magento_default_invoice_quantity:0
-msgid "Ordered Quantities"
-msgstr "Quantitat sol·licitada"
+msgid "Shipped Quantities"
+msgstr "Quantitats enviades"
+
+#. module: magento_connect
+#: view:magento.sync.images.wizard:0
+#: view:magento.sync.price.wizard:0
+#: view:magento.sync.product.wizard:0
+#: view:magento.sync.stock.wizard:0
+msgid "Exportation is running.... This action is in background. See logs server process"
+msgstr "L'exportació s'està executant... Aquesta acció es realitza com a tasca filla. Reviseu l'historial del servidor."
+
+#. module: magento_connect
+#: help:magento.sale.shop.status.type,paidinweb:0
+msgid "Paid in web. Sale Order is paid in web"
+msgstr "Paid in web. Sale Order is paid in web"
+
+#. module: magento_connect
+#: field:sale.shop,magento_notify_paidinweb:0
+msgid "Notify Paid in web"
+msgstr "Notifica pagat en web"
 
 #. module: magento_connect
 #: field:magento.app.customer,magento_storeview_ids:0
@@ -695,51 +1209,9 @@ msgid "Code Payment (example, paypal, checkmo, ccsave,..."
 msgstr "Codi tipus de pagament (exemple: paypal, checkmo, ccsave,...)"
 
 #. module: magento_connect
-#: view:magento.app:0
-#: selection:product.product,magento_visibility:0
-#: view:sale.shop:0
-msgid "Catalog"
-msgstr "Catàleg"
-
-#. module: magento_connect
-#: field:product.category,magento_url_key:0
-msgid "URL-key"
-msgstr "URL-key"
-
-#. module: magento_connect
 #: field:product.category,magento_include_in_menu:0
 msgid "Include in menu"
 msgstr "Inclòs al menú"
-
-#. module: magento_connect
-#: field:magento.app,magento_country_ids:0
-msgid "Country"
-msgstr "País"
-
-#. module: magento_connect
-#: help:sale.shop,magento_notify_delivered:0
-#: help:sale.shop,magento_notify_paid:0
-#: help:sale.shop,magento_notify_paid_delivered:0
-#: help:sale.shop,magento_notify_paidinweb:0
-#: help:sale.shop,magento_notify_paidinweb_delivered:0
-msgid "Magento notification"
-msgstr "Notificació Magento"
-
-#. module: magento_connect
-#: field:magento.app,pricelist_id:0
-#: selection:sale.shop,magento_sale_price:0
-msgid "Pricelist"
-msgstr "Tarifa"
-
-#. module: magento_connect
-#: model:product.template,name:magento_connect.product_product_gift_product_template
-msgid "Gift Certificate"
-msgstr "Missatge de regal"
-
-#. module: magento_connect
-#: view:sale.shop:0
-msgid "Export Products"
-msgstr "Exporta productes"
 
 #. module: magento_connect
 #: field:magento.app,to_import_customers:0
@@ -747,30 +1219,463 @@ msgid "To Import Customers"
 msgstr "Importa clients"
 
 #. module: magento_connect
-#: view:magento.app:0
-msgid "Import Magento Categories"
-msgstr "Importa categories Magento"
+#: field:product.product,magento_url_key:0
+msgid "Url Key"
+msgstr "Url Key"
 
 #. module: magento_connect
-#: field:sale.shop,magento_notify_delivered:0
-msgid "Notify Delivered"
-msgstr "Notifica entregat"
+#: view:magento.sync.images.wizard:0
+#: view:magento.sync.price.wizard:0
+#: view:magento.sync.product.wizard:0
+#: view:magento.sync.stock.wizard:0
+msgid "Close"
+msgstr "Tanca"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_magento_app_customer
+msgid "Magento App Customer"
+msgstr "Magento App Customer"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Are you sure to continue? See logs server process. This operation import all categories Magento to OpenERP"
+msgstr "Esteu segur de continuar? Reviseu l'historial del servidor. Aquesta acció importarà totes les categories de Magento a OpenERP."
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Import regions with countries selected. Are you sure to continue? See logs server process"
+msgstr "Importa províncies i país. ¿Esteu segur de continuar? Reviseu l'historial del servidor."
+
+#. module: magento_connect
+#: selection:magento.sale.shop.status.type,order_policy:0
+#: selection:sale.shop,magento_default_order_policy:0
+msgid "Shipping & Manual Invoice"
+msgstr "Enviament i facturació manual"
+
+#. module: magento_connect
+#: help:sale.shop,magento_status_paidinweb_delivered:0
+msgid "Status for paid in web and delivered"
+msgstr "Estat per pagat en web i entregat"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_res_partner_address
+msgid "Partner Addresses"
+msgstr "Adreces d'empreses"
+
+#. module: magento_connect
+#: selection:sale.shop,magento_sale_stock:0
+msgid "Real Stock"
+msgstr "Estoc real"
+
+#. module: magento_connect
+#: view:sale.shop:0
+msgid "Export Images"
+msgstr "Exporta imatges"
+
+#. module: magento_connect
+#: code:addons/magento_connect/product.py:116
+#: code:addons/magento_connect/product.py:293
+#, python-format
+msgid "-copy"
+msgstr "-copia"
+
+#. module: magento_connect
+#: field:magento.sale.shop.payment.type,method:0
+msgid "Method"
+msgstr "Mètode"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.act_magento_sync_product
+msgid "Export Magento"
+msgstr "Exporta a Magento"
+
+#. module: magento_connect
+#: help:sale.shop,magento_status_paid:0
+msgid "Status for paid orders (invoice)"
+msgstr "Estat de comandes pagades (factura)"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:99
+#, python-format
+msgid "Connection to server failed."
+msgstr "La connexió al servidor ha fallat."
+
+#. module: magento_connect
+#: field:sale.shop,magento_status_paid:0
+msgid "Paid"
+msgstr "Pagat"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Import Magento Attributes"
+msgstr "Importa atributs Magento"
+
+#. module: magento_connect
+#: field:magento.product.product.type,active:0
+msgid "Active"
+msgstr "Actiu"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_magento_external_referential
+msgid "Magento External Referential"
+msgstr "Referencia externa Magento"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:95
+#, python-format
+msgid "Connection to server are successfully."
+msgstr "La connexió amb el servidor s'ha realitzat amb èxit."
+
+#. module: magento_connect
+#: view:product.category:0
+msgid "Display Settings"
+msgstr "Mostra configuració"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:33
+#, python-format
+msgid "Please install python-magento from https://github.com/zikzakmedia/magento"
+msgstr "Si us plau, instal·leu python-magento des de https://github.com/zikzakmedia/magento"
+
+#. module: magento_connect
+#: field:sale.shop,magento_tax_include:0
+msgid "Tax Include"
+msgstr "Impostos inclosos"
+
+#. module: magento_connect
+#: field:sale.shop,magento_last_export_stock:0
+msgid "Last Export Stock"
+msgstr "Última exportació stock"
+
+#. module: magento_connect
+#: view:product.images.magento.app:0
+msgid "Products Images Magento"
+msgstr "Imatges de producte"
+
+#. module: magento_connect
+#: model:product.template,name:magento_connect.product_product_discount_product_template
+msgid "Discount Coupon"
+msgstr "Cupó descompte"
+
+#. module: magento_connect
+#: view:magento.app:0
+#: view:product.product:0
+msgid "General"
+msgstr "General"
+
+#. module: magento_connect
+#: field:magento.app,options:0
+msgid "Product Options"
+msgstr "Opcions de producte"
+
+#. module: magento_connect
+#: selection:magento.log,status:0
+#: selection:magento.sync.images.wizard,state:0
+#: selection:magento.sync.price.wizard,state:0
+#: selection:magento.sync.product.wizard,state:0
+#: selection:magento.sync.stock.wizard,state:0
+msgid "Done"
+msgstr "Done"
+
+#. module: magento_connect
+#: code:addons/magento_connect/product_images.py:92
+#, python-format
+msgid "This Image can't be deleted"
+msgstr "No es pot esborrar aquesta imatge"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Regions Mapping"
+msgstr "Assignació de provínices"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.action_magento_app
+#: model:ir.ui.menu,name:magento_connect.menu_magento_app
+#: view:product.images:0
+msgid "Magento Server"
+msgstr "Servidor Magento"
+
+#. module: magento_connect
+#: help:magento.sale.shop.status.type,status:0
+msgid "Code Status (example, cancel, pending, processing,..)"
+msgstr "Codi de l'estat (exemple: cancel·lat, pendent, processant...)"
+
+#. module: magento_connect
+#: field:sale.shop,magento_sale_stock:0
+msgid "Stock"
+msgstr "Estoc"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_product_product
+msgid "Product"
+msgstr "Producte"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Are you sure to continue? See logs server process"
+msgstr "Esteu segur de continuar? Reviseu l'historial del servidor."
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.action_magento_region
+#: model:ir.model,name:magento_connect.model_magento_region
+#: view:magento.region:0
+msgid "Magento Region"
+msgstr "Província de Magento"
+
+#. module: magento_connect
+#: selection:magento.sale.shop.status.type,order_policy:0
+#: selection:sale.shop,magento_default_order_policy:0
+msgid "Invoice from the Packing"
+msgstr "Factura des de l'albarà"
+
+#. module: magento_connect
+#: field:magento.sync.images.wizard,result:0
+#: field:magento.sync.price.wizard,result:0
+#: field:magento.sync.product.wizard,result:0
+#: field:magento.sync.stock.wizard,result:0
+msgid "Result"
+msgstr "Result"
+
+#. module: magento_connect
+#: field:magento.app.customer,magento_emailid:0
+msgid "Email Address"
+msgstr "Adreça de correu electrònic"
+
+#. module: magento_connect
+#: field:magento.sale.shop.status.type,invoice_quantity:0
+#: field:sale.shop,magento_default_invoice_quantity:0
+msgid "Invoice on"
+msgstr "Factura les"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:780
+#, python-format
+msgid "Error update %s status: %s"
+msgstr "Error actualitzant %s estat: %s"
+
+#. module: magento_connect
+#: view:res.partner:0
+msgid "Store views"
+msgstr "Vistes de botigues"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:33
+#, python-format
+msgid "vobject Import Error!"
+msgstr "Error d'importació de vobject!"
+
+#. module: magento_connect
+#: view:sale.shop:0
+msgid "Import Orders"
+msgstr "Importar comandes"
+
+#. module: magento_connect
+#: field:sale.shop,magento_check_vat_partner:0
+msgid "Check Vat"
+msgstr "Comprova CIF/NIF"
+
+#. module: magento_connect
+#: field:product.category,magento_meta_description:0
+msgid "Meta Description"
+msgstr "Meta descripció"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:948
+#, python-format
+msgid "This Magento Customer Group not allow to delete"
+msgstr "No es pot esborrar aquest grup de clients de Magento"
+
+#. module: magento_connect
+#: selection:product.product,magento_visibility:0
+msgid "Select Option"
+msgstr "Selecciona opció"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Import Magento Attributes Set"
+msgstr "Importa grup atributs Magento"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Import Regions"
+msgstr "Importar Províncies"
+
+#. module: magento_connect
+#: field:magento.storeview,magento_last_export_locale_products:0
+#: field:sale.shop,magento_last_export_products:0
+msgid "Last Export Products"
+msgstr "Darrers productes exportats"
+
+#. module: magento_connect
+#: field:product.images,magento_small_image:0
+msgid "Small Image"
+msgstr "Imatge petita"
+
+#. module: magento_connect
+#: model:ir.actions.act_window,name:magento_connect.action_magento_log
+#: model:ir.model,name:magento_connect.model_magento_log
+#: model:ir.ui.menu,name:magento_connect.menu_magento_log
+#: view:magento.log:0
+msgid "Magento Logs"
+msgstr "Magento Logs"
+
+#. module: magento_connect
+#: view:sale.order:0
+#: field:sale.order,magento_gift_message:0
+#: field:sale.order.line,magento_gift_message:0
+msgid "Gift Message"
+msgstr "Missatge de regal"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Export Customers"
+msgstr "Exportar Clients"
+
+#. module: magento_connect
+#: field:magento.external.referential,mgn_id:0
+#: field:magento.log,mgn_id:0
+msgid "Magento ID"
+msgstr "Identificador Magento"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_product_images_magento_app
+msgid "Product Images related with Magento App"
+msgstr "Imatges de producte relacionades amb Magento APP"
+
+#. module: magento_connect
+#: field:magento.customer.group,customer_group_id:0
+msgid "Customer Group ID"
+msgstr "Identificador de grup de clients"
+
+#. module: magento_connect
+#: field:magento.app,from_import_customers:0
+msgid "From Import Customers"
+msgstr "Clients des de"
+
+#. module: magento_connect
+#: help:sale.shop,magento_check_vat_partner:0
+msgid "Check Partner Vat exists in OpenERP. If this vat exists, not create partner and use this partner"
+msgstr "Comprova si el CIF/NIF de la empresa existeix a OpenERP. Si existeix, no crea la empresa i l'associa amb aquesta"
+
+#. module: magento_connect
+#: view:sale.shop:0
+msgid "Export Status Sale Orders"
+msgstr "Exportar estat de les comandes de venda"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:99
+#: code:addons/magento_connect/wizard/wizard_product_images.py:54
+#: code:addons/magento_connect/wizard/wizard_product_price.py:54
+#: code:addons/magento_connect/wizard/wizard_product_product.py:54
+#: code:addons/magento_connect/wizard/wizard_product_stock.py:54
+#, python-format
+msgid "Error!"
+msgstr "Error!"
+
+#. module: magento_connect
+#: field:product.images,magento_position:0
+msgid "Position"
+msgstr "Posició"
+
+#. module: magento_connect
+#: field:magento.sale.shop.payment.type,shop_id:0
+#: field:magento.sale.shop.status.type,shop_id:0
+msgid "Shop"
+msgstr "Botiga"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:745
+#, python-format
+msgid "Error update status %s"
+msgstr "Error actualitzant estat %s"
+
+#. module: magento_connect
+#: model:ir.module.module,shortdesc:magento_connect.module_meta_information
+msgid "Magento Connector"
+msgstr "Connector Magento"
+
+#. module: magento_connect
+#: code:addons/magento_connect/partner.py:107
+#: code:addons/magento_connect/partner.py:109
+#, python-format
+msgid "Successfully create partner: %s"
+msgstr "Creat empresa: %s"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Import Magento Product Images"
+msgstr "Importar imatges de productes Magento"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_sale_order
+msgid "Sales Order"
+msgstr "Comandes de venda"
+
+#. module: magento_connect
+#: view:magento.sale.shop.payment.type:0
+#: field:magento.sale.shop.payment.type,payment_type_id:0
+msgid "Payment Type"
+msgstr "Tipus de pagament"
+
+#. module: magento_connect
+#: field:magento.sale.shop.status.type,confirm:0
+msgid "Confirm"
+msgstr "Confirma"
+
+#. module: magento_connect
+#: field:product.images,magento_exportable:0
+msgid "Magento Exportable"
+msgstr "Exporta a Magento"
+
+#. module: magento_connect
+#: view:magento.external.referential:0
+msgid "Search Magento External Referential"
+msgstr "Cerca referència externa de Magento"
+
+#. module: magento_connect
+#: field:sale.shop,magento_last_export_prices:0
+msgid "Last Export Prices"
+msgstr "Darrers preus exportats"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_product_category
+msgid "Product Category"
+msgstr "Categoria de producte"
+
+#. module: magento_connect
+#: model:ir.model,name:magento_connect.model_magento_sync_price_wizard
+msgid "magento.sync.price.wizard"
+msgstr "magento.sync.price.wizard"
+
+#. module: magento_connect
+#: field:product.product,magento_visibility:0
+msgid "Visibility"
+msgstr "Visibilitat"
+
+#. module: magento_connect
+#: view:magento.app:0
+#: selection:product.product,magento_visibility:0
+#: view:sale.shop:0
+msgid "Catalog"
+msgstr "Catàleg"
+
+#. module: magento_connect
+#: view:product.product:0
+#: field:product.product,magento_shortdescription:0
+msgid "Short Description"
+msgstr "Descripció curta"
+
+#. module: magento_connect
+#: selection:magento.sale.shop.status.type,order_policy:0
+#: selection:sale.shop,magento_default_order_policy:0
+msgid "Invoice on Order After Delivery"
+msgstr "Factura en comanda després de l'entrega"
 
 #. module: magento_connect
 #: selection:magento.sale.shop.status.type,picking_policy:0
 #: selection:sale.shop,magento_default_picking_policy:0
 msgid "Complete Delivery"
 msgstr "Entrega complerta"
-
-#. module: magento_connect
-#: field:product.product,magento_url_key:0
-msgid "Url Key"
-msgstr "Url Key"
-
-#. module: magento_connect
-#: field:magento.app,product_uom_id:0
-msgid "Unit of Sale"
-msgstr "Unitat de venda"
 
 #. module: magento_connect
 #: field:magento.sale.shop.status.type,paidinweb:0
@@ -780,9 +1685,9 @@ msgid "Paid in web"
 msgstr "Paid in web"
 
 #. module: magento_connect
-#: help:magento.sale.shop.status.type,confirm:0
-msgid "Confirm order. Sale Order change state draft to done, and generate picking and/or invoice automatlly"
-msgstr "Confirma comandes. Les comandes de venda passaran d'esborrall a realitzada, i generaran albarà i/o factura segons política."
+#: view:magento.app:0
+msgid "Are you sure to continue? See logs server process. This operation import all images Magento to OpenERP"
+msgstr "¿Esteu segur de continuar? Reviseu l'historial del servidor. Aquesta acció importarà totes les imatges de Magento a OpenERP"
 
 #. module: magento_connect
 #: code:addons/magento_connect/sale.py:98
@@ -796,29 +1701,9 @@ msgid "Magento Increment ID"
 msgstr "Magento Increment ID"
 
 #. module: magento_connect
-#: field:magento.app,inventory:0
-msgid "Force Inventory"
-msgstr "Forçar inventari"
-
-#. module: magento_connect
-#: help:sale.order,magento_paidinweb:0
-msgid "Check this option if this sale order is paid by web payment"
-msgstr "Marca aquesta opció si la comanda és pagada via web"
-
-#. module: magento_connect
-#: field:magento.external.referential,oerp_id:0
-msgid "OpenERP ID"
-msgstr "Identificador OpenERP"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_magento_app_customer
-msgid "Magento App Customer"
-msgstr "Magento App Customer"
-
-#. module: magento_connect
-#: field:sale.shop,magento_notify_paidinweb_delivered:0
-msgid "Notify Paid in web/Delivered"
-msgstr "Notificar Pagat en web / Entregat"
+#: help:magento.app.customer,magento_vat:0
+msgid "To be able to receive customer VAT number you must set it in Magento Admin Panel, menu System / Configuration / Client Configuration / Name and Address Options."
+msgstr "Per a permetre rebre el CIF del client, heu de configurar-ho al panell d'administració de Magento, menú Sistema/Configuració/Configuració de Client/Opcions de nom i adreces."
 
 #. module: magento_connect
 #: field:sale.shop,magento_last_import_sale_orders:0
@@ -826,9 +1711,11 @@ msgid "Last Import Status Sale Orders"
 msgstr "Estat de les darreres comandes de vendes importades"
 
 #. module: magento_connect
-#: view:magento.app:0
-msgid "Import Magento Attributes"
-msgstr "Importa atributs Magento"
+#: code:addons/magento_connect/partner.py:251
+#: code:addons/magento_connect/partner.py:254
+#, python-format
+msgid "Successfully create partner address: %s"
+msgstr "Creat direcció d'empresa: %s"
 
 #. module: magento_connect
 #: selection:magento.sync.images.wizard,state:0
@@ -839,35 +1726,14 @@ msgid "First"
 msgstr "Primer"
 
 #. module: magento_connect
-#: model:ir.model,name:magento_connect.model_product_attributes_group
-msgid "Product attributes group for product OpenERP module"
-msgstr "Grup d'atributs de producte per al mòdul producte d'OpenERP"
+#: field:magento.log,comment:0
+msgid "Comment"
+msgstr "Comentari"
 
 #. module: magento_connect
-#: selection:magento.sale.shop.status.type,order_policy:0
-#: selection:sale.shop,magento_default_order_policy:0
-msgid "Shipping & Manual Invoice"
-msgstr "Enviament i facturació manual"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Are you sure to continue? See logs server process. This operation import all categories Magento to OpenERP"
-msgstr "Esteu segur de continuar? Reviseu l'historial del servidor. Aquesta acció importarà totes les categories de Magento a OpenERP."
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Core Components"
-msgstr "Components de núcli"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Import regions with countries selected. Are you sure to continue? See logs server process"
-msgstr "Importa províncies i país. ¿Esteu segur de continuar? Reviseu l'historial del servidor."
-
-#. module: magento_connect
-#: field:res.partner.address,magento_lastname:0
-msgid "Last Name"
-msgstr "Cognoms"
+#: field:magento.app,magento_default_storeview:0
+msgid "Store View Default"
+msgstr "Vista per defecte de la botiga"
 
 #. module: magento_connect
 #: help:magento.product.product.type,product_type:0
@@ -875,64 +1741,14 @@ msgid "Use the same name of Magento product type, for example 'simple'"
 msgstr "Utilitzeu el mateix nom del tipus de producte de Magento (p.e. 'simple')"
 
 #. module: magento_connect
-#: view:magento.storeview:0
-msgid "Export Translations Products"
-msgstr "Exporta traduccions de productes"
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:99
-#, python-format
-msgid "Connection to server failed."
-msgstr "La connexió al servidor ha fallat."
-
-#. module: magento_connect
-#: help:sale.shop,magento_status_paidinweb:0
-msgid "Status for paid in  web"
-msgstr "Estat del pagament pagat en web"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_magento_attribute_exclude
-msgid "Magento Attributes Exclude"
-msgstr "Excloure atributs de Magento"
-
-#. module: magento_connect
 #: help:magento.product.product.type,active:0
 msgid "If the active field is set to False, it will allow you to hide the product without removing it."
 msgstr "El camp actiu establert a fals us permet amagar el producte sense esborrar-lo."
 
 #. module: magento_connect
-#: field:magento.storegroup,magento_storeview_ids:0
-msgid "Store View"
-msgstr "Vista de botiga"
-
-#. module: magento_connect
-#: field:magento.external.referential,mgn_id:0
-msgid "Magento ID"
-msgstr "Identificador Magento"
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:97
-#, python-format
-msgid "Connection to server are successfully but reconfigure your Magento."
-msgstr "La connexió amb el servidor Magento a tingut èxit, però s'ha de re-configurar Magento."
-
-#. module: magento_connect
-#: field:magento.app,magento_website_ids:0
-#: field:product.product,magento_sale_shop:0
-msgid "Websites"
-msgstr "Llocs web"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Regions Mapping"
-msgstr "Assignació de provínices"
-
-#. module: magento_connect
-#: field:product.category,magento_exportable:0
-#: field:product.images.magento.app,magento_exported:0
-#: field:product.product,magento_exportable:0
-msgid "Exported to Magento?"
-msgstr "Exporta a Magento?"
+#: field:magento.app,product_discount_default_id:0
+msgid "Product Discount"
+msgstr "Producte de descompte"
 
 #. module: magento_connect
 #: help:magento.app,magento_default_storeview:0
@@ -941,93 +1757,27 @@ msgid "Default language this shop. If not select, use lang user"
 msgstr "Idioma per defecte per aquesta botiga. Si no se selecciona cap, s'utilitza l'idioma de l'usuari."
 
 #. module: magento_connect
-#: sql_constraint:sale.order:0
-msgid "Order Reference must be unique !"
-msgstr "El número de comanda ha de ser únic!"
+#: view:magento.website:0
+#: field:magento.website,magento_storegroup_ids:0
+msgid "Store Group"
+msgstr "Grup de botigues"
 
 #. module: magento_connect
-#: model:ir.model,name:magento_connect.model_res_partner_address
-msgid "Partner Addresses"
-msgstr "Adreces d'empreses"
+#: field:magento.region,region_id:0
+msgid "Region ID"
+msgstr "Identificador de regió"
 
 #. module: magento_connect
-#: help:sale.shop,magento_last_export_prices:0
-#: help:sale.shop,magento_last_export_stock:0
-msgid "This date is last export. If you need export all product prices, empty this field (long sync)"
-msgstr "Aquesta és la data de darrera importació. Si necessiteu la importació de nous productes, deixeu buida questa data (sincronització llarga)"
-
-#. module: magento_connect
-#: field:sale.shop,magento_status_paidinweb_delivered:0
-msgid "Paid in web/Delivered"
-msgstr "Pagat en web/Entregat"
-
-#. module: magento_connect
-#: view:sale.shop:0
-msgid "Payments"
-msgstr "Tipus de pagament"
-
-#. module: magento_connect
-#: field:product.images,magento_thumbnail:0
-msgid "Thumbnail"
-msgstr "Thumbnail"
-
-#. module: magento_connect
-#: field:product.category,magento_is_active:0
-msgid "Active?"
-msgstr "Activa?"
-
-#. module: magento_connect
-#: view:magento.storeview:0
-msgid "Import Translations Products"
-msgstr "Importa traduccions de productes"
-
-#. module: magento_connect
-#: selection:sale.shop,magento_sale_stock:0
-msgid "Real Stock"
-msgstr "Estoc real"
-
-#. module: magento_connect
-#: view:magento.sync.images.wizard:0
-#: view:magento.sync.price.wizard:0
-#: view:magento.sync.product.wizard:0
-#: view:magento.sync.stock.wizard:0
-msgid "Are you sure to export this product?"
-msgstr "Esteu segurs d'esportar aquest producte/s?"
-
-#. module: magento_connect
-#: code:addons/magento_connect/partner.py:166
+#: code:addons/magento_connect/partner.py:169
 #, python-format
 msgid "Partner Address ID '%s' not allow to delete because are active in Magento"
 msgstr "L'adreça d'empresa ID '%s' no es pot esborrar perque s'usa en el canal de venta Magento"
 
 #. module: magento_connect
-#: field:magento.app,to_import_products:0
-msgid "To Import Products"
-msgstr "Productes fins a la data"
-
-#. module: magento_connect
-#: help:magento.app,options:0
-msgid "Orders with product options. Split reference order line by -"
-msgstr "Comandes amb opcions de producte. Divideix la referencia de la línia de comanda per -"
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:960
+#: code:addons/magento_connect/mgn.py:759
 #, python-format
-msgid "This Magento Websites/Groups not allow to delete"
-msgstr "No es pot esborrar aquest lloc de Magento"
-
-#. module: magento_connect
-#: code:addons/magento_connect/wizard/wizard_product_price.py:72
-#: code:addons/magento_connect/wizard/wizard_product_product.py:72
-#: code:addons/magento_connect/wizard/wizard_product_stock.py:73
-#, python-format
-msgid "Not available some Magento Products to export"
-msgstr "No hi ha cap producte de Magento per exportar"
-
-#. module: magento_connect
-#: help:magento.app,from_import_customers:0
-msgid "This date is last import. If you need import new partners, you can modify this date (filter)"
-msgstr "Aquesta és la data de la darrera importació. Si necessiteu la importació de nous clients, podeu modificar aquesta data (filtro)"
+msgid "This Log is not allow to delete"
+msgstr "Aquest log no es permet esborrar"
 
 #. module: magento_connect
 #: view:magento.app:0
@@ -1035,42 +1785,9 @@ msgid "Import Customer Group"
 msgstr "Importa grups de clients"
 
 #. module: magento_connect
-#: view:product.category:0
-msgid "Magento Information"
-msgstr "Informació Magento"
-
-#. module: magento_connect
-#: code:addons/magento_connect/product.py:116
-#: code:addons/magento_connect/product.py:293
-#, python-format
-msgid "-copy"
-msgstr "-copia"
-
-#. module: magento_connect
-#: code:addons/magento_connect/sale.py:798
-#, python-format
-msgid "Sale Order ID '%s' not allow to delete because are active in Magento"
-msgstr "La comanda ID '%s' no es pot esborrar perque s'usa en el canal de venta Magento"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Import"
-msgstr "Importa"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Import Magento Products"
-msgstr "Importa productes Magento"
-
-#. module: magento_connect
 #: help:magento.app.customer,magento_emailid:0
 msgid "Magento uses this email ID to match the customer."
 msgstr "Magento utilitza aquest identificador de correu electrònic per cercar el client."
-
-#. module: magento_connect
-#: field:magento.sale.shop.payment.type,method:0
-msgid "Method"
-msgstr "Mètode"
 
 #. module: magento_connect
 #: view:magento.app:0
@@ -1078,38 +1795,15 @@ msgid "Store"
 msgstr "Botiga"
 
 #. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.act_magento_sync_product
-msgid "Export Magento"
-msgstr "Exporta a Magento"
+#: field:product.product,magento_manage_stock:0
+msgid "Manage Stock"
+msgstr "Gestiona estoc"
 
 #. module: magento_connect
-#: field:magento.sale.shop.status.type,status:0
-#: field:product.product,magento_status:0
-#: field:sale.order,magento_status:0
-#: view:sale.shop:0
-#: field:sale.shop,magento_status:0
-msgid "Status"
-msgstr "Estat"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Customers"
-msgstr "Clients"
-
-#. module: magento_connect
-#: model:ir.module.module,shortdesc:magento_connect.module_meta_information
-msgid "Magento Connector"
-msgstr "Connector Magento"
-
-#. module: magento_connect
-#: field:magento.app,from_import_products:0
-msgid "From Import Products"
-msgstr "Productes des de la data"
-
-#. module: magento_connect
-#: field:sale.shop,magento_scheduler:0
-msgid "Scheduler"
-msgstr "Scheduler"
+#: code:addons/magento_connect/sale.py:587
+#, python-format
+msgid "Error create image %s"
+msgstr "Error creant imatge %s"
 
 #. module: magento_connect
 #: help:sale.shop,magento_last_import_sale_orders:0
@@ -1120,21 +1814,6 @@ msgstr "Aquesta és la data de la darrera exportació. Si necessiteu exportar to
 #: field:sale.shop,magento_notify_paid_delivered:0
 msgid "Notify Paid/Delivered"
 msgstr "Notifica Pagament/Entregat"
-
-#. module: magento_connect
-#: field:sale.shop,magento_last_export_stock:0
-msgid "Last Export Stock"
-msgstr "Última exportació stock"
-
-#. module: magento_connect
-#: field:magento.app.customer,magento_storeview_id:0
-msgid "Last Store View"
-msgstr "Darrera botiga de compra"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_magento_product_category_attribute_options
-msgid "Option products category Attributes"
-msgstr "Opcions d'atributs de categoria de productes"
 
 #. module: magento_connect
 #: model:ir.actions.act_window,name:magento_connect.action_magento_product_product_type
@@ -1149,53 +1828,9 @@ msgid "This date is last import. If you need import news orders, you can modify 
 msgstr "Aquesta és la data de la darrera importació. Si necessiteu la importació de noves comandes, podeu modificar aquesta data (filtro)"
 
 #. module: magento_connect
-#: field:magento.product.product.type,active:0
-msgid "Active"
-msgstr "Actiu"
-
-#. module: magento_connect
-#: view:magento.website:0
-#: field:magento.website,magento_storegroup_ids:0
-msgid "Store Group"
-msgstr "Grup de botigues"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Websites Info"
-msgstr "Informació de llocs web"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_magento_external_referential
-msgid "Magento External Referential"
-msgstr "Referencia externa Magento"
-
-#. module: magento_connect
 #: view:magento.product.product.type:0
 msgid "Search Magento Product Type"
 msgstr "Cerca tipus de producte Magento"
-
-#. module: magento_connect
-#: selection:product.product,magento_visibility:0
-msgid "Search"
-msgstr "Cerca"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_sale_shop
-msgid "Sales Shop"
-msgstr "Botiga"
-
-#. module: magento_connect
-#: field:magento.attribute.exclude,model_id:0
-#: field:magento.external.referential,model_id:0
-msgid "OpenERP Model"
-msgstr "Model OpenERP"
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:802
-#: code:addons/magento_connect/mgn.py:849
-#, python-format
-msgid "Select language available this store view"
-msgstr "Selecciona idioma disponible per a la vista de la botiga"
 
 #. module: magento_connect
 #: view:sale.shop:0
@@ -1203,99 +1838,9 @@ msgid "Shop configuration"
 msgstr "Configuracions botiga"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:302
-#, python-format
-msgid "Product '%s' not allow to delete because are active in Magento Shop"
-msgstr "No es pot esborrar el producte '%s' perquè està actiu a la botiga Magento"
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:95
-#, python-format
-msgid "Connection to server are successfully."
-msgstr "La connexió amb el servidor s'ha realitzat amb èxit."
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:885
-#, python-format
-msgid "This Magento Attribute Exclude not allow to delete"
-msgstr "No es pot esborrar aquest atribut d'exclusió de Magento"
-
-#. module: magento_connect
-#: code:addons/magento_connect/wizard/wizard_product_images.py:54
-#: code:addons/magento_connect/wizard/wizard_product_price.py:54
-#: code:addons/magento_connect/wizard/wizard_product_product.py:54
-#: code:addons/magento_connect/wizard/wizard_product_stock.py:54
-#, python-format
-msgid "Select products to export"
-msgstr "Selecciona productes a exportar"
-
-#. module: magento_connect
-#: help:magento.app.customer,magento_vat:0
-msgid "To be able to receive customer VAT number you must set it in Magento Admin Panel, menu System / Configuration / Client Configuration / Name and Address Options."
-msgstr "Per a permetre rebre el CIF del client, heu de configurar-ho al panell d'administració de Magento, menú Sistema/Configuració/Configuració de Client/Opcions de nom i adreces."
-
-#. module: magento_connect
-#: view:product.product:0
-msgid "SEO"
-msgstr "SEO"
-
-#. module: magento_connect
-#: view:product.product:0
-#: field:product.product,magento_shortdescription:0
-msgid "Short Description"
-msgstr "Descripció curta"
-
-#. module: magento_connect
-#: help:sale.shop,magento_last_export_partners:0
-msgid "This date correspond to the last export. If you need export all partners, left empty this field."
-msgstr "Aquesta és la data de la darrera exportació. Si necessiteu exportar totes les empreses, deixeu buida aquesta data (sincronització llarga)"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_magento_sale_shop_payment_type
-msgid "Magento Sale Shop Payment Type"
-msgstr "Tipus de pagament de la botiga Magento"
-
-#. module: magento_connect
-#: view:product.category:0
-msgid "Display Settings"
-msgstr "Mostra configuració"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_magento_sync_images_wizard
-msgid "magento.sync.images.wizard"
-msgstr "magento.sync.images.wizard"
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:33
-#, python-format
-msgid "Please install python-magento from https://github.com/zikzakmedia/magento"
-msgstr "Si us plau, instal·leu python-magento des de https://github.com/zikzakmedia/magento"
-
-#. module: magento_connect
-#: help:product.attributes.group,magento:0
-msgid "Magento Attribute Group"
-msgstr "Grup d'atributs Magento"
-
-#. module: magento_connect
-#: code:addons/magento_connect/product_images.py:92
-#, python-format
-msgid "This Image can't be deleted"
-msgstr "No es pot esborrar aquesta imatge"
-
-#. module: magento_connect
-#: field:sale.shop,magento_tax_include:0
-msgid "Tax Include"
-msgstr "Impostos inclosos"
-
-#. module: magento_connect
-#: view:sale.shop:0
-msgid "Export Prices"
-msgstr "Exporta preus"
-
-#. module: magento_connect
-#: view:product.images.magento.app:0
-msgid "Products Images Magento"
-msgstr "Imatges de producte"
+#: selection:magento.log,status:0
+msgid "Error"
+msgstr "Error"
 
 #. module: magento_connect
 #: view:sale.shop:0
@@ -1303,88 +1848,9 @@ msgid "Export Stock"
 msgstr "Exportar stock"
 
 #. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.act_magento_region
-#: model:ir.ui.menu,name:magento_connect.menu_magento_region
-#: view:magento.app:0
-msgid "Regions"
-msgstr "Provícies"
-
-#. module: magento_connect
-#: model:product.template,name:magento_connect.product_product_discount_product_template
-msgid "Discount Coupon"
-msgstr "Cupó descompte"
-
-#. module: magento_connect
-#: field:delivery.carrier,code:0
-#: field:magento.attribute.exclude,name:0
-#: field:magento.region,code:0
-#: field:magento.storeview,code:0
-#: field:magento.website,code:0
-msgid "Code"
-msgstr "Codi"
-
-#. module: magento_connect
-#: help:magento.app,product_delivery_default_id:0
-msgid "Default Product Delivery"
-msgstr "Producte defecte entrega"
-
-#. module: magento_connect
 #: view:magento.product.product:0
 msgid "Magento Product Product Type"
 msgstr "Tipus de producte Magento"
-
-#. module: magento_connect
-#: field:magento.app,magento_default_storeview:0
-msgid "Store View Default"
-msgstr "Vista per defecte de la botiga"
-
-#. module: magento_connect
-#: help:product.product,magento_sale_shop:0
-msgid "Select yours Sale Shops available this product"
-msgstr "Seleccioneu la vostra botiga de venda disponible per aquest producte"
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn_referential.py:42
-#, python-format
-msgid "This External mapping not allow to delete"
-msgstr "No es pot esborrar aquesta assignació externa"
-
-#. module: magento_connect
-#: view:magento.app:0
-#: view:product.product:0
-msgid "General"
-msgstr "General"
-
-#. module: magento_connect
-#: field:magento.app,options:0
-msgid "Product Options"
-msgstr "Opcions de producte"
-
-#. module: magento_connect
-#: selection:sale.shop,magento_sale_price:0
-msgid "Sale Price"
-msgstr "Preu de venda"
-
-#. module: magento_connect
-#: model:ir.actions.act_window,help:magento_connect.action_magento_external_referential
-msgid "You can show/filter external referentials about Magento to OpenERP. This menu only available tree view."
-msgstr "Podeu mostrar/filtrar referencies externes quant a Magento per a OpenERP. Aquest menú només està disponible a les vistes d'arbre."
-
-#. module: magento_connect
-#: selection:magento.sync.images.wizard,state:0
-#: selection:magento.sync.price.wizard,state:0
-#: selection:magento.sync.product.wizard,state:0
-#: selection:magento.sync.stock.wizard,state:0
-msgid "Done"
-msgstr "Done"
-
-#. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.action_magento_storeview
-#: model:ir.model,name:magento_connect.model_magento_storeview
-#: model:ir.ui.menu,name:magento_connect.menu_magento_storeview
-#: view:magento.storeview:0
-msgid "Magento Store View"
-msgstr "Vista de botiga Magento"
 
 #. module: magento_connect
 #: field:magento.sync.images.wizard,magento_sale_shop:0
@@ -1402,36 +1868,9 @@ msgid "Customer Group"
 msgstr "Grup de clients"
 
 #. module: magento_connect
-#: field:magento.sale.shop.status.type,cancel:0
-#: view:magento.sync.images.wizard:0
-#: view:magento.sync.price.wizard:0
-#: view:magento.sync.product.wizard:0
-#: view:magento.sync.stock.wizard:0
-msgid "Cancel"
-msgstr "Cancel·la"
-
-#. module: magento_connect
-#: view:magento.sync.images.wizard:0
-#: view:magento.sync.price.wizard:0
-#: view:magento.sync.product.wizard:0
-#: view:magento.sync.stock.wizard:0
-msgid "Close"
-msgstr "Tanca"
-
-#. module: magento_connect
-#: field:product.category,magento_meta_keywords:0
-msgid "Meta Keyword"
-msgstr "Meta paraula clau"
-
-#. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.act_magento_sync_stock
-msgid "Export Stock Magento"
-msgstr "Exporta estoc a Magento"
-
-#. module: magento_connect
-#: field:magento.app.customer,magento_vat:0
-msgid "Magento VAT"
-msgstr "Magento CIF/NIF"
+#: field:product.images,magento_exclude:0
+msgid "Exclude"
+msgstr "Excloure"
 
 #. module: magento_connect
 #: model:ir.actions.act_window,name:magento_connect.act_magento_sync_price
@@ -1439,76 +1878,15 @@ msgid "Export Price Magento"
 msgstr "Exporta preus a Magento"
 
 #. module: magento_connect
-#: model:ir.model,name:magento_connect.model_product_images
-msgid "Products Image gallery"
-msgstr "Galeria de productes"
-
-#. module: magento_connect
 #: field:sale.shop,magento_status_delivered:0
 msgid "Delivered"
 msgstr "Entregat"
 
 #. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.action_magento_app
-#: model:ir.ui.menu,name:magento_connect.menu_magento_app
-#: view:product.images:0
-msgid "Magento Server"
-msgstr "Servidor Magento"
-
-#. module: magento_connect
-#: help:sale.shop,magento_status_delivered:0
-msgid "Status for delivered (picking)"
-msgstr "Estat per entregar (albarà)"
-
-#. module: magento_connect
-#: help:magento.sale.shop.status.type,status:0
-msgid "Code Status (example, cancel, pending, processing,..)"
-msgstr "Codi de l'estat (exemple: cancel·lat, pendent, processant...)"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Import Customers"
-msgstr "Importar clients"
-
-#. module: magento_connect
-#: field:res.partner.address,magento_firstname:0
-msgid "First Name"
-msgstr "Nom"
-
-#. module: magento_connect
-#: field:sale.shop,magento_to_sale_orders:0
-msgid "To Orders"
-msgstr "Comandes fins a"
-
-#. module: magento_connect
-#: help:magento.app.customer,magento_storeview_id:0
-msgid "Last store view where the customer has bought."
-msgstr "Darrera botiga a la que ha comprat el client."
-
-#. module: magento_connect
-#: view:product.product:0
-msgid "Metadescription"
-msgstr "Meta descripció"
-
-#. module: magento_connect
-#: field:magento.app,uri:0
-msgid "URI"
-msgstr "URI"
-
-#. module: magento_connect
-#: field:sale.shop,magento_sale_stock:0
-msgid "Stock"
-msgstr "Estoc"
-
-#. module: magento_connect
-#: field:sale.shop,magento_reference:0
-msgid "Magento Reference"
-msgstr "Referència de Magento"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_product_product
-msgid "Product"
-msgstr "Producte"
+#: code:addons/magento_connect/mgn.py:815
+#, python-format
+msgid "This Magento Store Group not allow to delete"
+msgstr "No es pot esborrar aquest grup de botigues Magento"
 
 #. module: magento_connect
 #: view:product.category:0
@@ -1518,56 +1896,19 @@ msgid "Description"
 msgstr "Descripció"
 
 #. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.action_product_images_magento_app
-msgid "Product Images Magento"
-msgstr "Imatges de producte"
+#: field:product.category,magento_url_key:0
+msgid "URL-key"
+msgstr "URL-key"
 
 #. module: magento_connect
-#: field:sale.shop,magento_sale_price:0
-msgid "Price"
-msgstr "Preu"
+#: help:magento.app,last_export_partners:0
+msgid "This date is last export. If you need export all partners, empty this field (long sync)"
+msgstr "Aquesta és la data de la darrera exportació. Si necessiteu l'exportació de totes les empreses, deixeu buida aquesta data (sincronització llarga)"
 
 #. module: magento_connect
-#: field:product.category,magento_meta_title:0
-msgid "Meta Title"
-msgstr "Meta títol"
-
-#. module: magento_connect
-#: field:magento.app,product_discount_default_id:0
-msgid "Product Discount"
-msgstr "Producte de descompte"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Are you sure to continue? See logs server process"
-msgstr "Esteu segur de continuar? Reviseu l'historial del servidor."
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:446
-#: code:addons/magento_connect/mgn.py:593
-#: code:addons/magento_connect/mgn.py:636
-#: code:addons/magento_connect/mgn.py:752
-#: code:addons/magento_connect/mgn.py:767
-#: code:addons/magento_connect/mgn.py:785
-#: code:addons/magento_connect/mgn.py:802
-#: code:addons/magento_connect/mgn.py:849
-#: code:addons/magento_connect/mgn.py:885
-#: code:addons/magento_connect/mgn.py:900
-#: code:addons/magento_connect/mgn.py:919
-#: code:addons/magento_connect/mgn.py:960
-#: code:addons/magento_connect/mgn_referential.py:42
-#: code:addons/magento_connect/partner.py:41
-#: code:addons/magento_connect/partner.py:166
-#: code:addons/magento_connect/product.py:183
-#: code:addons/magento_connect/product.py:242
-#: code:addons/magento_connect/product.py:271
-#: code:addons/magento_connect/product.py:302
-#: code:addons/magento_connect/product_images.py:92
-#: code:addons/magento_connect/sale.py:98
-#: code:addons/magento_connect/sale.py:798
-#, python-format
-msgid "Alert"
-msgstr "Alerta"
+#: field:product.images,magento_thumbnail:0
+msgid "Thumbnail"
+msgstr "Thumbnail"
 
 #. module: magento_connect
 #: help:product.category,magento_is_active:0
@@ -1575,25 +1916,14 @@ msgid "Indicates whether active in magento"
 msgstr "Indica quin està actiu a Magento"
 
 #. module: magento_connect
-#: field:sale.shop,magento_shop:0
-msgid "Magento Shop"
-msgstr "Botiga Magento"
+#: field:product.images,magento_filename:0
+msgid "Magento File Name"
+msgstr "Nom de l'arxiu"
 
 #. module: magento_connect
-#: field:magento.app,from_import_customers:0
-msgid "From Import Customers"
-msgstr "Clients des de"
-
-#. module: magento_connect
-#: help:sale.shop,magento_last_export_products:0
-msgid "This date is last export. If you need export new products, you can modify this date (filter)"
-msgstr "Aquesta és la data de la darrera importació. Si necessiteu la importació de nous productes, podeu modificar aquesta data (filtro)"
-
-#. module: magento_connect
-#: selection:magento.sale.shop.status.type,order_policy:0
-#: selection:sale.shop,magento_default_order_policy:0
-msgid "Invoice from the Packing"
-msgstr "Factura des de l'albarà"
+#: field:product.product,magento_sku:0
+msgid "Magento SKU"
+msgstr "Magento SKU"
 
 #. module: magento_connect
 #: field:magento.app,password:0
@@ -1601,27 +1931,9 @@ msgid "Password"
 msgstr "Contrasenya"
 
 #. module: magento_connect
-#: help:product.product,magento_exportable:0
-msgid "If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere."
-msgstr "Si activeu aquest valor, aquest producte es publicarà a la botiga Magento. Per desactivar el producte de la botiga, canvieu la visibilitat a Cap lloc (Nowhere)."
-
-#. module: magento_connect
-#: field:magento.sync.images.wizard,result:0
-#: field:magento.sync.price.wizard,result:0
-#: field:magento.sync.product.wizard,result:0
-#: field:magento.sync.stock.wizard,result:0
-msgid "Result"
-msgstr "Result"
-
-#. module: magento_connect
 #: view:magento.app:0
 msgid "Customer"
 msgstr "Client"
-
-#. module: magento_connect
-#: field:magento.app,username:0
-msgid "Username"
-msgstr "Nom d'usuari"
 
 #. module: magento_connect
 #: help:magento.app,product_uom_id:0
@@ -1629,62 +1941,26 @@ msgid "Default Unit of Sale"
 msgstr "Unitat de venda por defecte"
 
 #. module: magento_connect
-#: field:magento.app.customer,magento_emailid:0
-msgid "Email Address"
-msgstr "Adreça de correu electrònic"
+#: field:magento.app,magento_country_ids:0
+msgid "Country"
+msgstr "País"
 
 #. module: magento_connect
-#: field:magento.sale.shop.status.type,invoice_quantity:0
-#: field:sale.shop,magento_default_invoice_quantity:0
-msgid "Invoice on"
-msgstr "Factura les"
+#: help:magento.sale.shop.status.type,confirm:0
+msgid "Confirm order. Sale Order change state draft to done, and generate picking and/or invoice automatlly"
+msgstr "Confirma comandes. Les comandes de venda passaran d'esborrall a realitzada, i generaran albarà i/o factura segons política."
 
 #. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.action_magento_website
-#: model:ir.model,name:magento_connect.model_magento_website
-#: model:ir.ui.menu,name:magento_connect.menu_magento_website
-#: view:magento.external.referential:0
-#: field:magento.storegroup,magento_website_id:0
-#: view:magento.website:0
-#: field:sale.shop,magento_website:0
-msgid "Magento Website"
-msgstr "Lloc web Magento"
-
-#. module: magento_connect
-#: view:sale.shop:0
-msgid "Export Images"
-msgstr "Exporta imatges"
-
-#. module: magento_connect
-#: help:sale.shop,magento_status_paid_delivered:0
-msgid "Status for paid and delivered"
-msgstr "Estat del pagament i enviament"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Are you sure to continue? See logs server process. This operation import all images Magento to OpenERP"
-msgstr "¿Esteu segur de continuar? Reviseu l'historial del servidor. Aquesta acció importarà totes les imatges de Magento a OpenERP"
-
-#. module: magento_connect
-#: view:res.partner:0
-msgid "Store views"
-msgstr "Vistes de botigues"
-
-#. module: magento_connect
-#: view:magento.app:0
-msgid "Sale"
-msgstr "Venda"
-
-#. module: magento_connect
-#: help:magento.sale.shop.status.type,paidinweb:0
-msgid "Paid in web. Sale Order is paid in web"
-msgstr "Paid in web. Sale Order is paid in web"
+#: help:sale.shop,magento_last_export_status_orders:0
+msgid "This date correspond to the last export. If you need export all orders, left empty this field."
+msgstr "Aquesta és la data de la darrera exportació. Si necessiteu la exportació de totes les comandes, deixeu buida aquesta data (sincronització llarga)"
 
 #. module: magento_connect
 #: view:magento.app:0
 #: field:magento.app.customer,magento_app_id:0
 #: field:magento.customer.group,magento_app_id:0
 #: field:magento.external.referential,magento_app_id:0
+#: field:magento.log,magento_app_id:0
 #: field:magento.region,magento_app_id:0
 #: field:magento.website,magento_app_id:0
 #: field:product.images,magento_app_ids:0
@@ -1698,67 +1974,22 @@ msgid "Carrier"
 msgstr "Missatger"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:33
-#, python-format
-msgid "vobject Import Error!"
-msgstr "Error d'importació de vobject!"
-
-#. module: magento_connect
-#: view:res.partner:0
-#: field:res.partner,magento_app_customer:0
-msgid "Magento Customer"
-msgstr "Client Magento"
-
-#. module: magento_connect
 #: view:sale.shop:0
-msgid "Import Orders"
-msgstr "Importar comandes"
+msgid "Payments"
+msgstr "Tipus de pagament"
 
 #. module: magento_connect
-#: field:sale.shop,magento_notify_paidinweb:0
-msgid "Notify Paid in web"
-msgstr "Notifica pagat en web"
+#: view:magento.app:0
+msgid "Test Connection"
+msgstr "Test de connexió"
 
 #. module: magento_connect
-#: field:product.product,magento_manage_stock:0
-msgid "Manage Stock"
-msgstr "Gestiona estoc"
-
-#. module: magento_connect
-#: field:sale.shop,magento_check_vat_partner:0
-msgid "Check Vat"
-msgstr "Comprova CIF/NIF"
-
-#. module: magento_connect
-#: selection:sale.shop,magento_sale_stock:0
-msgid "Virtual Stock"
-msgstr "Estoc virtual"
-
-#. module: magento_connect
-#: field:product.product,magento_visibility:0
-msgid "Visibility"
-msgstr "Visibilitat"
-
-#. module: magento_connect
-#: field:product.category,magento_meta_description:0
-msgid "Meta Description"
-msgstr "Meta descripció"
-
-#. module: magento_connect
-#: view:product.product:0
-msgid "Magento Filters..."
-msgstr "Magento filtres..."
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:900
-#, python-format
-msgid "This Magento Customer Group not allow to delete"
-msgstr "No es pot esborrar aquest grup de clients de Magento"
-
-#. module: magento_connect
-#: selection:product.product,magento_visibility:0
-msgid "Select Option"
-msgstr "Selecciona opció"
+#: view:magento.sync.images.wizard:0
+#: view:magento.sync.price.wizard:0
+#: view:magento.sync.product.wizard:0
+#: view:magento.sync.stock.wizard:0
+msgid "Are you sure to export this product?"
+msgstr "Esteu segurs d'esportar aquest producte/s?"
 
 #. module: magento_connect
 #: help:magento.app,uri:0
@@ -1766,9 +1997,9 @@ msgid "URI Magento App. http://yourmagento.com/ (with / at end URI)"
 msgstr "URI de aplicacions Magento. http://yourmagento.com/ (amb / al final de la URI)"
 
 #. module: magento_connect
-#: view:magento.storeview:0
-msgid "Locale"
-msgstr "Lloc"
+#: selection:sale.shop,magento_sale_price:0
+msgid "Sale Price"
+msgstr "Preu de venda"
 
 #. module: magento_connect
 #: field:magento.product_category_attribute_options,attribute_name:0
@@ -1776,66 +2007,9 @@ msgid "Attribute Code"
 msgstr "Codi  atribut"
 
 #. module: magento_connect
-#: view:magento.app:0
-msgid "Import Magento Attributes Set"
-msgstr "Importa grup atributs Magento"
-
-#. module: magento_connect
-#: model:ir.model,name:magento_connect.model_magento_sync_price_wizard
-msgid "magento.sync.price.wizard"
-msgstr "magento.sync.price.wizard"
-
-#. module: magento_connect
 #: field:magento.app,payment_default_id:0
 msgid "Payment Term"
 msgstr "Termini de pagament"
-
-#. module: magento_connect
-#: view:magento.sync.images.wizard:0
-#: view:magento.sync.price.wizard:0
-#: view:magento.sync.product.wizard:0
-#: view:magento.sync.stock.wizard:0
-msgid "Products to sync..."
-msgstr "Productes sincronitzant..."
-
-#. module: magento_connect
-#: code:addons/magento_connect/mgn.py:446
-#: code:addons/magento_connect/mgn.py:593
-#: code:addons/magento_connect/mgn.py:636
-#, python-format
-msgid "Select Store View Magento"
-msgstr "Seleccioneu la vista de la botiga Magento"
-
-#. module: magento_connect
-#: field:magento.storeview,magento_last_import_locale_products:0
-msgid "Last Import Products"
-msgstr "Darrers productes importats"
-
-#. module: magento_connect
-#: help:magento.app,to_import_customers:0
-#: help:magento.app,to_import_products:0
-#: help:sale.shop,magento_to_sale_orders:0
-msgid "This date is to import (filter)"
-msgstr "Aquesta data és per importar (filtre)"
-
-#. module: magento_connect
-#: constraint:product.product:0
-msgid "Error: Invalid ean code"
-msgstr "Error: Codi EAN invàlid"
-
-#. module: magento_connect
-#: view:magento.app:0
-#: view:magento.sync.images.wizard:0
-#: view:magento.sync.price.wizard:0
-#: view:magento.sync.product.wizard:0
-#: view:magento.sync.stock.wizard:0
-msgid "Export"
-msgstr "Exporta"
-
-#. module: magento_connect
-#: help:sale.shop,magento_status_paid:0
-msgid "Status for paid orders (invoice)"
-msgstr "Estat de comandes pagades (factura)"
 
 #. module: magento_connect
 #: view:magento.sale.shop.status.type:0
@@ -1855,32 +2029,9 @@ msgid "Use Magento Reference (Increment) in order name"
 msgstr "Utilitza la referencia de Magento (increment) com a nom de la comanda"
 
 #. module: magento_connect
-#: model:ir.actions.act_window,name:magento_connect.action_magento_customer_group
-#: model:ir.model,name:magento_connect.model_magento_customer_group
-#: model:ir.ui.menu,name:magento_connect.menu_magento_customer_group
-#: view:magento.customer.group:0
-msgid "Magento Customer Group"
-msgstr "Grup de clientes Magento"
-
-#. module: magento_connect
-#: view:product.product:0
-msgid "Website"
-msgstr "Lloc web"
-
-#. module: magento_connect
 #: view:sale.shop:0
 msgid "Orders"
 msgstr "Comandes de venda"
-
-#. module: magento_connect
-#: help:sale.shop,magento_last_export_status_orders:0
-msgid "This date correspond to the last export. If you need export all orders, left empty this field."
-msgstr "Aquesta és la data de la darrera exportació. Si necessiteu la exportació de totes les comandes, deixeu buida aquesta data (sincronització llarga)"
-
-#. module: magento_connect
-#: field:sale.shop,magento_status_paid_delivered:0
-msgid "Paid/Delivered"
-msgstr "Pagat/Entregat"
 
 #~ msgid "Extra Information"
 #~ msgstr "Informació extra"

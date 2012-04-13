@@ -737,6 +737,53 @@ class magento_app(osv.osv):
 
 magento_app()
 
+class magento_log(osv.osv):
+    _name = 'magento.log'
+    _description = 'Magento Logs'
+    _order = "id desc"
+
+    _columns = {
+        'create': fields.datetime('Create'),
+        'magento_app_id': fields.many2one('magento.app', 'Magento App', required=True),
+        'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, select=True, ondelete='cascade'),
+        'oerp_id': fields.integer('OpenERP ID', required=True),
+        'mgn_id': fields.integer('Magento ID'),
+        'status': fields.selection([
+            ('done', 'Done'),
+            ('error', 'Error'),
+        ], 'Status'),
+        'comment': fields.char('Comment', size=256),
+    }
+
+    def unlink(self, cr, uid, vals, context=None):
+        raise osv.except_osv(_("Alert"), _("This Log is not allow to delete"))
+
+    def create_log(self, cr, uid, magento_app, model, oerp_id, mgn_id, status = 'done', comment = ''):
+        """
+        Create new log
+        :param magento_app: object
+        :param model: str name model
+        :param oerp_id: int OpenERP ID
+        :param mgn_id: int Magento ID
+        :return magento_external_referential_id
+        """
+        model_ids = self.pool.get('ir.model').search(cr, uid, [('model','=',model)])
+
+        values = {
+            'create': time.strftime('%Y-%m-%d %H:%M:%S'),
+            'magento_app_id': magento_app.id,
+            'model_id': model_ids[0],
+            'oerp_id': oerp_id,
+            'mgn_id': mgn_id,
+            'status': status,
+            'comment': comment,
+        }
+        magento_log_id = self.create(cr, uid, values)
+
+        return magento_log_id
+
+magento_log()
+
 class magento_website(osv.osv):
     _name = 'magento.website'
     _description = 'Magento Website'

@@ -104,6 +104,9 @@ class res_partner(osv.osv):
 
         if mapping and ('customer_id' in values):
             external_referential_obj.create_external_referential(cr, uid, magento_app, 'res.partner', partner_id, values['customer_id'])
+            self.pool.get('magento.log').create_log(cr, uid, magento_app, 'res.partner', partner_id, values['customer_id'], 'done', _('Successfully create partner: %s') % (values['name']) )
+        else:
+            self.pool.get('magento.log').create_log(cr, uid, magento_app, 'res.partner', partner_id, '', 'done', _('Successfully create partner: %s') % (values['name']) )
 
         logger.notifyChannel('Magento Sync Partner', netsvc.LOG_INFO, "Create Partner: magento %s, openerp id %s, magento id %s" % (magento_app.name, partner_id, values['customer_id']))
 
@@ -245,8 +248,10 @@ class res_partner_address(osv.osv):
 
         if 'customer_address_id' in customer_address:
             logger.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, magento id %s" % (magento_app.name, partner_address_id, customer_address['customer_address_id']))
+            self.pool.get('magento.log').create_log(cr, uid, magento_app, 'res.partner.address', partner_address_id, customer_address['customer_address_id'], 'done', _('Successfully create partner address: %s') % (vals['name']) )
         else:
             logger.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, %s" % (magento_app.name, partner_address_id, vals['name']))
+            self.pool.get('magento.log').create_log(cr, uid, magento_app, 'res.partner.address', partner_address_id, '', 'done', _('Successfully create partner address: %s') % (vals['name']) )
 
         return partner_address_id
 

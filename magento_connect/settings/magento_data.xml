@@ -16,7 +16,7 @@
             <field name="magento_exportable" eval="False" />
             <field name="categ_id" ref="mag0"/>
         </record>
-        
+
         <record id="product_product_cash_on_delivery" model="product.product">
             <field name="default_code">CASH ON DELIVERY MAGENTO</field>
             <field name="list_price">0.0</field>

@@ -151,9 +151,10 @@ class sale_shop(osv.osv):
         cr = db.cursor()
 
         magento_app = self.pool.get('magento.app').browse(cr, uid, magentoapp)
-
         context['magento_app'] = magento_app
+
         magento_external_referential_obj = self.pool.get('magento.external.referential')
+        magento_log_obj = self.pool.get('magento.log')
 
         product_mgn_id = False
 
@@ -200,8 +201,10 @@ class sale_shop(osv.osv):
                     try:
                         product_api.update(product_mgn_id, values, store_view)
                         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product SKU %s. OpenERP ID %s, Magento ID %s" % (product_sku, product.id, product_mgn_id))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, product_mgn_id, 'done', _('Successfully update product'))
                     except:
                         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Magento Update Product: %s %s." % (product_sku, product.id))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, product_mgn_id, 'error', _('Error update product'))
                 else: #create
                     try:
                         product_mgn_id = product_api.create(product_type, product_attribute_set, product_sku, values)
@@ -218,8 +221,10 @@ class sale_shop(osv.osv):
                                 # inventory_api.update(product_mgn_id, data)
                                 inventory_api.update(product.magento_sku, data) #mgn 151 use sku, not ID
                                 LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Force Inventory Available: Magento ID %s" % (product_mgn_id))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, product_mgn_id, 'done', _('Successfully create product'))
                     except:
                         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Error: Magento Create Product: SKU %s OpenERP ID %s." % (product_sku, product.id))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, product_mgn_id, 'error', _('Error create product'))
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Products Export")
 
@@ -284,6 +289,8 @@ class sale_shop(osv.osv):
         shop = self.pool.get('sale.shop').browse(cr, uid, saleshop)
         context['shop'] = shop
 
+        magento_log_obj = self.pool.get('magento.log')
+
         with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
             for product in self.pool.get('product.product').browse(cr, uid, ids, context):
                 LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Waiting OpenERP ID %s...." % (product.id))
@@ -315,8 +322,10 @@ class sale_shop(osv.osv):
                 try:
                     product_mgn_id = product_api.update(mgn_id, data)
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Prices: %s. OpenERP ID %s, Magento ID %s" % (price, product.id, mgn_id))
+                    magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, mgn_id, 'done', _('Successfully update price: %s') % (price) )
                 except:
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Error: Magento Update Price: OpenERP ID %s, Magento %s." % (product.id, mgn_id))
+                    magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, mgn_id, 'error', _('Error update price: %s') % (price) )
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Prices Export")
 
@@ -377,6 +386,7 @@ class sale_shop(osv.osv):
         cr = db.cursor()
 
         magento_external_referential_obj = self.pool.get('magento.external.referential')
+        magento_log_obj = self.pool.get('magento.log')
 
         magento_app = self.pool.get('magento.app').browse(cr, uid, magentoapp)
         context['magento_app'] = magento_app
@@ -408,13 +418,14 @@ class sale_shop(osv.osv):
                 product = self.pool.get('product.product').browse(cr, uid, product.id)
 
                 data = {'qty':stock, 'is_in_stock':is_in_stock,'manage_stock': product.magento_manage_stock}
-                print data
                 try:
                     # inventory_api.update(mgn_id, data)
                     inventory_api.update(product.magento_sku, data) #mgn 151 use sku, not ID
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Stock: %s. OpenERP ID %s, Magento ID %s" % (stock, product.id, mgn_id))
+                    magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, mgn_id, 'done', _('Successfully update stock: %s') % (stock) )
                 except:
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Error: Magento Stock Product: OpenERP ID %s Magento ID %s" % (product.id, mgn_id))
+                    magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, mgn_id, 'error', _('Error update stock: %s') % (stock) )
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Stock Export")
 
@@ -477,6 +488,7 @@ class sale_shop(osv.osv):
         cr = db.cursor()
 
         magento_external_referential_obj = self.pool.get('magento.external.referential')
+        magento_log_obj = self.pool.get('magento.log')
 
         magento_app = self.pool.get('magento.app').browse(cr, uid, magentoapp)
         context['magento_app'] = magento_app
@@ -519,8 +531,10 @@ class sale_shop(osv.osv):
                     try:
                         product_image_api.update(product, mgn_file_name, data)
                         LOGGER.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Update Image %s, Product Mgn ID %s" % (product_image.name, product))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'product.images', product_image.id, product, 'done', _('Successfully update image %s') % (mgn_file_name) )
                     except:
                         LOGGER.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Error Update Image %s, Product Mgn ID %s" % (product_image.name, product))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'product.images', product_image.id, product, 'error', _('Error update image %s') % (mgn_file_name) )
 
                 else:
                     """
@@ -559,7 +573,7 @@ class sale_shop(osv.osv):
 
                     try:
                         mgn_file_name = product_image_api.create(product, image, image_name, image_mime)
-                        product_image_api.update(product, mgn_file_name, data)
+                        mgn_id = product_image_api.update(product, mgn_file_name, data)
                         LOGGER.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Create Image %s, Product Mgn ID %s" % (product_image.name, product))
                         #update magento filename
                         self.pool.get('product.images').write(cr,uid,[product_image.id],{'magento_filename':mgn_file_name})
@@ -567,8 +581,10 @@ class sale_shop(osv.osv):
                         prod_images_mgn_apps = self.pool.get('product.images.magento.app').search(cr, uid, [('product_images_id','=',product_image.id),('magento_app_id','=',magento_app.id)])
                         if len(prod_images_mgn_apps)>0:
                             self.pool.get('product.images.magento.app').write(cr,uid,prod_images_mgn_apps,{'magento_exported':True})
+                        magento_log_obj.create_log(cr, uid, magento_app, 'product.images', product_image.id, product, 'done', _('Successfully create image %s') % (mgn_file_name) )
                     except:
                         LOGGER.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, "Error Create Image %s, Product Mgn ID %s" % (product_image.name, product))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'product.images', product_image.id, product, 'error', _('Error create image %s') % (mgn_file_name) )
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Images Export")
 
@@ -632,6 +648,8 @@ class sale_shop(osv.osv):
         sale_shop = self.pool.get('sale.shop').browse(cr, uid, saleshop)
         context['shop'] = sale_shop
 
+        magento_log_obj = self.pool.get('magento.log')
+ 
         with Order(magento_app.uri, magento_app.username, magento_app.password) as order_api:
             for order in orders:
                 order_id = order['order_id']
@@ -644,6 +662,7 @@ class sale_shop(osv.osv):
                     continue
                 values = order_api.info(code)
                 sale_order_id = self.pool.get('sale.order').magento_create_order(cr, uid, sale_shop, values, context)
+                magento_log_obj.create_log(cr, uid, magento_app, 'sale.order', sale_order_id, order_id, 'done', _('Successfully create sale order: %s') % (code) )
                 cr.commit()
             if not orders:
                 LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Not Orders available, magento %s, date > %s" % (magento_app.name, creted_filter))
@@ -711,11 +730,23 @@ class sale_shop(osv.osv):
         shop = self.pool.get('sale.shop').browse(cr, uid, saleshop)
         context['shop'] = shop
 
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
+        magento_log_obj = self.pool.get('magento.log')
+
         status = False
         comment = False
         notify = False
 
         for sale_order in self.pool.get('sale.order').browse(cr, uid, ids):
+            mapping_id = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'sale.order', sale_order.id)
+
+            if not mapping_id:
+                LOGGER.notifyChannel('Order Status', netsvc.LOG_ERROR, "Order %s not exist in mapping" % (sale_order.id))
+                magento_log_obj.create_log(cr, uid, magento_app, 'sale.order', (sale_order.id, '', 'error', _('Error update status %s') % (status) ))
+                        
+            mappings = magento_external_referential_obj.get_external_referential(cr, uid, [mapping_id])
+            order_mgn_id = mappings[0]['mgn_id']
+
             if sale_order.magento_paidinweb:
                 notify = shop.magento_notify_paidinweb
                 status = shop.magento_status_paidinweb
@@ -739,9 +770,14 @@ class sale_shop(osv.osv):
             if status:
                 LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Waiting OpenERP Order ID %s...." % (sale_order.id))
                 with Order(magento_app.uri, magento_app.username, magento_app.password) as order_api:
-                    order_api.addcomment(sale_order.name, status, comment, notify)
-                self.pool.get('sale.order').write(cr, uid, [sale_order.id], {'magento_status': status})
-                LOGGER.notifyChannel('Order Status', netsvc.LOG_INFO, "%s, status: %s" % (sale_order.name, status))
+                    try:
+                        order_api.addcomment(sale_order.name, status, comment, notify)
+                        self.pool.get('sale.order').write(cr, uid, [sale_order.id], {'magento_status': status})
+                        LOGGER.notifyChannel('Order Status', netsvc.LOG_INFO, "%s, status: %s" % (sale_order.name, status))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'sale.order', sale_order.id, order_mgn_id, 'done', _('Successfully update %s status: %s') % (sale_order.name, status) )
+                    except:
+                        LOGGER.notifyChannel('Order Status', netsvc.LOG_ERROR, "Error: %s, status: %s" % (sale_order.name, status))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'sale.order', sale_order.id, order_mgn_id, 'error', _('Error update %s status: %s') % (sale_order.name, status) )
 
         LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "End Export Status Orders %s" % (magento_app.name))
 
