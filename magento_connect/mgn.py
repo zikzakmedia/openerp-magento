@@ -779,6 +779,7 @@ class magento_log(osv.osv):
             'comment': comment,
         }
         magento_log_id = self.create(cr, uid, values)
+        cr.commit()
 
         return magento_log_id
 

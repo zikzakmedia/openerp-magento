@@ -61,8 +61,12 @@ class magento_sync_images_wizard(osv.osv_memory):
         product_ids = []
         product_images_ids = []
         for prod in self.pool.get('product.product').browse(cr, uid, data['active_ids']):
+            product_available_shops = []
+            for pshop in prod.magento_sale_shop:
+                product_available_shops.append(pshop.id)
+
             product_image = []
-            if prod.magento_exportable:
+            if prod.magento_exportable and shop.id in product_available_shops:
                 product_ids.append(prod.id)
                 for image in prod.image_ids:
                     if image.magento_exportable:

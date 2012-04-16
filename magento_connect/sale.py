@@ -224,7 +224,7 @@ class sale_shop(osv.osv):
                         magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, product_mgn_id, 'done', _('Successfully create product'))
                     except:
                         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Error: Magento Create Product: SKU %s OpenERP ID %s." % (product_sku, product.id))
-                        magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, product_mgn_id, 'error', _('Error create product'))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, '', 'error', _('Error create product'))
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Products Export")
 

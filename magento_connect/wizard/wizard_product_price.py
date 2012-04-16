@@ -60,7 +60,11 @@ class magento_sync_price_wizard(osv.osv_memory):
 
         product_ids = []
         for prod in self.pool.get('product.product').browse(cr, uid, data['active_ids']):
-            if prod.magento_exportable:
+            product_available_shops = []
+            for pshop in prod.magento_sale_shop:
+                product_available_shops.append(pshop.id)
+
+            if prod.magento_exportable and shop.id in product_available_shops:
                 product_ids.append(prod.id)
 
         values = {
