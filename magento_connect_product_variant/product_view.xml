@@ -50,7 +50,7 @@
                                 <page string="SEO">
                                     <field name="magento_tpl_url_key" colspan="4" attrs="{'required':[('magento_tpl_exportable','==',True)]}"/>
                                     <separator string="Metadescription" colspan="4"/>
-                                    <field name="magento_tpl_metadescription" nolabel="1" colspan="4" attrs="{'required':[('magento_tpl_exportable','==',True)]}"/>
+                                    <field name="magento_tpl_metadescription" nolabel="1" colspan="4"/>
                                     <separator string="Metakeyword" colspan="4"/>
                                     <field name="magento_tpl_metakeyword" nolabel="1" colspan="4"/>
                                     <field name="magento_tpl_metatitle" colspan="4"/>

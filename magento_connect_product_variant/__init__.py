@@ -25,3 +25,4 @@ import mgn
 import product
 import product_variant
 import sale
+import wizard

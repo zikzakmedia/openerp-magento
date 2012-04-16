@@ -43,6 +43,7 @@
         "mgn_view.xml",
         "product_view.xml",
         "sale_view.xml",
+        "wizard/wizard_product_template.xml",
     ],
     "active": False,
     "installable": True

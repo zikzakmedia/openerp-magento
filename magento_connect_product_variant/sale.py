@@ -104,6 +104,7 @@ class sale_shop(osv.osv):
 
         context['magento_app'] = magento_app
         magento_external_referential = self.pool.get('magento.external.referential')
+        magento_log_obj = self.pool.get('magento.log')
 
         product_mgn_ids = []
         attributes = {}
@@ -126,7 +127,7 @@ class sale_shop(osv.osv):
                 del values['sku']
                 del values['set']
 
-                if mapping_id: #uptate
+                if mapping_id: #update
                     mappings = magento_external_referential.get_external_referential(cr, uid, [mapping_id])
                     product_mgn_id = mappings[0]['mgn_id']
 
@@ -137,16 +138,23 @@ class sale_shop(osv.osv):
                         store_view = store_view[0]['mgn_id']
 
                     #~ print product_sku, values
-                    product_api.update(product_mgn_id, values, store_view)
-                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product SKU %s. OpenERP ID %s, Magento ID %s" % (product_sku, product_template_id, product_mgn_id))
+                    try:
+                        product_api.update(product_mgn_id, values, store_view)
+                        LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product SKU %s. OpenERP ID %s, Magento ID %s" % (product_sku, product_template_id, product_mgn_id))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'product.template', product_template_id, product_mgn_id, 'done', _('Successfully update template (configurable mapping)'))
+                    except:
+                        LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Magento Update Product Template: %s %s." % (product_sku, product_template.id))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'product.template', product_template.id, '', 'error', _('Error update template (configurable mapping)'))
                 else: #create
                     try:
                         product_mgn_id = product_api.create(product_type, product_attribute_set, product_sku, values)
                         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Create Product: %s. OpenERP ID %s, Magento ID %s" % (product_sku, product_template_id, product_mgn_id))
                         magento_external_referential.create_external_referential(cr, uid, magento_app, 'product.template', product_template_id, product_mgn_id)
+                        magento_log_obj.create_log(cr, uid, magento_app, 'product.template', product_template_id, product_mgn_id, 'done', _('Successfully create template (configurable mapping)'))
                     except:
                         product_mgn_id = False
                         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Magento Create Product Template: %s %s." % (product_sku, product_template.id))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'product.template', product_template.id, '', 'error', _('Error create template (configurable mapping)'))
 
                 if product_mgn_id:
                     with ProductConfigurable(magento_app.uri, magento_app.username, magento_app.password) as productconfigurable_api:
@@ -171,8 +179,11 @@ class sale_shop(osv.osv):
                             try:
                                 product = productconfigurable_api.update(product_mgn_id, products, attributes)
                                 LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Configurable %s. OpenERP ID %s, Magento ID %s" % (product_sku, product_template_id, product_mgn_id))
+                                magento_log_obj.create_log(cr, uid, magento_app, 'product.template', product_template_id, product_mgn_id, 'done', _('Successfully update template'))
                             except:
                                 LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Error Product Configurable: Magento product ID %s, Products ID %s" % (product_mgn_id, products))
+                                magento_log_obj.create_log(cr, uid, magento_app, 'product.template', product.id, product_mgn_id, 'error', _('Error update template'))
+
                     # return []
                     product_mgn_ids.append(product_mgn_id)
 
@@ -231,7 +242,9 @@ class sale_shop(osv.osv):
         cr = db.cursor()
 
         decimal = self.pool.get('decimal.precision').precision_get(cr, uid, 'Sale Price')
+
         magento_external_referential_obj = self.pool.get('magento.external.referential')
+        magento_log_obj = self.pool.get('magento.log')
 
         magento_app = self.pool.get('magento.app').browse(cr, uid, magentoapp)
         context['magento_app'] = magento_app
@@ -269,9 +282,13 @@ class sale_shop(osv.osv):
 
                 data = {'price':price}
                 #~ product_mgn_id = product_api.update(mgn_id, data, store_view)
-                product_mgn_id = product_api.update(mgn_id, data)
-
-                LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Template Prices: %s. OpenERP ID %s, Magento ID %s" % (price, product.id, mgn_id))
+                try:
+                    product_mgn_id = product_api.update(mgn_id, data)
+                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Template Prices: %s. OpenERP ID %s, Magento ID %s" % (price, product.id, mgn_id))
+                    magento_log_obj.create_log(cr, uid, magento_app, 'product.template', product.id, mgn_id, 'done', _('Successfully update template price: %s') % (price) )
+                except:
+                    LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, "Error: Update Product Template Prices: %s. OpenERP ID %s, Magento ID %s" % (price, product.id, mgn_id))
+                    magento_log_obj.create_log(cr, uid, magento_app, 'product.template', product.id, mgn_id, 'error', _('Error update template price: %s') % (price) )
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Template Prices Export")
 
