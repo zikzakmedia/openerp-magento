@@ -87,7 +87,7 @@ class product_category(osv.osv):
         'magento_description': fields.text('Description'),
         'magento_meta_title': fields.text('Meta Title'),
         'magento_meta_keywords': fields.text('Meta Keyword'),
-        'magento_meta_description': fields.text('Meta Description'),
+        'magento_meta_description': fields.text('Meta Description', help="Almost all search engines recommend it to be shorter than 155 characters of plain text"),
         'magento_available_sort_by': fields.many2one('magento.product_category_attribute_options', 'Available Product Listing (Sort By)', domain="[('attribute_name', '=', 'available_sort_by')]"),
         'magento_default_sort_by': fields.many2one('magento.product_category_attribute_options', 'Default Product Listing Sort (Sort By)', domain="[('attribute_name', '=', 'default_sort_by')]"),
         'magento_url_key': fields.char('URL-key', size=100, translate=True),
@@ -222,7 +222,7 @@ class product_product(osv.osv):
         'magento_visibility': fields.selection([('0', 'Select Option'), ('1', 'Nowhere'), ('2', 'Catalog'), ('3', 'Search'), ('4', 'Catalog,Search')], 'Visibility'),
         'magento_url_key': fields.char('Url Key', size=256),
         'magento_shortdescription': fields.text('Short Description', translate=True),
-        'magento_metadescription': fields.text('Description', translate=True),
+        'magento_metadescription': fields.text('Description', translate=True, help="Almost all search engines recommend it to be shorter than 155 characters of plain text"),
         'magento_metakeyword': fields.text('Keyword', translate=True),
         'magento_metatitle': fields.char('Title', size=256, translate=True),
         'magento_manage_stock':fields.boolean('Manage Stock'),
@@ -247,6 +247,11 @@ class product_product(osv.osv):
                 slug = unicode(slug, 'UTF-8')
             slug = slugify(slug)
             vals['magento_url_key'] = slug
+
+        if 'magento_metadescription' in vals:
+            metadescription = vals.get('magento_metadescription','')
+            if metadescription and len(metadescription)> 155:
+                vals['magento_metadescription'] = "%s..." % (metadescription[:152])
 
         product_id = super(product_product, self).create(cr, uid, vals, context)
 
@@ -273,6 +278,11 @@ class product_product(osv.osv):
             if 'magento_url_key' in vals:
                 slug = slugify(unicode(vals['magento_url_key'], 'UTF-8'))
                 vals['magento_url_key'] = slug
+
+            if 'magento_metadescription' in vals:
+                metadescription = vals.get('magento_metadescription','')
+                if metadescription and len(metadescription)> 155:
+                    vals['magento_metadescription'] = "%s..." % (metadescription[:152])
 
             result = result and super(product_product, self).write(cr, uid, [id], vals, context)
 

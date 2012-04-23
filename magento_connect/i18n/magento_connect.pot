@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.3\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2012-04-13 10:16+0000\n"
-"PO-Revision-Date: 2012-04-13 10:16+0000\n"
+"POT-Creation-Date: 2012-04-19 14:34+0000\n"
+"PO-Revision-Date: 2012-04-19 14:34+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgid "Partial Delivery"
 msgstr "Partial Delivery"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:967
+#: code:addons/magento_connect/mgn.py:968
 #, python-format
 msgid "This Magento Region not allow to delete"
 msgstr "This Magento Region not allow to delete"
@@ -93,7 +93,7 @@ msgstr "Payment Before Delivery"
 
 #. module: magento_connect
 #: code:addons/magento_connect/product.py:242
-#: code:addons/magento_connect/product.py:271
+#: code:addons/magento_connect/product.py:275
 #, python-format
 msgid "Error! Magento SKU %s must be unique"
 msgstr "Error! Magento SKU %s must be unique"
@@ -114,14 +114,15 @@ msgid "Error ! You can not create recursive categories."
 msgstr "Error ! You can not create recursive categories."
 
 #. module: magento_connect
+#: model:product.product,name:magento_connect.product_product_cash_on_delivery
 #: model:product.template,name:magento_connect.product_product_cash_on_delivery_product_template
 msgid "Cash on delivery"
 msgstr "Cash on delivery"
 
 #. module: magento_connect
-#: code:addons/magento_connect/wizard/wizard_product_price.py:72
-#: code:addons/magento_connect/wizard/wizard_product_product.py:72
-#: code:addons/magento_connect/wizard/wizard_product_stock.py:73
+#: code:addons/magento_connect/wizard/wizard_product_price.py:76
+#: code:addons/magento_connect/wizard/wizard_product_product.py:76
+#: code:addons/magento_connect/wizard/wizard_product_stock.py:77
 #, python-format
 msgid "Not available some Magento Products to export"
 msgstr "Not available some Magento Products to export"
@@ -372,8 +373,8 @@ msgid "Successfully update product"
 msgstr "Successfully update product"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:850
-#: code:addons/magento_connect/mgn.py:897
+#: code:addons/magento_connect/mgn.py:851
+#: code:addons/magento_connect/mgn.py:898
 #, python-format
 msgid "Select language available this store view"
 msgstr "Select language available this store view"
@@ -459,17 +460,13 @@ msgid "Last store view where the customer has bought."
 msgstr "Last store view where the customer has bought."
 
 #. module: magento_connect
-#: view:product.product:0
-msgid "Metadescription"
-msgstr "Metadescription"
-
-#. module: magento_connect
 #: code:addons/magento_connect/sale.py:428
 #, python-format
 msgid "Error update stock: %s"
 msgstr "Error update stock: %s"
 
 #. module: magento_connect
+#: model:product.product,name:magento_connect.product_product_shipping
 #: model:product.template,name:magento_connect.product_product_shipping_product_template
 msgid "Shipping and Handling"
 msgstr "Shipping and Handling"
@@ -572,22 +569,22 @@ msgstr "Select yours Sale Shops available this product"
 #: code:addons/magento_connect/mgn.py:594
 #: code:addons/magento_connect/mgn.py:637
 #: code:addons/magento_connect/mgn.py:759
-#: code:addons/magento_connect/mgn.py:800
-#: code:addons/magento_connect/mgn.py:815
-#: code:addons/magento_connect/mgn.py:833
-#: code:addons/magento_connect/mgn.py:850
-#: code:addons/magento_connect/mgn.py:897
-#: code:addons/magento_connect/mgn.py:933
-#: code:addons/magento_connect/mgn.py:948
-#: code:addons/magento_connect/mgn.py:967
-#: code:addons/magento_connect/mgn.py:1008
+#: code:addons/magento_connect/mgn.py:801
+#: code:addons/magento_connect/mgn.py:816
+#: code:addons/magento_connect/mgn.py:834
+#: code:addons/magento_connect/mgn.py:851
+#: code:addons/magento_connect/mgn.py:898
+#: code:addons/magento_connect/mgn.py:934
+#: code:addons/magento_connect/mgn.py:949
+#: code:addons/magento_connect/mgn.py:968
+#: code:addons/magento_connect/mgn.py:1009
 #: code:addons/magento_connect/mgn_referential.py:42
 #: code:addons/magento_connect/partner.py:41
 #: code:addons/magento_connect/partner.py:169
 #: code:addons/magento_connect/product.py:183
 #: code:addons/magento_connect/product.py:242
-#: code:addons/magento_connect/product.py:271
-#: code:addons/magento_connect/product.py:302
+#: code:addons/magento_connect/product.py:275
+#: code:addons/magento_connect/product.py:310
 #: code:addons/magento_connect/product_images.py:92
 #: code:addons/magento_connect/sale.py:98
 #: code:addons/magento_connect/sale.py:839
@@ -627,7 +624,7 @@ msgid "Are you sure to continue? This action is in background. See logs server p
 msgstr "Are you sure to continue? This action is in background. See logs server process"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:833
+#: code:addons/magento_connect/mgn.py:834
 #, python-format
 msgid "This Magento Store View not allow to delete"
 msgstr "This Magento Store View not allow to delete"
@@ -648,13 +645,13 @@ msgid "This date is last import. If you need import new products, you can modify
 msgstr "This date is last import. If you need import new products, you can modify this date (filter)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:800
+#: code:addons/magento_connect/mgn.py:801
 #, python-format
 msgid "This Magento Website not allow to delete"
 msgstr "This Magento Website not allow to delete"
 
 #. module: magento_connect
-#: code:addons/magento_connect/wizard/wizard_product_images.py:78
+#: code:addons/magento_connect/wizard/wizard_product_images.py:82
 #, python-format
 msgid "Not available some Magento Images to export"
 msgstr "Not available some Magento Images to export"
@@ -754,11 +751,6 @@ msgid "Username"
 msgstr "Username"
 
 #. module: magento_connect
-#: view:product.product:0
-msgid "Metakeyword"
-msgstr "Metakeyword"
-
-#. module: magento_connect
 #: help:sale.shop,magento_scheduler:0
 msgid "Available this Sale Shop crons (import/export)"
 msgstr "Available this Sale Shop crons (import/export)"
@@ -769,7 +761,7 @@ msgid "This date correspond to the last export. If you need export all images, l
 msgstr "This date correspond to the last export. If you need export all images, left empty this field."
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:933
+#: code:addons/magento_connect/mgn.py:934
 #, python-format
 msgid "This Magento Attribute Exclude not allow to delete"
 msgstr "This Magento Attribute Exclude not allow to delete"
@@ -890,7 +882,7 @@ msgid "Sales Shop"
 msgstr "Sales Shop"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:302
+#: code:addons/magento_connect/product.py:310
 #, python-format
 msgid "Product '%s' not allow to delete because are active in Magento Shop"
 msgstr "Product '%s' not allow to delete because are active in Magento Shop"
@@ -1020,6 +1012,11 @@ msgid "Magento Customer"
 msgstr "Magento Customer"
 
 #. module: magento_connect
+#: field:sale.shop,magento_notify_paidinweb:0
+msgid "Notify Paid in web"
+msgstr "Notify Paid in web"
+
+#. module: magento_connect
 #: view:product.product:0
 msgid "Magento Filters..."
 msgstr "Magento Filters..."
@@ -1067,6 +1064,7 @@ msgid "Authentication"
 msgstr "Authentication"
 
 #. module: magento_connect
+#: model:product.product,name:magento_connect.product_product_gift
 #: model:product.template,name:magento_connect.product_product_gift_product_template
 msgid "Gift Certificate"
 msgstr "Gift Certificate"
@@ -1167,7 +1165,7 @@ msgid "Partners"
 msgstr "Partners"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:1008
+#: code:addons/magento_connect/mgn.py:1009
 #, python-format
 msgid "This Magento Websites/Groups not allow to delete"
 msgstr "This Magento Websites/Groups not allow to delete"
@@ -1197,9 +1195,9 @@ msgid "Paid in web. Sale Order is paid in web"
 msgstr "Paid in web. Sale Order is paid in web"
 
 #. module: magento_connect
-#: field:sale.shop,magento_notify_paidinweb:0
-msgid "Notify Paid in web"
-msgstr "Notify Paid in web"
+#: constraint:product.product:0
+msgid "Several dimension values for the same dimension type"
+msgstr "Several dimension values for the same dimension type"
 
 #. module: magento_connect
 #: field:magento.app.customer,magento_storeview_ids:0
@@ -1278,7 +1276,7 @@ msgstr "Export Images"
 
 #. module: magento_connect
 #: code:addons/magento_connect/product.py:116
-#: code:addons/magento_connect/product.py:293
+#: code:addons/magento_connect/product.py:301
 #, python-format
 msgid "-copy"
 msgstr "-copy"
@@ -1357,6 +1355,7 @@ msgid "Products Images Magento"
 msgstr "Products Images Magento"
 
 #. module: magento_connect
+#: model:product.product,name:magento_connect.product_product_discount
 #: model:product.template,name:magento_connect.product_product_discount_product_template
 msgid "Discount Coupon"
 msgstr "Discount Coupon"
@@ -1484,7 +1483,7 @@ msgid "Meta Description"
 msgstr "Meta Description"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:948
+#: code:addons/magento_connect/mgn.py:949
 #, python-format
 msgid "This Magento Customer Group not allow to delete"
 msgstr "This Magento Customer Group not allow to delete"
@@ -1614,6 +1613,12 @@ msgstr "Import Magento Product Images"
 #: model:ir.model,name:magento_connect.model_sale_order
 msgid "Sales Order"
 msgstr "Sales Order"
+
+#. module: magento_connect
+#: help:product.category,magento_meta_description:0
+#: help:product.product,magento_metadescription:0
+msgid "Almost all search engines recommend it to be shorter than 155 characters of plain text"
+msgstr "Almost all search engines recommend it to be shorter than 155 characters of plain text"
 
 #. module: magento_connect
 #: view:magento.sale.shop.payment.type:0
@@ -1887,7 +1892,7 @@ msgid "Delivered"
 msgstr "Delivered"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:815
+#: code:addons/magento_connect/mgn.py:816
 #, python-format
 msgid "This Magento Store Group not allow to delete"
 msgstr "This Magento Store Group not allow to delete"

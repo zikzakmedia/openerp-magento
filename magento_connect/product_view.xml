@@ -89,10 +89,8 @@
                                 </page>
                                 <page string="SEO">
                                     <field name="magento_url_key" colspan="4" attrs="{'required':[('magento_exportable','==',True)]}"/>
-                                    <separator string="Metadescription" colspan="4"/>
-                                    <field name="magento_metadescription" nolabel="1" colspan="4"/>
-                                    <separator string="Metakeyword" colspan="4"/>
-                                    <field name="magento_metakeyword" nolabel="1" colspan="4"/>
+                                    <field name="magento_metadescription" colspan="4"/>
+                                    <field name="magento_metakeyword" colspan="4"/>
                                     <field name="magento_metatitle" colspan="4"/>
                                 </page>
                                 <page string="Website">
