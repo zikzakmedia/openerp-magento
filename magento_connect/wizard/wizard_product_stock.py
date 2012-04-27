@@ -81,7 +81,7 @@ class magento_sync_stock_wizard(osv.osv_memory):
         cr.commit()
 
         if len(product_ids) > 0:
-            thread1 = threading.Thread(target=self.pool.get('sale.shop').magento_export_stock_stepbystep, args=(cr.dbname, uid, magento_app.id, shop.id, stock_id, [prod.id], context))
+            thread1 = threading.Thread(target=self.pool.get('sale.shop').magento_export_stock_stepbystep, args=(cr.dbname, uid, magento_app.id, shop.id, stock_id, product_ids, context))
             thread1.start()
         return True
 

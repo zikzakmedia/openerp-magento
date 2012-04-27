@@ -26,6 +26,7 @@ from tools.translate import _
 
 import netsvc
 import time
+import datetime
 
 try:
     from magento import api
@@ -79,6 +80,20 @@ class magento_app(osv.osv):
         'magento_region_ids': fields.one2many('magento.region', 'magento_app_id', 'Region'),
         'inventory': fields.boolean('Force Inventory', help='When create new product, this force inventory available'),
         'options': fields.boolean('Product Options', help='Orders with product options. Split reference order line by -'),
+        'log_clean': fields.selection([
+            ('1','1 Day'),
+            ('3','3 Days'),
+            ('5','5 Days'),
+            ('7','7 Days'),
+            ('15','15 Days'),
+            ('30','30 Days'),
+            ('60','60 Days'),
+            ('90','90 Days'),
+        ], 'Clean Logs', help='Days from delete logs to past'),
+    }
+
+    _defaults = {
+        'log_clean': '15',
     }
 
     def core_sync_test(self, cr, uid, ids, context):
@@ -735,6 +750,24 @@ class magento_app(osv.osv):
 
         return True
 
+    def run_clean_log_scheduler(self, cr, uid, use_new_cursor=False, context=None):
+        """Magento APP - Clean Logs
+        Delete logs from date to past
+        """
+
+        magento_log_obj = self.pool.get('magento.log')
+
+        mgn_apps = self.search(cr, uid, [])
+        for mgn_app in self.browse(cr, uid, mgn_apps):
+            day = int(mgn_app.log_clean)
+            if day:
+                date = datetime.date.today()-datetime.timedelta(days=day)
+                from_date = "%s 00:00:00" % (date)
+                logs = magento_log_obj.search(cr, uid, [('create_log', '<', from_date),('magento_app_id','=',mgn_app.id)])
+                magento_log_obj.unlink(cr, uid, logs)
+
+        return True
+
 magento_app()
 
 class magento_log(osv.osv):
@@ -743,7 +776,7 @@ class magento_log(osv.osv):
     _order = "id desc"
 
     _columns = {
-        'create': fields.datetime('Create'),
+        'create_log': fields.datetime('Create'),
         'magento_app_id': fields.many2one('magento.app', 'Magento App', required=True),
         'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, select=True, ondelete='cascade'),
         'oerp_id': fields.integer('OpenERP ID', required=True),
@@ -754,9 +787,6 @@ class magento_log(osv.osv):
         ], 'Status'),
         'comment': fields.char('Comment', size=256),
     }
-
-    def unlink(self, cr, uid, vals, context=None):
-        raise osv.except_osv(_("Alert"), _("This Log is not allow to delete"))
 
     def create_log(self, cr, uid, magento_app, model, oerp_id, mgn_id, status = 'done', comment = ''):
         """
@@ -770,7 +800,7 @@ class magento_log(osv.osv):
         model_ids = self.pool.get('ir.model').search(cr, uid, [('model','=',model)])
 
         values = {
-            'create': time.strftime('%Y-%m-%d %H:%M:%S'),
+            'create_log': time.strftime('%Y-%m-%d %H:%M:%S'),
             'magento_app_id': magento_app.id,
             'model_id': model_ids[0],
             'oerp_id': oerp_id,

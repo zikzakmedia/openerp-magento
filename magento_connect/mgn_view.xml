@@ -17,7 +17,8 @@
                         <page string="General">
                             <field name="uri" />
                             <field name="magento_default_storeview"/>
-                            <field name="product_category_id" />
+                            <field name="product_category_id"/>
+                            <field name="log_clean"/>
                         </page>
                         <page string="Sale">
                             <field name="payment_default_id"/>
@@ -127,7 +128,7 @@
             <field name="arch" type="xml">
                 <search string="Search Log">
                    <group col='15' colspan='4'>
-                        <field name="create" />
+                        <field name="create_log" />
                         <field name="magento_app_id"/>
                         <field name="model_id" />
                         <field name="oerp_id" />
@@ -145,7 +146,7 @@
             <field name="priority" eval="5"/>
             <field name="arch" type="xml">
             <tree string="Magento Logs" colors="red:status=='error'">
-                <field name="create" />
+                <field name="create_log" />
                 <field name="magento_app_id"/>
                 <field name="model_id" />
                 <field name="oerp_id" />
