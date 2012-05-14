@@ -1073,6 +1073,13 @@ class sale_order(osv.osv):
             if mgn_status.paidinweb:
                 vals['magento_paidinweb'] = True
 
+        """Magento Status history"""
+        if 'status_history' in values:
+            notes = []
+            for history in values['status_history']:
+                notes.append('%s - %s - %s' % (str(history['created_at']), str(history['status']), str(history['comment'])) )
+            vals['note'] = '\n'.join(notes)
+
         """Delivery Carrier"""
         if 'shipping_method' in values:
             delivery_ids = self.pool.get('delivery.carrier').search(cr, uid, [('code','=',values['shipping_method'])])
