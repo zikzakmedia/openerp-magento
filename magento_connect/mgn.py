@@ -90,6 +90,7 @@ class magento_app(osv.osv):
             ('60','60 Days'),
             ('90','90 Days'),
         ], 'Clean Logs', help='Days from delete logs to past'),
+        'mapping_sale_order_lines': fields.many2many('base.external.mapping','magento_app_mapping_sale_order_rel', 'magento_app_id','mapping_id','Mapping Sale Order Lines'),
     }
 
     _defaults = {

@@ -24,14 +24,14 @@
 from osv import osv, fields
 from tools.translate import _
 
-import netsvc
-import time
-import mimetypes
-import os
-import urllib, urllib2
 import binascii
-import pooler
+import mimetypes
+import netsvc
+import os
 import threading
+import time
+import urllib, urllib2
+import pooler
 
 from magento import *
 from urllib2 import Request, urlopen, URLError, HTTPError
@@ -990,7 +990,8 @@ class sale_order(osv.osv):
     def magento_create_order(self, cr, uid, sale_shop, values, context=None):
         """
         Create Magento Order
-        Not use Base External Mapping
+        Address, order line and amount is design by code.
+        After you can add more order lines by base mapping
         :sale_shop: object
         :values: dicc order
         :return sale_order_id (OpenERP ID)
@@ -1077,7 +1078,7 @@ class sale_order(osv.osv):
         if 'status_history' in values:
             notes = []
             for history in values['status_history']:
-                notes.append('%s - %s - %s' % (str(history['created_at']), str(history['status']), str(history['comment'])) )
+                notes.append('%s - %s - %s' % (str(history['created_at']), str(history['status']), str(unicode(history['comment']).encode('utf-8'))) )
             vals['note'] = '\n'.join(notes)
 
         """Delivery Carrier"""
@@ -1101,7 +1102,24 @@ class sale_order(osv.osv):
         for item in values['items']:
             if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
                 sale_order_line = self.pool.get('sale.order.line').magento_create_order_line(cr, uid, magento_app, sale_order, item, context)
-            
+
+        """Add new order lines by mapping
+        Mapping return dicc with price_unit and name
+        Add default values line
+        """
+        mapping_order_lines = magento_app.mapping_sale_order_lines
+        for mapping_order_line in mapping_order_lines:
+            vals_line = self.pool.get('base.external.mapping').get_external_to_oerp(cr, uid, mapping_order_line.name, '', values, context)
+            extra_line_name = vals_line.get('name', False)
+            extra_line_price = vals_line.get('price_unit', False)
+            if extra_line_name and extra_line_price:
+                vals_line['order_id'] = sale_order.id
+                vals_line['qty_ordered'] = 1
+                vals_line['weight'] = 0
+                vals_line['product_uom'] = magento_app.product_uom_id.id
+                vals_line['purchase_price'] = vals_line['price_unit']
+                self.pool.get('sale.order.line').create(cr, uid, vals_line, context)
+
         """Confirm Order - Change status sale order"""
         if confirm:
             LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Order %s change status: Done" % (sale_order_id))
