@@ -24,9 +24,11 @@
 from osv import osv, fields
 from tools.translate import _
 
-import netsvc
-import time
 import datetime
+import netsvc
+import pooler
+import threading
+import time
 
 try:
     from magento import api
@@ -490,10 +492,34 @@ class magento_app(osv.osv):
                 if ofilter2:
                     products = products+product_api.list(ofilter2, store_view)
 
-                for product in products:
-                    self.pool.get('product.product').magento_create_product_type(cr, uid, magento_app, product, store_view, context)
+                cr.commit()
 
-        LOGGER.notifyChannel('Magento Sync Products', netsvc.LOG_INFO, "End Sync Products magento app %s." % (magento_app.name))
+                LOGGER.notifyChannel('Magento App', netsvc.LOG_INFO, "Start Sync Products magento app %s." % (magento_app.name))
+
+                thread1 = threading.Thread(target=self.core_sync_products_thread, args=(cr.dbname, uid, magento_app.id, products, store_view, context))
+                thread1.start()
+
+        return True
+
+    def core_sync_products_thread(self, db_name, uid, magento_app, products, store_view, context=None):
+        """Thread Sync Products
+        :magento_app: Magento APP ID (int)
+        :products: Dicc
+        :context: Dicc
+        return True/False
+        """
+
+        db, pool = pooler.get_db_and_pool(db_name)
+        cr = db.cursor()
+
+        magento_app = self.pool.get('magento.app').browse(cr, uid, magento_app)
+
+        for product in products:
+            self.pool.get('product.product').magento_create_product_type(cr, uid, magento_app, product, store_view, context)
+
+        LOGGER.notifyChannel('Magento App', netsvc.LOG_INFO, "End Sync Products magento app %s." % (magento_app.name))
+        cr.close()
+
         return True
 
     def core_sync_images(self, cr, uid, ids, context):
