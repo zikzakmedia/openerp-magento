@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.3\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2012-04-27 13:56+0000\n"
-"PO-Revision-Date: 2012-04-27 13:56+0000\n"
+"POT-Creation-Date: 2012-05-15 14:53+0000\n"
+"PO-Revision-Date: 2012-05-15 14:53+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgid "Partial Delivery"
 msgstr "Partial Delivery"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:998
+#: code:addons/magento_connect/mgn.py:1012
 #, python-format
 msgid "This Magento Region not allow to delete"
 msgstr "This Magento Region not allow to delete"
@@ -46,9 +46,9 @@ msgid "To Import Products"
 msgstr "To Import Products"
 
 #. module: magento_connect
-#: view:magento.app:0
-msgid "Import Magento Products"
-msgstr "Import Magento Products"
+#: view:sale.shop:0
+msgid "Export Prices"
+msgstr "Export Prices"
 
 #. module: magento_connect
 #: view:magento.app:0
@@ -56,9 +56,9 @@ msgid "Import Magento Store"
 msgstr "Import Magento Store"
 
 #. module: magento_connect
-#: view:product.images.magento.app:0
-msgid "Products Images Magento"
-msgstr "Products Images Magento"
+#: selection:magento.app,log_clean:0
+msgid "1 Day"
+msgstr "1 Day"
 
 #. module: magento_connect
 #: field:sale.shop,magento_scheduler:0
@@ -132,7 +132,7 @@ msgid "Not available some Magento Products to export"
 msgstr "Not available some Magento Products to export"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:110
+#: code:addons/magento_connect/mgn.py:111
 #, python-format
 msgid "Ok!"
 msgstr "Ok!"
@@ -143,7 +143,7 @@ msgid "Logistic Default"
 msgstr "Logistic Default"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:112
+#: code:addons/magento_connect/mgn.py:113
 #, python-format
 msgid "Warning!"
 msgstr "Warning!"
@@ -296,7 +296,13 @@ msgid "Export Translations Products"
 msgstr "Export Translations Products"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:112
+#: view:magento.app:0
+#: field:magento.app,mapping_sale_order_lines:0
+msgid "Mapping Sale Order Lines"
+msgstr "Mapping Sale Order Lines"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:113
 #, python-format
 msgid "Connection to server are successfully but reconfigure your Magento."
 msgstr "Connection to server are successfully but reconfigure your Magento."
@@ -377,8 +383,8 @@ msgid "Successfully update product"
 msgstr "Successfully update product"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:881
-#: code:addons/magento_connect/mgn.py:928
+#: code:addons/magento_connect/mgn.py:895
+#: code:addons/magento_connect/mgn.py:942
 #, python-format
 msgid "Select language available this store view"
 msgstr "Select language available this store view"
@@ -419,6 +425,12 @@ msgstr "Partner ID '%s' not allow to delete because are active in Magento"
 #: field:magento.storeview,magento_storegroup_id:0
 msgid "Magento Store Group"
 msgstr "Magento Store Group"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:465
+#, python-format
+msgid "Select Import Date"
+msgstr "Select Import Date"
 
 #. module: magento_connect
 #: help:sale.shop,magento_last_export_partners:0
@@ -530,8 +542,8 @@ msgstr "Locale"
 
 #. module: magento_connect
 #: code:addons/magento_connect/mgn.py:462
-#: code:addons/magento_connect/mgn.py:609
-#: code:addons/magento_connect/mgn.py:652
+#: code:addons/magento_connect/mgn.py:623
+#: code:addons/magento_connect/mgn.py:666
 #, python-format
 msgid "Select Store View Magento"
 msgstr "Select Store View Magento"
@@ -574,17 +586,18 @@ msgstr "Select yours Sale Shops available this product"
 
 #. module: magento_connect
 #: code:addons/magento_connect/mgn.py:462
-#: code:addons/magento_connect/mgn.py:609
-#: code:addons/magento_connect/mgn.py:652
-#: code:addons/magento_connect/mgn.py:831
-#: code:addons/magento_connect/mgn.py:846
-#: code:addons/magento_connect/mgn.py:864
-#: code:addons/magento_connect/mgn.py:881
-#: code:addons/magento_connect/mgn.py:928
-#: code:addons/magento_connect/mgn.py:964
-#: code:addons/magento_connect/mgn.py:979
-#: code:addons/magento_connect/mgn.py:998
-#: code:addons/magento_connect/mgn.py:1039
+#: code:addons/magento_connect/mgn.py:465
+#: code:addons/magento_connect/mgn.py:623
+#: code:addons/magento_connect/mgn.py:666
+#: code:addons/magento_connect/mgn.py:845
+#: code:addons/magento_connect/mgn.py:860
+#: code:addons/magento_connect/mgn.py:878
+#: code:addons/magento_connect/mgn.py:895
+#: code:addons/magento_connect/mgn.py:942
+#: code:addons/magento_connect/mgn.py:978
+#: code:addons/magento_connect/mgn.py:993
+#: code:addons/magento_connect/mgn.py:1012
+#: code:addons/magento_connect/mgn.py:1053
 #: code:addons/magento_connect/mgn_referential.py:42
 #: code:addons/magento_connect/partner.py:41
 #: code:addons/magento_connect/partner.py:169
@@ -631,7 +644,7 @@ msgid "Are you sure to continue? This action is in background. See logs server p
 msgstr "Are you sure to continue? This action is in background. See logs server process"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:864
+#: code:addons/magento_connect/mgn.py:878
 #, python-format
 msgid "This Magento Store View not allow to delete"
 msgstr "This Magento Store View not allow to delete"
@@ -657,7 +670,7 @@ msgid "This date is last import. If you need import new products, you can modify
 msgstr "This date is last import. If you need import new products, you can modify this date (filter)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:831
+#: code:addons/magento_connect/mgn.py:845
 #, python-format
 msgid "This Magento Website not allow to delete"
 msgstr "This Magento Website not allow to delete"
@@ -778,7 +791,7 @@ msgid "Store"
 msgstr "Store"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:964
+#: code:addons/magento_connect/mgn.py:978
 #, python-format
 msgid "This Magento Attribute Exclude not allow to delete"
 msgstr "This Magento Attribute Exclude not allow to delete"
@@ -845,11 +858,6 @@ msgid "Import Translations Products"
 msgstr "Import Translations Products"
 
 #. module: magento_connect
-#: view:sale.shop:0
-msgid "Export Prices"
-msgstr "Export Prices"
-
-#. module: magento_connect
 #: code:addons/magento_connect/sale.py:860
 #, python-format
 msgid "Sale Order ID '%s' not allow to delete because are active in Magento"
@@ -876,6 +884,11 @@ msgstr "Successfully update %s status: %s"
 #: view:product.product:0
 msgid "Website"
 msgstr "Website"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Import/Update Magento Products"
+msgstr "Import/Update Magento Products"
 
 #. module: magento_connect
 #: code:addons/magento_connect/sale.py:555
@@ -924,7 +937,6 @@ msgid "Magento Attribute Group"
 msgstr "Magento Attribute Group"
 
 #. module: magento_connect
-#: field:delivery.carrier,code:0
 #: field:magento.attribute.exclude,name:0
 #: field:magento.region,code:0
 #: field:magento.storeview,code:0
@@ -973,6 +985,11 @@ msgstr "Error update image %s"
 #: field:sale.shop,magento_sale_price:0
 msgid "Price"
 msgstr "Price"
+
+#. module: magento_connect
+#: view:magento.app:0
+msgid "Mapping"
+msgstr "Mapping"
 
 #. module: magento_connect
 #: code:addons/magento_connect/sale.py:348
@@ -1181,7 +1198,7 @@ msgid "Partners"
 msgstr "Partners"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:1039
+#: code:addons/magento_connect/mgn.py:1053
 #, python-format
 msgid "This Magento Websites/Groups not allow to delete"
 msgstr "This Magento Websites/Groups not allow to delete"
@@ -1255,6 +1272,11 @@ msgid "Close"
 msgstr "Close"
 
 #. module: magento_connect
+#: view:magento.app:0
+msgid "Are you sure to continue? See logs server process. This operation import products Magento to OpenERP"
+msgstr "Are you sure to continue? See logs server process. This operation import products Magento to OpenERP"
+
+#. module: magento_connect
 #: model:ir.model,name:magento_connect.model_magento_app_customer
 msgid "Magento App Customer"
 msgstr "Magento App Customer"
@@ -1321,7 +1343,7 @@ msgid "Status for paid orders (invoice)"
 msgstr "Status for paid orders (invoice)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:114
+#: code:addons/magento_connect/mgn.py:115
 #, python-format
 msgid "Connection to server failed."
 msgstr "Connection to server failed."
@@ -1347,7 +1369,7 @@ msgid "Magento External Referential"
 msgstr "Magento External Referential"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:110
+#: code:addons/magento_connect/mgn.py:111
 #, python-format
 msgid "Connection to server are successfully."
 msgstr "Connection to server are successfully."
@@ -1374,9 +1396,9 @@ msgid "Last Export Stock"
 msgstr "Last Export Stock"
 
 #. module: magento_connect
-#: selection:magento.app,log_clean:0
-msgid "1 Day"
-msgstr "1 Day"
+#: view:product.images.magento.app:0
+msgid "Products Images Magento"
+msgstr "Products Images Magento"
 
 #. module: magento_connect
 #: model:product.template,name:magento_connect.product_product_discount_product_template
@@ -1521,7 +1543,7 @@ msgid "Meta Description"
 msgstr "Meta Description"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:979
+#: code:addons/magento_connect/mgn.py:993
 #, python-format
 msgid "This Magento Customer Group not allow to delete"
 msgstr "This Magento Customer Group not allow to delete"
@@ -1601,7 +1623,7 @@ msgid "Export Status Sale Orders"
 msgstr "Export Status Sale Orders"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:114
+#: code:addons/magento_connect/mgn.py:115
 #: code:addons/magento_connect/wizard/wizard_product_images.py:54
 #: code:addons/magento_connect/wizard/wizard_product_price.py:54
 #: code:addons/magento_connect/wizard/wizard_product_product.py:54
@@ -1926,7 +1948,7 @@ msgid "Delivered"
 msgstr "Delivered"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:846
+#: code:addons/magento_connect/mgn.py:860
 #, python-format
 msgid "This Magento Store Group not allow to delete"
 msgstr "This Magento Store Group not allow to delete"

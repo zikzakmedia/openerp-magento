@@ -323,15 +323,17 @@ class product_product(osv.osv):
         """
         product_obj = self.pool.get('product.product')
 
-        product_product = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.product', product['product_id'])
-        if not product_product: #create
+        external_referential_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.product', product['product_id'])
+        if not external_referential_id: #create
             if hasattr(product_obj, 'magento_create_product_' + product['type']):
                 magento_create_product_type = getattr(product_obj, 'magento_create_product_' + product['type'])
                 magento_create_product_type(cr, uid, magento_app, product, store_view, context)
             else:
                 self.magento_create_product(cr, uid, magento_app, product, store_view, context)
-        else:
-            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Product exists: magento %s, magento product id %s. Not create" % (magento_app.name, product['product_id']))
+        else: #update
+            attribute_external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [external_referential_id])
+            product_id = attribute_external_referentials[0]['oerp_id']
+            self.magento_update_product(cr, uid, magento_app, product_id, product, store_view, context)
 
         return True
 
@@ -349,7 +351,7 @@ class product_product(osv.osv):
         if 'product_tmpl_id' in context:
             values['product_tmpl_id'] = context['product_tmpl_id']
 
-        product_product_oerp_id = self.pool.get('product.product').create(cr, uid, values, context)
+        product_product_oerp_id = self.create(cr, uid, values, context)
         self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.product', product_product_oerp_id, product['product_id'])
         LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Product Product: magento app %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
 
@@ -357,7 +359,7 @@ class product_product(osv.osv):
         with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
             product_info = product_api.info(int(product['product_id']), store_view)
 
-        product_obj = self.pool.get('product.product').browse(cr, uid, product_product_oerp_id, context)
+        product_obj = self.browse(cr, uid, product_product_oerp_id, context)
 
         context['magento_app'] = magento_app
         context['product_info'] = product_info
@@ -365,12 +367,47 @@ class product_product(osv.osv):
         product_template_vals = self.pool.get('base.external.mapping').get_external_to_oerp(cr, uid, 'magento.product.template', product_obj.product_tmpl_id.id, product_info, context)
         vals = dict(product_product_vals, **product_template_vals)
         #~ print vals #dicc value to write
-        self.pool.get('product.product').write(cr, uid, [product_product_oerp_id], vals)
+        self.write(cr, uid, [product_product_oerp_id], vals)
         LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Write Product Product: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
 
         cr.commit()
 
         return product_product_oerp_id
+
+    def magento_update_product(self, cr, uid, magento_app, product_id, product_info, store_view, context=None):
+        """Update Product from Magento Values
+        :product_id int
+        :magento_app object
+        :product_info dicc
+        :store_view ID
+        :return product_product_oerp_id
+        """
+        if context is None:
+            context = {}
+
+        product = self.browse(cr, uid, product_id, context)
+
+        #~ Update product info
+        with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
+            product_info = product_api.info(int(product_info['product_id']), store_view)
+
+        context['magento_app'] = magento_app
+        context['product_info'] = product_info
+        product_product_vals = self.pool.get('base.external.mapping').get_external_to_oerp(cr, uid, 'magento.product.product', product.id, product_info, context)
+        product_template_vals = self.pool.get('base.external.mapping').get_external_to_oerp(cr, uid, 'magento.product.template', product.product_tmpl_id.id, product_info, context)
+        
+        product_product_vals = self.pool.get('base.external.mapping').exclude_uptade(cr, uid, 'magento.product.product', product_product_vals, context)
+        product_template_vals = self.pool.get('base.external.mapping').exclude_uptade(cr, uid, 'magento.product.template', product_template_vals, context)
+        values = dict(product_template_vals, **product_product_vals)
+
+        vals = dict(product_product_vals, **product_template_vals)
+
+        self.write(cr, uid, [product.id], vals)
+        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Update Product Product: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product.id, product_info['product_id']))
+
+        cr.commit()
+
+        return product.id
 
     def magento_product_values(self, cr, uid, magento_app, product, context=None):
         """Get Product Values from Magento Values

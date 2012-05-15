@@ -61,7 +61,7 @@
                             <button name="core_sync_categories" string="Import Magento Categories" colspan="4" type="object" confirm="Are you sure to continue? See logs server process. This operation import all categories Magento to OpenERP"/>
                             <group col="5" colspan="4">
                                 <group col="1" colspan="1">
-                                    <button name="core_sync_products" string="Import Magento Products" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
+                                    <button name="core_sync_products" string="Import/Update Magento Products" colspan="4" type="object" confirm="Are you sure to continue? See logs server process. This operation import products Magento to OpenERP"/>
                                 </group>
                                 <group col="4" colspan="2">
                                     <field name="from_import_products" />

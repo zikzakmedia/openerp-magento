@@ -450,11 +450,10 @@ class magento_app(osv.osv):
     def core_sync_products(self, cr, uid, ids, context):
         """
         def sync Product Product Magento to OpenERP
-        Only create new values if not exist; not update or delete
+        Import products from Magento to OpenERP. Create or Update products
         :ids list
         :return True
         """
-
         product_obj = self.pool.get('product.product')
         magento_external_referential_obj = self.pool.get('magento.external.referential')
 
@@ -462,11 +461,20 @@ class magento_app(osv.osv):
             if not magento_app.magento_default_storeview:
                 raise osv.except_osv(_("Alert"), _("Select Store View Magento"))
 
+            if not magento_app.from_import_products:
+                raise osv.except_osv(_("Alert"), _("Select Import Date"))
+
             with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
                 if 'ofilter' in context:
                     ofilter = context['ofilter']
+                    ofilter2 = False
                 else:
-                    ofilter = {'created_at':{'from':magento_app.from_import_products, 'to':magento_app.to_import_products}}
+                    ofilter = {
+                        'created_at':{'from':magento_app.from_import_products, 'to':magento_app.to_import_products},
+                    }
+                    ofilter2 = {
+                        'updated_at':{'from':magento_app.from_import_products, 'to':magento_app.to_import_products},
+                    }
 
                 store_view = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', magento_app.magento_default_storeview.id)
                 store_view = magento_external_referential_obj.get_external_referential(cr, uid, [store_view])
@@ -477,9 +485,14 @@ class magento_app(osv.osv):
                 self.write(cr, uid, ids, {'from_import_products': date_from_import})
                 self.write(cr, uid, ids, {'to_import_products': time.strftime('%Y-%m-%d %H:%M:%S')})
 
-                for product in product_api.list(ofilter, store_view):
+                products = product_api.list(ofilter, store_view)
+
+                if ofilter2:
+                    products = products+product_api.list(ofilter2, store_view)
+
+                for product in products:
                     self.pool.get('product.product').magento_create_product_type(cr, uid, magento_app, product, store_view, context)
-                    
+
         LOGGER.notifyChannel('Magento Sync Products', netsvc.LOG_INFO, "End Sync Products magento app %s." % (magento_app.name))
         return True
 
