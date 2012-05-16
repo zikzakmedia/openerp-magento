@@ -4,16 +4,31 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 6.0.2\n"
+"Project-Id-Version: OpenERP Server 6.0.3\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-12-19 13:32+0000\n"
-"PO-Revision-Date: 2011-12-19 13:32+0000\n"
+"POT-Creation-Date: 2012-05-16 10:57+0000\n"
+"PO-Revision-Date: 2012-05-16 10:57+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: magento_connect_product_variant
+#: view:product.template:0
+msgid "SKU"
+msgstr "SKU"
+
+#. module: magento_connect_product_variant
+#: view:product.template:0
+msgid "Magento"
+msgstr "Magento"
+
+#. module: magento_connect_product_variant
+#: view:magento.sync.template.wizard:0
+msgid "Are you sure to export this product?"
+msgstr "Are you sure to export this product?"
 
 #. module: magento_connect_product_variant
 #: field:product.template,magento_tpl_metatitle:0
@@ -26,14 +41,41 @@ msgid "Select yours Sale Shops available this product (configurable product)"
 msgstr "Select yours Sale Shops available this product (configurable product)"
 
 #. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/sale.py:288
+#, python-format
+msgid "Successfully update template price: %s"
+msgstr "Successfully update template price: %s"
+
+#. module: magento_connect_product_variant
 #: constraint:product.template:0
 msgid "Error: The default UOM and the purchase UOM must be in the same category."
 msgstr "Error: The default UOM and the purchase UOM must be in the same category."
 
 #. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/wizard/wizard_product_template.py:54
+#, python-format
+msgid "Select templates to export"
+msgstr "Select templates to export"
+
+#. module: magento_connect_product_variant
 #: view:sale.shop:0
 msgid "Export Product Templates Prices"
 msgstr "Export Product Templates Prices"
+
+#. module: magento_connect_product_variant
+#: help:sale.shop,magento_last_export_product_templates:0
+msgid "This date is last export (Configurable products). If you need export new templates, you can modify this date (filter)"
+msgstr "This date is last export (Configurable products). If you need export new templates, you can modify this date (filter)"
+
+#. module: magento_connect_product_variant
+#: field:magento.sync.template.wizard,state:0
+msgid "State"
+msgstr "State"
+
+#. module: magento_connect_product_variant
+#: view:magento.sync.template.wizard:0
+msgid "Export Template"
+msgstr "Export Template"
 
 #. module: magento_connect_product_variant
 #: code:addons/magento_connect_product_variant/product_variant.py:86
@@ -42,15 +84,43 @@ msgid "This Magento Product Dimension Option not allow to delete"
 msgstr "This Magento Product Dimension Option not allow to delete"
 
 #. module: magento_connect_product_variant
-#: code:addons/magento_connect_product_variant/product.py:119
+#: code:addons/magento_connect_product_variant/sale.py:153
 #, python-format
-msgid "Template '%s' not allow to delete because are active in Magento Shop"
-msgstr "Template '%s' not allow to delete because are active in Magento Shop"
+msgid "Successfully create template (configurable mapping)"
+msgstr "Successfully create template (configurable mapping)"
+
+#. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/product.py:153
+#, python-format
+msgid "-copy"
+msgstr "-copy"
+
+#. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/sale.py:185
+#, python-format
+msgid "Error update template"
+msgstr "Error update template"
+
+#. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/sale.py:144
+#, python-format
+msgid "Successfully update template (configurable mapping)"
+msgstr "Successfully update template (configurable mapping)"
+
+#. module: magento_connect_product_variant
+#: view:magento.sync.template.wizard:0
+msgid "Exportation is running.... This action is in background. See logs server process"
+msgstr "Exportation is running.... This action is in background. See logs server process"
 
 #. module: magento_connect_product_variant
 #: view:product.template:0
 msgid "Metadescription"
 msgstr "Metadescription"
+
+#. module: magento_connect_product_variant
+#: model:ir.actions.act_window,name:magento_connect_product_variant.act_magento_sync_template
+msgid "Export Magento"
+msgstr "Export Magento"
 
 #. module: magento_connect_product_variant
 #: field:product.template,magento_tpl_status:0
@@ -78,9 +148,9 @@ msgid "Select Option"
 msgstr "Select Option"
 
 #. module: magento_connect_product_variant
-#: field:product.template,magento_tpl_tax_class:0
-msgid "Magento Tax"
-msgstr "Magento Tax"
+#: field:sale.shop,magento_last_export_prices_templates:0
+msgid "Last Export Prices Templates"
+msgstr "Last Export Prices Templates"
 
 #. module: magento_connect_product_variant
 #: view:sale.shop:0
@@ -88,9 +158,15 @@ msgid "Export Product Templates (And Product Simples)"
 msgstr "Export Product Templates (And Product Simples)"
 
 #. module: magento_connect_product_variant
-#: help:sale.shop,magento_last_export_product_templates:0
-msgid "This date is last export (Configurable products). If you need export new templates, you can modify this date (filter)"
-msgstr "This date is last export (Configurable products). If you need export new templates, you can modify this date (filter)"
+#: code:addons/magento_connect_product_variant/mgn.py:171
+#, python-format
+msgid "Finish Import/Update products"
+msgstr "Finish Import/Update products"
+
+#. module: magento_connect_product_variant
+#: view:product.template:0
+msgid "Metakeyword"
+msgstr "Metakeyword"
 
 #. module: magento_connect_product_variant
 #: view:magento.app:0
@@ -99,10 +175,10 @@ msgid "Are you sure to continue? See logs server process"
 msgstr "Are you sure to continue? See logs server process"
 
 #. module: magento_connect_product_variant
-#: code:addons/magento_connect_product_variant/mgn.py:82
+#: code:addons/magento_connect_product_variant/mgn.py:94
 #: code:addons/magento_connect_product_variant/product.py:104
-#: code:addons/magento_connect_product_variant/product.py:112
-#: code:addons/magento_connect_product_variant/product.py:119
+#: code:addons/magento_connect_product_variant/product.py:125
+#: code:addons/magento_connect_product_variant/product.py:138
 #: code:addons/magento_connect_product_variant/product_variant.py:43
 #: code:addons/magento_connect_product_variant/product_variant.py:86
 #, python-format
@@ -110,9 +186,20 @@ msgid "Alert"
 msgstr "Alert"
 
 #. module: magento_connect_product_variant
+#: model:ir.model,name:magento_connect_product_variant.model_magento_sync_template_wizard
+msgid "magento.sync.template.wizard"
+msgstr "magento.sync.template.wizard"
+
+#. module: magento_connect_product_variant
 #: selection:product.template,magento_tpl_visibility:0
 msgid "Catalog"
 msgstr "Catalog"
+
+#. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/sale.py:291
+#, python-format
+msgid "Error update template price: %s"
+msgstr "Error update template price: %s"
 
 #. module: magento_connect_product_variant
 #: selection:product.template,magento_tpl_visibility:0
@@ -135,6 +222,11 @@ msgid "Import Magento Attributes Configurable (Dimension Type)"
 msgstr "Import Magento Attributes Configurable (Dimension Type)"
 
 #. module: magento_connect_product_variant
+#: view:magento.sync.template.wizard:0
+msgid "Export"
+msgstr "Export"
+
+#. module: magento_connect_product_variant
 #: field:product.template,magento_tpl_url_key:0
 msgid "Url Key"
 msgstr "Url Key"
@@ -143,6 +235,18 @@ msgstr "Url Key"
 #: help:product.template,magento_tpl_exportable:0
 msgid "If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere."
 msgstr "If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere."
+
+#. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/sale.py:157
+#, python-format
+msgid "Error create template (configurable mapping)"
+msgstr "Error create template (configurable mapping)"
+
+#. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/product_variant.py:43
+#, python-format
+msgid "This Magento Product Dimension Type not allow to delete"
+msgstr "This Magento Product Dimension Type not allow to delete"
 
 #. module: magento_connect_product_variant
 #: view:product.template:0
@@ -155,14 +259,35 @@ msgid "Search"
 msgstr "Search"
 
 #. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/product.py:138
+#, python-format
+msgid "Template '%s' not allow to delete because are active in Magento Shop"
+msgstr "Template '%s' not allow to delete because are active in Magento Shop"
+
+#. module: magento_connect_product_variant
+#: field:magento.sync.template.wizard,magento_sale_shop:0
+msgid "Sale Shop"
+msgstr "Sale Shop"
+
+#. module: magento_connect_product_variant
 #: field:product.template,magento_tpl_metakeyword:0
 msgid "Keyword"
 msgstr "Keyword"
 
 #. module: magento_connect_product_variant
+#: help:sale.shop,magento_last_export_prices_templates:0
+msgid "This date is last export. If you need export all product templates prices, empty this field (long sync)"
+msgstr "This date is last export. If you need export all product templates prices, empty this field (long sync)"
+
+#. module: magento_connect_product_variant
 #: selection:product.template,magento_tpl_visibility:0
 msgid "Catalog,Search"
 msgstr "Catalog,Search"
+
+#. module: magento_connect_product_variant
+#: field:product.template,magento_tpl_visibility:0
+msgid "Visibility"
+msgstr "Visibility"
 
 #. module: magento_connect_product_variant
 #: field:product.template,magento_tpl_sale_shop:0
@@ -175,9 +300,10 @@ msgid "Last Export Product Templates"
 msgstr "Last Export Product Templates"
 
 #. module: magento_connect_product_variant
-#: model:ir.model,name:magento_connect_product_variant.model_product_template
-msgid "Product Template"
-msgstr "Product Template"
+#: code:addons/magento_connect_product_variant/wizard/wizard_product_template.py:54
+#, python-format
+msgid "Error!"
+msgstr "Error!"
 
 #. module: magento_connect_product_variant
 #: view:product.template:0
@@ -187,20 +313,27 @@ msgstr "Short Description"
 
 #. module: magento_connect_product_variant
 #: code:addons/magento_connect_product_variant/product.py:104
-#: code:addons/magento_connect_product_variant/product.py:112
+#: code:addons/magento_connect_product_variant/product.py:125
 #, python-format
 msgid "Error! Magento SKU %s must be unique"
 msgstr "Error! Magento SKU %s must be unique"
 
 #. module: magento_connect_product_variant
-#: field:product.template,magento_tpl_visibility:0
-msgid "Visibility"
-msgstr "Visibility"
+#: code:addons/magento_connect_product_variant/wizard/wizard_product_template.py:76
+#, python-format
+msgid "Not available some Magento Templates to export"
+msgstr "Not available some Magento Templates to export"
 
 #. module: magento_connect_product_variant
 #: model:ir.model,name:magento_connect_product_variant.model_magento_app
 msgid "Magento Server - APP"
 msgstr "Magento Server - APP"
+
+#. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/mgn.py:125
+#, python-format
+msgid "Start Import/Update products: %s"
+msgstr "Start Import/Update products: %s"
 
 #. module: magento_connect_product_variant
 #: model:ir.module.module,description:magento_connect_product_variant.module_meta_information
@@ -212,9 +345,14 @@ msgstr "\n"
 "    "
 
 #. module: magento_connect_product_variant
-#: help:sale.shop,magento_last_export_prices_templates:0
-msgid "This date is last export. If you need export all product templates prices, empty this field (long sync)"
-msgstr "This date is last export. If you need export all product templates prices, empty this field (long sync)"
+#: selection:magento.sync.template.wizard,state:0
+msgid "First"
+msgstr "First"
+
+#. module: magento_connect_product_variant
+#: view:product.template:0
+msgid "Magento Filters..."
+msgstr "Magento Filters..."
 
 #. module: magento_connect_product_variant
 #: field:product.variant.dimension.type,code:0
@@ -222,9 +360,10 @@ msgid "Code"
 msgstr "Code"
 
 #. module: magento_connect_product_variant
-#: field:sale.shop,magento_last_export_prices_templates:0
-msgid "Last Export Prices Templates"
-msgstr "Last Export Prices Templates"
+#: code:addons/magento_connect_product_variant/sale.py:147
+#, python-format
+msgid "Error update template (configurable mapping)"
+msgstr "Error update template (configurable mapping)"
 
 #. module: magento_connect_product_variant
 #: view:product.template:0
@@ -232,14 +371,19 @@ msgid "SEO"
 msgstr "SEO"
 
 #. module: magento_connect_product_variant
+#: model:ir.model,name:magento_connect_product_variant.model_product_template
+msgid "Product Template"
+msgstr "Product Template"
+
+#. module: magento_connect_product_variant
 #: field:product.template,magento_tpl_attribute_group_id:0
 msgid "Attribute"
 msgstr "Attribute"
 
 #. module: magento_connect_product_variant
-#: view:product.template:0
-msgid "Metakeyword"
-msgstr "Metakeyword"
+#: field:product.template,magento_tpl_tax_class:0
+msgid "Magento Tax"
+msgstr "Magento Tax"
 
 #. module: magento_connect_product_variant
 #: view:product.template:0
@@ -247,10 +391,16 @@ msgid "General"
 msgstr "General"
 
 #. module: magento_connect_product_variant
-#: code:addons/magento_connect_product_variant/mgn.py:82
+#: code:addons/magento_connect_product_variant/mgn.py:94
 #, python-format
 msgid "Select Store View Magento"
 msgstr "Select Store View Magento"
+
+#. module: magento_connect_product_variant
+#: code:addons/magento_connect_product_variant/sale.py:182
+#, python-format
+msgid "Successfully update template"
+msgstr "Successfully update template"
 
 #. module: magento_connect_product_variant
 #: constraint:product.product:0
@@ -258,20 +408,34 @@ msgid "Error: Invalid ean code"
 msgstr "Error: Invalid ean code"
 
 #. module: magento_connect_product_variant
-#: view:product.template:0
-msgid "Magento"
-msgstr "Magento"
+#: selection:magento.sync.template.wizard,state:0
+msgid "Done"
+msgstr "Done"
 
 #. module: magento_connect_product_variant
-#: code:addons/magento_connect_product_variant/product_variant.py:43
-#, python-format
-msgid "This Magento Product Dimension Type not allow to delete"
-msgstr "This Magento Product Dimension Type not allow to delete"
+#: field:magento.sync.template.wizard,result:0
+msgid "Result"
+msgstr "Result"
 
 #. module: magento_connect_product_variant
 #: field:product.template,magento_tpl_exportable:0
 msgid "Exported to Magento?"
 msgstr "Exported to Magento?"
+
+#. module: magento_connect_product_variant
+#: view:magento.sync.template.wizard:0
+msgid "Products to sync..."
+msgstr "Products to sync..."
+
+#. module: magento_connect_product_variant
+#: view:magento.sync.template.wizard:0
+msgid "Cancel"
+msgstr "Cancel"
+
+#. module: magento_connect_product_variant
+#: view:magento.sync.template.wizard:0
+msgid "Close"
+msgstr "Close"
 
 #. module: magento_connect_product_variant
 #: model:ir.model,name:magento_connect_product_variant.model_product_variant_dimension_type

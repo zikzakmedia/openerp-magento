@@ -27,6 +27,8 @@ from tools.translate import _
 from magento import *
 
 import netsvc
+import pooler
+import threading
 import time
 
 LOGGER = netsvc.Logger()
@@ -94,8 +96,14 @@ class magento_app(osv.osv):
             with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
                 if 'ofilter' in context:
                     ofilter = context['ofilter']
+                    ofilter2 = False
                 else:
-                    ofilter = {'created_at':{'from':magento_app.from_import_products, 'to':magento_app.to_import_products}}
+                    ofilter = {
+                        'created_at':{'from':magento_app.from_import_products, 'to':magento_app.to_import_products},
+                    }
+                    ofilter2 = {
+                        'updated_at':{'from':magento_app.from_import_products, 'to':magento_app.to_import_products},
+                    }
 
                 store_view = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'magento.storeview', magento_app.magento_default_storeview.id)
                 store_view = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])
@@ -107,18 +115,62 @@ class magento_app(osv.osv):
                 self.write(cr, uid, ids, {'to_import_products': time.strftime('%Y-%m-%d %H:%M:%S')})
 
                 products = product_api.list(ofilter, store_view)
+                LOGGER.notifyChannel('Magento App', netsvc.LOG_INFO, "Filter %s" % (ofilter))
 
-                # We have list first product simple and after product configurable
-                # First, only create product configurable (and product simple related in this product configurable)
-                # After, create product simple. If this simple was created, skip 
-                for product in products:
-                    if product['type'] == 'configurable':
-                        self.pool.get('product.product').magento_create_product_type(cr, uid, magento_app, product, store_view, context)
+                if ofilter2:
+                    products = products+product_api.list(ofilter2, store_view)
+                    LOGGER.notifyChannel('Magento App', netsvc.LOG_INFO, "Filter %s" % (ofilter2))
 
-                #Uncomment second part import only configurable products (id from to)
-                for product in products:
-                    if product['type'] != 'configurable':
-                        self.pool.get('product.product').magento_create_product_type(cr, uid, magento_app, product, store_view, context)
+                LOGGER.notifyChannel('Magento App', netsvc.LOG_INFO, "Start Sync Products magento app %s." % (magento_app.name))
+                self.pool.get('magento.log').create_log(cr, uid, magento_app, 'product.product', 0, '', 'done', _('Start Import/Update products: %s') % ofilter )
+
+                # remove same items in list
+                prods = []
+                for prod in products:
+                    product_id = prod['product_id']
+                    add = True
+                    for p in prods:
+                        if product_id == p['product_id']:
+                            add = False
+                    if add:
+                        prods.append(prod)
+
+                cr.commit()
+
+                thread1 = threading.Thread(target=self.core_sync_products_thread, args=(cr.dbname, uid, magento_app.id, prods, store_view, context))
+                thread1.start()
+
+        return True
+
+    def core_sync_products_thread(self, db_name, uid, magento_app, products, store_view, context=None):
+        """Thread Sync Products
+        :magento_app: Magento APP ID (int)
+        :products: Dicc
+        :context: Dicc
+        return True/False
+        """
+
+        db, pool = pooler.get_db_and_pool(db_name)
+        cr = db.cursor()
+
+        magento_app = self.pool.get('magento.app').browse(cr, uid, magento_app)
+
+        # We have list first product simple and after product configurable
+        # First, only create product configurable (and product simple related in this product configurable)
+        # After, create product simple. If this simple was created, skip
+        for product in products:
+            if product['type'] == 'configurable':
+                self.pool.get('product.product').magento_create_product_type(cr, uid, magento_app, product, store_view, context)
+
+        #Uncomment second part import only configurable products (id from to)
+        for product in products:
+            if product['type'] != 'configurable':
+                self.pool.get('product.product').magento_create_product_type(cr, uid, magento_app, product, store_view, context)
+
+        LOGGER.notifyChannel('Magento App', netsvc.LOG_INFO, "End Sync Products magento app %s." % (magento_app.name))
+        self.pool.get('magento.log').create_log(cr, uid, magento_app, 'product.product', 0, '', 'done', _('Finish Import/Update products') )
+
+        cr.close()
 
         return True
 

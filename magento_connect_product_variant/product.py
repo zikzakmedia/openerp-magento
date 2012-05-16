@@ -191,8 +191,8 @@ class product_product(osv.osv):
     _inherit = "product.product"
 
     def magento_create_product_configurable(self, cr, uid, magento_app, product, store_view, context = None):
-        """Create Product Variant (configurable) from Magento Values
-        This method is better defined product.template, but product.product have dinamic methos to call, it's available in product.product
+        """Create or Update Product Template (configurable) from Magento Values
+        This method is better defined product.template, but product.product have dinamic methos to call.
         :magento_app object
         :product dicc
         :store_view ID
@@ -200,13 +200,15 @@ class product_product(osv.osv):
         """
         LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Waitting... %s" % (product['product_id']))
 
+        product_template_magento_id = product['product_id']
         product_template_oerp_id = None
-        product_template_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.template', product['product_id'])
-        if not product_template_id:
+
+        external_referential_id = self.pool.get('magento.external.referential').check_mgn2oerp(cr, uid, magento_app, 'product.template', product['product_id'])
+
+        if not external_referential_id: #create
             values = self.magento_product_values(cr, uid, magento_app, product, context)
             values['is_multi_variants'] = True
             product_template_name = values['name']
-            product_template_magento_id = product['product_id']
             product_template_oerp_id = self.pool.get('product.template').create(cr, uid, values, context)
             self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.template', product_template_oerp_id, product_template_magento_id)
             LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Product Template: magento app %s, openerp id %s, magento product id %s." % (magento_app.name, product_template_oerp_id, product['product_id']))
@@ -264,8 +266,25 @@ class product_product(osv.osv):
                 self.pool.get('product.template').add_all_option(cr, uid, [product_template_oerp_id], context)
 
             cr.commit()
-        else:
-            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Skip! Product Template exists: magento %s, magento product id %s. Not create" % (magento_app.name, product['product_id']))
+        else: #update
+
+            attribute_external_referentials = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [external_referential_id])
+            product_template_id = attribute_external_referentials[0]['oerp_id']
+            
+            #~ Update product.template dicc
+            with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
+                product_template_info = product_api.info(product_template_magento_id)
+
+           # Base External Mapping
+            context['magento_app'] = magento_app
+            context['product_info'] = product_template_info
+            vals = self.pool.get('base.external.mapping').get_external_to_oerp(cr, uid, 'magento.product.configurable', product_template_id, product_template_info, context)
+            vals = self.pool.get('base.external.mapping').exclude_uptade(cr, uid, 'magento.product.configurable', vals, context)
+
+            self.pool.get('product.template').write(cr, uid, [product_template_id], vals, context)
+            cr.commit()
+
+            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Write Product Template: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product_template_id, product['product_id']))
 
         return product_template_oerp_id
 
