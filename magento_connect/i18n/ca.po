@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.2\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2012-05-15 14:53+0000\n"
-"PO-Revision-Date: 2012-05-15 16:55+0100\n"
+"POT-Creation-Date: 2012-05-16 10:54+0000\n"
+"PO-Revision-Date: 2012-05-16 12:56+0100\n"
 "Last-Translator: Raimon Esteve <resteve@zikzakmedia.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgid "Partial Delivery"
 msgstr "Entrega parcial"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:1012
+#: code:addons/magento_connect/mgn.py:1054
 #, python-format
 msgid "This Magento Region not allow to delete"
 msgstr "Aquestes regions no es poden eliminar"
@@ -56,9 +56,9 @@ msgid "Import Magento Store"
 msgstr "Importa Magento Store"
 
 #. module: magento_connect
-#: selection:magento.app,log_clean:0
-msgid "1 Day"
-msgstr "1 Day"
+#: view:product.images.magento.app:0
+msgid "Products Images Magento"
+msgstr "Imatges de producte"
 
 #. module: magento_connect
 #: field:sale.shop,magento_scheduler:0
@@ -132,7 +132,7 @@ msgid "Not available some Magento Products to export"
 msgstr "No hi ha cap producte de Magento per exportar"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:111
+#: code:addons/magento_connect/mgn.py:113
 #, python-format
 msgid "Ok!"
 msgstr "Accepta"
@@ -143,7 +143,7 @@ msgid "Logistic Default"
 msgstr "Valors per defecte de logística"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:113
+#: code:addons/magento_connect/mgn.py:115
 #, python-format
 msgid "Warning!"
 msgstr "Atenció!"
@@ -302,7 +302,7 @@ msgid "Mapping Sale Order Lines"
 msgstr "Mapeig Línies de venta"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:113
+#: code:addons/magento_connect/mgn.py:115
 #, python-format
 msgid "Connection to server are successfully but reconfigure your Magento."
 msgstr "La connexió amb el servidor Magento a tingut èxit, però s'ha de re-configurar Magento."
@@ -366,6 +366,11 @@ msgid "Customers"
 msgstr "Clients"
 
 #. module: magento_connect
+#: model:ir.module.module,shortdesc:magento_connect.module_meta_information
+msgid "Magento Connector"
+msgstr "Connector Magento"
+
+#. module: magento_connect
 #: field:magento.sale.shop.status.type,picking_policy:0
 #: field:sale.shop,magento_default_picking_policy:0
 msgid "Packing Policy"
@@ -383,8 +388,8 @@ msgid "Successfully update product"
 msgstr "Actualitzat producte"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:895
-#: code:addons/magento_connect/mgn.py:942
+#: code:addons/magento_connect/mgn.py:937
+#: code:addons/magento_connect/mgn.py:984
 #, python-format
 msgid "Select language available this store view"
 msgstr "Selecciona idioma disponible per a la vista de la botiga"
@@ -427,7 +432,7 @@ msgid "Magento Store Group"
 msgstr "Grup de botigues Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:465
+#: code:addons/magento_connect/mgn.py:467
 #, python-format
 msgid "Select Import Date"
 msgstr "Selecciona data per la importació"
@@ -541,9 +546,9 @@ msgid "Locale"
 msgstr "Lloc"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:462
-#: code:addons/magento_connect/mgn.py:623
-#: code:addons/magento_connect/mgn.py:666
+#: code:addons/magento_connect/mgn.py:464
+#: code:addons/magento_connect/mgn.py:665
+#: code:addons/magento_connect/mgn.py:708
 #, python-format
 msgid "Select Store View Magento"
 msgstr "Seleccioneu la vista de la botiga Magento"
@@ -585,19 +590,19 @@ msgid "Select yours Sale Shops available this product"
 msgstr "Seleccioneu la vostra botiga de venda disponible per aquest producte"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:462
-#: code:addons/magento_connect/mgn.py:465
-#: code:addons/magento_connect/mgn.py:623
-#: code:addons/magento_connect/mgn.py:666
-#: code:addons/magento_connect/mgn.py:845
-#: code:addons/magento_connect/mgn.py:860
-#: code:addons/magento_connect/mgn.py:878
-#: code:addons/magento_connect/mgn.py:895
-#: code:addons/magento_connect/mgn.py:942
-#: code:addons/magento_connect/mgn.py:978
-#: code:addons/magento_connect/mgn.py:993
-#: code:addons/magento_connect/mgn.py:1012
-#: code:addons/magento_connect/mgn.py:1053
+#: code:addons/magento_connect/mgn.py:464
+#: code:addons/magento_connect/mgn.py:467
+#: code:addons/magento_connect/mgn.py:665
+#: code:addons/magento_connect/mgn.py:708
+#: code:addons/magento_connect/mgn.py:887
+#: code:addons/magento_connect/mgn.py:902
+#: code:addons/magento_connect/mgn.py:920
+#: code:addons/magento_connect/mgn.py:937
+#: code:addons/magento_connect/mgn.py:984
+#: code:addons/magento_connect/mgn.py:1020
+#: code:addons/magento_connect/mgn.py:1035
+#: code:addons/magento_connect/mgn.py:1054
+#: code:addons/magento_connect/mgn.py:1095
 #: code:addons/magento_connect/mgn_referential.py:42
 #: code:addons/magento_connect/partner.py:41
 #: code:addons/magento_connect/partner.py:169
@@ -644,7 +649,7 @@ msgid "Are you sure to continue? This action is in background. See logs server p
 msgstr "Esteu segur de continuar? Aquesta acció s'executarà com a tasca oculta. Reviseu l'historial del servidor."
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:878
+#: code:addons/magento_connect/mgn.py:920
 #, python-format
 msgid "This Magento Store View not allow to delete"
 msgstr "No es pot esborrar aquesta vista de botiga de Magento"
@@ -670,7 +675,7 @@ msgid "This date is last import. If you need import new products, you can modify
 msgstr "Aquesta és la data de darrera importació. Si necessiteu importar nous productes, podeu modificar aquesta data (filtre)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:845
+#: code:addons/magento_connect/mgn.py:887
 #, python-format
 msgid "This Magento Website not allow to delete"
 msgstr "No es pot esborrar aquest lloc web Magento"
@@ -787,7 +792,7 @@ msgid "Store"
 msgstr "Botiga"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:978
+#: code:addons/magento_connect/mgn.py:1020
 #, python-format
 msgid "This Magento Attribute Exclude not allow to delete"
 msgstr "No es pot esborrar aquest atribut d'exclusió de Magento"
@@ -1042,6 +1047,12 @@ msgid "Magento Customer"
 msgstr "Client Magento"
 
 #. module: magento_connect
+#: code:addons/magento_connect/mgn.py:498
+#, python-format
+msgid "Start Import/Update products: %s"
+msgstr "Inici importació/actualització de productes: %s"
+
+#. module: magento_connect
 #: selection:magento.app,log_clean:0
 msgid "30 Days"
 msgstr "30 Dies"
@@ -1129,6 +1140,12 @@ msgid "Last Export Categories"
 msgstr "Darreres categories exportades"
 
 #. module: magento_connect
+#: code:addons/magento_connect/mgn.py:535
+#, python-format
+msgid "Finish Import/Update products"
+msgstr "Finalitzat importació/actualització productes"
+
+#. module: magento_connect
 #: field:magento.app,from_import_products:0
 msgid "From Import Products"
 msgstr "Productes des de la data"
@@ -1194,7 +1211,7 @@ msgid "Partners"
 msgstr "Empreses"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:1053
+#: code:addons/magento_connect/mgn.py:1095
 #, python-format
 msgid "This Magento Websites/Groups not allow to delete"
 msgstr "No es pot esborrar aquest lloc de Magento"
@@ -1339,7 +1356,7 @@ msgid "Status for paid orders (invoice)"
 msgstr "Estat de comandes pagades (factura)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:115
+#: code:addons/magento_connect/mgn.py:117
 #, python-format
 msgid "Connection to server failed."
 msgstr "La connexió al servidor ha fallat."
@@ -1365,7 +1382,7 @@ msgid "Magento External Referential"
 msgstr "Referencia externa Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:111
+#: code:addons/magento_connect/mgn.py:113
 #, python-format
 msgid "Connection to server are successfully."
 msgstr "La connexió amb el servidor s'ha realitzat amb èxit."
@@ -1376,7 +1393,7 @@ msgid "Display Settings"
 msgstr "Mostra configuració"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:34
+#: code:addons/magento_connect/mgn.py:36
 #, python-format
 msgid "Please install python-magento from https://github.com/zikzakmedia/magento"
 msgstr "Si us plau, instal·leu python-magento des de https://github.com/zikzakmedia/magento"
@@ -1392,9 +1409,9 @@ msgid "Last Export Stock"
 msgstr "Última exportació stock"
 
 #. module: magento_connect
-#: view:product.images.magento.app:0
-msgid "Products Images Magento"
-msgstr "Imatges de producte"
+#: selection:magento.app,log_clean:0
+msgid "1 Day"
+msgstr "1 Day"
 
 #. module: magento_connect
 #: model:product.template,name:magento_connect.product_product_discount_product_template
@@ -1518,7 +1535,7 @@ msgid "Store views"
 msgstr "Vistes de botigues"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:34
+#: code:addons/magento_connect/mgn.py:36
 #, python-format
 msgid "vobject Import Error!"
 msgstr "Error d'importació de vobject!"
@@ -1539,7 +1556,7 @@ msgid "Meta Description"
 msgstr "Meta descripció"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:993
+#: code:addons/magento_connect/mgn.py:1035
 #, python-format
 msgid "This Magento Customer Group not allow to delete"
 msgstr "No es pot esborrar aquest grup de clients de Magento"
@@ -1619,7 +1636,7 @@ msgid "Export Status Sale Orders"
 msgstr "Exportar estat de les comandes de venda"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:115
+#: code:addons/magento_connect/mgn.py:117
 #: code:addons/magento_connect/wizard/wizard_product_images.py:54
 #: code:addons/magento_connect/wizard/wizard_product_price.py:54
 #: code:addons/magento_connect/wizard/wizard_product_product.py:54
@@ -1644,11 +1661,6 @@ msgstr "Botiga"
 #, python-format
 msgid "Error update status %s"
 msgstr "Error actualitzant estat %s"
-
-#. module: magento_connect
-#: model:ir.module.module,shortdesc:magento_connect.module_meta_information
-msgid "Magento Connector"
-msgstr "Connector Magento"
 
 #. module: magento_connect
 #: code:addons/magento_connect/partner.py:107
@@ -1944,7 +1956,7 @@ msgid "Delivered"
 msgstr "Entregat"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:860
+#: code:addons/magento_connect/mgn.py:902
 #, python-format
 msgid "This Magento Store Group not allow to delete"
 msgstr "No es pot esborrar aquest grup de botigues Magento"

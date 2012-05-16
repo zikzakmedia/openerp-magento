@@ -488,15 +488,29 @@ class magento_app(osv.osv):
                 self.write(cr, uid, ids, {'to_import_products': time.strftime('%Y-%m-%d %H:%M:%S')})
 
                 products = product_api.list(ofilter, store_view)
+                LOGGER.notifyChannel('Magento App', netsvc.LOG_INFO, "Filter %s" % (ofilter))
 
                 if ofilter2:
                     products = products+product_api.list(ofilter2, store_view)
+                    LOGGER.notifyChannel('Magento App', netsvc.LOG_INFO, "Filter %s" % (ofilter2))
+
+                LOGGER.notifyChannel('Magento App', netsvc.LOG_INFO, "Start Sync Products magento app %s." % (magento_app.name))
+                self.pool.get('magento.log').create_log(cr, uid, magento_app, 'product.product', 0, '', 'done', _('Start Import/Update products: %s') % ofilter )
+
+                # remove same items in list
+                prods = []
+                for prod in products:
+                    product_id = prod['product_id']
+                    add = True
+                    for p in prods:
+                        if product_id == p['product_id']:
+                            add = False
+                    if add:
+                        prods.append(prod)
 
                 cr.commit()
 
-                LOGGER.notifyChannel('Magento App', netsvc.LOG_INFO, "Start Sync Products magento app %s." % (magento_app.name))
-
-                thread1 = threading.Thread(target=self.core_sync_products_thread, args=(cr.dbname, uid, magento_app.id, products, store_view, context))
+                thread1 = threading.Thread(target=self.core_sync_products_thread, args=(cr.dbname, uid, magento_app.id, prods, store_view, context))
                 thread1.start()
 
         return True
@@ -518,6 +532,8 @@ class magento_app(osv.osv):
             self.pool.get('product.product').magento_create_product_type(cr, uid, magento_app, product, store_view, context)
 
         LOGGER.notifyChannel('Magento App', netsvc.LOG_INFO, "End Sync Products magento app %s." % (magento_app.name))
+        self.pool.get('magento.log').create_log(cr, uid, magento_app, 'product.product', 0, '', 'done', _('Finish Import/Update products') )
+
         cr.close()
 
         return True
