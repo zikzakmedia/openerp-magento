@@ -367,9 +367,12 @@ class product_product(osv.osv):
         product_template_vals = self.pool.get('base.external.mapping').get_external_to_oerp(cr, uid, 'magento.product.template', product_obj.product_tmpl_id.id, product_info, context)
         vals = dict(product_product_vals, **product_template_vals)
         #~ print vals #dicc value to write
-        self.write(cr, uid, [product_product_oerp_id], vals)
-
-        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Write Product Product: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
+        try:
+            self.write(cr, uid, [product_product_oerp_id], vals)
+            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Write Product Product: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
+        except:
+            self.pool.get('magento.log').create_log(cr, uid, magento_app, 'product.product', product_product_oerp_id, product['product_id'], 'error', _('Error update info product from magento'))
+            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Error update info product from magento: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
 
         cr.commit()
 
