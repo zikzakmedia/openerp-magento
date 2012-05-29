@@ -351,9 +351,14 @@ class product_product(osv.osv):
         if 'product_tmpl_id' in context:
             values['product_tmpl_id'] = context['product_tmpl_id']
 
-        product_product_oerp_id = self.create(cr, uid, values, context)
-        self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.product', product_product_oerp_id, product['product_id'])
-        LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Product Product: magento app %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
+        try:
+            product_product_oerp_id = self.create(cr, uid, values, context)
+            self.pool.get('magento.external.referential').create_external_referential(cr, uid, magento_app, 'product.product', product_product_oerp_id, product['product_id'])
+            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Create Product Product: magento app %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
+        except:
+            self.pool.get('magento.log').create_log(cr, uid, magento_app, 'product.product', 0, product['product_id'], 'error', _('Error create product from Magento'))
+            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Error create product from Magento: magento %s, magento product id %s." % (magento_app.name, product['product_id']))
+            return False
 
         #~ Update product info
         with Product(magento_app.uri, magento_app.username, magento_app.password) as product_api:
@@ -371,8 +376,8 @@ class product_product(osv.osv):
             self.write(cr, uid, [product_product_oerp_id], vals)
             LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_INFO, "Write Product Product: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
         except:
-            self.pool.get('magento.log').create_log(cr, uid, magento_app, 'product.product', product_product_oerp_id, product['product_id'], 'error', _('Error update info product from magento'))
-            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Error update info product from magento: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
+            self.pool.get('magento.log').create_log(cr, uid, magento_app, 'product.product', product_product_oerp_id, product['product_id'], 'error', _('Error update info product from Magento'))
+            LOGGER.notifyChannel('Magento Sync API', netsvc.LOG_ERROR, "Error update info product from Magento: magento %s, openerp id %s, magento product id %s." % (magento_app.name, product_product_oerp_id, product['product_id']))
 
         cr.commit()
 
