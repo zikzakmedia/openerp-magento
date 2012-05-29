@@ -81,6 +81,8 @@ class sale_shop(osv.osv):
         'magento_notify_paidinweb': fields.boolean('Notify Paid in web', help='Magento notification'),
         'magento_status_paidinweb_delivered': fields.char('Paid in web/Delivered', size=128, help='Status for paid in web and delivered'),
         'magento_notify_paidinweb_delivered': fields.boolean('Notify Paid in web/Delivered', help='Magento notification'),
+        'magento_status_cancel': fields.char('Cancel', size=128, help='Status for cancel orders'),
+        'magento_notify_cancel': fields.boolean('Notify Cancel', help='Magento notification'),
     }
 
     _defaults = {
@@ -89,6 +91,7 @@ class sale_shop(osv.osv):
         'magento_sale_stock': 'virtualstock',
         'magento_from_sale_orders': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'),
         'magento_check_vat_partner': lambda *a: 1,
+        'magento_status_cancel': 'canceled',
     }
 
     def unlink(self, cr, uid, ids, context=None):
@@ -754,11 +757,11 @@ class sale_shop(osv.osv):
         magento_external_referential_obj = self.pool.get('magento.external.referential')
         magento_log_obj = self.pool.get('magento.log')
 
-        status = False
-        comment = False
-        notify = False
-
         for sale_order in self.pool.get('sale.order').browse(cr, uid, ids):
+            status = False
+            comment = False
+            notify = False
+
             mapping_id = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'sale.order', sale_order.id)
 
             if not mapping_id:
@@ -768,6 +771,9 @@ class sale_shop(osv.osv):
             mappings = magento_external_referential_obj.get_external_referential(cr, uid, [mapping_id])
             order_mgn_id = mappings[0]['mgn_id']
 
+            if sale_order.state == 'cancel':
+                notify = shop.magento_notify_cancel
+                status = shop.magento_status_cancel
             if sale_order.magento_paidinweb:
                 notify = shop.magento_notify_paidinweb
                 status = shop.magento_status_paidinweb
