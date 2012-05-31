@@ -11,4 +11,5 @@ username = 'admin'
 password = 'admin'
 dbname = 'openerp_database'
 MAGENTO_APP = 1
+SALE_SHOP = [2]
 LANGS = ['en_US','es_ES','ca_ES','pt_PT']
