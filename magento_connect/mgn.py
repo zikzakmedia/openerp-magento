@@ -93,6 +93,8 @@ class magento_app(osv.osv):
             ('90','90 Days'),
         ], 'Clean Logs', help='Days from delete logs to past'),
         'mapping_sale_order_lines': fields.many2many('base.external.mapping','magento_app_mapping_sale_order_rel', 'magento_app_id','mapping_id','Mapping Sale Order Lines'),
+        'customer_default_group': fields.many2one('magento.customer.group', 'Customer Group', help='Default Customer Group'),
+
     }
 
     _defaults = {
@@ -726,13 +728,16 @@ class magento_app(osv.osv):
 
             with Customer(magento_app.uri, magento_app.username, magento_app.password) as customer_api:
                 for magento_app_customer in magento_app_customers:
-                    magento_customer_group_id = extern_ref_obj.check_oerp2mgn(
+                    magento_customer_group = extern_ref_obj.check_oerp2mgn(
                         cr,
                         uid,
                         magento_app,
                         'magento.customer.group',
                         magento_app_customer.magento_customer_group_id.id,
                     )
+                    magento_customer_group = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [magento_customer_group])
+                    magento_customer_group_id = magento_customer_group[0]['mgn_id']
+
                     name = partner_obj.magento_get_name(cr, uid, magento_app_customer.partner_id, context)
                     first_name = name['firstname']
                     last_name = name['lastname']
@@ -1105,24 +1110,25 @@ class magento_app_customer(osv.osv):
             context = {}
 
         magento_external_referential_obj = self.pool.get('magento.external.referential')
-        magento_customer_group_id = self.pool.get('magento.customer.group').search(cr, uid, [('customer_group_id', '=', customer['group_id']), ('magento_app_id', 'in', [magento_app.id])])[0]
+
+        magento_group = customer.get('group_id', magento_app.customer_default_group.id)
+        magento_customer_group_id = self.pool.get('magento.customer.group').search(cr, uid, [('customer_group_id', '=', magento_group), ('magento_app_id', 'in', [magento_app.id])])[0]
         email = customer['email']
-        #check if exist this email. Yes, add -copy
-        emails = self.search(cr, uid, [('magento_emailid', '=', customer['email']), ('magento_app_id', 'in', [magento_app.id])])
-        if len(emails)>0:
-            email = "%s-copy" % customer['email']
+        magento_app_customer = self.search(cr, uid, [('magento_emailid', '=', customer['email']), ('magento_app_id', 'in', [magento_app.id])])
+        if len(magento_app_customer)>0:
+            magento_app_customer_id = magento_app_customer[0]
+        else:
+            vals = {
+                'partner_id': partner_id,
+                'magento_app_id': magento_app.id,
+                'magento_customer_group_id': magento_customer_group_id,
+                'magento_emailid': email,
+            }
+            if 'taxvat' in customer:
+                vals['magento_vat'] = customer['taxvat']
 
-        vals = {
-            'partner_id': partner_id,
-            'magento_app_id': magento_app.id,
-            'magento_customer_group_id': magento_customer_group_id,
-            'magento_emailid': email,
-        }
-        if 'taxvat' in customer:
-            vals['magento_vat'] = customer['taxvat']
-
-        magento_app_customer_id = self.create(cr, uid, vals, context)
-        magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'magento.app.customer', magento_customer_group_id, customer['group_id'])
+            magento_app_customer_id = self.create(cr, uid, vals, context)
+            # magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'magento.app.customer', magento_customer_group_id, customer['group_id'])
 
         return magento_app_customer_id
 
