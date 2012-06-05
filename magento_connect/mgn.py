@@ -54,6 +54,12 @@ class magento_storeview(osv.osv):
 
 magento_storeview()
 
+class magento_customer_group(osv.osv):
+    _name = 'magento.customer.group'
+    _description = 'Magento Customer Group'
+
+magento_customer_group()
+
 class magento_app(osv.osv):
     _name = 'magento.app'
     _description = 'Magento Server - APP'
