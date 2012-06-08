@@ -636,8 +636,13 @@ class sale_shop(osv.osv):
                         creted_filter['to'] = sale_shop.magento_to_sale_orders
                     ofilter = {'created_at':creted_filter}
 
-                orders = order_api.list(ofilter)
-                LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Import Orders: %s" % (ofilter))
+                try:
+                    orders = order_api.list(ofilter)
+                    LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Import Orders: %s" % (ofilter))
+                except:
+                    message = _("Error Magento connection: Select a date range less or check Magento connection")
+                    LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_ERROR, message)
+                    raise osv.except_osv(_("Error"), message)
 
                 #~ Update date last import
                 date_from_import = sale_shop.magento_to_sale_orders and sale_shop.magento_to_sale_orders or time.strftime('%Y-%m-%d %H:%M:%S')

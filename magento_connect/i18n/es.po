@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.2\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2012-05-16 10:54+0000\n"
-"PO-Revision-Date: 2012-05-16 12:59+0100\n"
+"POT-Creation-Date: 2012-06-08 08:13+0000\n"
+"PO-Revision-Date: 2012-06-08 10:19+0100\n"
 "Last-Translator: Raimon Esteve <resteve@zikzakmedia.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgid "Partial Delivery"
 msgstr "Entrega parcial"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:1054
+#: code:addons/magento_connect/mgn.py:1065
 #, python-format
 msgid "This Magento Region not allow to delete"
 msgstr "Estas regiones no se pueden eliminar"
@@ -44,6 +44,12 @@ msgstr "Título"
 #: field:magento.app,to_import_products:0
 msgid "To Import Products"
 msgstr "Productos hasta la fecha"
+
+#. module: magento_connect
+#: code:addons/magento_connect/partner.py:298
+#, python-format
+msgid "Successfully update partner address: %s"
+msgstr "Actualizada dirección de empresa: %s"
 
 #. module: magento_connect
 #: view:sale.shop:0
@@ -119,6 +125,7 @@ msgid "Error ! You can not create recursive categories."
 msgstr "¡Error! No puede crear categorías recursivas."
 
 #. module: magento_connect
+#: model:product.product,name:magento_connect.product_product_cash_on_delivery
 #: model:product.template,name:magento_connect.product_product_cash_on_delivery_product_template
 msgid "Cash on delivery"
 msgstr "Contrareembolso"
@@ -132,7 +139,7 @@ msgid "Not available some Magento Products to export"
 msgstr "No hay ningún producto de Magento a exportar"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:113
+#: code:addons/magento_connect/mgn.py:121
 #, python-format
 msgid "Ok!"
 msgstr "Aceptar"
@@ -143,7 +150,7 @@ msgid "Logistic Default"
 msgstr "Valores por defecto de logística"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:115
+#: code:addons/magento_connect/mgn.py:123
 #, python-format
 msgid "Warning!"
 msgstr "¡Atención!"
@@ -236,6 +243,7 @@ msgid "Nowhere"
 msgstr "Ninguna parte"
 
 #. module: magento_connect
+#: help:sale.shop,magento_notify_cancel:0
 #: help:sale.shop,magento_notify_delivered:0
 #: help:sale.shop,magento_notify_paid:0
 #: help:sale.shop,magento_notify_paid_delivered:0
@@ -265,7 +273,7 @@ msgid "Last Store View"
 msgstr "Última tienda de compra"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:605
+#: code:addons/magento_connect/sale.py:608
 #, python-format
 msgid "Successfully create image %s"
 msgstr "Creado imagen %s"
@@ -286,6 +294,11 @@ msgid "Export Stock Magento"
 msgstr "Exportar Estoc a Magento"
 
 #. module: magento_connect
+#: help:magento.app,customer_default_group:0
+msgid "Default Customer Group"
+msgstr "Grupo de clientes por defecto"
+
+#. module: magento_connect
 #: field:res.partner.address,magento_lastname:0
 msgid "Last Name"
 msgstr "Apellidos"
@@ -302,7 +315,7 @@ msgid "Mapping Sale Order Lines"
 msgstr "Mapeo para las linias de venta"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:115
+#: code:addons/magento_connect/mgn.py:123
 #, python-format
 msgid "Connection to server are successfully but reconfigure your Magento."
 msgstr "La conexión con el servidor Magento a tenido exito, pero se debe reconfigurar Magento."
@@ -331,9 +344,12 @@ msgid "Magento Sale Shop Status Type"
 msgstr "Estados de magento"
 
 #. module: magento_connect
-#: field:magento.app,inventory:0
-msgid "Force Inventory"
-msgstr "Forzar Inventario"
+#: view:magento.sync.images.wizard:0
+#: view:magento.sync.price.wizard:0
+#: view:magento.sync.product.wizard:0
+#: view:magento.sync.stock.wizard:0
+msgid "Are you sure to export this product?"
+msgstr "¿Estáis seguros de exportar este producto/s?"
 
 #. module: magento_connect
 #: help:magento.app,options:0
@@ -382,14 +398,14 @@ msgid "Option products category Attributes"
 msgstr "Opciones de atributos de categoría de productos"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:204
+#: code:addons/magento_connect/sale.py:207
 #, python-format
 msgid "Successfully update product"
 msgstr "Actualizado producto"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:937
-#: code:addons/magento_connect/mgn.py:984
+#: code:addons/magento_connect/mgn.py:948
+#: code:addons/magento_connect/mgn.py:995
 #, python-format
 msgid "Select language available this store view"
 msgstr "Seleccionar idioma disponible para la vista de la tienda"
@@ -411,7 +427,7 @@ msgid "magento.sync.images.wizard"
 msgstr "magento.sync.images.wizard"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:227
+#: code:addons/magento_connect/sale.py:230
 #, python-format
 msgid "Error create product"
 msgstr "Error creando productos"
@@ -432,7 +448,7 @@ msgid "Magento Store Group"
 msgstr "Grupo de tiendas Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:467
+#: code:addons/magento_connect/mgn.py:475
 #, python-format
 msgid "Select Import Date"
 msgstr "Seleccione una fecha para importar"
@@ -486,12 +502,13 @@ msgid "Last store view where the customer has bought."
 msgstr "Última tienda en la que ha comprado el cliente."
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:449
+#: code:addons/magento_connect/sale.py:452
 #, python-format
 msgid "Error update stock: %s"
 msgstr "Error actualizado estoc: %s"
 
 #. module: magento_connect
+#: model:product.product,name:magento_connect.product_product_shipping
 #: model:product.template,name:magento_connect.product_product_shipping_product_template
 msgid "Shipping and Handling"
 msgstr "Envío y manipulación"
@@ -507,7 +524,7 @@ msgid "Payment"
 msgstr "Pagos"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:224
+#: code:addons/magento_connect/sale.py:227
 #, python-format
 msgid "Successfully create product"
 msgstr "Creado producto"
@@ -546,9 +563,9 @@ msgid "Locale"
 msgstr "Lugar"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:464
-#: code:addons/magento_connect/mgn.py:665
-#: code:addons/magento_connect/mgn.py:708
+#: code:addons/magento_connect/mgn.py:472
+#: code:addons/magento_connect/mgn.py:673
+#: code:addons/magento_connect/mgn.py:716
 #, python-format
 msgid "Select Store View Magento"
 msgstr "Seleccione la vista de la tienda Magento"
@@ -566,7 +583,7 @@ msgid "Error: Invalid ean code"
 msgstr "Error: Código EAN inválido"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:686
+#: code:addons/magento_connect/sale.py:694
 #, python-format
 msgid "Successfully create sale order: %s"
 msgstr "Creado pedido de venta: %s"
@@ -590,29 +607,29 @@ msgid "Select yours Sale Shops available this product"
 msgstr "Seleccione su tienda de venta disponible para este producto"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:464
-#: code:addons/magento_connect/mgn.py:467
-#: code:addons/magento_connect/mgn.py:665
-#: code:addons/magento_connect/mgn.py:708
-#: code:addons/magento_connect/mgn.py:887
-#: code:addons/magento_connect/mgn.py:902
-#: code:addons/magento_connect/mgn.py:920
-#: code:addons/magento_connect/mgn.py:937
-#: code:addons/magento_connect/mgn.py:984
-#: code:addons/magento_connect/mgn.py:1020
-#: code:addons/magento_connect/mgn.py:1035
-#: code:addons/magento_connect/mgn.py:1054
-#: code:addons/magento_connect/mgn.py:1095
+#: code:addons/magento_connect/mgn.py:472
+#: code:addons/magento_connect/mgn.py:475
+#: code:addons/magento_connect/mgn.py:673
+#: code:addons/magento_connect/mgn.py:716
+#: code:addons/magento_connect/mgn.py:898
+#: code:addons/magento_connect/mgn.py:913
+#: code:addons/magento_connect/mgn.py:931
+#: code:addons/magento_connect/mgn.py:948
+#: code:addons/magento_connect/mgn.py:995
+#: code:addons/magento_connect/mgn.py:1031
+#: code:addons/magento_connect/mgn.py:1046
+#: code:addons/magento_connect/mgn.py:1065
+#: code:addons/magento_connect/mgn.py:1106
 #: code:addons/magento_connect/mgn_referential.py:42
 #: code:addons/magento_connect/partner.py:41
-#: code:addons/magento_connect/partner.py:169
+#: code:addons/magento_connect/partner.py:171
 #: code:addons/magento_connect/product.py:183
 #: code:addons/magento_connect/product.py:242
 #: code:addons/magento_connect/product.py:276
 #: code:addons/magento_connect/product.py:312
 #: code:addons/magento_connect/product_images.py:92
-#: code:addons/magento_connect/sale.py:98
-#: code:addons/magento_connect/sale.py:860
+#: code:addons/magento_connect/sale.py:101
+#: code:addons/magento_connect/sale.py:871
 #, python-format
 msgid "Alert"
 msgstr "Alerta"
@@ -649,7 +666,7 @@ msgid "Are you sure to continue? This action is in background. See logs server p
 msgstr "¿Está seguro de continuar? Esta acción se ejecutará como tarea oculta. Revise el historial del servidor."
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:920
+#: code:addons/magento_connect/mgn.py:931
 #, python-format
 msgid "This Magento Store View not allow to delete"
 msgstr "No está permitido borrar esta vista de tienda de Magento"
@@ -675,7 +692,12 @@ msgid "This date is last import. If you need import new products, you can modify
 msgstr "Esta es la fecha de última importación. Si necesita importar nuevos productos, puede modificar esta fecha (filtro)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:887
+#: field:sale.shop,magento_notify_cancel:0
+msgid "Notify Cancel"
+msgstr "Notificación de cancelación"
+
+#. module: magento_connect
+#: code:addons/magento_connect/mgn.py:898
 #, python-format
 msgid "This Magento Website not allow to delete"
 msgstr "No se puede borrar este sitio web Magento"
@@ -758,6 +780,11 @@ msgid "Username"
 msgstr "Nombre de usuario"
 
 #. module: magento_connect
+#: field:sale.shop,magento_notify_paidinweb:0
+msgid "Notify Paid in web"
+msgstr "Notificar el pago en web"
+
+#. module: magento_connect
 #: help:sale.shop,magento_scheduler:0
 msgid "Available this Sale Shop crons (import/export)"
 msgstr "Establecer esta tienda a disponible en la importación automática (importación/exportación)"
@@ -773,7 +800,7 @@ msgid "Store"
 msgstr "Tienda"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:1020
+#: code:addons/magento_connect/mgn.py:1031
 #, python-format
 msgid "This Magento Attribute Exclude not allow to delete"
 msgstr "No se puede borrar este atributo de exclusión de Magento"
@@ -840,7 +867,12 @@ msgid "Import Translations Products"
 msgstr "Importar traducciones de productos"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:860
+#: field:magento.app,magento_country_ids:0
+msgid "Country"
+msgstr "País"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:871
 #, python-format
 msgid "Sale Order ID '%s' not allow to delete because are active in Magento"
 msgstr "No se puede borrar el pedido '%s' porque está activo en la tienda Magento"
@@ -857,7 +889,13 @@ msgid "Product Images Magento"
 msgstr "Imágenes de producto"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:798
+#: code:addons/magento_connect/partner.py:301
+#, python-format
+msgid "Error update partner address: %s"
+msgstr "Error actualizando direcciones de empresa: %s"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:809
 #, python-format
 msgid "Successfully update %s status: %s"
 msgstr "Actualizado %s el estado: %s"
@@ -873,7 +911,7 @@ msgid "Import/Update Magento Products"
 msgstr "Importar/Actualizar productos"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:555
+#: code:addons/magento_connect/sale.py:558
 #, python-format
 msgid "Successfully update image %s"
 msgstr "Actualizado imagen %s"
@@ -919,6 +957,7 @@ msgid "Magento Attribute Group"
 msgstr "Grupo de atributos Magento"
 
 #. module: magento_connect
+#: field:delivery.carrier,code:0
 #: field:magento.attribute.exclude,name:0
 #: field:magento.region,code:0
 #: field:magento.storeview,code:0
@@ -932,6 +971,7 @@ msgstr "Código"
 #: view:magento.sync.price.wizard:0
 #: view:magento.sync.product.wizard:0
 #: view:magento.sync.stock.wizard:0
+#: field:sale.shop,magento_status_cancel:0
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -958,7 +998,7 @@ msgid "First Name"
 msgstr "Nombre"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:558
+#: code:addons/magento_connect/sale.py:561
 #, python-format
 msgid "Error update image %s"
 msgstr "Error actualizando imagen %s"
@@ -974,7 +1014,7 @@ msgid "Mapping"
 msgstr "Mapeo"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:348
+#: code:addons/magento_connect/sale.py:351
 #, python-format
 msgid "Error update price: %s"
 msgstr "Error actualizando precio: %s"
@@ -1028,7 +1068,7 @@ msgid "Magento Customer"
 msgstr "Cliente Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:498
+#: code:addons/magento_connect/mgn.py:506
 #, python-format
 msgid "Start Import/Update products: %s"
 msgstr "Inicio importación/actualización de productos: %s"
@@ -1044,7 +1084,13 @@ msgid "Magento Filters..."
 msgstr "Magento filtros..."
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:207
+#: code:addons/magento_connect/product.py:379
+#, python-format
+msgid "Error update info product from Magento"
+msgstr "Error actualizando productos de Magento"
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:210
 #, python-format
 msgid "Error update product"
 msgstr "Error actualizando productos"
@@ -1064,7 +1110,7 @@ msgid "Export"
 msgstr "Exportar"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:345
+#: code:addons/magento_connect/sale.py:348
 #, python-format
 msgid "Successfully update price: %s"
 msgstr "Actualizado precio: %s"
@@ -1086,6 +1132,7 @@ msgid "Authentication"
 msgstr "Autenticación"
 
 #. module: magento_connect
+#: model:product.product,name:magento_connect.product_product_gift
 #: model:product.template,name:magento_connect.product_product_gift_product_template
 msgid "Gift Certificate"
 msgstr "Mensaje de regalo"
@@ -1121,7 +1168,7 @@ msgid "Last Export Categories"
 msgstr "Últimas categorías exportadas"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:535
+#: code:addons/magento_connect/mgn.py:543
 #, python-format
 msgid "Finish Import/Update products"
 msgstr "Finalizado importación/actualización productos"
@@ -1163,6 +1210,11 @@ msgid "Shipping Policy"
 msgstr "Política de envío"
 
 #. module: magento_connect
+#: help:sale.shop,magento_status_cancel:0
+msgid "Status for cancel orders"
+msgstr "Estado de pedidos cancelados"
+
+#. module: magento_connect
 #: model:ir.ui.menu,name:magento_connect.menu_magento
 #: field:product.attributes.group,magento:0
 #: view:product.category:0
@@ -1176,7 +1228,7 @@ msgid "Magento"
 msgstr "Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:446
+#: code:addons/magento_connect/sale.py:449
 #, python-format
 msgid "Successfully update stock: %s"
 msgstr "Actualizado estoc: %s"
@@ -1192,7 +1244,7 @@ msgid "Partners"
 msgstr "Empresas"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:1095
+#: code:addons/magento_connect/mgn.py:1106
 #, python-format
 msgid "This Magento Websites/Groups not allow to delete"
 msgstr "No se puede borrar este sitio de Magento"
@@ -1227,9 +1279,9 @@ msgid "Clean Logs"
 msgstr "Limpiar Logs"
 
 #. module: magento_connect
-#: field:sale.shop,magento_notify_paidinweb:0
-msgid "Notify Paid in web"
-msgstr "Notificar el pago en web"
+#: constraint:product.product:0
+msgid "Several dimension values for the same dimension type"
+msgstr "Several dimension values for the same dimension type"
 
 #. module: magento_connect
 #: field:magento.app.customer,magento_storeview_ids:0
@@ -1310,11 +1362,6 @@ msgid "Magento Logs"
 msgstr "Magento Logs"
 
 #. module: magento_connect
-#: view:sale.shop:0
-msgid "Export Images"
-msgstr "Exportar imágenes"
-
-#. module: magento_connect
 #: code:addons/magento_connect/product.py:116
 #: code:addons/magento_connect/product.py:303
 #, python-format
@@ -1337,7 +1384,7 @@ msgid "Status for paid orders (invoice)"
 msgstr "Estado de pedidos pagados (factura)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:117
+#: code:addons/magento_connect/mgn.py:125
 #, python-format
 msgid "Connection to server failed."
 msgstr "La conexión al servidor ha fallado."
@@ -1346,6 +1393,12 @@ msgstr "La conexión al servidor ha fallado."
 #: field:sale.shop,magento_status_paid:0
 msgid "Paid"
 msgstr "Pagado"
+
+#. module: magento_connect
+#: code:addons/magento_connect/product.py:359
+#, python-format
+msgid "Error create product from Magento"
+msgstr "Error creando producto de Magento"
 
 #. module: magento_connect
 #: view:magento.app:0
@@ -1363,10 +1416,15 @@ msgid "Magento External Referential"
 msgstr "Referencia externa Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:113
+#: code:addons/magento_connect/mgn.py:121
 #, python-format
 msgid "Connection to server are successfully."
 msgstr "La conexión con el servidor se ha realizado con éxito."
+
+#. module: magento_connect
+#: help:magento.app.customer,magento_vat:0
+msgid "To be able to receive customer VAT number you must set it in Magento Admin Panel, menu System / Configuration / Client Configuration / Name and Address Options."
+msgstr "Para permitir recibir el CIF del cliente, debe configurarlo en el panel de administrador de Magento, menú Sistema/Configuración/Configuración de Cliente/Opciones de nombre y direcciones."
 
 #. module: magento_connect
 #: view:product.category:0
@@ -1395,6 +1453,7 @@ msgid "1 Day"
 msgstr "1 Días"
 
 #. module: magento_connect
+#: model:product.product,name:magento_connect.product_product_discount
 #: model:product.template,name:magento_connect.product_product_discount_product_template
 msgid "Discount Coupon"
 msgstr "Cupón descuento"
@@ -1463,6 +1522,12 @@ msgid "Product"
 msgstr "Producto"
 
 #. module: magento_connect
+#: code:addons/magento_connect/sale.py:643
+#, python-format
+msgid "Error Magento connection: Select a date range less or check Magento connection"
+msgstr "Error conexión Magento: Seleccione un intérvalo de fechas menor o revise la conexión de Magento"
+
+#. module: magento_connect
 #: view:magento.app:0
 msgid "Are you sure to continue? See logs server process"
 msgstr "¿Está seguro de continuar? Revise el historial del servidor."
@@ -1505,7 +1570,7 @@ msgid "Invoice on"
 msgstr "Factura las"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:801
+#: code:addons/magento_connect/sale.py:812
 #, python-format
 msgid "Error update %s status: %s"
 msgstr "Error actualizando %s el estado: %s"
@@ -1537,15 +1602,15 @@ msgid "Meta Description"
 msgstr "Meta descripción"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:1035
+#: code:addons/magento_connect/mgn.py:1046
 #, python-format
 msgid "This Magento Customer Group not allow to delete"
 msgstr "No se puede borrar este grupo de clientes de Magento"
 
 #. module: magento_connect
-#: selection:product.product,magento_visibility:0
-msgid "Select Option"
-msgstr "Seleccionar opción"
+#: field:product.category,magento_url_key:0
+msgid "URL-key"
+msgstr "URL-key"
 
 #. module: magento_connect
 #: view:magento.app:0
@@ -1617,7 +1682,7 @@ msgid "Export Status Sale Orders"
 msgstr "Exportar estado de los pedidos de venta"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:117
+#: code:addons/magento_connect/mgn.py:125
 #: code:addons/magento_connect/wizard/wizard_product_images.py:54
 #: code:addons/magento_connect/wizard/wizard_product_price.py:54
 #: code:addons/magento_connect/wizard/wizard_product_product.py:54
@@ -1638,7 +1703,7 @@ msgid "Shop"
 msgstr "Tienda"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:766
+#: code:addons/magento_connect/sale.py:774
 #, python-format
 msgid "Error update status %s"
 msgstr "Error actualizando estado %s"
@@ -1745,7 +1810,7 @@ msgid "Are you sure to continue? See logs server process. This operation import 
 msgstr "¿Está seguro de continuar? Revise el historial del servidor. Esta acción importará todas las imágenes de Magento a OpenERP"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:98
+#: code:addons/magento_connect/sale.py:101
 #, python-format
 msgid "Sale shop ID '%s' not allow to delete because are active in Magento"
 msgstr "No se puede borrar la tienda '%s' porque está activo en la tienda Magento"
@@ -1761,9 +1826,9 @@ msgid "60 Days"
 msgstr "60 Días"
 
 #. module: magento_connect
-#: help:magento.app.customer,magento_vat:0
-msgid "To be able to receive customer VAT number you must set it in Magento Admin Panel, menu System / Configuration / Client Configuration / Name and Address Options."
-msgstr "Para permitir recibir el CIF del cliente, debe configurarlo en el panel de administrador de Magento, menú Sistema/Configuración/Configuración de Cliente/Opciones de nombre y direcciones."
+#: field:magento.app,inventory:0
+msgid "Force Inventory"
+msgstr "Forzar Inventario"
 
 #. module: magento_connect
 #: field:sale.shop,magento_last_import_sale_orders:0
@@ -1771,8 +1836,8 @@ msgid "Last Import Status Sale Orders"
 msgstr "Estado de los últimos pedidos de venta importados"
 
 #. module: magento_connect
-#: code:addons/magento_connect/partner.py:251
-#: code:addons/magento_connect/partner.py:254
+#: code:addons/magento_connect/partner.py:274
+#: code:addons/magento_connect/partner.py:277
 #, python-format
 msgid "Successfully create partner address: %s"
 msgstr "Creada dirección de empresa: %s"
@@ -1828,7 +1893,7 @@ msgid "Region ID"
 msgstr "Identificador de región"
 
 #. module: magento_connect
-#: code:addons/magento_connect/partner.py:169
+#: code:addons/magento_connect/partner.py:171
 #, python-format
 msgid "Partner Address ID '%s' not allow to delete because are active in Magento"
 msgstr "No se puede borrar la dirección de empresa '%s' porque está activo en la tienda Magento"
@@ -1854,7 +1919,7 @@ msgid "Manage Stock"
 msgstr "Gestionar estoc"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:608
+#: code:addons/magento_connect/sale.py:611
 #, python-format
 msgid "Error create image %s"
 msgstr "Error creando imagen %s"
@@ -1892,7 +1957,9 @@ msgid "Shop configuration"
 msgstr "Configuraciones tienda"
 
 #. module: magento_connect
+#: code:addons/magento_connect/sale.py:644
 #: selection:magento.log,status:0
+#, python-format
 msgid "Error"
 msgstr "Error"
 
@@ -1917,6 +1984,7 @@ msgid "Sale Shop"
 msgstr "Tienda"
 
 #. module: magento_connect
+#: field:magento.app,customer_default_group:0
 #: field:magento.app.customer,magento_customer_group_id:0
 msgid "Customer Group"
 msgstr "Grupo de clientes"
@@ -1937,7 +2005,7 @@ msgid "Delivered"
 msgstr "Entregado"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:902
+#: code:addons/magento_connect/mgn.py:913
 #, python-format
 msgid "This Magento Store Group not allow to delete"
 msgstr "No se puede borrar este grupo de tiendas Magento"
@@ -1950,9 +2018,9 @@ msgid "Description"
 msgstr "Descripción"
 
 #. module: magento_connect
-#: field:product.category,magento_url_key:0
-msgid "URL-key"
-msgstr "URL-key"
+#: selection:product.product,magento_visibility:0
+msgid "Select Option"
+msgstr "Seleccionar opción"
 
 #. module: magento_connect
 #: help:magento.app,last_export_partners:0
@@ -1995,9 +2063,9 @@ msgid "Default Unit of Sale"
 msgstr "Unidad de venta por defecto"
 
 #. module: magento_connect
-#: field:magento.app,magento_country_ids:0
-msgid "Country"
-msgstr "País"
+#: view:sale.shop:0
+msgid "Export Images"
+msgstr "Exportar imágenes"
 
 #. module: magento_connect
 #: help:magento.sale.shop.status.type,confirm:0
@@ -2036,14 +2104,6 @@ msgstr "Tipos de pago"
 #: view:magento.app:0
 msgid "Test Connection"
 msgstr "Test de conexión"
-
-#. module: magento_connect
-#: view:magento.sync.images.wizard:0
-#: view:magento.sync.price.wizard:0
-#: view:magento.sync.product.wizard:0
-#: view:magento.sync.stock.wizard:0
-msgid "Are you sure to export this product?"
-msgstr "¿Estáis seguros de exportar este producto/s?"
 
 #. module: magento_connect
 #: help:magento.app,uri:0
@@ -2087,8 +2147,6 @@ msgstr "Utiliza la referencia de Magento (Incremento) como nombre de pedido"
 msgid "Orders"
 msgstr "Pedidos de venta"
 
-#~ msgid "Several dimension values for the same dimension type"
-#~ msgstr "Several dimension values for the same dimension type"
 #~ msgid "This Log is not allow to delete"
 #~ msgstr "Este log no se permite eliminar"
 #~ msgid "Metadescription"
