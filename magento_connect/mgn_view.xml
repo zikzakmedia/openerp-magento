@@ -20,6 +20,7 @@
                             <field name="product_category_id"/>
                             <field name="log_clean"/>
                             <field name="customer_default_group"/>
+                            <field name="group"/>
                         </page>
                         <page string="Sale">
                             <field name="payment_default_id"/>

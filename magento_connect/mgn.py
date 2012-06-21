@@ -100,7 +100,7 @@ class magento_app(osv.osv):
         ], 'Clean Logs', help='Days from delete logs to past'),
         'mapping_sale_order_lines': fields.many2many('base.external.mapping','magento_app_mapping_sale_order_rel', 'magento_app_id','mapping_id','Mapping Sale Order Lines'),
         'customer_default_group': fields.many2one('magento.customer.group', 'Customer Group', help='Default Customer Group'),
-
+        'group': fields.many2one('res.groups', 'Group', required=True, help='Group Users to notification'),
     }
 
     _defaults = {
@@ -814,6 +814,27 @@ class magento_app(osv.osv):
                                         LOGGER.notifyChannel('Magento Export Customer', netsvc.LOG_INFO, "Create Address magento %s: openerp ID %s." % (magento_customer_address_id, address.id))
                                     except:
                                         LOGGER.notifyChannel('Magento Export Customer', netsvc.LOG_ERROR, "Magento %s: Partner Address ID %s error." % (magento_app.name, address.id))
+
+        return True
+
+
+    def set_request(self, cr, uid, magento_app, request):
+        """Create res.request (notification) all users by group
+        :magento_app: object
+        :request: list
+        return True
+        """
+        if len(request)>0:
+            users = self.pool.get('res.users').search(cr, uid, [('groups_id','in',[magento_app.group.id])])
+            body = "\n".join(request)
+            for user in users:
+                self.pool.get('res.request').create(cr, uid, {
+                        'name': _('Magento notification: %s') % (magento_app.name),
+                        'state': 'waiting',
+                        'act_from': uid,
+                        'act_to': user,
+                        'body': body,
+                    })
 
         return True
 
