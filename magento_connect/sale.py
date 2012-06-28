@@ -649,6 +649,8 @@ class sale_shop(osv.osv):
         :return True
         """
 
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
+
         for sale_shop in self.browse(cr, uid, ids):
             magento_app = sale_shop.magento_website.magento_app_id
 
@@ -660,6 +662,12 @@ class sale_shop(osv.osv):
                     if sale_shop.magento_to_sale_orders:
                         creted_filter['to'] = sale_shop.magento_to_sale_orders
                     ofilter = {'created_at':creted_filter}
+
+                #Orders by store ID
+                mapping_id = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'magento.website', sale_shop.magento_website.id)
+                mappings = magento_external_referential_obj.get_external_referential(cr, uid, [mapping_id])
+                store_id = mappings[0]['mgn_id']
+                ofilter['store_id'] = str(store_id)
 
                 try:
                     orders = order_api.list(ofilter)
