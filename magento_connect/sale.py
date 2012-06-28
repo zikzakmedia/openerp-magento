@@ -252,6 +252,8 @@ class sale_shop(osv.osv):
         :return True
         """
 
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
+
         product_shop_ids = []
         for shop in self.browse(cr, uid, ids):
             magento_app = shop.magento_website.magento_app_id
@@ -267,15 +269,20 @@ class sale_shop(osv.osv):
                 if last_exported_time < product_product['create_date'][:19] or (product_product['write_date'] and last_exported_time < product_product['write_date'][:19]):
                     product_shop_ids.append(product_product['id'])
 
+            #Website ID
+            mapping_id = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'magento.website', shop.magento_website.id)
+            mappings = magento_external_referential_obj.get_external_referential(cr, uid, [mapping_id])
+            website_id = mappings[0]['mgn_id']
+
             LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Products Price to sync: %s" % (product_shop_ids))
 
             cr.commit()
-            thread1 = threading.Thread(target=self.magento_export_prices_stepbystep, args=(cr.dbname, uid, magento_app.id, shop.id, product_shop_ids, context))
+            thread1 = threading.Thread(target=self.magento_export_prices_stepbystep, args=(cr.dbname, uid, magento_app.id, shop.id,  website_id, product_shop_ids, context))
             thread1.start()
 
         return True
 
-    def magento_export_prices_stepbystep(self, db_name, uid, magentoapp, saleshop, ids, context=None):
+    def magento_export_prices_stepbystep(self, db_name, uid, magentoapp, saleshop, website_id, ids, context=None):
         """
         Get all IDs products to update Prices in Magento
         :param dbname: str
@@ -353,7 +360,10 @@ class sale_shop(osv.osv):
                     data['special_price'] = special_price
 
                 try:
-                    product_mgn_id = product_api.update(mgn_id, data)
+                    if magento_app.catalog_price == 'website' and website_id:
+                        product_mgn_id = product_api.update(mgn_id, data, website_id)
+                    else:
+                        product_mgn_id = product_api.update(mgn_id, data)
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Prices: %s. OpenERP ID %s, Magento ID %s" % (data, product.id, mgn_id))
                     magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, mgn_id, 'done', _('Successfully update price: %s') % (data) )
                 except:
@@ -696,7 +706,7 @@ class sale_shop(osv.osv):
         :ids: list
         :return mgn_id
         """
-
+        request = []
         if len(orders) == 0:
             LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Orders Import")
             return True
@@ -724,12 +734,16 @@ class sale_shop(osv.osv):
                     continue
                 values = order_api.info(code)
                 sale_order_id = self.pool.get('sale.order').magento_create_order(cr, uid, sale_shop, values, context)
-                magento_log_obj.create_log(cr, uid, magento_app, 'sale.order', sale_order_id, order_id, 'done', _('Successfully create sale order: %s') % (code) )
+                message = _('Successfully create sale order: %s') % (code)
+                magento_log_obj.create_log(cr, uid, magento_app, 'sale.order', sale_order_id, order_id, 'done', message)
                 cr.commit()
+                request.append(message)
             if not orders:
                 LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Not Orders available, magento %s, date > %s" % (magento_app.name, creted_filter))
 
         LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "End Import Magento Orders %s" % (magento_app.name))
+
+        self.pool.get('magento.app').set_request(cr, uid, magento_app, request)
 
         cr.commit()
         cr.close()

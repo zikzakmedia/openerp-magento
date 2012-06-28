@@ -49,6 +49,7 @@ class magento_sync_price_wizard(osv.osv_memory):
 
     def sync_price(self, cr, uid, ids, data, context={}):
         """Export sync prices"""
+        magento_external_referential_obj = self.pool.get('magento.external.referential')
 
         if len(data['active_ids']) == 0:
             raise osv.except_osv(_('Error!'), _('Select products to export'))
@@ -75,12 +76,17 @@ class magento_sync_price_wizard(osv.osv_memory):
         else:
             values['result'] = _('Not available some Magento Products to export')
 
+        #Website ID
+        mapping_id = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'magento.website', shop.magento_website.id)
+        mappings = magento_external_referential_obj.get_external_referential(cr, uid, [mapping_id])
+        website_id = mappings[0]['mgn_id']
+
         self.write(cr, uid, ids, values)
 
         cr.commit()
 
         if len(product_ids) > 0:
-            thread1 = threading.Thread(target=self.pool.get('sale.shop').magento_export_prices_stepbystep, args=(cr.dbname, uid, magento_app.id, shop.id, product_ids, context))
+            thread1 = threading.Thread(target=self.pool.get('sale.shop').magento_export_prices_stepbystep, args=(cr.dbname, uid, magento_app.id, shop.id, website_id, product_ids, context))
             thread1.start()
         return True
 

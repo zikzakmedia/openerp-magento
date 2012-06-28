@@ -21,6 +21,7 @@
                             <field name="log_clean"/>
                             <field name="customer_default_group"/>
                             <field name="group"/>
+                            <field name="catalog_price"/>
                         </page>
                         <page string="Sale">
                             <field name="payment_default_id"/>

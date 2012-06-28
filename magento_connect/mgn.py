@@ -101,10 +101,15 @@ class magento_app(osv.osv):
         'mapping_sale_order_lines': fields.many2many('base.external.mapping','magento_app_mapping_sale_order_rel', 'magento_app_id','mapping_id','Mapping Sale Order Lines'),
         'customer_default_group': fields.many2one('magento.customer.group', 'Customer Group', help='Default Customer Group'),
         'group': fields.many2one('res.groups', 'Group', required=True, help='Group Users to notification'),
+        'catalog_price': fields.selection([
+            ('global','Global'),
+            ('website','Website'),
+        ], 'Catalog Price', required=True, help='Magento Configuration/Catalog/Price/Catalog Price Scope'),
     }
 
     _defaults = {
         'log_clean': '15',
+        'catalog_price': 'global',
     }
 
     def core_sync_test(self, cr, uid, ids, context):
@@ -824,7 +829,7 @@ class magento_app(osv.osv):
         :request: list
         return True
         """
-        if len(request)>0:
+        if request:
             users = self.pool.get('res.users').search(cr, uid, [('groups_id','in',[magento_app.group.id])])
             body = "\n".join(request)
             for user in users:
