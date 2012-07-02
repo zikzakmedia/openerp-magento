@@ -989,7 +989,10 @@ class sale_order(osv.osv):
 
             # If Create Partner same time create order, Magento Customer Address ID = 0
             if billing_address == '0' or billing_address == None:
-                partner_address_invoice_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, values['billing_address'])
+                vals = values['billing_address']
+                if not vals.get('email'):
+                    vals['email'] = values['customer_email']
+                partner_address_invoice_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, vals)
             else:
                 partner_invoice_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', billing_address)
 
@@ -1028,7 +1031,7 @@ class sale_order(osv.osv):
             customer_address['telephone'] = values['billing_address']['telephone']
             customer_address['street'] = values['billing_address']['street']
             customer_address['postcode'] = values['billing_address']['postcode']
-            customer_address['email'] = values['billing_address']['email']
+            customer_address['email'] = values['billing_address']['email'] or values['customer_email']
             customer_address['country_id'] = values['billing_address']['country_id']
             customer_address['region_id'] = values['billing_address']['region_id']
 
@@ -1059,7 +1062,10 @@ class sale_order(osv.osv):
 
             # If Create Partner same time create order, Magento Customer Address ID = 0
             if shipping_address == '0' or shipping_address == None:
-                partner_address_shipping_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, values['shipping_address'])
+                vals = values['shipping_address']
+                if not vals.get('email'):
+                    vals['email'] = values['customer_email']
+                partner_address_shipping_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, vals)
             else:
                 partner_shipping_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', shipping_address)
 
@@ -1098,7 +1104,7 @@ class sale_order(osv.osv):
             customer_address['telephone'] = values['shipping_address']['telephone']
             customer_address['street'] = values['shipping_address']['street']
             customer_address['postcode'] = values['shipping_address']['postcode']
-            customer_address['email'] = values['shipping_address']['email']
+            customer_address['email'] = values['shipping_address']['email'] or values['customer_email']
             customer_address['country_id'] = values['shipping_address']['country_id']
             customer_address['region_id'] = values['shipping_address']['region_id']
 
