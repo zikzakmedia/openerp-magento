@@ -1030,7 +1030,7 @@ class sale_order(osv.osv):
             customer_address['postcode'] = values['billing_address']['postcode']
             customer_address['email'] = values['billing_address']['email']
             customer_address['country_id'] = values['billing_address']['country_id']
-            customer_address['region'] = values['billing_address']['region_id']
+            customer_address['region_id'] = values['billing_address']['region_id']
 
             # check if this address exist => street and postcode
             addresses = self.pool.get('res.partner.address').search(cr, uid, [
@@ -1100,7 +1100,7 @@ class sale_order(osv.osv):
             customer_address['postcode'] = values['shipping_address']['postcode']
             customer_address['email'] = values['shipping_address']['email']
             customer_address['country_id'] = values['shipping_address']['country_id']
-            customer_address['region'] = values['shipping_address']['region_id']
+            customer_address['region_id'] = values['shipping_address']['region_id']
 
             # check if this address exist => street and postcode
             addresses = self.pool.get('res.partner.address').search(cr, uid, [

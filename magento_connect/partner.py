@@ -223,7 +223,7 @@ class res_partner_address(osv.osv):
 
         base_external_mapping_obj = self.pool.get('base.external.mapping')
         country_obj = self.pool.get('res.country')
-        state_obj = self.pool.get('res.country.state')
+        mgn_region_obj = self.pool.get('magento.region')
 
         vals = {}
         vals['name'] = '%s %s' % (customer_address['firstname'].capitalize(), customer_address['lastname'].capitalize())
@@ -237,10 +237,11 @@ class res_partner_address(osv.osv):
             vals['email'] = customer_address['email']
         country_ids = country_obj.search(cr, uid, [('code', '=', customer_address['country_id'])], context = context)
         vals['country_id'] = country_ids and country_ids[0] or False
-        if 'region' in customer_address:
-            state_ids = state_obj.search(cr, uid, [('name', '=', customer_address['region'])], context = context)
-            vals['state_id'] = state_ids and state_ids[0] or False
-
+        if 'region_id' in customer_address:
+            state_ids = mgn_region_obj.search(cr, uid, [('region_id', '=', customer_address['region_id'])], context = context)
+            if state_ids:
+                magento_region = mgn_region_obj.browse(cr, uid, state_ids[0])
+                vals['state_id'] = magento_region.res_country_state_id.id
         partner_address_vals = base_external_mapping_obj.get_external_to_oerp(cr, uid, 'magento.res.partner.address', False, vals, context)
         
         return partner_address_vals
@@ -346,7 +347,7 @@ class res_partner_address(osv.osv):
                     customer_address['postcode'] = values['postcode']
                     customer_address['email'] = values['email']
                     customer_address['country_id'] = values['country_id']
-                    customer_address['region'] = values['region_id']
+                    customer_address['region_id'] = values['region_id']
                     return self.magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address, mapping = False)
 
 
