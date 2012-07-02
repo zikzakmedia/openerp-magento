@@ -37,7 +37,7 @@ from magento import *
 from urllib2 import Request, urlopen, URLError, HTTPError
 
 LOGGER = netsvc.Logger()
-PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable','bundle']
+PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable']
 
 class sale_shop(osv.osv):
     _inherit = "sale.shop"
