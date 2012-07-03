@@ -816,6 +816,7 @@ class sale_shop(osv.osv):
             status = False
             comment = False
             notify = False
+            cancel = False
 
             mapping_id = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'sale.order', sale_order.id)
 
@@ -829,6 +830,7 @@ class sale_shop(osv.osv):
             if sale_order.state == 'cancel':
                 notify = shop.magento_notify_cancel
                 status = shop.magento_status_cancel
+                cancel = True
             if sale_order.magento_paidinweb:
                 notify = shop.magento_notify_paidinweb
                 status = shop.magento_status_paidinweb
@@ -853,13 +855,17 @@ class sale_shop(osv.osv):
                 LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Waiting OpenERP Order ID %s...." % (sale_order.id))
                 with Order(magento_app.uri, magento_app.username, magento_app.password) as order_api:
                     try:
-                        order_api.addcomment(sale_order.name, status, comment, notify)
+                        order_api.addcomment(sale_order.magento_increment_id, status, comment, notify)
+                        if cancel:
+                            order_api.cancel(sale_order.magento_increment_id)
                         self.pool.get('sale.order').write(cr, uid, [sale_order.id], {'magento_status': status})
-                        LOGGER.notifyChannel('Order Status', netsvc.LOG_INFO, "%s, status: %s" % (sale_order.name, status))
-                        magento_log_obj.create_log(cr, uid, magento_app, 'sale.order', sale_order.id, order_mgn_id, 'done', _('Successfully update %s status: %s') % (sale_order.name, status) )
+                        LOGGER.notifyChannel('Order Status', netsvc.LOG_INFO, "%s, status: %s" % (sale_order.magento_increment_id, status))
+                        magento_log_obj.create_log(cr, uid, magento_app, 'sale.order', sale_order.id, order_mgn_id, 'done', _('Successfully update %s status: %s') % (sale_order.magento_increment_id, status))
                     except:
                         LOGGER.notifyChannel('Order Status', netsvc.LOG_ERROR, "Error: %s, status: %s" % (sale_order.name, status))
-                        magento_log_obj.create_log(cr, uid, magento_app, 'sale.order', sale_order.id, order_mgn_id, 'error', _('Error update %s status: %s') % (sale_order.name, status) )
+                        magento_log_obj.create_log(cr, uid, magento_app, 'sale.order', sale_order.id, order_mgn_id, 'error', _('Error update %s status: %s') % (sale_order.magento_increment_id, status))
+
+            #TODO: Magento API. Create invoice and shipments
 
         LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "End Export Status Orders %s" % (magento_app.name))
 
