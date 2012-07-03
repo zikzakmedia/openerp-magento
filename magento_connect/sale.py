@@ -656,6 +656,7 @@ class sale_shop(osv.osv):
         """
         Sync Orders Magento to OpenERP filterd by magento_sale_shop
         Get ids all sale.order and send one to one to Magento
+        Import Orders from Magento force UTC date
         :return True
         """
 
@@ -668,9 +669,11 @@ class sale_shop(osv.osv):
                 if 'ofilter' in context:
                     ofilter = context['ofilter']
                 else:
-                    creted_filter = {'from':sale_shop.magento_from_sale_orders}
+                    from_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(time.mktime(time.strptime(sale_shop.magento_from_sale_orders, "%Y-%m-%d %H:%M:%S")))) #Convert UTC timezone
+                    creted_filter = {'from':from_time}
                     if sale_shop.magento_to_sale_orders:
-                        creted_filter['to'] = sale_shop.magento_to_sale_orders
+                        to_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(time.mktime(time.strptime(sale_shop.magento_to_sale_orders, "%Y-%m-%d %H:%M:%S")))) #Convert UTC timezone
+                        creted_filter['to'] = to_time
                     ofilter = {'created_at':creted_filter}
 
                 #Orders by store ID
