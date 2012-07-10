@@ -35,6 +35,7 @@ import pooler
 
 from magento import *
 from urllib2 import Request, urlopen, URLError, HTTPError
+from mgntools import *
 
 LOGGER = netsvc.Logger()
 PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable']
@@ -669,10 +670,10 @@ class sale_shop(osv.osv):
                 if 'ofilter' in context:
                     ofilter = context['ofilter']
                 else:
-                    from_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(time.mktime(time.strptime(sale_shop.magento_from_sale_orders, "%Y-%m-%d %H:%M:%S")))) #Convert UTC timezone
+                    from_time = convert_gmtime(sale_shop.magento_from_sale_orders)
                     creted_filter = {'from':from_time}
                     if sale_shop.magento_to_sale_orders:
-                        to_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(time.mktime(time.strptime(sale_shop.magento_to_sale_orders, "%Y-%m-%d %H:%M:%S")))) #Convert UTC timezone
+                        to_time = convert_gmtime(sale_shop.magento_to_sale_orders)
                         creted_filter['to'] = to_time
                     ofilter = {'created_at':creted_filter}
 
@@ -1026,7 +1027,7 @@ class sale_order(osv.osv):
                 if update_address:
                     address_invoice = self.pool.get('res.partner.address').perm_read(cr, uid, [partner_address_invoice_id])[0]
                     address_invoice_write = address_invoice.get('write_date', False)
-                    if address_invoice['create_date'][:19] < customer_address['updated_at'] or (address_invoice_write and address_invoice['write_date'][:19] < customer_address['updated_at']):
+                    if convert_gmtime(address_invoice['create_date'][:19]) < customer_address['updated_at'] or (address_invoice_write and convert_gmtime(address_invoice['write_date'][:19]) < customer_address['updated_at']):
                         self.pool.get('res.partner.address').magento_update_partner_address(cr, uid, magento_app, partner_address_invoice_id, customer_address, context)
                     else:
                         LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Not update OpenERP Invoice Partner Address ID %s. Magento last updated: %s" % (partner_address_invoice_id, customer_address['updated_at']))
@@ -1099,7 +1100,7 @@ class sale_order(osv.osv):
                 if update_address:
                     address_shipping = self.pool.get('res.partner.address').perm_read(cr, uid, [partner_address_shipping_id])[0]
                     address_shipping_write = address_shipping.get('write_date', False)
-                    if address_shipping['create_date'][:19] < customer_address['updated_at'] or (address_shipping_write and address_shipping['write_date'][:19] < customer_address['updated_at']):
+                    if convert_gmtime(address_shipping['create_date'][:19]) < customer_address['updated_at'] or (address_shipping_write and convert_gmtime(address_shipping['write_date'][:19]) < customer_address['updated_at']):
                         self.pool.get('res.partner.address').magento_update_partner_address(cr, uid, magento_app, partner_address_shipping_id, customer_address, context)
                     else:
                         LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Not update OpenERP Shipping Partner Address ID %s. Magento last updated: %s" % (partner_address_shipping_id, customer_address['updated_at']))
