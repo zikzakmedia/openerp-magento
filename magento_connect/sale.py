@@ -84,6 +84,7 @@ class sale_shop(osv.osv):
         'magento_notify_paidinweb_delivered': fields.boolean('Notify Paid in web/Delivered', help='Magento notification'),
         'magento_status_cancel': fields.char('Cancel', size=128, help='Status for cancel orders'),
         'magento_notify_cancel': fields.boolean('Notify Cancel', help='Magento notification'),
+        'magento_price_global': fields.boolean('Price Global', help='This sale use in global prices (by multistore)'),
     }
 
     _defaults = {
@@ -363,6 +364,8 @@ class sale_shop(osv.osv):
                 try:
                     if magento_app.catalog_price == 'website' and website_id:
                         product_mgn_id = product_api.update(mgn_id, data, website_id)
+                        if shop.magento_price_global:
+                            product_mgn_id = product_api.update(mgn_id, data) #global price
                     else:
                         product_mgn_id = product_api.update(mgn_id, data)
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Update Product Prices: %s. OpenERP ID %s, Magento ID %s" % (data, product.id, mgn_id))

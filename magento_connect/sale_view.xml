@@ -53,6 +53,7 @@
                                         <field name="magento_tax_include"/>
                                         <field name="magento_check_vat_partner"/>
                                         <field name="magento_default_language"/>
+                                        <field name="magento_price_global"/>
                                         <separator string="Logistic Default" colspan="4"/>
                                         <field name="magento_default_picking_policy" attrs="{'required':[('magento_shop','=', True)]}"/>
                                         <field name="magento_default_order_policy" attrs="{'required':[('magento_shop','=', True)]}"/>
