@@ -1318,6 +1318,8 @@ class sale_order_line(osv.osv):
         product_id = False
         product_uom = magento_app.product_uom_id.id
         product_uom_qty = round(float(item['qty_ordered']),decimals)
+        product_uos = product_uom
+        product_uos_qty = product_uom_qty
         weight = item['weight'] and item['weight'] or 0
         weight = round(float(weight),decimals)
 
@@ -1356,13 +1358,15 @@ class sale_order_line(osv.osv):
                 product_id = magento_external_referential_obj.get_external_referential(cr, uid, [product_mapping_id])[0]['oerp_id']
                 product = self.pool.get('product.product').browse(cr, uid, product_id)
                 product_uom = product.uos_id.id and product.uos_id.id or product.uom_id.id
+                product_uos = product.uos_id.id and product.uos_id.id or product.uom_id.id
+
                 product_id_change = self.pool.get('sale.order.line').product_id_change(cr, uid,
                     [sale_order.id], sale_order.partner_id.property_product_pricelist.id, product.id,
                     product_uom_qty, product_uom, partner_id=sale_order.partner_id.id)
 
                 product_name = product_id_change['value']['name']
-                vals_line['delay'] = product_id_change['value']['delay']
                 weight = product_id_change['value']['th_weight']
+                vals_line['delay'] = product_id_change['value']['delay']
                 vals_line['type'] = product_id_change['value']['type']
                 tax_ids = [self.pool.get('account.tax').browse(cr, uid, t_id).id for t_id in product_id_change['value']['tax_id']]
                 vals_line['tax_id'] = [(6, 0, tax_ids)]
@@ -1373,6 +1377,8 @@ class sale_order_line(osv.osv):
             vals_line['product_id'] = product_id
             vals_line['product_uom_qty'] = product_uom_qty
             vals_line['product_uom'] = product_uom
+            vals_line['product_uos_qty'] = product_uos_qty
+            vals_line['product_uos'] = product_uos
             vals_line['th_weight'] = weight
 
             if first: #only first loop add price
