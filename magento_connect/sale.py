@@ -1020,6 +1020,8 @@ class sale_order(osv.osv):
                         customer_info = False
                         customer = self.pool.get('res.partner').magento_customer_info(magento_app, customer_id)
                         customer_address['email'] = customer['email']
+                    if not 'email' in customer_address:
+                        customer_address['email'] = values['customer_email']
 
                     self.pool.get('res.partner.address').magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address, type='invoice')
                     partner_invoice_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', billing_address)
@@ -1093,6 +1095,8 @@ class sale_order(osv.osv):
                         customer_info = False
                         customer  = self.pool.get('res.partner').magento_customer_info(magento_app, customer_id)
                         customer_address['email'] = customer['email']
+                    if not 'email' in customer_address:
+                        customer_address['email'] = values['customer_email']
 
                     self.pool.get('res.partner.address').magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address, type='delivery')
                     partner_shipping_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', shipping_address)
