@@ -266,6 +266,11 @@ class res_partner_address(osv.osv):
         partner_address_vals['partner_id'] = partner_id
         partner_address_vals['type'] =  type
 
+        """Adding Company Name of Billing address like Partner Name"""
+        if type == 'invoice' or type == 'default':
+            if 'company' in customer_address:
+                self.pool.get('res.partner').write(cr,uid,[partner_id],{'name':customer_address['company']},context)
+
         partner_address_id = self.create(cr, uid, partner_address_vals, context)
         if mapping and ('customer_address_id' in customer_address):
             external_referential_obj.create_external_referential(cr, uid, magento_app, 'res.partner.address', partner_address_id, customer_address['customer_address_id'])
