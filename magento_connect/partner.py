@@ -268,7 +268,7 @@ class res_partner_address(osv.osv):
 
         """Adding Company Name of Billing address like Partner Name"""
         if type == 'invoice' or type == 'default':
-            if 'company' in customer_address:
+            if 'company' in customer_address and customer_address.get('company') != None:
                 self.pool.get('res.partner').write(cr,uid,[partner_id],{'name':customer_address['company']},context)
 
         partner_address_id = self.create(cr, uid, partner_address_vals, context)
