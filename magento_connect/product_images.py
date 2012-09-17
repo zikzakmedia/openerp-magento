@@ -57,6 +57,21 @@ class product_images(osv.osv):
         'magento_exclude':lambda * a:False
     }
 
+    def create(self, cr, uid, vals, context=None):
+        """
+        If Product is Magento, add image magento exportable
+        If Product is not Magento and user add image magento exportable, change to False
+        """
+        if context is None:
+            context = {}
+        if vals.get('product_id',False):
+            res = self.pool.get('product.product').read(cr, uid, [vals['product_id']], ['magento_exportable'])[0]
+            if res['magento_exportable']:
+                vals['magento_exportable'] = True
+            else:
+                vals['magento_exportable'] = False
+        return super(product_images, self).create(cr, uid, vals, context)
+
     def write(self, cr, uid, ids, values, context=None):
         """
         :values -> Dictionary with values
