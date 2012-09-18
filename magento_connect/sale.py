@@ -237,12 +237,10 @@ class sale_shop(osv.osv):
                         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, message)
                         magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, '', 'error', message)
                         request.append(message)
+                cr.commit()
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Products Export")
-
         self.pool.get('magento.app').set_request(cr, uid, magento_app, request)
-
-        cr.commit()
         cr.close()
 
         return product_mgn_id
@@ -375,12 +373,10 @@ class sale_shop(osv.osv):
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, message)
                     magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, mgn_id, 'error', message)
                     request.append(message)
+                cr.commit()
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Prices Export")
-
         self.pool.get('magento.app').set_request(cr, uid, magento_app, request)
-
-        cr.commit()
         cr.close()
 
         return True
@@ -481,12 +477,10 @@ class sale_shop(osv.osv):
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, message)
                     magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, mgn_id, 'error', message)
                     request.append(message)
+                cr.commit()
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Stock Export")
-
         self.pool.get('magento.app').set_request(cr, uid, magento_app, request)
-
-        cr.commit()
         cr.close()
 
         return True
@@ -646,12 +640,10 @@ class sale_shop(osv.osv):
                         LOGGER.notifyChannel('Magento Sync Product Image', netsvc.LOG_INFO, message)
                         magento_log_obj.create_log(cr, uid, magento_app, 'product.images', product_image.id, product, 'error', message )
                         request.append(message)
+                cr.commit()
 
         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Images Export")
-
         self.pool.get('magento.app').set_request(cr, uid, magento_app, request)
-
-        cr.commit()
         cr.close()
 
         return True
@@ -728,7 +720,11 @@ class sale_shop(osv.osv):
         context['shop'] = sale_shop
 
         magento_log_obj = self.pool.get('magento.log')
- 
+
+        if not orders:
+            LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Not Orders available, magento %s, date > %s" % (magento_app.name, creted_filter))
+            return True
+
         with Order(magento_app.uri, magento_app.username, magento_app.password) as order_api:
             for order in orders:
                 order_id = order['order_id']
@@ -745,14 +741,10 @@ class sale_shop(osv.osv):
                 magento_log_obj.create_log(cr, uid, magento_app, 'sale.order', sale_order_id, order_id, 'done', message)
                 cr.commit()
                 request.append(message)
-            if not orders:
-                LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "Not Orders available, magento %s, date > %s" % (magento_app.name, creted_filter))
+                cr.commit()
 
         LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "End Import Magento Orders %s" % (magento_app.name))
-
         self.pool.get('magento.app').set_request(cr, uid, magento_app, request)
-
-        cr.commit()
         cr.close()
 
         return True
@@ -870,10 +862,9 @@ class sale_shop(osv.osv):
                         magento_log_obj.create_log(cr, uid, magento_app, 'sale.order', sale_order.id, order_mgn_id, 'error', _('Error update %s status: %s') % (sale_order.magento_increment_id, status))
 
             #TODO: Magento API. Create invoice and shipments
+            cr.commit()
 
         LOGGER.notifyChannel('Magento Sync Sale Order', netsvc.LOG_INFO, "End Export Status Orders %s" % (magento_app.name))
-
-        cr.commit()
         cr.close()
 
         return True
