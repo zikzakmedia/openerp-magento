@@ -74,7 +74,7 @@
                         <field name="magento_exportable" attrs="{'invisible':[('magento_exportable','==',True)]}"/>
                     </xpath>
                     <xpath expr="/form/group/group/field[@name='ean13']" position="after">
-                        <field name="magento_sku" attrs="{'required':[('magento_exportable','==',True)], 'readonly':[('magento_exported', '==', True)],'invisible':[('magento_exportable','==',False)]}"/>
+                        <field name="magento_sku" attrs="{'required':[('magento_exportable','==',True)]}"/>
                     </xpath>
                     <xpath expr="/form/notebook/page[@string='Descriptions']" position="after">
                         <page string="Magento" attrs="{'invisible':[('magento_exportable','==',False)]}">

@@ -214,7 +214,7 @@ class product_product(osv.osv):
         return False
 
     _columns = {
-        'magento_sku':fields.char('Magento SKU', size=64),
+        'magento_sku':fields.char('Magento SKU', size=64, help='Magento Code. Only available this field to Magento when create product. Not updated.'),
         'magento_exportable':fields.boolean('Exported to Magento?', change_default=True, help='If check this value, this product is publishing in Magento Store. For disable this product in your Magento Store, change visibility option to Nowhere.'),
         'magento_sale_shop': fields.many2many('sale.shop', 'magento_sale_shop_rel', 'product_product_id', 'sale_shop_id', 'Websites', help='Select yours Sale Shops available this product'),
         'magento_product_type': fields.selection(_product_type_get, 'Product Type'),

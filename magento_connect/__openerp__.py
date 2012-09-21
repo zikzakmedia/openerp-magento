@@ -48,9 +48,9 @@
         - https://launchpad.net/magentoerpconnect
         
     Documentation available at (spanish):
-    http://wiki.zikzakmedia.com/openerp:magentoconnect
+    http://openerp.zikzakmedia.com/Esale/MagentoConnect
 
-    Special Thanks to Akretion www.akretion.com and OpenLabs www.openlabs.co.in
+    Special Thanks to OpenLabs www.openlabs.co.in
     """,
     "license" : "AGPL-3",
     "depends" : [
