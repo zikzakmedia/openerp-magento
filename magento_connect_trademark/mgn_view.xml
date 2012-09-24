@@ -9,6 +9,9 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <data>
+                    <xpath expr="/form/group/notebook/page[@string='General']/field[@name='catalog_price']" position="after">
+                        <field name="manufacturer_name"/>
+                    </xpath>
                     <xpath expr="/form/group/notebook/page[@string='Global']/button[@name='core_sync_attributes']" position="after">
                         <button name="core_sync_attributes_manafacturer" string="Import Magento Attributes Manafacturer" colspan="4" type="object" confirm="Are you sure to continue? See logs server process"/>
                     </xpath>

@@ -35,9 +35,17 @@ class magento_app(osv.osv):
     _inherit = 'magento.app'
     _description = 'Magento Server - APP'
 
+    _columns = {
+        'manufacturer_name': fields.char('Manufacturer', size=256, help='Manufacturer attribute name'),
+    }
+
+    _defaults = {
+        'manufacturer_name': 'manufacturer',
+    }
+
     def core_sync_attributes_manafacturer(self, cr, uid, ids, context):
         """
-        def sync Product Type Magento to OpenERP
+        def sync Manufacturer Magento to OpenERP
         Only create new values if not exist; not update or delete
         :ids list magento app
         :return True
@@ -48,8 +56,9 @@ class magento_app(osv.osv):
 
         for magento_app in self.browse(cr, uid, ids):
             with ProductAttribute(magento_app.uri, magento_app.username, magento_app.password) as  product_attribute_api:
+                manufacturer = magento_app.manufacturer_name or 'manufacturer'
                 try:
-                    attribute_options = product_attribute_api.options('manufacturer')
+                    attribute_options = product_attribute_api.options(manufacturer)
                 except:
                     raise osv.except_osv(_("Alert"), _("Not exist manufacturer attribute"))
 

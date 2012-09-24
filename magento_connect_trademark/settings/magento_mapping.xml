@@ -13,7 +13,7 @@
             <field name='active'>1</field>
             <field name='in_function'>value = False
 if values:
-    options = self.pool.get('magento.manufacturer').search(cr, uid, [('value','=',values),('magento_app_id','=',context['magento_app'])])
+    options = self.pool.get('magento.manufacturer').search(cr, uid, [('value','=',values),('magento_app_id','=',context['magento_app'].id)])
     if len(options)>0:
         value = self.pool.get('magento.manufacturer').browse(cr, uid, options[0]).manufacturer_id.id</field>
             <field name='out_function'>value = ''
