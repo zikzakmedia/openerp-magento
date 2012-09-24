@@ -226,7 +226,7 @@ class sale_shop(osv.osv):
                                 data = {
                                     'qty':1,
                                     'is_in_stock':True,
-                                    'manage_stock': True,
+                                    'manage_stock': product.magento_manage_stock,
                                 }
                                 # inventory_api.update(product_mgn_id, data)
                                 inventory_api.update(product.magento_sku, data) #mgn 151 use sku, not ID
