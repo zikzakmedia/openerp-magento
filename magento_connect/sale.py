@@ -157,6 +157,7 @@ class sale_shop(osv.osv):
 
         magento_app = self.pool.get('magento.app').browse(cr, uid, magentoapp)
         context['magento_app'] = magento_app
+        shop = context['shop']
 
         magento_external_referential_obj = self.pool.get('magento.external.referential')
         magento_log_obj = self.pool.get('magento.log')
@@ -217,6 +218,9 @@ class sale_shop(osv.osv):
                         request.append(message)
                 else: #create
                     try:
+                        price = self.magento_get_prices(cr, uid, shop, product, context)
+                        values['price'] = price['price']
+                        values['special_price'] = price['special_price']
                         product_mgn_id = product_api.create(product_type, product_attribute_set, product_sku, values)
                         LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Create Product: %s. OpenERP ID %s, Magento ID %s" % (product_sku, product.id, product_mgn_id))
                         magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'product.product', product.id, product_mgn_id)
@@ -224,8 +228,8 @@ class sale_shop(osv.osv):
                         if magento_app.inventory:
                             with Inventory(magento_app.uri, magento_app.username, magento_app.password) as inventory_api:
                                 data = {
-                                    'qty':1,
-                                    'is_in_stock':True,
+                                    'qty': magento_app.inventory_qty,
+                                    'is_in_stock': True,
                                     'manage_stock': product.magento_manage_stock,
                                 }
                                 # inventory_api.update(product_mgn_id, data)
@@ -244,6 +248,46 @@ class sale_shop(osv.osv):
         cr.close()
 
         return product_mgn_id
+
+    def magento_get_prices(self, cr, uid, shop, product, context=None):
+        """
+        Get Products Price from Price List or price (with or not taxes)
+        :param shop: object
+        :param product: object
+        :return dicc
+        """
+        decimal = self.pool.get('decimal.precision').precision_get(cr, uid, 'Sale Price')
+        price = ''
+        if shop.magento_sale_price == 'pricelist' and shop.pricelist_id:
+            price = self.pool.get('product.pricelist').price_get(cr, uid, [shop.pricelist_id.id], product.id, 1.0)[shop.pricelist_id.id]
+        else:
+            price = product.product_tmpl_id.list_price
+
+        if shop.magento_tax_include:
+            price_compute_all = self.pool.get('account.tax').compute_all(cr, uid, product.product_tmpl_id.taxes_id, price, 1, address_id=None, product=product.product_tmpl_id, partner=None)
+            price = price_compute_all['total_included']
+
+        if price:
+            price = '%.*f' % (decimal, price) #decimal precision
+
+        #Special Price
+        special_price = ''
+        if shop.special_price:
+            if shop.type_special_price == 'pricelist' and shop.special_pricelist_id:
+                special_price = self.pool.get('product.pricelist').price_get(cr, uid, [shop.special_pricelist_id.id], product.id, 1.0)[shop.special_pricelist_id.id]
+            else:
+                special_price = product.special_price
+
+            if shop.magento_tax_include:
+                price_compute_all = self.pool.get('account.tax').compute_all(cr, uid, product.product_tmpl_id.taxes_id, special_price, 1, address_id=None, product=product.product_tmpl_id, partner=None)
+                special_price = price_compute_all['total_included']
+
+            if special_price > 0.0 and special_price < price:
+                special_price = '%.*f' % (decimal, special_price) #decimal precision
+            else:
+                special_price = '' #reset special price to null
+
+        return {'price':price, 'special_price':special_price}
 
     def magento_export_prices(self, cr, uid, ids, context=None):
         """
@@ -299,7 +343,6 @@ class sale_shop(osv.osv):
         db, pool = pooler.get_db_and_pool(db_name)
         cr = db.cursor()
 
-        decimal = self.pool.get('decimal.precision').precision_get(cr, uid, 'Sale Price')
         magento_external_referential_obj = self.pool.get('magento.external.referential')
 
         magento_app = self.pool.get('magento.app').browse(cr, uid, magentoapp)
@@ -321,43 +364,15 @@ class sale_shop(osv.osv):
                 #~ store_view  = self.pool.get('magento.external.referential').get_external_referential(cr, uid, [store_view])[0]['mgn_id']
 
                 data = {}
-                price = ''
                 if not mgn_id:#not product created/exist in Magento. Create
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Force create product ID %s" % (product.id))
                     mgn_id = self.magento_export_products_stepbystep(cr.dbname, uid, magento_app.id, [product.id], context)
                     cr = db.cursor() #magento_export_products_stepbystep close cr. Reopen
 
-                #Price
-                if shop.magento_sale_price == 'pricelist' and shop.pricelist_id:
-                    price = self.pool.get('product.pricelist').price_get(cr, uid, [shop.pricelist_id.id], product.id, 1.0)[shop.pricelist_id.id]
-                else:
-                    price = product.product_tmpl_id.list_price
-
-                if shop.magento_tax_include:
-                    price_compute_all = self.pool.get('account.tax').compute_all(cr, uid, product.product_tmpl_id.taxes_id, price, 1, address_id=None, product=product.product_tmpl_id, partner=None)
-                    price = price_compute_all['total_included']
-
-                if price:
-                    price = '%.*f' % (decimal, price) #decimal precision
-                    data['price'] = price
-
-                #Special Price
-                if shop.special_price:
-                    if shop.type_special_price == 'pricelist' and shop.special_pricelist_id:
-                        special_price = self.pool.get('product.pricelist').price_get(cr, uid, [shop.special_pricelist_id.id], product.id, 1.0)[shop.special_pricelist_id.id]
-                    else:
-                        special_price = product.special_price
-
-                    if shop.magento_tax_include:
-                        price_compute_all = self.pool.get('account.tax').compute_all(cr, uid, product.product_tmpl_id.taxes_id, special_price, 1, address_id=None, product=product.product_tmpl_id, partner=None)
-                        special_price = price_compute_all['total_included']
-
-                    if special_price > 0.0 and special_price < price:
-                        special_price = '%.*f' % (decimal, special_price) #decimal precision
-                    else:
-                        special_price = '' #reset special price to null
-
-                    data['special_price'] = special_price
+                #Prices
+                price = self.magento_get_prices( cr, uid, shop, product, context)
+                data['price'] = price['price']
+                data['special_price'] = price['special_price']
 
                 try:
                     if magento_app.catalog_price == 'website' and website_id:

@@ -87,6 +87,7 @@ class magento_app(osv.osv):
         'magento_country_ids': fields.many2many('res.country','magento_app_country_rel', 'magento_app_id','country_id','Country'),
         'magento_region_ids': fields.one2many('magento.region', 'magento_app_id', 'Region'),
         'inventory': fields.boolean('Force Inventory', help='When create new product, this force inventory available'),
+        'inventory_qty': fields.integer('Qty Inventory', help='Units when force inventory'),
         'options': fields.boolean('Product Options', help='Orders with product options. Split reference order line by -'),
         'log_clean': fields.selection([
             ('1','1 Day'),
@@ -110,6 +111,7 @@ class magento_app(osv.osv):
     _defaults = {
         'log_clean': '15',
         'catalog_price': 'global',
+        'inventory_qty': 1,
     }
 
     def core_sync_test(self, cr, uid, ids, context):

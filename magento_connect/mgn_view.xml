@@ -31,6 +31,7 @@
                             <field name="product_delivery_default_id"/>
                             <field name="product_discount_default_id"/>
                             <field name="inventory"/>
+                            <field name="inventory_qty"/>
                             <field name="options"/>
                         </page>
                         <page string="Authentication">

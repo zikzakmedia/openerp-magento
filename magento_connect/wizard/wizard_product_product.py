@@ -82,6 +82,8 @@ class magento_sync_product_wizard(osv.osv_memory):
         if shop.magento_default_language:
             context['lang'] = shop.magento_default_language.code
 
+        context['shop'] = shop
+
         if len(product_ids) > 0:
             thread1 = threading.Thread(target=self.pool.get('sale.shop').magento_export_products_stepbystep, args=(cr.dbname, uid, magento_app.id, product_ids, context))
             thread1.start()
