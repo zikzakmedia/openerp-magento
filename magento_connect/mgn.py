@@ -416,7 +416,8 @@ class magento_app(osv.osv):
                 with Category(magento_app.uri, magento_app.username, magento_app.password) as category_api:
                     try:
                         if product_cat_mgn_id:
-                            #TODO Parent ID not updated. Only vals
+                            #TODO Parent ID not updated. Update parent_id need to call move method
+                            #NOTE Please make sure that you are not moving category to any of its own children
                             category_api.update(product_cat_mgn_id, product_category_vals)
                             LOGGER.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "Update Category Magento ID %s, OpenERP ID %s." % (product_cat_mgn_id, product_category))
                         else:

@@ -190,7 +190,6 @@ class sale_shop(osv.osv):
 
                 # remove dicc values
                 del values['id']
-                del values['sku']
                 del values['type']
                 del values['set']
 
@@ -217,6 +216,7 @@ class sale_shop(osv.osv):
                         magento_log_obj.create_log(cr, uid, magento_app, 'product.product', product.id, product_mgn_id, 'error', message)
                         request.append(message)
                 else: #create
+                    del values['sku']
                     try:
                         price = self.magento_get_prices(cr, uid, shop, product, context)
                         values['price'] = price['price']
@@ -834,7 +834,8 @@ class sale_shop(osv.osv):
             if not mapping_id:
                 LOGGER.notifyChannel('Order Status', netsvc.LOG_ERROR, "Order %s not exist in mapping" % (sale_order.id))
                 magento_log_obj.create_log(cr, uid, magento_app, 'sale.order', (sale_order.id, '', 'error', _('Error update status %s') % (status) ))
-                        
+                continue
+
             mappings = magento_external_referential_obj.get_external_referential(cr, uid, [mapping_id])
             order_mgn_id = mappings[0]['mgn_id']
 
