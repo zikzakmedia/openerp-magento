@@ -77,8 +77,11 @@ class product_category(osv.osv):
     def onchange_name(self, cr, uid, ids, name, slug):
         value = {}
         if not slug:
-            slug = slugify(unicode(name, 'UTF-8'))
-            value = {'magento_url_key': slug}
+            try:
+                slug = slugify(unicode(name, 'UTF-8'))
+                value = {'magento_url_key': slug}
+            except:
+                pass
         return {'value':value}
 
     _columns = {
@@ -195,8 +198,11 @@ class product_product(osv.osv):
     def onchange_name(self, cr, uid, ids, name, slug):
         value = {}
         if not slug and name:
-            slug = slugify(unicode(name, 'UTF-8'))
-            value = {'magento_url_key': slug}
+            try:
+                slug = slugify(unicode(name, 'UTF-8'))
+                value = {'magento_url_key': slug}
+            except:
+                pass
         return {'value':value}
 
     def _check_magento_sku(self, cr, uid, magento_sku, id=False):
