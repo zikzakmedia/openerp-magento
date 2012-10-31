@@ -306,7 +306,7 @@ if value == None:
             <field name='mapping_id' ref='magento_connect.mgn03'/>
             <field name='field_id' search="[('model_id','=','product.category'),('name','=','parent_id')]" model='ir.model.fields'/>
             <field name='external_field'>parent_id</field>
-            <field name='type'>in</field>
+            <field name='type'>in_out</field>
             <field name='external_type'>str</field>
             <field name='active'>1</field>
             <field name='in_function'>value = ''

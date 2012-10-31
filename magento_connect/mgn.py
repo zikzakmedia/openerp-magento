@@ -411,7 +411,9 @@ class magento_app(osv.osv):
                     product_cat = magento_external_referential_obj.get_external_referential(cr, uid, [product_cat])
                     product_cat_mgn_id = product_cat[0]['mgn_id']
 
+                product_cat_parent = product_category_vals['parent_id']
                 del product_category_vals['id']
+                del product_category_vals['parent_id']
 
                 with Category(magento_app.uri, magento_app.username, magento_app.password) as category_api:
                     try:
@@ -421,13 +423,11 @@ class magento_app(osv.osv):
                             category_api.update(product_cat_mgn_id, product_category_vals)
                             LOGGER.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "Update Category Magento ID %s, OpenERP ID %s." % (product_cat_mgn_id, product_category))
                         else:
-                            product_cat_parent = product_category_vals['parent_id']
                             product_cat_parent = self.pool.get('magento.external.referential').check_oerp2mgn(cr, uid, magento_app, 'product.category', product_cat_parent)
                             if product_cat_parent:
                                 product_cat_parent = magento_external_referential_obj.get_external_referential(cr, uid, [product_cat_parent])
                                 parent_id = product_cat_parent[0]['mgn_id']
 
-                            del product_category_vals['parent_id']
                             product_cat_mgn_id = category_api.create(parent_id, product_category_vals)
                             magento_external_referential_obj.create_external_referential(cr, uid, magento_app, 'product.category', product_category, product_cat_mgn_id)
                             LOGGER.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "Create Category Magento ID %s, OpenERP ID %s." % (product_cat_mgn_id, product_category))
