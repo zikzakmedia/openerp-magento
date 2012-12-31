@@ -41,6 +41,7 @@
         "security/ir.model.access.csv",
         "settings/magento_mapping.xml",
         "mgn_view.xml",
+        "sale_view.xml",
     ],
     "active": False,
     "installable": True

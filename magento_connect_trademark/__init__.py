@@ -23,3 +23,4 @@
 
 import mgn
 import partner
+import sale
