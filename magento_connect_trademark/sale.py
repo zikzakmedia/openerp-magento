@@ -86,8 +86,7 @@ class sale_shop(osv.osv):
                 if mgn_id:
                     continue
 
-                #TODO: select store from magento_app
-                data = {'label':[{'store_id':[0,1], 'value':trademark.name},]}
+                data = {'label':[{'store_id':[0,], 'value':trademark.name},]}
 
                 try:
                     result = product_attribute_api.createOption(manufacturer_name, data)
