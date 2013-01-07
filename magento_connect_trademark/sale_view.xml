@@ -9,10 +9,10 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <data>
-                    <button name="magento_export_products" position="before">
+                    <button name="magento_export_images" position="after">
                         <button name="magento_export_trademark" string="Export Trademarks" colspan="1" type="object" confirm="Are you sure to continue? This action is in background. See logs server process"/>
                     </button>
-                    <field name="magento_last_export_products" position="before">
+                    <field name="magento_last_export_images" position="after">
                             <field name="magento_last_export_trademark" />
                     </field>
                 </data>

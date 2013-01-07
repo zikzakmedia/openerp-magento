@@ -113,7 +113,7 @@ class sale_shop(osv.osv):
                     else:
                         raise Exception()
                 except:
-                    message = _('Error: Magento Update Price: %s. OpenERP ID: %s, Magento ID %s') % (trademark.name, trademark.id, mgn_id)
+                    message = _('Error: Magento Tradename: %s. OpenERP ID: %s, Magento ID %s') % (trademark.name, trademark.id, mgn_id)
                     LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_ERROR, message)
                     magento_log_obj.create_log(cr, uid, magento_app, 'magento.manufacturer', trademark.id, mgn_id, 'error', message)
                     request.append(message)

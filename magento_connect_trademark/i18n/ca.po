@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.3\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2012-09-24 08:35+0000\n"
-"PO-Revision-Date: 2012-09-24 10:38+0100\n"
+"POT-Creation-Date: 2013-01-07 11:55+0000\n"
+"PO-Revision-Date: 2013-01-07 12:58+0100\n"
 "Last-Translator: Raimon Esteve <resteve@zikzakmedia.com>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -17,14 +17,36 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: magento_connect_trademark
+#: view:sale.shop:0
+msgid "Export Trademarks"
+msgstr "Exporta fabricants"
+
+#. module: magento_connect_trademark
+#: help:sale.shop,magento_last_export_trademark:0
+msgid "This date is last export. If you need export new manufacturers, you can modify this date (filter)"
+msgstr "Aquesta data és la última exportació. Si necessita exportar nous fabricants pot modificar aquesta data (filtre)"
+
+#. module: magento_connect_trademark
+#: field:magento.manufacturer,label:0
+msgid "Label"
+msgstr "Etiqueta"
+
+#. module: magento_connect_trademark
+#: code:addons/magento_connect_trademark/sale.py:110
+#, python-format
+msgid "Successfully export trademark: %s"
+msgstr "Fabricant exportat: %s"
+
+#. module: magento_connect_trademark
+#: code:addons/magento_connect_trademark/mgn.py:63
+#, python-format
+msgid "Not exist manufacturer attribute"
+msgstr "No existeix l'atribut fabricant (manufacturer)"
+
+#. module: magento_connect_trademark
 #: help:magento.app,manufacturer_name:0
 msgid "Manufacturer attribute name"
 msgstr "Nom del atribut de fabricant"
-
-#. module: magento_connect_trademark
-#: field:magento.manufacturer,magento_app_id:0
-msgid "Magento App"
-msgstr "Magento App"
 
 #. module: magento_connect_trademark
 #: view:magento.app:0
@@ -32,14 +54,63 @@ msgid "Are you sure to continue? See logs server process"
 msgstr "Esteu segur de continuar? Reviseu l'historial del servidor."
 
 #. module: magento_connect_trademark
-#: field:magento.manufacturer,label:0
-msgid "Label"
-msgstr "Label"
+#: code:addons/magento_connect_trademark/mgn.py:63
+#: code:addons/magento_connect_trademark/partner.py:35
+#, python-format
+msgid "Alert"
+msgstr "Alerta"
+
+#. module: magento_connect_trademark
+#: view:sale.shop:0
+msgid "Are you sure to continue? This action is in background. See logs server process"
+msgstr "Esteu segur de continuar? Aquesta acció es realitza en background. Reviseu l'historial del servidor."
+
+#. module: magento_connect_trademark
+#: model:ir.model,name:magento_connect_trademark.model_magento_manufacturer
+msgid "Magento manufacturer"
+msgstr "Fabricant Magento"
+
+#. module: magento_connect_trademark
+#: model:ir.model,name:magento_connect_trademark.model_sale_shop
+msgid "Sales Shop"
+msgstr "Botigues"
+
+#. module: magento_connect_trademark
+#: field:magento.app,manufacturer_name:0
+#: field:magento.manufacturer,manufacturer_id:0
+msgid "Manufacturer"
+msgstr "Fabricant"
 
 #. module: magento_connect_trademark
 #: view:magento.app:0
 msgid "Import Magento Attributes Manafacturer"
 msgstr "Importa atributs de fabricant de Magento"
+
+#. module: magento_connect_trademark
+#: field:magento.manufacturer,magento_app_id:0
+msgid "Magento App"
+msgstr "Magento App"
+
+#. module: magento_connect_trademark
+#: model:ir.model,name:magento_connect_trademark.model_magento_app
+msgid "Magento Server - APP"
+msgstr "Magento Server - APP"
+
+#. module: magento_connect_trademark
+#: field:magento.manufacturer,value:0
+msgid "ID"
+msgstr "ID"
+
+#. module: magento_connect_trademark
+#: code:addons/magento_connect_trademark/sale.py:116
+#, python-format
+msgid "Error: Magento Tradename: %s. OpenERP ID: %s, Magento ID %s"
+msgstr "Error: Fabricant Magento: %s. OpenERP ID: %s, Magento ID %s"
+
+#. module: magento_connect_trademark
+#: field:sale.shop,magento_last_export_trademark:0
+msgid "Last Export Trademarks"
+msgstr "Últims fabricants exportats"
 
 #. module: magento_connect_trademark
 #: model:ir.module.module,description:magento_connect_trademark.module_meta_information
@@ -53,11 +124,6 @@ msgstr ""
 "    "
 
 #. module: magento_connect_trademark
-#: model:ir.model,name:magento_connect_trademark.model_magento_manufacturer
-msgid "Magento manufacturer"
-msgstr "Fabricant Magento"
-
-#. module: magento_connect_trademark
 #: code:addons/magento_connect_trademark/partner.py:35
 #, python-format
 msgid "Partner ID '%s' not allow to delete because are active in Magento Manafacturer"
@@ -69,38 +135,9 @@ msgid "Partner"
 msgstr "Empresa"
 
 #. module: magento_connect_trademark
-#: model:ir.model,name:magento_connect_trademark.model_magento_app
-msgid "Magento Server - APP"
-msgstr "Magento Server - APP"
-
-#. module: magento_connect_trademark
-#: code:addons/magento_connect_trademark/mgn.py:63
-#, python-format
-msgid "Not exist manufacturer attribute"
-msgstr "No existeix l'atribut fabricant (manufacturer)"
-
-#. module: magento_connect_trademark
-#: code:addons/magento_connect_trademark/mgn.py:63
-#: code:addons/magento_connect_trademark/partner.py:35
-#, python-format
-msgid "Alert"
-msgstr "Alerta"
-
-#. module: magento_connect_trademark
-#: field:magento.manufacturer,value:0
-msgid "ID"
-msgstr "ID"
-
-#. module: magento_connect_trademark
 #: model:ir.module.module,shortdesc:magento_connect_trademark.module_meta_information
 msgid "Magento Connector - Trademark (Manufacturer)"
 msgstr "Magento Connector - Trademark (Manufacturer)"
-
-#. module: magento_connect_trademark
-#: field:magento.app,manufacturer_name:0
-#: field:magento.manufacturer,manufacturer_id:0
-msgid "Manufacturer"
-msgstr "Fabricant"
 
 #~ msgid "Magento Manafacturer"
 #~ msgstr "Fabricant Magento"

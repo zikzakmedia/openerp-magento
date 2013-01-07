@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.3\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2012-09-24 08:35+0000\n"
-"PO-Revision-Date: 2012-09-24 08:35+0000\n"
+"POT-Creation-Date: 2013-01-07 11:55+0000\n"
+"PO-Revision-Date: 2013-01-07 11:55+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,19 +16,14 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: magento_connect_trademark
-#: help:magento.app,manufacturer_name:0
-msgid "Manufacturer attribute name"
-msgstr "Manufacturer attribute name"
+#: view:sale.shop:0
+msgid "Export Trademarks"
+msgstr "Export Trademarks"
 
 #. module: magento_connect_trademark
-#: field:magento.manufacturer,magento_app_id:0
-msgid "Magento App"
-msgstr "Magento App"
-
-#. module: magento_connect_trademark
-#: view:magento.app:0
-msgid "Are you sure to continue? See logs server process"
-msgstr "Are you sure to continue? See logs server process"
+#: help:sale.shop,magento_last_export_trademark:0
+msgid "This date is last export. If you need export new manufacturers, you can modify this date (filter)"
+msgstr "This date is last export. If you need export new manufacturers, you can modify this date (filter)"
 
 #. module: magento_connect_trademark
 #: field:magento.manufacturer,label:0
@@ -36,9 +31,85 @@ msgid "Label"
 msgstr "Label"
 
 #. module: magento_connect_trademark
+#: code:addons/magento_connect_trademark/sale.py:110
+#, python-format
+msgid "Successfully export trademark: %s"
+msgstr "Successfully export trademark: %s"
+
+#. module: magento_connect_trademark
+#: code:addons/magento_connect_trademark/mgn.py:63
+#, python-format
+msgid "Not exist manufacturer attribute"
+msgstr "Not exist manufacturer attribute"
+
+#. module: magento_connect_trademark
+#: help:magento.app,manufacturer_name:0
+msgid "Manufacturer attribute name"
+msgstr "Manufacturer attribute name"
+
+#. module: magento_connect_trademark
+#: view:magento.app:0
+msgid "Are you sure to continue? See logs server process"
+msgstr "Are you sure to continue? See logs server process"
+
+#. module: magento_connect_trademark
+#: code:addons/magento_connect_trademark/mgn.py:63
+#: code:addons/magento_connect_trademark/partner.py:35
+#, python-format
+msgid "Alert"
+msgstr "Alert"
+
+#. module: magento_connect_trademark
+#: view:sale.shop:0
+msgid "Are you sure to continue? This action is in background. See logs server process"
+msgstr "Are you sure to continue? This action is in background. See logs server process"
+
+#. module: magento_connect_trademark
+#: model:ir.model,name:magento_connect_trademark.model_magento_manufacturer
+msgid "Magento manufacturer"
+msgstr "Magento manufacturer"
+
+#. module: magento_connect_trademark
+#: model:ir.model,name:magento_connect_trademark.model_sale_shop
+msgid "Sales Shop"
+msgstr "Sales Shop"
+
+#. module: magento_connect_trademark
+#: field:magento.app,manufacturer_name:0
+#: field:magento.manufacturer,manufacturer_id:0
+msgid "Manufacturer"
+msgstr "Manufacturer"
+
+#. module: magento_connect_trademark
 #: view:magento.app:0
 msgid "Import Magento Attributes Manafacturer"
 msgstr "Import Magento Attributes Manafacturer"
+
+#. module: magento_connect_trademark
+#: field:magento.manufacturer,magento_app_id:0
+msgid "Magento App"
+msgstr "Magento App"
+
+#. module: magento_connect_trademark
+#: model:ir.model,name:magento_connect_trademark.model_magento_app
+msgid "Magento Server - APP"
+msgstr "Magento Server - APP"
+
+#. module: magento_connect_trademark
+#: field:magento.manufacturer,value:0
+msgid "ID"
+msgstr "ID"
+
+#. module: magento_connect_trademark
+#: code:addons/magento_connect_trademark/sale.py:116
+#, python-format
+msgid "Error: Magento Tradename: %s. OpenERP ID: %s, Magento ID %s"
+msgstr "Error: Magento Tradename: %s. OpenERP ID: %s, Magento ID %s"
+
+#. module: magento_connect_trademark
+#: field:sale.shop,magento_last_export_trademark:0
+msgid "Last Export Trademarks"
+msgstr "Last Export Trademarks"
 
 #. module: magento_connect_trademark
 #: model:ir.module.module,description:magento_connect_trademark.module_meta_information
@@ -48,11 +119,6 @@ msgid "\n"
 msgstr "\n"
 "    Magento E-commerce Trademark management. Relation Manafacturer Magento availables in OpenERP Manafacturers.\n"
 "    "
-
-#. module: magento_connect_trademark
-#: model:ir.model,name:magento_connect_trademark.model_magento_manufacturer
-msgid "Magento manufacturer"
-msgstr "Magento manufacturer"
 
 #. module: magento_connect_trademark
 #: code:addons/magento_connect_trademark/partner.py:35
@@ -66,36 +132,7 @@ msgid "Partner"
 msgstr "Partner"
 
 #. module: magento_connect_trademark
-#: model:ir.model,name:magento_connect_trademark.model_magento_app
-msgid "Magento Server - APP"
-msgstr "Magento Server - APP"
-
-#. module: magento_connect_trademark
-#: code:addons/magento_connect_trademark/mgn.py:63
-#, python-format
-msgid "Not exist manufacturer attribute"
-msgstr "Not exist manufacturer attribute"
-
-#. module: magento_connect_trademark
-#: code:addons/magento_connect_trademark/mgn.py:63
-#: code:addons/magento_connect_trademark/partner.py:35
-#, python-format
-msgid "Alert"
-msgstr "Alert"
-
-#. module: magento_connect_trademark
-#: field:magento.manufacturer,value:0
-msgid "ID"
-msgstr "ID"
-
-#. module: magento_connect_trademark
 #: model:ir.module.module,shortdesc:magento_connect_trademark.module_meta_information
 msgid "Magento Connector - Trademark (Manufacturer)"
 msgstr "Magento Connector - Trademark (Manufacturer)"
-
-#. module: magento_connect_trademark
-#: field:magento.app,manufacturer_name:0
-#: field:magento.manufacturer,manufacturer_id:0
-msgid "Manufacturer"
-msgstr "Manufacturer"
 
