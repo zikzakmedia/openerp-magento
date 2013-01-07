@@ -249,9 +249,12 @@ class product_product(osv.osv):
 
         if 'magento_url_key' in vals:
             slug = vals['magento_url_key']
-            if not isinstance(slug, unicode):
-                slug = unicode(slug, 'UTF-8')
-            slug = slugify(slug)
+            try:
+                if not isinstance(slug, unicode):
+                    slug = unicode(slug, 'UTF-8')
+                slug = slugify(slug)
+            except:
+                pass
             vals['magento_url_key'] = slug
 
         if 'magento_metadescription' in vals:
@@ -282,8 +285,11 @@ class product_product(osv.osv):
                     # raise osv.except_osv(_("Alert"), _("Error! Magento SKU %s must be unique") % (vals['magento_sku']))
 
             if 'magento_url_key' in vals:
-                slug = slugify(unicode(vals['magento_url_key'], 'UTF-8'))
-                vals['magento_url_key'] = slug
+                try:
+                    slug = slugify(unicode(vals['magento_url_key'], 'UTF-8'))
+                    vals['magento_url_key'] = slug
+                except:
+                    pass
 
             if 'magento_metadescription' in vals:
                 metadescription = vals.get('magento_metadescription','')
@@ -413,7 +419,7 @@ class product_product(osv.osv):
         
         product_product_vals = self.pool.get('base.external.mapping').exclude_uptade(cr, uid, 'magento.product.product', product_product_vals, context)
         product_template_vals = self.pool.get('base.external.mapping').exclude_uptade(cr, uid, 'magento.product.template', product_template_vals, context)
-        values = dict(product_template_vals, **product_product_vals)
+        # values = dict(product_template_vals, **product_product_vals)
 
         vals = dict(product_product_vals, **product_template_vals)
 
