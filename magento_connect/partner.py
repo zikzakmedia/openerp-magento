@@ -232,7 +232,10 @@ class res_partner_address(osv.osv):
         vals['name'] = '%s %s' % (customer_address['firstname'].capitalize(), customer_address['lastname'].capitalize())
         vals['city'] = customer_address['city'].capitalize()
         vals['phone'] = customer_address['telephone']
-        vals['street'] = customer_address['street'].capitalize()
+        street = customer_address['street'].capitalize()
+        street = street.replace(unicode('º','UTF-8'), '')
+        street = street.replace(unicode('ª','UTF-8'), '')
+        vals['street'] = street
         vals['zip'] = customer_address['postcode']
         vals['magento_firstname'] = customer_address['firstname']
         vals['magento_lastname'] = customer_address['lastname']

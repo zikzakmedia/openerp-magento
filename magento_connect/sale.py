@@ -1013,6 +1013,7 @@ class sale_order(osv.osv):
                 if not vals.get('email'):
                     vals['email'] = values['customer_email']
                 partner_address_invoice_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, vals, type='invoice')
+                customer_address = vals.copy()
             else:
                 partner_invoice_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', billing_address)
 
@@ -1071,6 +1072,25 @@ class sale_order(osv.osv):
             else:
                 partner_address_invoice_id = self.pool.get('res.partner.address').magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address, mapping=False, type='invoice')
 
+        # compare customer address and order address. Not same, create new address; not mapping address
+        order_address = values['billing_address']['street']
+        order_postcode = values['billing_address']['postcode']
+        partner_address = customer_address['street']
+        partner_zip = customer_address['postcode']
+        if ((order_address != partner_address) and (order_postcode != partner_zip)):
+            order_address = order_address.capitalize()
+            order_address = order_address.replace(unicode('º','UTF-8'), '')
+            order_address = order_address.replace(unicode('ª','UTF-8'), '')
+            addresses = partner_address_obj.search(cr, uid, [
+                ('partner_id','=', partner_id),
+                ('street', '=', order_address), 
+                ('zip', '=', order_postcode),
+                ])
+            if len(addresses):
+                partner_address_invoice_id = addresses[0]
+            else:
+                partner_address_invoice_id = self.pool.get('res.partner.address').magento_create_partner_address(cr, uid, magento_app, partner_id, values['billing_address'], mapping=False, type='invoice')
+
         return partner_address_invoice_id
 
     def magento_create_order_shipping_address(self, cr, uid, magento_app, sale_shop, partner_id, customer_id, values, customer_info, context):
@@ -1091,6 +1111,7 @@ class sale_order(osv.osv):
                 if not vals.get('email'):
                     vals['email'] = values['customer_email']
                 partner_address_shipping_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, vals, type='delivery')
+                customer_address = vals.copy()
             else:
                 partner_shipping_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', shipping_address)
 
@@ -1148,6 +1169,25 @@ class sale_order(osv.osv):
                 partner_address_shipping_id = addresses[0]
             else:
                 partner_address_shipping_id = self.pool.get('res.partner.address').magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address, mapping=False, type='delivery')
+
+        # compare customer address and order address. Not same, create new address; not mapping address
+        order_address = values['shipping_address']['street']
+        order_postcode = values['shipping_address']['postcode']
+        partner_address = customer_address['street']
+        partner_zip = customer_address['postcode']
+        if ((order_address != partner_address) and (order_postcode != partner_zip)):
+            order_address = order_address.capitalize()
+            order_address = order_address.replace(unicode('º','UTF-8'), '')
+            order_address = order_address.replace(unicode('ª','UTF-8'), '')
+            addresses = partner_address_obj.search(cr, uid, [
+                ('partner_id','=', partner_id),
+                ('street', '=', order_address), 
+                ('zip', '=', order_postcode),
+                ])
+            if len(addresses):
+                partner_address_shipping_id = addresses[0]
+            else:
+                partner_address_shipping_id = self.pool.get('res.partner.address').magento_create_partner_address(cr, uid, magento_app, partner_id, values['shipping_address'], mapping=False, type='delivery')
 
         return partner_address_shipping_id
 
