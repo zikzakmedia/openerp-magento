@@ -1012,12 +1012,15 @@ class sale_order(osv.osv):
                 vals = values['billing_address']
                 if not vals.get('email'):
                     vals['email'] = values['customer_email']
-                partner_address_invoice_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, vals)
+                partner_address_invoice_id = self.pool.get('res.partner.address').magento_ghost_customer_address(cr, uid, magento_app, partner_id, customer_id, vals, type='invoice')
             else:
                 partner_invoice_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', billing_address)
 
-                #call customer address magento. We need ever to call because we need check if magento user change this address
+                #Get Addres Info by webservices. If address not exist, get values from order
                 customer_address  = self.pool.get('res.partner.address').magento_customer_address_info(magento_app, billing_address)
+                if not customer_address:
+                    customer_address  = values['billing_address']
+
                 if not 'customer_address_id' in customer_address:
                     customer_address['customer_address_id'] = billing_address
 
@@ -1036,7 +1039,7 @@ class sale_order(osv.osv):
                 partner_address_invoice_id = magento_external_referential_obj.get_external_referential(cr, uid, [partner_invoice_mapping_id])[0]['oerp_id']
 
                 #update address invoice
-                if update_address:
+                if update_address and customer_address.get('updated_at'):
                     address_invoice = self.pool.get('res.partner.address').perm_read(cr, uid, [partner_address_invoice_id])[0]
                     address_invoice_write = address_invoice.get('write_date', False)
                     if convert_gmtime(address_invoice['create_date'][:19]) < customer_address['updated_at'] or (address_invoice_write and convert_gmtime(address_invoice['write_date'][:19]) < customer_address['updated_at']):
@@ -1091,8 +1094,11 @@ class sale_order(osv.osv):
             else:
                 partner_shipping_mapping_id = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'res.partner.address', shipping_address)
 
-                #call customer address magento. We need ever to call because we need check if magento user change this address
+                #Get Addres Info by webservices. If address not exist, get values from order
                 customer_address = self.pool.get('res.partner.address').magento_customer_address_info(magento_app, shipping_address)
+                if not customer_address:
+                    customer_address  = values['shipping_address']
+
                 if not 'customer_address_id' in customer_address:
                     customer_address['customer_address_id'] = shipping_address
 
@@ -1111,7 +1117,7 @@ class sale_order(osv.osv):
                 partner_address_shipping_id = magento_external_referential_obj.get_external_referential(cr, uid, [partner_shipping_mapping_id])[0]['oerp_id']
 
                 #update address delivery
-                if update_address:
+                if update_address and customer_address.get('updated_at'):
                     address_shipping = self.pool.get('res.partner.address').perm_read(cr, uid, [partner_address_shipping_id])[0]
                     address_shipping_write = address_shipping.get('write_date', False)
                     if convert_gmtime(address_shipping['create_date'][:19]) < customer_address['updated_at'] or (address_shipping_write and convert_gmtime(address_shipping['write_date'][:19]) < customer_address['updated_at']):

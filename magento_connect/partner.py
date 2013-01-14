@@ -177,7 +177,10 @@ class res_partner_address(osv.osv):
         :return customer
         """
         with CustomerAddress(magento_app.uri, magento_app.username, magento_app.password) as customer_address_api:
-            address = customer_address_api.info(customer_address_id)
+            try:
+                address = customer_address_api.info(customer_address_id)
+            except:
+                return False
 
         return address
 
