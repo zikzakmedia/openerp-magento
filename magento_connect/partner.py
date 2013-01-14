@@ -270,7 +270,7 @@ class res_partner_address(osv.osv):
         if type == 'invoice' or type == 'default':
             if customer_address.get('company') and customer_address.get('company') != None:
                 logger.notifyChannel('Magento', netsvc.LOG_INFO, 'Change Partner name: %s (company)' % customer_address.get('company'))
-                self.pool.get('res.partner').write(cr,uid,[partner_id],{'name':customer_address['company']},context)
+                self.pool.get('res.partner').write(cr,uid,[partner_id],{'name':customer_address['company']}, context)
 
         partner_address_id = self.create(cr, uid, partner_address_vals, context)
         if mapping and ('customer_address_id' in customer_address):
@@ -309,7 +309,7 @@ class res_partner_address(osv.osv):
 
         return partner_address_id
 
-    def magento_ghost_customer_address(self, cr, uid, magento_app, partner_id, customer_id, values):
+    def magento_ghost_customer_address(self, cr, uid, magento_app, partner_id, customer_id, values, type = 'default'):
         """If Create Partner same time create order, Magento Customer Address ID = 0
         1- Check zip and address exists in Address OpenERP
         2- Get Customer API. Check Address. Not mapping address
@@ -324,15 +324,20 @@ class res_partner_address(osv.osv):
         zip = values['postcode']
         street = values['street']
 
+        """Adding Company Name of Billing address like Partner Name"""
+        if type == 'invoice' or type == 'default':
+            if values.get('company') and values.get('company') != None:
+                logger.notifyChannel('Magento', netsvc.LOG_INFO, 'Change Partner name: %s (company)' % values.get('company'))
+                self.pool.get('res.partner').write(cr,uid,[partner_id],{'name':values['company']}, context)
+
         address = self.pool.get('res.partner.address').search(cr, uid, [
                 ('zip','=',zip),
                 ('street','=',street),
                 ('partner_id','=',partner_id),
             ])
-        # 1
+    
         if len(address)>0:
             return address[0]
-        # 2
         else:
             with CustomerAddress(magento_app.uri, magento_app.username, magento_app.password) as customer_address_api:
                 customer_address = customer_address_api.list(customer_id)
@@ -340,7 +345,6 @@ class res_partner_address(osv.osv):
                     if address['postcode'] == zip and address['street'] == street:
                         create_ghost_address = False
                         return self.magento_create_partner_address(cr, uid, magento_app, partner_id, address, mapping = True)
-                # 3
                 if len(customer_address)>0:
                     return self.magento_create_partner_address(cr, uid, magento_app, partner_id, customer_address[0], mapping = False)
                 else:
