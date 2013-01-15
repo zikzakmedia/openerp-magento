@@ -311,7 +311,7 @@ class res_partner_address(osv.osv):
 
         return partner_address_id
 
-    def magento_ghost_customer_address(self, cr, uid, magento_app, partner_id, customer_id, values, type = 'default'):
+    def magento_ghost_customer_address(self, cr, uid, magento_app, partner_id, customer_id, values, type = 'default', context = None):
         """If Create Partner same time create order, Magento Customer Address ID = 0
         1- Check zip and address exists in Address OpenERP
         2- Get Customer API. Check Address. Not mapping address
