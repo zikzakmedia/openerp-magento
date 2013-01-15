@@ -1078,7 +1078,7 @@ class sale_order(osv.osv):
         partner_address = customer_address['street']
         partner_zip = customer_address['postcode']
         if ((order_address != partner_address) and (order_postcode != partner_zip)):
-            order_address = order_address.capitalize()
+            order_address = order_address.title()
             order_address = order_address.replace(unicode('º','UTF-8'), '')
             order_address = order_address.replace(unicode('ª','UTF-8'), '')
             addresses = partner_address_obj.search(cr, uid, [
@@ -1176,7 +1176,7 @@ class sale_order(osv.osv):
         partner_address = customer_address['street']
         partner_zip = customer_address['postcode']
         if ((order_address != partner_address) and (order_postcode != partner_zip)):
-            order_address = order_address.capitalize()
+            order_address = order_address.title()
             order_address = order_address.replace(unicode('º','UTF-8'), '')
             order_address = order_address.replace(unicode('ª','UTF-8'), '')
             addresses = partner_address_obj.search(cr, uid, [

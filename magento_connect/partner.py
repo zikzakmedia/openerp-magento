@@ -97,7 +97,7 @@ class res_partner(osv.osv):
                     return partner_id[0]
 
         context['magento_app'] = magento_app
-        values['name'] = '%s %s' % (values['firstname'].capitalize(), values['lastname'].capitalize())
+        values['name'] = '%s %s' % (values['firstname'].title(), values['lastname'].title())
         res_partner_vals = res_partner_vals_obj.get_external_to_oerp(cr, uid, 'magento.res.partner', False, values, context)
         res_partner_vals['customer'] = True #fix this partner is customer
         partner_id = self.create(cr, uid, res_partner_vals, context)
@@ -229,10 +229,10 @@ class res_partner_address(osv.osv):
         mgn_region_obj = self.pool.get('magento.region')
 
         vals = {}
-        vals['name'] = '%s %s' % (customer_address['firstname'].capitalize(), customer_address['lastname'].capitalize())
-        vals['city'] = customer_address['city'].capitalize()
+        vals['name'] = '%s %s' % (customer_address['firstname'].title(), customer_address['lastname'].title())
+        vals['city'] = customer_address['city'].title()
         vals['phone'] = customer_address['telephone']
-        street = customer_address['street'].capitalize()
+        street = customer_address['street'].title()
         street = street.replace(unicode('º','UTF-8'), '')
         street = street.replace(unicode('ª','UTF-8'), '')
         vals['street'] = street
@@ -385,14 +385,14 @@ class res_partner_address(osv.osv):
             else:
                 firstname = ''.join(partner_name[:1])
             partner_name.remove(partner_name[0])
-        result['firstname'] = firstname.capitalize()
+        result['firstname'] = firstname.title()
 
         if partner_address.magento_lastname:
             lastname = partner_address.magento_lastname
         else:
             lastname = ' '.join(partner_name)
 
-        result['lastname'] = lastname.capitalize()
+        result['lastname'] = lastname.title()
         if result['lastname'] == '': #not empty
             result['lastname'] = '--'
 
