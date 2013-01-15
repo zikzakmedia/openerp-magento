@@ -27,6 +27,8 @@ import netsvc
 
 from magento import *
 
+LOGGER = netsvc.Logger()
+
 class res_partner(osv.osv):
     _inherit = "res.partner"
 
@@ -64,8 +66,6 @@ class res_partner(osv.osv):
         magento_vat = False
         if 'taxvat' in values:
             magento_vat = values['taxvat']
-
-        logger = netsvc.Logger()
 
         external_referential_obj = self.pool.get('magento.external.referential')
         res_partner_vals_obj = self.pool.get('base.external.mapping')
@@ -110,7 +110,7 @@ class res_partner(osv.osv):
 
         magento_app_customer_ids = self.pool.get('magento.app.customer').magento_app_customer_create(cr, uid, magento_app, partner_id, values, context)
 
-        logger.notifyChannel('Magento Sync Partner', netsvc.LOG_INFO, "Create Partner: magento %s, openerp id %s, magento id %s" % (magento_app.name, partner_id, values['customer_id']))
+        LOGGER.notifyChannel('Magento Sync Partner', netsvc.LOG_INFO, "Create Partner: magento %s, openerp id %s, magento id %s" % (magento_app.name, partner_id, values['customer_id']))
 
         return partner_id
 
@@ -264,8 +264,6 @@ class res_partner_address(osv.osv):
         if context is None:
             context = {}
 
-        logger = netsvc.Logger()
-
         external_referential_obj = self.pool.get('magento.external.referential')
 
         partner_address_vals = self.magento_partner_address_data(cr, uid, customer_address, context)
@@ -275,7 +273,7 @@ class res_partner_address(osv.osv):
         """Adding Company Name of Billing address like Partner Name"""
         if type == 'invoice' or type == 'default':
             if customer_address.get('company') and customer_address.get('company') != None:
-                logger.notifyChannel('Magento', netsvc.LOG_INFO, 'Change Partner name: %s (company)' % customer_address.get('company'))
+                LOGGER.notifyChannel('Magento', netsvc.LOG_INFO, 'Change Partner name: %s (company)' % customer_address.get('company'))
                 self.pool.get('res.partner').write(cr,uid,[partner_id],{'name':customer_address['company']}, context)
 
         partner_address_id = self.create(cr, uid, partner_address_vals, context)
@@ -283,10 +281,10 @@ class res_partner_address(osv.osv):
             external_referential_obj.create_external_referential(cr, uid, magento_app, 'res.partner.address', partner_address_id, customer_address['customer_address_id'])
 
         if 'customer_address_id' in customer_address:
-            logger.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, magento id %s" % (magento_app.name, partner_address_id, customer_address['customer_address_id']))
+            LOGGER.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, magento id %s" % (magento_app.name, partner_address_id, customer_address['customer_address_id']))
             self.pool.get('magento.log').create_log(cr, uid, magento_app, 'res.partner.address', partner_address_id, customer_address['customer_address_id'], 'done', _('Successfully create partner address: %s') % (partner_address_vals['name']) )
         else:
-            logger.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, %s" % (magento_app.name, partner_address_id, partner_address_vals['name']))
+            LOGGER.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, %s" % (magento_app.name, partner_address_id, partner_address_vals['name']))
             self.pool.get('magento.log').create_log(cr, uid, magento_app, 'res.partner.address', partner_address_id, '', 'done', _('Successfully create partner address: %s') % (partner_address_vals['name']) )
 
         return partner_address_id
@@ -301,16 +299,14 @@ class res_partner_address(osv.osv):
         if context is None:
             context = {}
 
-        logger = netsvc.Logger()
-
         partner_address_vals = self.magento_partner_address_data(cr, uid, customer_address, context)
 
         try:
             self.write(cr, uid, [partner_address_id], partner_address_vals, context)
-            logger.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Update Partner Address: magento %s, openerp id %s" % (magento_app.name, partner_address_id))
+            LOGGER.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Update Partner Address: magento %s, openerp id %s" % (magento_app.name, partner_address_id))
             self.pool.get('magento.log').create_log(cr, uid, magento_app, 'res.partner.address', partner_address_id, customer_address['customer_address_id'], 'done', _('Successfully update partner address: %s') % (partner_address_vals['name']) )
         except:
-            logger.notifyChannel('Magento Sync Partner Address', netsvc.LOG_ERROR, "Update Partner Address: magento %s, openerp id %s" % (magento_app.name, partner_address_id))
+            LOGGER.notifyChannel('Magento Sync Partner Address', netsvc.LOG_ERROR, "Update Partner Address: magento %s, openerp id %s" % (magento_app.name, partner_address_id))
             self.pool.get('magento.log').create_log(cr, uid, magento_app, 'res.partner.address', partner_address_id, customer_address['customer_address_id'], 'error', _('Error update partner address: %s') % (partner_address_vals['name']) )
 
         return partner_address_id
@@ -333,7 +329,7 @@ class res_partner_address(osv.osv):
         """Adding Company Name of Billing address like Partner Name"""
         if type == 'invoice' or type == 'default':
             if values.get('company') and values.get('company') != None:
-                logger.notifyChannel('Magento', netsvc.LOG_INFO, 'Change Partner name: %s (company)' % values.get('company'))
+                LOGGER.notifyChannel('Magento', netsvc.LOG_INFO, 'Change Partner name: %s (company)' % values.get('company'))
                 self.pool.get('res.partner').write(cr,uid,[partner_id],{'name':values['company']}, context)
 
         address = self.pool.get('res.partner.address').search(cr, uid, [
