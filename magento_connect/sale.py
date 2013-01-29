@@ -782,12 +782,13 @@ class sale_shop(osv.osv):
             # write sale shop date last export
             self.pool.get('sale.shop').write(cr, uid, shop.id, {'magento_last_export_status_orders': time.strftime('%Y-%m-%d %H:%M:%S')})
             sale_order_ids = self.pool.get('sale.order').search(cr, uid, [('shop_id','=',shop.id)])
-            
+
+            ids = []
             for sale_order in self.pool.get('sale.order').perm_read(cr, uid, sale_order_ids):
                 # product.product modify > date exported last time
                 if  sale_order['write_date'] and last_exported_time < sale_order['write_date'][:19]:
-                    sale_order_ids.append(sale_order['id'])
-            sale_order_ids = [x for x in set(sale_order_ids)]
+                    ids.append(sale_order['id'])
+            sale_order_ids = [x for x in set(ids)]
 
             LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Orders Status to sync: %s" % (sale_order_ids))
 
@@ -861,6 +862,7 @@ class sale_shop(osv.osv):
 
             #not update status if status not change
             if status == sale_order.magento_status:
+                #~ LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "Not update status %s order: %s - %s" % (sale_order.id, status, sale_order.magento_status))
                 status = False
 
             if status:
