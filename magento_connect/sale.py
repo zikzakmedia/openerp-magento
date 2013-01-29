@@ -148,7 +148,7 @@ class sale_shop(osv.osv):
         :ids: list
         :return mgn_id
         """
-        if len(ids) == 0:
+        if not ids:
             LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Products Export")
             return True
 
@@ -336,7 +336,7 @@ class sale_shop(osv.osv):
         :return mgn_id
         """
 
-        if len(ids) == 0:
+        if not ids:
             LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Prices Export")
             return True
 
@@ -440,7 +440,7 @@ class sale_shop(osv.osv):
         :return mgn_id
         """
 
-        if len(ids) == 0:
+        if not ids:
             LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Stock Export")
             return True
 
@@ -546,7 +546,7 @@ class sale_shop(osv.osv):
         :return mgn_id
         """
 
-        if len(ids) == 0:
+        if not ids:
             LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Product Images Export")
             return True
 
@@ -808,7 +808,7 @@ class sale_shop(osv.osv):
         :return mgn_id
         """
 
-        if len(ids) == 0:
+        if not ids:
             LOGGER.notifyChannel('Magento Sale Shop', netsvc.LOG_INFO, "End Status Orders Export")
             return True
 
