@@ -982,6 +982,7 @@ class sale_order(osv.osv):
         if not customer_id:
             customer = values['billing_address']
             email = customer['email']
+            customer['taxvat'] = values.get('customer_taxvat')
             mapping = False
             partner_customers = self.pool.get('magento.app.customer').search(cr, uid, [('magento_emailid','=',email)])
             if len(partner_customers) > 0:

@@ -63,9 +63,7 @@ class res_partner(osv.osv):
 
         vat = False
         vat_ok = False
-        magento_vat = False
-        if 'taxvat' in values:
-            magento_vat = values['taxvat']
+        magento_vat = values.get('taxvat')
 
         external_referential_obj = self.pool.get('magento.external.referential')
         res_partner_vals_obj = self.pool.get('base.external.mapping')
