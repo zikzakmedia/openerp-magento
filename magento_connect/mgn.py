@@ -316,7 +316,7 @@ class magento_app(osv.osv):
                             #this attribute is exclude?
                             product_attribute_excludes = self.pool.get('magento.attribute.exclude').search(cr, uid, [('name','=',product_attribute['code'])])
                             if not len(product_attribute_excludes)>0:
-                                attribute = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'magento.website', product_attribute['attribute_id'])
+                                attribute = magento_external_referential_obj.check_mgn2oerp(cr, uid, magento_app, 'product.attributes', product_attribute['attribute_id'])
                                 LOGGER.notifyChannel('Magento Sync Attribute', netsvc.LOG_INFO, "Waitting %s..." % (product_attribute['code']))
 
                                 if not attribute: #create
