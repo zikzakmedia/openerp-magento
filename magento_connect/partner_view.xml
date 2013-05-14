@@ -10,6 +10,7 @@
             <field name="arch" type="xml">
                 <xpath expr="/form/notebook" position="inside">
                     <page string="Magento">
+                        <field name="magento_customer_email" />
                         <field colspan="4" mode="tree,form" name="magento_app_customer" nolabel="1" select="1" height="260">
                                <form string="Magento Customer">
                                     <field name="magento_app_id" widget="selection"/>

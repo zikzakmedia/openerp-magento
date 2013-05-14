@@ -34,6 +34,7 @@ class res_partner(osv.osv):
 
     _columns = {
         'magento_app_customer': fields.one2many('magento.app.customer', 'partner_id', 'Magento Customer'),
+        'magento_customer_email': fields.char('Magento Customer eMail', size=240, readonly=True),
     }
 
     def unlink(self, cr, uid, ids, context=None):
@@ -53,6 +54,27 @@ class res_partner(osv.osv):
 
         return customer
 
+    def magento_search_partner(self, cr, uid, values, context = None):
+        """Search Partner from Magento Values
+        :return partner_id
+        """
+        if context is None:
+            context = {}
+
+        partner_obj = self.pool.get('res.partner')
+
+        # search by tax vat
+        if values.get('customer_taxvat'):
+            vat = 'ES%s' % values.get('customer_taxvat') #TODO Hardcode Spanish vat
+            partners = partner_obj.search(cr, uid, [('vat', 'ilike', vat)], context = context)
+            if partners:
+                return partners[0]
+        # search by email
+        partners = partner_obj.search(cr, uid, [('magento_customer_email', 'ilike', values.get('customer_email'))], context = context)
+        if partners:
+            return partners[0]
+        return None
+
     def magento_create_partner(self, cr, uid, magento_app, values, mapping = True, context = None):
         """Create Partner from Magento Values
         Transform dicc by Base External Mapping
@@ -60,7 +82,6 @@ class res_partner(osv.osv):
         """
         if context is None:
             context = {}
-
         vat = False
         vat_ok = False
         magento_vat = values.get('taxvat')
@@ -69,15 +90,7 @@ class res_partner(osv.osv):
         res_partner_vals_obj = self.pool.get('base.external.mapping')
 
         if magento_vat:
-            country_obj = self.pool.get('res.country')
-            country_id = country_obj.search(cr, uid, [('code', 'ilike', magento_vat[:2])], context = context)
-
-            if len(country_id) == 0: # The VAT has not a valid country code
-                partner_address_obj = self.pool.get('res.partner.address')
-                country_code = partner_address_obj.magento_get_customer_address_country_code(cr, uid, magento_app, values, context)
-                vat = '%s%s' % (country_code, magento_vat)
-            else: # The VAT has a valid country code
-                vat = magento_vat
+            vat = 'ES%s' % magento_vat
 
             if hasattr(self, 'check_vat_' + vat[:2].lower()):
                 check = getattr(self, 'check_vat_' + vat[:2].lower())
@@ -98,17 +111,10 @@ class res_partner(osv.osv):
         values['name'] = '%s %s' % (values['firstname'].title(), values['lastname'].title())
         res_partner_vals = res_partner_vals_obj.get_external_to_oerp(cr, uid, 'magento.res.partner', False, values, context)
         res_partner_vals['customer'] = True #fix this partner is customer
+        res_partner_vals['magento_customer_email'] = values.get('email').lower()
         partner_id = self.create(cr, uid, res_partner_vals, context)
 
-        if mapping and ('customer_id' in values):
-            external_referential_obj.create_external_referential(cr, uid, magento_app, 'res.partner', partner_id, values['customer_id'])
-            self.pool.get('magento.log').create_log(cr, uid, magento_app, 'res.partner', partner_id, values['customer_id'], 'done', _('Successfully create partner: %s') % (values['name']) )
-        else:
-            self.pool.get('magento.log').create_log(cr, uid, magento_app, 'res.partner', partner_id, '', 'done', _('Successfully create partner: %s') % (values['name']) )
-
-        magento_app_customer_ids = self.pool.get('magento.app.customer').magento_app_customer_create(cr, uid, magento_app, partner_id, values, context)
-
-        LOGGER.notifyChannel('Magento Sync Partner', netsvc.LOG_INFO, "Create Partner: magento %s, openerp id %s, magento id %s" % (magento_app.name, partner_id, values['customer_id']))
+        LOGGER.notifyChannel('Magento Sync Partner', netsvc.LOG_INFO, "Create Partner: magento %s, openerp id %s, magento email %s" % (magento_app.name, partner_id, res_partner_vals['magento_customer_email']))
 
         return partner_id
 
@@ -210,9 +216,19 @@ class res_partner_address(osv.osv):
 
         with CustomerAddress(magento_app.uri, magento_app.username, magento_app.password) as customer_address_api:
             customer_addresses = []
-            for customer_address in customer_address_api.list(customer['customer_id']):
-                customer_addresses.append(customer_address)
+            try:
+                for customer_address in customer_address_api.list(customer['customer_id']):
+                    customer_addresses.append(customer_address)
+            except:
+                LOGGER.notifyChannel('Magento Get Customer Address', netsvc.LOG_ERROR, "Customer ID not exist %s" % (customer['customer_id']))
         return customer_addresses
+
+    def magento_street(self, street):
+        '''Return street str'''
+        street = street.title()
+        street = street.replace(unicode('º','UTF-8'), '')
+        street = street.replace(unicode('ª','UTF-8'), '')
+        return street
 
     def magento_partner_address_data(self, cr, uid, customer_address, context):
         """Partner Address Data.
@@ -230,10 +246,7 @@ class res_partner_address(osv.osv):
         vals['name'] = '%s %s' % (customer_address['firstname'].title(), customer_address['lastname'].title())
         vals['city'] = customer_address['city'].title()
         vals['phone'] = customer_address['telephone']
-        street = customer_address['street'].title()
-        street = street.replace(unicode('º','UTF-8'), '')
-        street = street.replace(unicode('ª','UTF-8'), '')
-        vals['street'] = street
+        vals['street'] = self.magento_street(customer_address['street'])
         vals['zip'] = customer_address['postcode']
         vals['magento_firstname'] = customer_address['firstname']
         vals['magento_lastname'] = customer_address['lastname']
@@ -249,6 +262,24 @@ class res_partner_address(osv.osv):
         partner_address_vals = base_external_mapping_obj.get_external_to_oerp(cr, uid, 'magento.res.partner.address', False, vals, context)
         
         return partner_address_vals
+
+    def magento_search_partner_address(self, cr, uid, partner_id, values, context = None):
+        """Search Partner Address from Magento Values
+        :return address_id
+        """
+        if context is None:
+            context = {}
+
+        address_obj = self.pool.get('res.partner.address')
+        address = address_obj.search(cr, uid, [
+            ('partner_id', '=', partner_id),
+            ('email', 'ilike', values.get('email')),
+            ('street', '=', self.magento_street(values['street'])),
+            ('zip', '=', values['postcode'])
+            ], context = context)
+        if address:
+            return address[0]
+        return None
 
     def magento_create_partner_address(self, cr, uid, magento_app, partner_id, customer_address, mapping = True, type = 'default', context = None):
         """Create Partner Address from Magento Values
@@ -278,12 +309,8 @@ class res_partner_address(osv.osv):
         if mapping and ('customer_address_id' in customer_address):
             external_referential_obj.create_external_referential(cr, uid, magento_app, 'res.partner.address', partner_address_id, customer_address['customer_address_id'])
 
-        if 'customer_address_id' in customer_address:
-            LOGGER.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, magento id %s" % (magento_app.name, partner_address_id, customer_address['customer_address_id']))
-            self.pool.get('magento.log').create_log(cr, uid, magento_app, 'res.partner.address', partner_address_id, customer_address['customer_address_id'], 'done', _('Successfully create partner address: %s') % (partner_address_vals['name']) )
-        else:
-            LOGGER.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, %s" % (magento_app.name, partner_address_id, partner_address_vals['name']))
-            self.pool.get('magento.log').create_log(cr, uid, magento_app, 'res.partner.address', partner_address_id, '', 'done', _('Successfully create partner address: %s') % (partner_address_vals['name']) )
+        LOGGER.notifyChannel('Magento Sync Partner Address', netsvc.LOG_INFO, "Create Partner Address: magento %s, openerp id %s, %s" % (magento_app.name, partner_address_id, partner_address_vals['name']))
+        self.pool.get('magento.log').create_log(cr, uid, magento_app, 'res.partner.address', partner_address_id, '', 'done', _('Successfully create partner address: %s') % (partner_address_vals['name']) )
 
         return partner_address_id
 
