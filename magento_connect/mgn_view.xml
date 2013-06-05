@@ -22,6 +22,7 @@
                             <field name="customer_default_group"/>
                             <field name="group"/>
                             <field name="catalog_price"/>
+                            <field name="category_root"/>
                         </page>
                         <page string="Sale">
                             <field name="payment_default_id"/>

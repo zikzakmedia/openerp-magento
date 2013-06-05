@@ -106,12 +106,14 @@ class magento_app(osv.osv):
             ('global','Global'),
             ('website','Website'),
         ], 'Catalog Price', required=True, help='Magento Configuration/Catalog/Price/Catalog Price Scope'),
+        'category_root': fields.integer('Category Root', help='ID category root'),
     }
 
     _defaults = {
         'log_clean': '15',
         'catalog_price': 'global',
         'inventory_qty': 1,
+        'category_root': 2,
     }
 
     def core_sync_test(self, cr, uid, ids, context):
@@ -383,7 +385,7 @@ class magento_app(osv.osv):
 
         for magento_app in self.browse(cr, uid, ids):
             with Category(magento_app.uri, magento_app.username, magento_app.password) as category_api:
-                categ_tree = category_api.tree()
+                categ_tree = category_api.tree(parent_id=magento_app.category_root)
                 self.pool.get('product.category').magento_record_entire_tree(cr, uid, magento_app, categ_tree)
 
         LOGGER.notifyChannel('Magento Sync Categories', netsvc.LOG_INFO, "End Sync Categories magento app %s." % (magento_app.name))
@@ -405,6 +407,9 @@ class magento_app(osv.osv):
                 product_cat_mgn_id = False
                 context["category_id"] = product_category
                 product_category_vals = self.pool.get('base.external.mapping').get_oerp_to_external(cr, uid, 'magento.product.category', [product_category], context)[0]
+                if not product_category_vals.get('parent_id'):
+                    LOGGER.notifyChannel('Magento Export Categories', netsvc.LOG_INFO, "Not found parent_id. Check if is available in mapping external <- OpenERP")
+                    continue
 
                 product_cat = magento_external_referential_obj.check_oerp2mgn(cr, uid, magento_app, 'product.category', product_category_vals['id'])
                 if product_cat:

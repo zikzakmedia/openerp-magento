@@ -85,6 +85,8 @@ class sale_shop(osv.osv):
         'magento_status_cancel': fields.char('Cancel', size=128, help='Status for cancel orders'),
         'magento_notify_cancel': fields.boolean('Notify Cancel', help='Magento notification'),
         'magento_price_global': fields.boolean('Price Global', help='This sale use in global prices (by multistore)'),
+        'magento_group_price': fields.boolean('Group Price', help='If check this value, when export product prices add prices by group'),
+        'magento_group_prices': fields.one2many('magento.sale.shop.group.price', 'shop_id', 'Group Prices'),
     }
 
     _defaults = {
@@ -287,7 +289,26 @@ class sale_shop(osv.osv):
             else:
                 special_price = '' #reset special price to null
 
-        return {'price':price, 'special_price':special_price}
+        #Group Price
+        group_price = []
+        if shop.magento_group_price and product.magento_group_price:
+            # {'cust_group': '0', 'website_price': '10.0000', 'price': '10.0000', 'website_id': '0', 'price_id': '1', 'all_groups': '0'}
+            for group in shop.magento_group_prices:
+                price = self.pool.get('product.pricelist').price_get(cr, uid, [group.pricelist_id.id], product.id, 1.0)[group.pricelist_id.id]
+                if price > 0.0:
+                    if shop.magento_tax_include:
+                        price_compute_all = self.pool.get('account.tax').compute_all(cr, uid, product.product_tmpl_id.taxes_id, price, 1, address_id=None, product=product.product_tmpl_id, partner=None)
+                        price = price_compute_all['total_included']
+                    price = '%.*f' % (decimal, price) #decimal precision
+                    group_price.append({
+                        'cust_group': group.group_id.customer_group_id,
+                        'price': price,
+                        })
+        return {
+            'price':price,
+            'special_price':special_price,
+            'group_price': group_price,
+            }
 
     def magento_export_prices(self, cr, uid, ids, context=None):
         """
@@ -373,6 +394,7 @@ class sale_shop(osv.osv):
                 price = self.magento_get_prices( cr, uid, shop, product, context)
                 data['price'] = price['price']
                 data['special_price'] = price['special_price']
+                data['group_price'] = price['group_price']
 
                 try:
                     if magento_app.catalog_price == 'website' and website_id:
@@ -844,7 +866,7 @@ class sale_shop(osv.osv):
                 notify = shop.magento_notify_cancel
                 status = shop.magento_status_cancel
                 cancel = True
-            if sale_order.magento_paidinweb:
+            if sale_order.paid_in_web:
                 notify = shop.magento_notify_paidinweb
                 status = shop.magento_status_paidinweb
             if sale_order.invoiced:
@@ -856,7 +878,7 @@ class sale_shop(osv.osv):
             if sale_order.invoiced and sale_order.shipped:
                 notify = shop.magento_notify_paid_delivered
                 status = shop.magento_status_paid_delivered
-            if sale_order.magento_paidinweb and sale_order.shipped:
+            if sale_order.paid_in_web and sale_order.shipped:
                 notify = shop.magento_notify_paidinweb_delivered
                 status = shop.magento_status_paidinweb_delivered
 
@@ -930,7 +952,6 @@ class sale_order(osv.osv):
         'magento_increment_id': fields.char('Magento Increment ID', size=128, readonly=True),
         'magento_status': fields.char('Status', size=128, readonly=True, help='Magento Status'),
         'magento_gift_message': fields.text('Gift Message'),
-        'magento_paidinweb': fields.boolean('Paid in web', help='Check this option if this sale order is paid by web payment'),
     }
 
     def unlink(self, cr, uid, ids, context=None):
@@ -985,7 +1006,7 @@ class sale_order(osv.osv):
         """Create Magento Partner Address"""
         partner_address_obj = self.pool.get('res.partner.address')
 
-        address_values = values['billing_address']
+        address_values = values['shipping_address']
         if not values.get('email'):
             address_values['email'] = values['customer_email']
         address_id = partner_address_obj.magento_search_partner_address(cr, uid, partner_id, address_values)
@@ -1080,7 +1101,7 @@ class sale_order(osv.osv):
             if mgn_status.cancel:
                 cancel = True
             if mgn_status.paidinweb:
-                vals['magento_paidinweb'] = True
+                vals['paid_in_web'] = True
 
         """Magento Status history"""
         if 'status_history' in values:
@@ -1360,3 +1381,17 @@ class magento_sale_shop_payment_type(osv.osv):
     }
 
 magento_sale_shop_payment_type()
+
+class magento_sale_shop_group_price(osv.osv):
+    _name = "magento.sale.shop.group.price"
+
+    _description = "Magento Sale Shop Group Price"
+    _rec_name = "status"
+
+    _columns = {
+        'shop_id': fields.many2one('sale.shop','Shop', required=True),
+        'group_id': fields.many2one('magento.customer.group','Customer Group', required=True),
+        'pricelist_id': fields.many2one('product.pricelist', 'Pricelist', required=True),
+    }
+
+magento_sale_shop_group_price()

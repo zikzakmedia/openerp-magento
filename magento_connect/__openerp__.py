@@ -64,6 +64,7 @@
         "product_special_price",
         "sale_margin",
         "sale_payment",
+        "sale_payment_web",
     ],
     "init_xml" : [],
     "demo_xml" : [],

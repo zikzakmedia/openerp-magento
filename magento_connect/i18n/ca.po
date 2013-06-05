@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 6.0.2\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2012-09-25 15:10+0000\n"
-"PO-Revision-Date: 2012-09-25 17:12+0100\n"
+"POT-Creation-Date: 2013-05-14 10:34+0000\n"
+"PO-Revision-Date: 2013-05-14 12:35+0100\n"
 "Last-Translator: Raimon Esteve <resteve@zikzakmedia.com>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -28,10 +28,10 @@ msgid "Group Users to notification"
 msgstr "Grup usuaris a notificar"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:215
+#: code:addons/magento_connect/mgn.py:1094
 #, python-format
-msgid "Error: Magento Update Product: %s %s."
-msgstr "Error: Magento Update Product: %s %s."
+msgid "This Magento Region not allow to delete"
+msgstr "Aquestes regions no es poden eliminar"
 
 #. module: magento_connect
 #: model:ir.actions.act_window,name:magento_connect.action_magento_attribute_exclude
@@ -52,7 +52,7 @@ msgid "To Import Products"
 msgstr "Productes fins a la data"
 
 #. module: magento_connect
-#: code:addons/magento_connect/partner.py:304
+#: code:addons/magento_connect/partner.py:332
 #, python-format
 msgid "Successfully update partner address: %s"
 msgstr "Actualitzat direcció d'empresa: %s"
@@ -109,8 +109,8 @@ msgid "Payment Before Delivery"
 msgstr "Pagament abans de l'entrega"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:242
-#: code:addons/magento_connect/product.py:276
+#: code:addons/magento_connect/product.py:250
+#: code:addons/magento_connect/product.py:287
 #, python-format
 msgid "Error! Magento SKU %s must be unique"
 msgstr "Error! Magento SKU %s ha de ser únic"
@@ -278,7 +278,7 @@ msgid "Last Store View"
 msgstr "Darrera botiga de compra"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:652
+#: code:addons/magento_connect/sale.py:670
 #, python-format
 msgid "Successfully create image %s"
 msgstr "Imatge creada  %s"
@@ -408,14 +408,14 @@ msgid "Search Magento Product Type"
 msgstr "Cerca tipus de producte Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:213
+#: code:addons/magento_connect/sale.py:214
 #, python-format
 msgid "Successfully update product"
 msgstr "Actualitzat producte"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:976
-#: code:addons/magento_connect/mgn.py:1023
+#: code:addons/magento_connect/mgn.py:977
+#: code:addons/magento_connect/mgn.py:1024
 #, python-format
 msgid "Select language available this store view"
 msgstr "Selecciona idioma disponible per a la vista de la botiga"
@@ -437,7 +437,7 @@ msgid "magento.sync.images.wizard"
 msgstr "magento.sync.images.wizard"
 
 #. module: magento_connect
-#: code:addons/magento_connect/partner.py:41
+#: code:addons/magento_connect/partner.py:44
 #, python-format
 msgid "Partner ID '%s' not allow to delete because are active in Magento"
 msgstr "La  empresa ID '%s' no es pot esborrar per que s'usa en el canal de venta Magento"
@@ -452,7 +452,7 @@ msgid "Magento Store Group"
 msgstr "Grup de botigues Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:482
+#: code:addons/magento_connect/mgn.py:483
 #, python-format
 msgid "Select Import Date"
 msgstr "Selecciona data per la importació"
@@ -511,7 +511,7 @@ msgid "Shipping and Handling"
 msgstr "Enviament i manipulació"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:387
+#: code:addons/magento_connect/sale.py:405
 #, python-format
 msgid "Error: Magento Update Price: %s. OpenERP ID: %s, Magento ID %s"
 msgstr "Error: Magento Update Price: %s. OpenERP ID: %s, Magento ID %s"
@@ -527,7 +527,7 @@ msgid "Payment"
 msgstr "Pagaments"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:238
+#: code:addons/magento_connect/sale.py:240
 #, python-format
 msgid "Successfully create product"
 msgstr "Creat producte"
@@ -566,9 +566,9 @@ msgid "Locale"
 msgstr "Lloc"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:479
-#: code:addons/magento_connect/mgn.py:680
-#: code:addons/magento_connect/mgn.py:723
+#: code:addons/magento_connect/mgn.py:480
+#: code:addons/magento_connect/mgn.py:681
+#: code:addons/magento_connect/mgn.py:724
 #, python-format
 msgid "Select Store View Magento"
 msgstr "Seleccioneu la vista de la botiga Magento"
@@ -586,7 +586,7 @@ msgid "Error: Invalid ean code"
 msgstr "Error: Codi EAN invàlid"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:755
+#: code:addons/magento_connect/sale.py:773
 #, python-format
 msgid "Successfully create sale order: %s"
 msgstr "Creat comanda de venda: %s"
@@ -615,29 +615,29 @@ msgid "Magento Code. Only available this field to Magento when create product. N
 msgstr "Codi de Magento. Només aquest camp s'usarà quan es crea el producte a Magento. No s'actualitzarà aquest camp en l'actualització del producte."
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:479
-#: code:addons/magento_connect/mgn.py:482
-#: code:addons/magento_connect/mgn.py:680
-#: code:addons/magento_connect/mgn.py:723
-#: code:addons/magento_connect/mgn.py:926
-#: code:addons/magento_connect/mgn.py:941
-#: code:addons/magento_connect/mgn.py:959
-#: code:addons/magento_connect/mgn.py:976
-#: code:addons/magento_connect/mgn.py:1023
-#: code:addons/magento_connect/mgn.py:1059
-#: code:addons/magento_connect/mgn.py:1074
-#: code:addons/magento_connect/mgn.py:1093
-#: code:addons/magento_connect/mgn.py:1134
+#: code:addons/magento_connect/mgn.py:480
+#: code:addons/magento_connect/mgn.py:483
+#: code:addons/magento_connect/mgn.py:681
+#: code:addons/magento_connect/mgn.py:724
+#: code:addons/magento_connect/mgn.py:927
+#: code:addons/magento_connect/mgn.py:942
+#: code:addons/magento_connect/mgn.py:960
+#: code:addons/magento_connect/mgn.py:977
+#: code:addons/magento_connect/mgn.py:1024
+#: code:addons/magento_connect/mgn.py:1060
+#: code:addons/magento_connect/mgn.py:1075
+#: code:addons/magento_connect/mgn.py:1094
+#: code:addons/magento_connect/mgn.py:1135
 #: code:addons/magento_connect/mgn_referential.py:42
-#: code:addons/magento_connect/partner.py:41
-#: code:addons/magento_connect/partner.py:171
-#: code:addons/magento_connect/product.py:183
-#: code:addons/magento_connect/product.py:242
-#: code:addons/magento_connect/product.py:276
-#: code:addons/magento_connect/product.py:312
+#: code:addons/magento_connect/partner.py:44
+#: code:addons/magento_connect/partner.py:175
+#: code:addons/magento_connect/product.py:186
+#: code:addons/magento_connect/product.py:250
+#: code:addons/magento_connect/product.py:287
+#: code:addons/magento_connect/product.py:326
 #: code:addons/magento_connect/product_images.py:107
-#: code:addons/magento_connect/sale.py:103
-#: code:addons/magento_connect/sale.py:937
+#: code:addons/magento_connect/sale.py:105
+#: code:addons/magento_connect/sale.py:958
 #, python-format
 msgid "Alert"
 msgstr "Alerta"
@@ -674,7 +674,7 @@ msgid "Are you sure to continue? This action is in background. See logs server p
 msgstr "Esteu segur de continuar? Aquesta acció s'executarà com a tasca oculta. Reviseu l'historial del servidor."
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:959
+#: code:addons/magento_connect/mgn.py:960
 #, python-format
 msgid "This Magento Store View not allow to delete"
 msgstr "No es pot esborrar aquesta vista de botiga de Magento"
@@ -705,7 +705,7 @@ msgid "Notify Cancel"
 msgstr "Notificació de cancel·lació"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:926
+#: code:addons/magento_connect/mgn.py:927
 #, python-format
 msgid "This Magento Website not allow to delete"
 msgstr "No es pot esborrar aquest lloc web Magento"
@@ -717,7 +717,7 @@ msgid "Not available some Magento Images to export"
 msgstr "No hi ha cap imatge de Magento per a exportar"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:603
+#: code:addons/magento_connect/sale.py:621
 #, python-format
 msgid "Error Update Image %s, Product Mgn ID %s"
 msgstr "Error Update Image %s, Product Mgn ID %s"
@@ -755,53 +755,9 @@ msgid "Type"
 msgstr "Tipus"
 
 #. module: magento_connect
-#: model:ir.module.module,description:magento_connect.module_meta_information
-msgid ""
-"\n"
-"    Magento E-commerce management. Your Magento and OpenERP are connecting.\n"
-"\n"
-"    1. Requirements:\n"
-"     1.1 Install Magento Python from:\n"
-"        - https://github.com/zikzakmedia/magento\n"
-"\n"
-"     1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category \n"
-"        - https://github.com/zikzakmedia/magento_webservices\n"
-"\n"
-"    2. Configuration\n"
-"     2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude\n"
-"     2.2 Mapping more product fields go to Administrator -> Customization -> Database Structure -> External Mapping\n"
-"     2.3 Configure yours Magento APP: Sale -> Configuration -> Magento\n"
-"    \n"
-"    3. Other information\n"
-"     3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.\n"
-"     3.2 Also exists another module Magento management we working another projects:\n"
-"        - https://launchpad.net/magentoerpconnect\n"
-"        \n"
-"    Documentation available at (spanish):\n"
-"    http://wiki.zikzakmedia.com/openerp:magentoconnect\n"
-"\n"
-"    Special Thanks to Akretion www.akretion.com and OpenLabs www.openlabs.co.in\n"
-"    "
-msgstr ""
-"\n"
-"    Gestor de Magento E-Commerce. El vostre connector de Magento a OpenERP.\n"
-"\n"
-"    Requisits:\n"
-"    Instal·lar Magento Python des de:\n"
-"        - https://github.com/zikzakmedia/magento\n"
-"\n"
-"    Instal·lar la API del mòdul estès de Magento. Aquest mòdul és el mateix que l'utilitzat per magentoeprconnect. Afegeix els mètodes de l'API addicionals per utilitzar el lloc multi web, multi botiga, categoria multi producte:\n"
-"        - http://www.magentocommerce.com/magento-connect/Sharoon+Thomas/extension/1827/open-erp-connecotr-by-openlabs\n"
-"\n"
-"    Configureu la vostra aplicació Magento: Vendes -> Configuració -> Magento\n"
-"    Per assignar més camps de productes obrir Administrador -> Personalització -> Estructura de la base de dades -> External Mapping\n"
-"\n"
-"    El mòdul Magento utilitza els atributs de producte per afegir nous camps al model producte. Aquest mòdul no utilitza EAV (Entity-attribute-value model) i hi ha un màxim de camps disponibles a la taula producte de PostgreSQL.\n"
-"\n"
-"    També existeix un altre mòdul per gestionar Magento.\n"
-"        - https://launchpad.net/magentoerpconnect\n"
-"Agraïments a Akretion www.akretion.com\n"
-"    "
+#: field:product.images,magento_thumbnail:0
+msgid "Thumbnail"
+msgstr "Thumbnail"
 
 #. module: magento_connect
 #: field:magento.app,product_delivery_default_id:0
@@ -829,7 +785,7 @@ msgid "Store"
 msgstr "Botiga"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:1059
+#: code:addons/magento_connect/mgn.py:1060
 #, python-format
 msgid "This Magento Attribute Exclude not allow to delete"
 msgstr "No es pot esborrar aquest atribut d'exclusió de Magento"
@@ -841,6 +797,7 @@ msgstr "Unitats quan es força l'inventari"
 
 #. module: magento_connect
 #: field:magento.app,pricelist_id:0
+#: field:magento.sale.shop.group.price,pricelist_id:0
 #: selection:sale.shop,magento_sale_price:0
 msgid "Pricelist"
 msgstr "Tarifa"
@@ -901,7 +858,7 @@ msgid "Import Translations Products"
 msgstr "Importa traduccions de productes"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:491
+#: code:addons/magento_connect/sale.py:509
 #, python-format
 msgid "Error: Magento Stock Product: %s. OpenERP ID %s Magento ID %s"
 msgstr "Error: Magento Stock Product: %s. OpenERP ID %s Magento ID %s"
@@ -912,13 +869,13 @@ msgid "Country"
 msgstr "País"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:937
+#: code:addons/magento_connect/sale.py:958
 #, python-format
 msgid "Sale Order ID '%s' not allow to delete because are active in Magento"
 msgstr "La comanda ID '%s' no es pot esborrar perque s'usa en el canal de venta Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:183
+#: code:addons/magento_connect/product.py:186
 #, python-format
 msgid "This Magento Product Type not allow to delete"
 msgstr "No es pot esborrar aquest tipus de producte Magento"
@@ -929,13 +886,13 @@ msgid "Product Images Magento"
 msgstr "Imatges de producte"
 
 #. module: magento_connect
-#: code:addons/magento_connect/partner.py:307
+#: code:addons/magento_connect/partner.py:335
 #, python-format
 msgid "Error update partner address: %s"
 msgstr "Error actualitzant empresa: %s"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:874
+#: code:addons/magento_connect/sale.py:895
 #, python-format
 msgid "Successfully update %s status: %s"
 msgstr "Actualitzat  %s l'estat: %s"
@@ -947,12 +904,17 @@ msgid "Website"
 msgstr "Lloc web"
 
 #. module: magento_connect
+#: model:ir.model,name:magento_connect.model_magento_sale_shop_group_price
+msgid "Magento Sale Shop Group Price"
+msgstr "Grup de preus per botigues Magento"
+
+#. module: magento_connect
 #: view:magento.app:0
 msgid "Import/Update Magento Products"
 msgstr "Importa/Actualitza productes"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:601
+#: code:addons/magento_connect/sale.py:619
 #, python-format
 msgid "Successfully update image %s"
 msgstr "Actualitzat la imatge %s"
@@ -973,7 +935,7 @@ msgid "Sales Shop"
 msgstr "Botiga"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:312
+#: code:addons/magento_connect/product.py:326
 #, python-format
 msgid "Product '%s' not allow to delete because are active in Magento Shop"
 msgstr "No es pot esborrar el producte '%s' perquè està actiu a la botiga Magento"
@@ -986,6 +948,11 @@ msgstr "No es pot esborrar el producte '%s' perquè està actiu a la botiga Mage
 #, python-format
 msgid "Select products to export"
 msgstr "Selecciona productes a exportar"
+
+#. module: magento_connect
+#: help:sale.shop,magento_group_price:0
+msgid "If check this value, when export product prices add prices by group"
+msgstr "Si activeu aquest valor, quan exporti preus de productes exportarà preus segons grup de clients."
 
 #. module: magento_connect
 #: model:ir.model,name:magento_connect.model_magento_sale_shop_payment_type
@@ -1102,7 +1069,7 @@ msgid "Magento Customer"
 msgstr "Client Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:513
+#: code:addons/magento_connect/mgn.py:514
 #, python-format
 msgid "Start Import/Update products: %s"
 msgstr "Inici importació/actualització de productes: %s"
@@ -1118,7 +1085,7 @@ msgid "Magento Filters..."
 msgstr "Magento filtres..."
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:379
+#: code:addons/magento_connect/product.py:393
 #, python-format
 msgid "Error update info product from Magento"
 msgstr "Error actualitzant informació del producte de Magento"
@@ -1138,7 +1105,12 @@ msgid "Export"
 msgstr "Exporta"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:385
+#: help:product.product,magento_group_price:0
+msgid "If check this value, when export product prices (and shop is active group price), export prices by group"
+msgstr "Si activeu aquest valor, quan exporti preus de productes i a la botiga ho permet, exportarà preus segons grup de clients."
+
+#. module: magento_connect
+#: code:addons/magento_connect/sale.py:403
 #, python-format
 msgid "Successfully update price: %s"
 msgstr "Actualitzat el preu: %s"
@@ -1158,6 +1130,11 @@ msgstr "Producte descompte per defecte"
 #: view:magento.app:0
 msgid "Authentication"
 msgstr "Autenticació"
+
+#. module: magento_connect
+#: field:sale.shop,magento_group_prices:0
+msgid "Group Prices"
+msgstr "Preus per grup"
 
 #. module: magento_connect
 #: model:product.template,name:magento_connect.product_product_gift_product_template
@@ -1195,7 +1172,7 @@ msgid "Last Export Categories"
 msgstr "Darreres categories exportades"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:550
+#: code:addons/magento_connect/mgn.py:551
 #, python-format
 msgid "Finish Import/Update products"
 msgstr "Finalitzat importació/actualització productes"
@@ -1255,7 +1232,7 @@ msgid "Magento"
 msgstr "Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:489
+#: code:addons/magento_connect/sale.py:507
 #, python-format
 msgid "Successfully update stock: %s"
 msgstr "Actualitzat l'estoc: %s"
@@ -1271,7 +1248,7 @@ msgid "Partners"
 msgstr "Empreses"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:1134
+#: code:addons/magento_connect/mgn.py:1135
 #, python-format
 msgid "This Magento Websites/Groups not allow to delete"
 msgstr "No es pot esborrar aquest lloc de Magento"
@@ -1389,8 +1366,14 @@ msgid "Magento Logs"
 msgstr "Magento Logs"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:116
-#: code:addons/magento_connect/product.py:303
+#: code:addons/magento_connect/sale.py:216
+#, python-format
+msgid "Error: Magento Update Product: %s %s."
+msgstr "Error: Magento Update Product: %s %s."
+
+#. module: magento_connect
+#: code:addons/magento_connect/product.py:119
+#: code:addons/magento_connect/product.py:317
 #, python-format
 msgid "-copy"
 msgstr "-copia"
@@ -1417,7 +1400,7 @@ msgid "Paid"
 msgstr "Pagat"
 
 #. module: magento_connect
-#: code:addons/magento_connect/product.py:359
+#: code:addons/magento_connect/product.py:373
 #, python-format
 msgid "Error create product from Magento"
 msgstr "Error creant producte de Magento"
@@ -1475,6 +1458,14 @@ msgid "1 Day"
 msgstr "1 dia"
 
 #. module: magento_connect
+#: view:magento.sale.shop.group.price:0
+#: field:product.product,magento_group_price:0
+#: view:sale.shop:0
+#: field:sale.shop,magento_group_price:0
+msgid "Group Price"
+msgstr "Preu per grup"
+
+#. module: magento_connect
 #: model:product.template,name:magento_connect.product_product_discount_product_template
 msgid "Discount Coupon"
 msgstr "Cupó descompte"
@@ -1511,7 +1502,7 @@ msgid "This Image can't be deleted"
 msgstr "No es pot esborrar aquesta imatge"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:839
+#: code:addons/magento_connect/mgn.py:840
 #, python-format
 msgid "Magento notification: %s"
 msgstr "Notificació Magento: %s"
@@ -1539,7 +1530,7 @@ msgid "Code Status (example, cancel, pending, processing,..)"
 msgstr "Codi de l'estat (exemple: cancel·lat, pendent, processant...)"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:240
+#: code:addons/magento_connect/sale.py:242
 #, python-format
 msgid "Error: Magento Create Product: SKU %s OpenERP ID %s."
 msgstr "Error: Magento Create Product: SKU %s OpenERP ID %s."
@@ -1560,7 +1551,7 @@ msgid "Product"
 msgstr "Producte"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:700
+#: code:addons/magento_connect/sale.py:718
 #, python-format
 msgid "Error Magento connection: Select a date range less or check Magento connection"
 msgstr "Error connexió Magento: Selecciona un rang de dates menor o revisi la connexió de Magento"
@@ -1613,7 +1604,7 @@ msgid "Invoice on"
 msgstr "Factura les"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:877
+#: code:addons/magento_connect/sale.py:898
 #, python-format
 msgid "Error update %s status: %s"
 msgstr "Error actualitzant %s estat: %s"
@@ -1645,7 +1636,7 @@ msgid "Meta Description"
 msgstr "Meta descripció"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:1074
+#: code:addons/magento_connect/mgn.py:1075
 #, python-format
 msgid "This Magento Customer Group not allow to delete"
 msgstr "No es pot esborrar aquest grup de clients de Magento"
@@ -1750,23 +1741,17 @@ msgid "Position"
 msgstr "Posició"
 
 #. module: magento_connect
+#: field:magento.sale.shop.group.price,shop_id:0
 #: field:magento.sale.shop.payment.type,shop_id:0
 #: field:magento.sale.shop.status.type,shop_id:0
 msgid "Shop"
 msgstr "Botiga"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:836
+#: code:addons/magento_connect/sale.py:855
 #, python-format
 msgid "Error update status %s"
 msgstr "Error actualitzant estat %s"
-
-#. module: magento_connect
-#: code:addons/magento_connect/partner.py:107
-#: code:addons/magento_connect/partner.py:109
-#, python-format
-msgid "Successfully create partner: %s"
-msgstr "Creat empresa: %s"
 
 #. module: magento_connect
 #: view:magento.app:0
@@ -1845,6 +1830,11 @@ msgid "Invoice on Order After Delivery"
 msgstr "Factura en comanda després de l'entrega"
 
 #. module: magento_connect
+#: field:res.partner,magento_customer_email:0
+msgid "Magento Customer eMail"
+msgstr "Identificador de Magento"
+
+#. module: magento_connect
 #: selection:magento.sale.shop.status.type,picking_policy:0
 #: selection:sale.shop,magento_default_picking_policy:0
 msgid "Complete Delivery"
@@ -1863,7 +1853,7 @@ msgid "Are you sure to continue? See logs server process. This operation import 
 msgstr "¿Esteu segur de continuar? Reviseu l'historial del servidor. Aquesta acció importarà totes les imatges de Magento a OpenERP"
 
 #. module: magento_connect
-#: code:addons/magento_connect/sale.py:103
+#: code:addons/magento_connect/sale.py:105
 #, python-format
 msgid "Sale shop ID '%s' not allow to delete because are active in Magento"
 msgstr "La botiga ID '%s' no es pot esborrar perque s'usa en el canal de venta Magento"
@@ -1889,8 +1879,7 @@ msgid "Last Import Status Sale Orders"
 msgstr "Estat de les darreres comandes de vendes importades"
 
 #. module: magento_connect
-#: code:addons/magento_connect/partner.py:280
-#: code:addons/magento_connect/partner.py:283
+#: code:addons/magento_connect/partner.py:313
 #, python-format
 msgid "Successfully create partner address: %s"
 msgstr "Creat direcció d'empresa: %s"
@@ -1907,6 +1896,55 @@ msgstr "Primer"
 #: field:magento.log,comment:0
 msgid "Comment"
 msgstr "Comentari"
+
+#. module: magento_connect
+#: model:ir.module.module,description:magento_connect.module_meta_information
+msgid ""
+"\n"
+"    Magento E-commerce management. Your Magento and OpenERP are connecting.\n"
+"\n"
+"    1. Requirements:\n"
+"     1.1 Install Magento Python from:\n"
+"        - https://github.com/zikzakmedia/magento\n"
+"\n"
+"     1.2 Install Magento Module Extend API. This module is same magentoerpconnect module use. Add additional API methods for use by the Multi website, Multi Store, Multi Product category \n"
+"        - https://github.com/zikzakmedia/magento_webservices\n"
+"\n"
+"    2. Configuration\n"
+"     2.1 Exclude product fields Magento go to OpenERP in Sale -> Configuration -> Magento Attribute Exclude\n"
+"     2.2 Mapping more product fields go to Administrator -> Customization -> Database Structure -> External Mapping\n"
+"     2.3 Configure yours Magento APP: Sale -> Configuration -> Magento\n"
+"    \n"
+"    3. Other information\n"
+"     3.1 Magento module use Product Attributes to add new fields Product model. This module don't use EAV (Entity-attribute-value model) and there are maxim fields available in product table postgres.\n"
+"     3.2 Also exists another module Magento management we working another projects:\n"
+"        - https://launchpad.net/magentoerpconnect\n"
+"        \n"
+"    Documentation available at (spanish):\n"
+"    http://openerp.zikzakmedia.com/Esale/MagentoConnect\n"
+"\n"
+"    Special Thanks to OpenLabs www.openlabs.co.in\n"
+"    "
+msgstr ""
+"\n"
+"    Gestor de Magento E-Commerce. El vostre connector de Magento a OpenERP.\n"
+"\n"
+"    Requisits:\n"
+"    Instal·lar Magento Python des de:\n"
+"        - https://github.com/zikzakmedia/magento\n"
+"\n"
+"    Instal·lar la API del mòdul estès de Magento. Aquest mòdul és el mateix que l'utilitzat per magentoeprconnect. Afegeix els mètodes de l'API addicionals per utilitzar el lloc multi web, multi botiga, categoria multi producte:\n"
+"        - http://www.magentocommerce.com/magento-connect/Sharoon+Thomas/extension/1827/open-erp-connecotr-by-openlabs\n"
+"\n"
+"    Configureu la vostra aplicació Magento: Vendes -> Configuració -> Magento\n"
+"    Per assignar més camps de productes obrir Administrador -> Personalització -> Estructura de la base de dades -> External Mapping\n"
+"\n"
+"    El mòdul Magento utilitza els atributs de producte per afegir nous camps al model producte. Aquest mòdul no utilitza EAV (Entity-attribute-value model) i hi ha un màxim de camps disponibles a la taula producte de PostgreSQL.\n"
+"\n"
+"    També existeix un altre mòdul per gestionar Magento.\n"
+"        - https://launchpad.net/magentoerpconnect\n"
+"Agraïments a Akretion www.akretion.com\n"
+"    "
 
 #. module: magento_connect
 #: field:magento.app,magento_default_storeview:0
@@ -1946,7 +1984,7 @@ msgid "Region ID"
 msgstr "Identificador de regió"
 
 #. module: magento_connect
-#: code:addons/magento_connect/partner.py:171
+#: code:addons/magento_connect/partner.py:175
 #, python-format
 msgid "Partner Address ID '%s' not allow to delete because are active in Magento"
 msgstr "L'adreça d'empresa ID '%s' no es pot esborrar perque s'usa en el canal de venta Magento"
@@ -2004,13 +2042,7 @@ msgid "Shop configuration"
 msgstr "Configuracions botiga"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:1093
-#, python-format
-msgid "This Magento Region not allow to delete"
-msgstr "Aquestes regions no es poden eliminar"
-
-#. module: magento_connect
-#: code:addons/magento_connect/sale.py:702
+#: code:addons/magento_connect/sale.py:720
 #: selection:magento.log,status:0
 #, python-format
 msgid "Error"
@@ -2039,6 +2071,7 @@ msgstr "Botiga"
 #. module: magento_connect
 #: field:magento.app,customer_default_group:0
 #: field:magento.app.customer,magento_customer_group_id:0
+#: field:magento.sale.shop.group.price,group_id:0
 msgid "Customer Group"
 msgstr "Grup de clients"
 
@@ -2063,7 +2096,7 @@ msgid "Indicates whether active in magento"
 msgstr "Indica quin està actiu a Magento"
 
 #. module: magento_connect
-#: code:addons/magento_connect/mgn.py:941
+#: code:addons/magento_connect/mgn.py:942
 #, python-format
 msgid "This Magento Store Group not allow to delete"
 msgstr "No es pot esborrar aquest grup de botigues Magento"
@@ -2084,11 +2117,6 @@ msgstr "Selecciona opció"
 #: help:magento.app,last_export_partners:0
 msgid "This date is last export. If you need export all partners, empty this field (long sync)"
 msgstr "Aquesta és la data de la darrera exportació. Si necessiteu l'exportació de totes les empreses, deixeu buida aquesta data (sincronització llarga)"
-
-#. module: magento_connect
-#: field:product.images,magento_thumbnail:0
-msgid "Thumbnail"
-msgstr "Thumbnail"
 
 #. module: magento_connect
 #: help:sale.shop,magento_status_paid:0
@@ -2204,6 +2232,9 @@ msgstr "Utilitza la referencia de Magento (increment) com a nom de la comanda"
 #: view:sale.shop:0
 msgid "Orders"
 msgstr "Comandes de venda"
+
+#~ msgid "Successfully create partner: %s"
+#~ msgstr "Creat empresa: %s"
 
 #~ msgid "Error create product"
 #~ msgstr "Error crear producte"

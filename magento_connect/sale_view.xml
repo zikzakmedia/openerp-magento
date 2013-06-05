@@ -54,11 +54,15 @@
                                         <field name="magento_check_vat_partner"/>
                                         <field name="magento_default_language"/>
                                         <field name="magento_price_global"/>
+                                        <field name="magento_group_price"/>
                                         <separator string="Logistic Default" colspan="4"/>
                                         <field name="magento_default_picking_policy" attrs="{'required':[('magento_shop','=', True)]}"/>
                                         <field name="magento_default_order_policy" attrs="{'required':[('magento_shop','=', True)]}"/>
                                         <field name="magento_default_invoice_quantity" attrs="{'required':[('magento_shop','=', True)]}"/>
                                     </group>
+                                </page>
+                                <page string="Group Price">
+                                    <field name="magento_group_prices" colspan="4" nolabel="1" attrs="{'invisible':[('magento_group_price','=', False)]}"/>
                                 </page>
                                 <page string="Status">
                                     <separator string="Import Status" colspan="4"/>
@@ -96,7 +100,6 @@
                 <xpath expr="/form/notebook/page[@string='History']" position="after">
                     <page string="Magento">
                         <field name="magento_increment_id"/>
-                        <field name="magento_paidinweb"/>
                         <field name="magento_status"/>
                         <separator string="Gift Message" colspan="4" />
                         <field name="magento_gift_message" colspan="4" nolabel="1"/>
@@ -174,5 +177,31 @@
             </field>
         </record>
 
+        <!--Magento Sale Shop Group Price-->
+        <record model="ir.ui.view" id="view_magento_sale_shop_group_price_form">
+            <field name="name">magento_sale_shop_group_price_form</field>
+            <field name="model">magento.sale.shop.group.price</field>
+            <field name="type">form</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+                <form string="Group Price">
+                    <field name="group_id"/>
+                    <field name="pricelist_id"/>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="magento_sale_shop_group_price_tree">
+            <field name="name">magento_sale_shop_group_price_tree</field>
+            <field name="model">magento.sale.shop.group.price</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="5"/>
+            <field name="arch" type="xml">
+                <tree string="Group Price">
+                    <field name="group_id"/>
+                    <field name="pricelist_id"/>
+                </tree>
+            </field>
+        </record>
     </data>
 </openerp>

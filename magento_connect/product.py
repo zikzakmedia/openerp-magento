@@ -232,12 +232,14 @@ class product_product(osv.osv):
         'magento_metakeyword': fields.text('Keyword', translate=True),
         'magento_metatitle': fields.char('Title', size=256, translate=True),
         'magento_manage_stock':fields.boolean('Manage Stock'),
+        'magento_group_price':fields.boolean('Group Price', help='If check this value, when export product prices (and shop is active group price), export prices by group'),
     }
 
     _defaults = {
         'magento_status':lambda * a:True,
         'magento_visibility': '4',
         'magento_manage_stock':lambda * a:True,
+        'magento_group_price':lambda * a:True,
     }
 
     def create(self, cr, uid, vals, context=None):
