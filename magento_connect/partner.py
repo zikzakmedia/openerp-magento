@@ -70,9 +70,17 @@ class res_partner(osv.osv):
             if partners:
                 return partners[0]
         # search by email
-        partners = partner_obj.search(cr, uid, [('magento_customer_email', 'ilike', values.get('customer_email'))], context = context)
-        if partners:
-            return partners[0]
+        email = values.get('customer_email')
+        if not email:
+            billing_address = values.get('billing_address')
+            email = billing_address.get('email')
+        if not email:
+            shipping_address = values.get('shipping_address')
+            email = shipping_address.get('email')
+        if email:
+            partners = partner_obj.search(cr, uid, [('magento_customer_email', 'ilike', email)], context = context)
+            if partners:
+                return partners[0]
         return None
 
     def magento_create_partner(self, cr, uid, magento_app, values, mapping = True, context = None):
@@ -109,12 +117,13 @@ class res_partner(osv.osv):
 
         context['magento_app'] = magento_app
         values['name'] = '%s %s' % (values['firstname'].title(), values['lastname'].title())
+        email = values.get('email').lower()
         res_partner_vals = res_partner_vals_obj.get_external_to_oerp(cr, uid, 'magento.res.partner', False, values, context)
         res_partner_vals['customer'] = True #fix this partner is customer
-        res_partner_vals['magento_customer_email'] = values.get('email').lower()
+        res_partner_vals['magento_customer_email'] = email
         partner_id = self.create(cr, uid, res_partner_vals, context)
 
-        LOGGER.notifyChannel('Magento Sync Partner', netsvc.LOG_INFO, "Create Partner: magento %s, openerp id %s, magento email %s" % (magento_app.name, partner_id, res_partner_vals['magento_customer_email']))
+        LOGGER.notifyChannel('Magento Sync Partner', netsvc.LOG_INFO, "Create Partner: magento %s, openerp id %s, magento email %s" % (magento_app.name, partner_id, email))
 
         return partner_id
 

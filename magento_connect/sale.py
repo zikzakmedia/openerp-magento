@@ -974,8 +974,14 @@ class sale_order(osv.osv):
 
         if not partner_id:
             customer = values['billing_address']
-            customer['email'] = values.get('customer_email')
             customer['taxvat'] = values.get('customer_taxvat')
+
+            if not customer.get('email'):
+                email = values.get('customer_email')
+                if not email:
+                    shipping_address = values.get('shipping_address')
+                    email = shipping_address.get('email')
+                customer['email'] = email
 
             partner_id = partner_obj.magento_create_partner(cr, uid, magento_app, customer, context)
 
